@@ -121,7 +121,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center sm:gap-8 gap-6">
               <Link
                 target="_blank"
                 href={links.INSTAGRAM}
