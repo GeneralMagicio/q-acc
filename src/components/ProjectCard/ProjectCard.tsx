@@ -11,7 +11,7 @@ export const ProjectCard = () => {
           layout="fill"
         />
       </div>
-      <div className="relative p-6">
+      <div className="relative p-6 text-start flex flex-col gap-4">
         <div className="absolute bg-white -top-12 left-0 w-16 h-16 p-3 rounded-tr-xl">
           <Image
             src="/images/project-card/logo.svg"
@@ -20,12 +20,16 @@ export const ProjectCard = () => {
             height={40}
           />
         </div>
-
-        <h2 className="text-lg font-semibold">Project Title</h2>
-        <p className="text-sm text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-          tincidunt, nisl nec ultricies.
+        <div>
+          <p className="text-pink-500">DEGEN</p>
+          <h2 className="text-lg font-bold">Here is another awesome project</h2>
+        </div>
+        <p className="text-gray-500">
+          The Commons Simulator is a gamified simulation tool powered by a
+          cadCAD backend that was developed by the Commons Stack&apos;s
+          Decentralized Dev community.
         </p>
+        <div className="border-t-[1px]"></div>
       </div>
     </div>
   );
