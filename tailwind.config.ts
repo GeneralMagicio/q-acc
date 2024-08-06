@@ -7,11 +7,25 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "1rem",
+    },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      colors: {
+        giv: {
+          500: "#5326EC",
+          800: "#1B1657",
+        },
+        pink: {
+          500: "#E1458D",
+        },
+        success: {
+          100: "#D2FFFB",
+          500: "#37B4A9",
+          600: "#2EA096",
+          700: "#1B8C82",
+        },
       },
     },
   },
