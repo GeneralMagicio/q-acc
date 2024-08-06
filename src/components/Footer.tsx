@@ -115,7 +115,7 @@ export const Footer: React.FC = () => {
                   href={links.RECRUITEE}
                   className="text-gray-700 hover:underline"
                 >
-                  We're Hiring!
+                  We&apos;re Hiring!
                 </Link>
               </li>
             </ul>
