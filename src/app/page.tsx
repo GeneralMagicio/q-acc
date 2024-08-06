@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import Collaborator from "@/components/Collaborator";
 import { IconArrowRight } from "@/components/Icons/IconArrowRight";
 import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
 import { checkWhiteList } from "@/services/check-white-list";
@@ -17,8 +18,9 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="container text-center flex flex-col items-center gap-8">
+    <main className="flex flex-col items-center w-full mx-auto">
       <ProjectCard />
+      <Collaborator />
     </main>
   );
 }
