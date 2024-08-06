@@ -30,6 +30,17 @@ export const ProjectCard = () => {
           Decentralized Dev community.
         </p>
         <div className="border-t-[1px]"></div>
+        <div>
+          <div className="flex gap-1">
+            <Image
+              src={"/images/project-card/token-logo.svg"}
+              alt="token-logo"
+              width={24}
+              height={24}
+            />
+            <p className="text-gray-800">DEGEN Price</p>
+          </div>
+        </div>
       </div>
     </div>
   );
