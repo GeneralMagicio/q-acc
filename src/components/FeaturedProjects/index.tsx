@@ -59,9 +59,9 @@ export const FeaturedProjects = () => {
             },
           }}
           slidesPerView={"auto"}
-          spaceBetween={30}
+          spaceBetween={4}
         >
-          <SwiperSlide className={swiperSlideStyle}>
+          <SwiperSlide className={`${swiperSlideStyle} pl-10`}>
             <ProjectCard />
           </SwiperSlide>
           <SwiperSlide className={swiperSlideStyle}>
