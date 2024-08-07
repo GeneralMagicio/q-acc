@@ -76,3 +76,24 @@ body {
 .swiper-pagination-bullet-active{
   color: black;
 }
+
+/* Fonts */
+@layer base {
+  @font-face {
+    font-family: 'TuskerGrotesk';
+    src: url('/fonts/TuskerGrotesk-4500Medium.woff2') format('woff2'),
+         url('/fonts/TuskerGrotesk-4500Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: 'TuskerGrotesk';
+    src: url('/fonts/TuskerGrotesk-6700Bold.woff2') format('woff2'),
+         url('/fonts/TuskerGrotesk-6700Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+  }
+}
