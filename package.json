@@ -17,6 +17,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.2",
+    "swiper": "^11.1.9",
     "viem": "^2.18.8",
     "wagmi": "^2.12.2"
   },
