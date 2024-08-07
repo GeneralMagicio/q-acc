@@ -14,6 +14,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         "tusker-grotesk": ["TuskerGrotesk", "sans-serif"],
+        redHatText: "Red Hat Text",
       },
       colors: {
         giv: {
@@ -33,9 +34,6 @@ const config: Config = {
       },
       backgroundImage: {
         "particle-pattern": "url('/images/bg/particles.png')",
-      },
-      fontFamily: {
-        redHatText: "Red Hat Text",
       },
     },
   },
