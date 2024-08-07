@@ -12,6 +12,9 @@ const config: Config = {
       padding: "1rem",
     },
     extend: {
+      fontFamily: {
+        "tusker-grotesk": ["TuskerGrotesk", "sans-serif"],
+      },
       colors: {
         giv: {
           500: "#5326EC",
@@ -26,6 +29,10 @@ const config: Config = {
           600: "#2EA096",
           700: "#1B8C82",
         },
+        peach: "#FBBA80",
+      },
+      backgroundImage: {
+        "particle-pattern": "url('/images/bg/particles.png')",
       },
       fontFamily: {
         redHatText: "Red Hat Text",
