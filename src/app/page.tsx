@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import { FeaturedProjects } from "@/components/FeaturedProjects";
 import { IconArrowRight } from "@/components/Icons/IconArrowRight";
 import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
 import { checkWhiteList } from "@/services/check-white-list";
@@ -17,8 +18,8 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="container text-center flex flex-col items-center gap-8">
-      <ProjectCard />
+    <main className="">
+      <FeaturedProjects />
     </main>
   );
 }
