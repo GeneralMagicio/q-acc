@@ -1,5 +1,6 @@
 "use client";
 
+import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
 import { FeaturedProjects } from "@/components/FeaturedProjects";
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <main className="">
+      <Banner />
       <FeaturedProjects />
       <Collaborator />
     </main>
