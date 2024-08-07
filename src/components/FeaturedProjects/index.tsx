@@ -12,56 +12,72 @@ export const FeaturedProjects = () => {
   const [_, setSwiperInstance] = useState<SwiperClass>();
 
   return (
-    <div className="one-side-container bg-red-400 ">
-      <Swiper
-        onSwiper={setSwiperInstance}
-        modules={[Navigation, Pagination]}
-        navigation={{
-          nextEl: nextElRef.current,
-          prevEl: prevElRef.current,
-        }}
-        pagination={{
-          el: pagElRef.current,
-          clickable: true,
-          type: "bullets",
-          renderBullet: function (index, className) {
-            return '<span class="' + className + '">' + (index + 1) + "</span>";
-          },
-        }}
-        slidesPerView={"auto"}
-        spaceBetween={30}
-      >
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-        <SwiperSlide className="!w-auto">
-          <ProjectCard />
-        </SwiperSlide>
-      </Swiper>
+    <div className="bg-white mt-4">
+      <div className="container flex justify-between">
+        <h2>#QuadraticAccelerator</h2>
+        <div className="flex">
+          <div ref={prevElRef} className="prev-button">
+            Prev
+          </div>
+          <div ref={pagElRef} className="pagination"></div>
+          <div ref={nextElRef} className="next-button">
+            Next
+          </div>
+        </div>
+      </div>
+      <div className="one-side-container bg-red-400 ">
+        <Swiper
+          onSwiper={setSwiperInstance}
+          modules={[Navigation, Pagination]}
+          navigation={{
+            nextEl: nextElRef.current,
+            prevEl: prevElRef.current,
+          }}
+          pagination={{
+            el: pagElRef.current,
+            clickable: true,
+            type: "bullets",
+            renderBullet: function (index, className) {
+              return (
+                '<span class="' + className + '">' + (index + 1) + "</span>"
+              );
+            },
+          }}
+          slidesPerView={"auto"}
+          spaceBetween={30}
+        >
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+          <SwiperSlide className="!w-auto">
+            <ProjectCard />
+          </SwiperSlide>
+        </Swiper>
+      </div>
     </div>
   );
 };
