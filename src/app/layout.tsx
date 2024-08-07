@@ -29,7 +29,7 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col relative overflow-x-hidden">
           <Web3ModalProvider initialState={initialState}>
             <Header />
-            <div className="flex-1 flex items-center">{children}</div>
+            <div className="flex-1">{children}</div>
           </Web3ModalProvider>
         </div>
       </body>

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
+import { FeaturedProjects } from "@/components/FeaturedProjects";
 import { IconArrowRight } from "@/components/Icons/IconArrowRight";
 import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
 import { checkWhiteList } from "@/services/check-white-list";
@@ -18,8 +19,8 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="flex flex-col items-center w-full mx-auto">
-      <ProjectCard />
+    <main className="">
+      <FeaturedProjects />
       <Collaborator />
     </main>
   );
