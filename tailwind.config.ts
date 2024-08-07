@@ -27,6 +27,9 @@ const config: Config = {
           700: "#1B8C82",
         },
       },
+      backgroundImage: {
+        "particle-pattern": "url('/images/bg/particles.png')",
+      },
     },
   },
   plugins: [],
