@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +7,8 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --scrollColor: #d6dee1;
+  --scrollHoverColor: #a8bbbf;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,6 +76,26 @@ body {
   box-shadow: none;
 }
 
-.swiper-pagination-bullet-active{
+.swiper-pagination-bullet-active {
   color: black;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+  height: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollColor);
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollHoverColor);
 }
