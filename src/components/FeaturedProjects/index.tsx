@@ -38,7 +38,7 @@ export const FeaturedProjects = () => {
         </div>
       </div>
       <div className="one-side-container flex flex-col md:flex-row overflow-hidden !pl-0 pb-10">
-        <div className="shadow-xl rounded-r-xl px-6 flex flex-col justify-center items-center gap-12">
+        <div className="shadow-xl rounded-r-xl py-10 px-6 flex flex-col justify-center items-center gap-12">
           <h2 className="text-6xl font-bold">This Season&apos;s Projects</h2>
           <p className="text-giv-500 font-bold">Explore </p>
         </div>
