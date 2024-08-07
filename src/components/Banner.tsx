@@ -21,6 +21,7 @@ export const Banner = () => {
           tokenization
         </div>
       </h1>
+      <div className="text-white text-4xl mt-4">q/acc = QF*ABC</div>
     </div>
   );
 };
