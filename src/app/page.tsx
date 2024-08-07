@@ -17,8 +17,10 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="container text-center flex flex-col items-center gap-8">
-      <ProjectCard />
+    <main className="">
+      <div className="one-side-container bg-red-400 ">
+        <ProjectCard />
+      </div>
     </main>
   );
 }
