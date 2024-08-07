@@ -26,6 +26,10 @@ const config: Config = {
           600: "#2EA096",
           700: "#1B8C82",
         },
+        peach: "#FBBA80",
+      },
+      backgroundImage: {
+        "particle-pattern": "url('/images/bg/particles.png')",
       },
     },
   },
