@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import { FeaturedProjects } from "@/components/FeaturedProjects";
 import { IconArrowRight } from "@/components/Icons/IconArrowRight";
 import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
 import { checkWhiteList } from "@/services/check-white-list";
@@ -18,9 +19,7 @@ export default function Home() {
 
   return (
     <main className="">
-      <div className="one-side-container bg-red-400 ">
-        <ProjectCard />
-      </div>
+      <FeaturedProjects />
     </main>
   );
 }
