@@ -65,3 +65,9 @@ body {
     margin-left: calc(50% - 768px);
   }
 }
+
+/* Swiper */
+.swiper-button-disabled {
+  opacity: 0.4;
+  cursor: default;
+}
