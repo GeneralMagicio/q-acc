@@ -21,11 +21,14 @@ export const FeaturedProjects = () => {
     <div className="bg-white mt-4 py-10">
       <div className="container flex justify-between items-center">
         <h2>#QuadraticAccelerator</h2>
-        <div className="flex">
+        <div className="flex gap-2 items-center">
           <div ref={prevElRef} className={navigationStyle}>
             <IconPointerLeft size={24} />
           </div>
-          <div ref={pagElRef} className="flex gap-1 items-center"></div>
+          <div
+            ref={pagElRef}
+            className="flex gap-2 items-center text-xl text-gray-400"
+          ></div>
           <div ref={nextElRef} className={navigationStyle}>
             <IconPointerRight size={24} />
           </div>

@@ -71,3 +71,7 @@ body {
   opacity: 0.4;
   cursor: default;
 }
+
+.swiper-pagination-bullet-active{
+  color: black;
+}
