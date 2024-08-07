@@ -19,8 +19,10 @@ export const FeaturedProjects = () => {
 
   return (
     <div className="bg-white mt-4 py-10">
-      <div className="container flex justify-between items-center">
-        <h2>#QuadraticAccelerator</h2>
+      <div className="container flex justify-between items-center mb-10">
+        <h2 className="text-3xl text-gray-400 font-bold">
+          #QuadraticAccelerator
+        </h2>
         <div className="flex gap-2 items-center">
           <div ref={prevElRef} className={navigationStyle}>
             <IconPointerLeft size={24} />
