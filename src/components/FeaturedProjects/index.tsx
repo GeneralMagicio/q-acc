@@ -20,9 +20,9 @@ export const FeaturedProjects = () => {
   return (
     <div className="bg-white mt-4 py-10">
       <div className="container flex justify-between items-center mb-10">
-        <h2 className="text-3xl text-gray-400 font-bold">
+        <h3 className="text-3xl text-gray-400 font-bold">
           #QuadraticAccelerator
-        </h2>
+        </h3>
         <div className="flex gap-2 items-center">
           <div ref={prevElRef} className={navigationStyle}>
             <IconPointerLeft size={24} />
@@ -36,7 +36,10 @@ export const FeaturedProjects = () => {
           </div>
         </div>
       </div>
-      <div className="one-side-container">
+      <div className="one-side-container flex overflow-hidden !pl-0 pb-10">
+        <div className="shadow-xl rounded-r-xl px-6 flex items-center">
+          <h2 className="text-6xl font-bold">This Season&apos;s Projects</h2>
+        </div>
         <Swiper
           onSwiper={setSwiperInstance}
           modules={[Navigation, Pagination]}
