@@ -1,9 +1,14 @@
 import Image from "next/image";
-import React from "react";
+import React, { FC } from "react";
 
-export const ProjectCard = () => {
+interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const ProjectCard: FC<ProjectCardProps> = ({ className, ...props }) => {
   return (
-    <div className="relative  w-96 rounded-xl bg-white overflow-hidden shadow-md shadow-gray-200 ">
+    <div
+      className={`relative w-full rounded-xl bg-white overflow-hidden shadow-md shadow-gray-200 ${className}`}
+      {...props}
+    >
       <div className="relative h-48">
         <Image
           src="/images/project-card/card-image.jpeg"
