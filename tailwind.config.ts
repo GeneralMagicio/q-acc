@@ -12,6 +12,9 @@ const config: Config = {
       padding: "1rem",
     },
     extend: {
+      fontFamily: {
+        "tusker-grotesk": ["TuskerGrotesk", "sans-serif"],
+      },
       colors: {
         giv: {
           500: "#5326EC",
