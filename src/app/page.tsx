@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import Collaborator from "@/components/Collaborator";
 import { FeaturedProjects } from "@/components/FeaturedProjects";
 import { IconArrowRight } from "@/components/Icons/IconArrowRight";
 import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
@@ -20,6 +21,7 @@ export default function Home() {
   return (
     <main className="">
       <FeaturedProjects />
+      <Collaborator />
     </main>
   );
 }
