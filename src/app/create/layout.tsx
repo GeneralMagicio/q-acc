@@ -1,6 +1,7 @@
 "use client";
 
 import { CreateProvider } from "@/components/Create/CreateContext";
+import Link from "next/link";
 
 export default function CreateLayout({
   children,
@@ -9,7 +10,10 @@ export default function CreateLayout({
 }>) {
   return (
     <CreateProvider>
-      <nav>Create Section Navigation</nav>
+      <nav>
+        Create Section Navigation
+        <Link href="/create/project">Project</Link>
+      </nav>
       <section>{children}</section>
     </CreateProvider>
   );
