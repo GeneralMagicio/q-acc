@@ -60,7 +60,19 @@ const CreateProjectForm: FC<{
           rules={{ required: "Project Description is required" }}
         />
 
-        <section className="flex flex-col gap-4 w-2/4 mx-auto">
+        <section className="flex flex-col gap-6">
+          <div>
+            <h2>Tell us about your project...</h2>
+            <p className="text-sm mt-2">
+              <span className="text-gray-900">Aim for 200-500 words.</span>
+              <span className="text-pink-500">
+                How to write a good project description.{" "}
+              </span>
+            </p>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-6 w-2/4 mx-auto">
           <label className="text-4xl font-bold text-gray-800 text-center mb-7">
             Upload Token icon
           </label>
