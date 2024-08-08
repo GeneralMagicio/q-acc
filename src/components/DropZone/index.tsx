@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+"use client";
+
+import { useCallback, useEffect, useState, useRef, FC } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext, RegisterOptions } from "react-hook-form";
 import { uploadToIPFS } from "./service";
@@ -11,7 +13,7 @@ interface DropzoneProps {
   rules?: RegisterOptions;
 }
 
-export const Dropzone: React.FC<DropzoneProps> = ({ name, rules, onDrop }) => {
+export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [ipfsHash, setIpfsHash] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
