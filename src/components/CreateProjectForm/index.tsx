@@ -7,6 +7,7 @@ import { Dropzone } from "@/components/DropZone";
 import { isAddress } from "viem";
 import { type FC } from "react";
 import Textarea from "../TextArea";
+import { SocialMediaInput } from "./SocialMediaInput";
 
 interface FormData {
   tokenName: string;
@@ -15,6 +16,21 @@ interface FormData {
   projectAddress: string;
   addressConfirmed: boolean;
 }
+
+const socialMediaLinks = [
+  { name: "website", label: "Website", iconName: "web.svg" },
+  { name: "facebook", label: "Facebook", iconName: "facebook.svg" },
+  { name: "twitter", label: "Twitter", iconName: "twitter.svg" },
+  { name: "linkedin", label: "LinkedIn", iconName: "linkedin.svg" },
+  { name: "discord", label: "Discord", iconName: "discord.svg" },
+  { name: "telegram", label: "Telegram", iconName: "telegram.svg" },
+  { name: "instagram", label: "Instagram", iconName: "instagram.svg" },
+  { name: "reddit", label: "Reddit", iconName: "reddit.svg" },
+  { name: "youtube", label: "YouTube", iconName: "youtube.svg" },
+  { name: "farcaster", label: "Farcaster", iconName: "farcaster.svg" },
+  { name: "lens", label: "Lens", iconName: "lens.svg" },
+  { name: "github", label: "GitHub", iconName: "github.svg" },
+];
 
 const CreateProjectForm: FC<{
   onNext: () => void;
@@ -80,6 +96,11 @@ const CreateProjectForm: FC<{
                 Add your project’s social media links (optional)
               </span>
             </p>
+          </div>
+          <div className="flex flex-col gap-6">
+            {socialMediaLinks.map((socialMedia) => (
+              <SocialMediaInput key={socialMedia.name} {...socialMedia} />
+            ))}
           </div>
         </section>
 
