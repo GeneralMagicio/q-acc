@@ -1,12 +1,16 @@
+"use client";
+
+import { CreateProvider } from "@/components/Create/CreateContext";
+
 export default function CreateLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <CreateProvider>
       <nav>Create Section Navigation</nav>
       <section>{children}</section>
-    </div>
+    </CreateProvider>
   );
 }
