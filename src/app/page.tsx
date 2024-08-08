@@ -12,6 +12,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
+import About from "@/components/About";
+import InfoSection from "@/components/InfoSection";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,8 @@ export default function Home() {
   return (
     <main className="">
       <Banner />
+      <InfoSection />
+      <About />
       <FeaturedProjects />
       <Collaborator />
     </main>

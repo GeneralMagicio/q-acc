@@ -14,6 +14,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         "tusker-grotesk": ["TuskerGrotesk", "sans-serif"],
+        redHatText: "Red Hat Text",
       },
       colors: {
         giv: {

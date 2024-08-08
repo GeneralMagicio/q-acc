@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   return (
-    <footer className="bg-gray-100 py-8 mt-10">
+    <footer className="bg-gray-100 py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row justify-between">
           <div className="mb-4 lg:mb-0">
