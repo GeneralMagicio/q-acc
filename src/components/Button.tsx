@@ -5,6 +5,7 @@ export enum ButtonColor {
   Pink = "pink",
   Gray = "gray",
   Giv = "giv",
+  Base = "base",
 }
 
 export enum ButtonStyle {
@@ -38,6 +39,11 @@ const variantClasses = {
     [ButtonStyle.Outline]: "text-giv-500 border border-giv-500 bg-transparent",
     [ButtonStyle.Text]: "text-giv-500 bg-transparent",
   },
+  [ButtonColor.Base]: {
+    [ButtonStyle.Solid]: "text-giv-500 bg-white",
+    [ButtonStyle.Outline]: "text-giv-500 border border-giv-500 bg-transparent",
+    [ButtonStyle.Text]: "text-giv-500 bg-transparent",
+  },
 };
 
 const disabledClass = "opacity-50 cursor-not-allowed";
@@ -45,8 +51,9 @@ const disabledClass = "opacity-50 cursor-not-allowed";
 export const Button: FC<IButtonProps> = ({
   children,
   loading,
-  color = ButtonColor.Pink,
+  color = ButtonColor.Base,
   styleType = ButtonStyle.Solid,
+  className = "",
   ...props
 }) => {
   const variantClass = variantClasses[color][styleType];
@@ -55,9 +62,9 @@ export const Button: FC<IButtonProps> = ({
   return (
     <button
       {...props}
-      className={`font-bold text-xs border-none rounded-full py-4 px-10 flex gap-2 ${variantClass} ${
+      className={`font-bold items-center flex ${variantClass} ${
         isDisabled ? disabledClass : ""
-      }`}
+      } ${className}`} // Combine the variant class with any additional classes
       disabled={isDisabled}
     >
       {loading && <Spinner size={16} />}

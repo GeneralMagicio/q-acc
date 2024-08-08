@@ -128,7 +128,11 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
               />
             ) : (
               <>
-                <p>Drop your Token icon here</p>
+                <p>
+                  {name === "profilePhoto"
+                    ? "Drop your Profile photo here"
+                    : "Drag & drop an image here or ,"}
+                </p>
                 <p>or</p>
                 <p className="font-bold">Browse Files</p>
               </>
