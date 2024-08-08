@@ -62,11 +62,22 @@ const CreateProjectForm: FC<{
 
         <section className="flex flex-col gap-6">
           <div>
-            <h2>Tell us about your project...</h2>
+            <h2 className="text-2xl">Tell us about your project...</h2>
             <p className="text-sm mt-2">
               <span className="text-gray-900">Aim for 200-500 words.</span>
               <span className="text-pink-500">
                 How to write a good project description.{" "}
+              </span>
+            </p>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-6">
+          <div>
+            <h2 className="text-2xl">Social Media Links</h2>
+            <p className="text-sm mt-2">
+              <span className="text-gray-900">
+                Add your project’s social media links (optional)
               </span>
             </p>
           </div>
