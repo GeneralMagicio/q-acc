@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { FC } from "react";
 import { type RegisterOptions } from "react-hook-form";
-import Input from "../Input";
+import Input from "../../Input";
 
 interface SocialMediaInputProps {
   name: string;

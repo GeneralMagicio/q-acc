@@ -1,6 +1,6 @@
 "use client";
 
-import CreateProjectForm from "@/components/CreateProjectForm";
+import CreateProjectForm from "@/components/Create/CreateProjectForm";
 
 export default function CreateProjectPage() {
   const onBack = () => {};
