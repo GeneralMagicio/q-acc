@@ -54,10 +54,10 @@ const CreateProjectForm: FC<{
         />
 
         <Textarea
-          name="projectDescription"
-          label="Project Description"
-          placeholder="Enter project description"
-          rules={{ required: "Project Description is required" }}
+          name="projectTeaser"
+          label="Project Teaser"
+          placeholder="Enter project teaser"
+          rules={{ required: "Project Teaser is required" }}
         />
 
         <section className="flex flex-col gap-6">
