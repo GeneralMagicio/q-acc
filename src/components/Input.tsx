@@ -44,7 +44,6 @@ const Input: React.FC<InputProps> = ({
           {...props}
           value={value}
           onChange={handleChange}
-          // Adjust padding to account for counter
           className={`px-4 py-4 block w-full rounded-lg border-2 pr-12 ${
             errors[name]
               ? "border-red-500 focus:border-red-500"
@@ -54,7 +53,7 @@ const Input: React.FC<InputProps> = ({
           }`}
         />
         {errors[name] && (
-          <p className="absolute text-red-500 text-xs  -bottom-4">
+          <p className="absolute text-red-500 text-xs -bottom-4">
             {(errors[name]?.message as string) || "Error"}
           </p>
         )}
