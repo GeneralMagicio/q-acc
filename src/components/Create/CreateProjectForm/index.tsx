@@ -170,24 +170,24 @@ const CreateProjectForm: FC<{
           </div>
         </section>
 
-        <section className="flex flex-col gap-6 w-2/4 mx-auto">
-          <label className="text-4xl font-bold text-gray-800 text-end mb-7">
+        <section className="flex flex-col gap-6 w-full mx-auto">
+          <label className="text-4xl font-bold text-gray-800">
             Upload Logo
           </label>
           <p>Displayed in the header of the project page.</p>
           <Dropzone name="logo" onDrop={handleDrop} />
         </section>
 
-        <section className="flex flex-col gap-6 w-2/4 mx-auto">
-          <label className="text-4xl font-bold text-gray-800 text-end mb-7">
+        <section className="flex flex-col gap-6 w-full mx-auto">
+          <label className="text-4xl font-bold text-gray-800">
             Add an image to your project
           </label>
           <p>Displayed in the header of the project page.</p>
           <Dropzone name="banner" onDrop={handleDrop} />
         </section>
 
-        <section className="flex flex-col gap-4 w-2/4 mx-auto">
-          <h1 className="text-4xl font-bold text-gray-800 text-center mb-7">
+        <section className="flex flex-col gap-4 w-full mx-auto">
+          <h1 className="text-4xl font-bold text-gray-800">
             Enter Project Address
           </h1>
           <Input
