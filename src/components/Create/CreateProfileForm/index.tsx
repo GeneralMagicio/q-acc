@@ -27,7 +27,7 @@ const CreateProjectForm: FC<{
   });
   const { handleSubmit, setValue } = methods;
 
-  const handleDrop = (file: File, ipfsHash: string) => {
+  const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
       setValue("profilePhoto", { file, ipfsHash });
     }
