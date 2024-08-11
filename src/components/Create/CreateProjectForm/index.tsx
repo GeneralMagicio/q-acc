@@ -10,10 +10,11 @@ import Textarea from "../../TextArea";
 import { SocialMediaInput } from "./SocialMediaInput";
 import { validators } from "./vaildators";
 
-interface FormData {
+export interface FormData {
   tokenName: string;
   tokenTicker: string;
-  tokenIcon: { file: File; ipfsHash: string } | null;
+  logo: { file: File; ipfsHash: string } | null;
+  banner: { file: File; ipfsHash: string } | null;
   projectAddress: string;
   addressConfirmed: boolean;
 }
@@ -103,9 +104,9 @@ const CreateProjectForm: FC<{
   });
   const { handleSubmit, setValue, formState } = methods;
 
-  const handleDrop = (file: File, ipfsHash: string) => {
+  const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue("tokenIcon", { file, ipfsHash });
+      setValue(name as keyof FormData, { file, ipfsHash });
     }
   };
 
@@ -170,10 +171,19 @@ const CreateProjectForm: FC<{
         </section>
 
         <section className="flex flex-col gap-6 w-2/4 mx-auto">
-          <label className="text-4xl font-bold text-gray-800 text-center mb-7">
-            Upload Token icon
+          <label className="text-4xl font-bold text-gray-800 text-end mb-7">
+            Upload Logo
           </label>
-          <Dropzone name="icon" onDrop={handleDrop} />
+          <p>Displayed in the header of the project page.</p>
+          <Dropzone name="logo" onDrop={handleDrop} />
+        </section>
+
+        <section className="flex flex-col gap-6 w-2/4 mx-auto">
+          <label className="text-4xl font-bold text-gray-800 text-end mb-7">
+            Add an image to your project
+          </label>
+          <p>Displayed in the header of the project page.</p>
+          <Dropzone name="banner" onDrop={handleDrop} />
         </section>
 
         <section className="flex flex-col gap-4 w-2/4 mx-auto">
