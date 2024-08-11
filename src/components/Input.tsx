@@ -58,7 +58,7 @@ const Input: React.FC<InputProps> = ({
           </p>
         )}
         {showCounter && maxLength && (
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-gray-100 border rounded-full text-xs text-gray-500">
+          <div className="absolute right-2 top-1/2 py-1 px-2 transform -translate-y-1/2 flex items-center justify-center bg-gray-100 border rounded-full text-xs text-gray-400">
             {value.length}/{maxLength}
           </div>
         )}

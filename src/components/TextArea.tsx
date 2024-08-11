@@ -52,7 +52,7 @@ const Textarea: React.FC<TextareaProps> = ({
           </p>
         )}
         {showCounter && maxLength && (
-          <div className="absolute right-2 bottom-2 flex items-center justify-center w-8 h-8 bg-gray-100 border rounded-full text-xs text-gray-500">
+          <div className="absolute right-2 bottom-2 flex items-center justify-center bg-gray-100 border py-1 px-2 rounded-2xl text-xs text-gray-400">
             {value.length}/{maxLength}
           </div>
         )}
