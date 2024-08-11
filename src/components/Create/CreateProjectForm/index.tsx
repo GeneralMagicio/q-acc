@@ -128,6 +128,8 @@ const CreateProjectForm: FC<{
           label="Project Name"
           placeholder="My First Project"
           rules={{ required: "Project Name is required" }}
+          showCounter
+          maxLength={55}
         />
 
         <Textarea
@@ -135,6 +137,8 @@ const CreateProjectForm: FC<{
           label="Project Teaser"
           placeholder="Enter project teaser"
           rules={{ required: "Project Teaser is required" }}
+          showCounter
+          maxLength={100}
         />
 
         <section className="flex flex-col gap-6">
