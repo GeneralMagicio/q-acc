@@ -39,7 +39,7 @@ const Input: React.FC<InputProps> = ({
         }`}
       />
       {errors[name] && (
-        <p className="absolute text-red-500 text-xs mt-1 -bottom-1">
+        <p className="absolute text-red-500 text-xs  -bottom-4">
           {(errors[name]?.message as string) || "Error"}
         </p>
       )}
