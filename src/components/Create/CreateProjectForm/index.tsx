@@ -23,7 +23,7 @@ const socialMediaLinks = [
   { name: "twitter", label: "Twitter", iconName: "twitter.svg" },
   { name: "linkedin", label: "LinkedIn", iconName: "linkedin.svg" },
   { name: "discord", label: "Discord", iconName: "discord.svg" },
-  // { name: "telegram", label: "Telegram", iconName: "telegram.svg" },
+  { name: "telegram", label: "Telegram", iconName: "telegram.svg" },
   { name: "instagram", label: "Instagram", iconName: "instagram.svg" },
   { name: "reddit", label: "Reddit", iconName: "reddit.svg" },
   { name: "youtube", label: "YouTube", iconName: "youtube.svg" },
