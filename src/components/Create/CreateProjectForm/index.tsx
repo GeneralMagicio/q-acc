@@ -8,6 +8,7 @@ import { isAddress } from "viem";
 import { type FC } from "react";
 import Textarea from "../../TextArea";
 import { SocialMediaInput } from "./SocialMediaInput";
+import { validators } from "./vaildators";
 
 interface FormData {
   tokenName: string;
@@ -18,18 +19,78 @@ interface FormData {
 }
 
 const socialMediaLinks = [
-  { name: "website", label: "Website", iconName: "web.svg" },
-  { name: "facebook", label: "Facebook", iconName: "facebook.svg" },
-  { name: "twitter", label: "Twitter", iconName: "twitter.svg" },
-  { name: "linkedin", label: "LinkedIn", iconName: "linkedin.svg" },
-  { name: "discord", label: "Discord", iconName: "discord.svg" },
-  { name: "telegram", label: "Telegram", iconName: "telegram.svg" },
-  { name: "instagram", label: "Instagram", iconName: "instagram.svg" },
-  { name: "reddit", label: "Reddit", iconName: "reddit.svg" },
-  { name: "youtube", label: "YouTube", iconName: "youtube.svg" },
-  { name: "farcaster", label: "Farcaster", iconName: "farcaster.svg" },
-  { name: "lens", label: "Lens", iconName: "lens.svg" },
-  { name: "github", label: "GitHub", iconName: "github.svg" },
+  {
+    name: "website",
+    label: "Website",
+    iconName: "web.svg",
+    rules: validators.website,
+  },
+  {
+    name: "facebook",
+    label: "Facebook",
+    iconName: "facebook.svg",
+    rules: validators.facebook,
+  },
+  {
+    name: "twitter",
+    label: "Twitter",
+    iconName: "twitter.svg",
+    rules: validators.twitter,
+  },
+  {
+    name: "linkedin",
+    label: "LinkedIn",
+    iconName: "linkedin.svg",
+    rules: validators.linkedin,
+  },
+  {
+    name: "discord",
+    label: "Discord",
+    iconName: "discord.svg",
+    rules: validators.discord,
+  },
+  {
+    name: "telegram",
+    label: "Telegram",
+    iconName: "telegram.svg",
+    rules: validators.telegram,
+  },
+  {
+    name: "instagram",
+    label: "Instagram",
+    iconName: "instagram.svg",
+    rules: validators.instagram,
+  },
+  {
+    name: "reddit",
+    label: "Reddit",
+    iconName: "reddit.svg",
+    rules: validators.reddit,
+  },
+  {
+    name: "youtube",
+    label: "YouTube",
+    iconName: "youtube.svg",
+    rules: validators.youtube,
+  },
+  {
+    name: "farcaster",
+    label: "Farcaster",
+    iconName: "farcaster.svg",
+    rules: validators.farcaster,
+  },
+  {
+    name: "lens",
+    label: "Lens",
+    iconName: "lens.svg",
+    rules: validators.lens,
+  },
+  {
+    name: "github",
+    label: "GitHub",
+    iconName: "github.svg",
+    rules: validators.github,
+  },
 ];
 
 const CreateProjectForm: FC<{
