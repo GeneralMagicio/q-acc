@@ -170,22 +170,6 @@ const CreateProjectForm: FC<{
           </div>
         </section>
 
-        <section className="flex flex-col gap-6 w-full mx-auto">
-          <label className="text-4xl font-bold text-gray-800">
-            Upload Logo
-          </label>
-          <p>Displayed in the header of the project page.</p>
-          <Dropzone name="logo" onDrop={handleDrop} />
-        </section>
-
-        <section className="flex flex-col gap-6 w-full mx-auto">
-          <label className="text-4xl font-bold text-gray-800">
-            Add an image to your project
-          </label>
-          <p>Displayed in the header of the project page.</p>
-          <Dropzone name="banner" onDrop={handleDrop} />
-        </section>
-
         <section className="flex flex-col gap-4 w-full mx-auto">
           <h1 className="text-4xl font-bold text-gray-800">
             Enter Project Address
@@ -209,6 +193,22 @@ const CreateProjectForm: FC<{
               required: "You must confirm you have access to this address.",
             }}
           />
+        </section>
+
+        <section className="flex flex-col gap-6 w-full mx-auto">
+          <label className="text-4xl font-bold text-gray-800">
+            Upload Logo
+          </label>
+          <p>Displayed in the header of the project page.</p>
+          <Dropzone name="logo" onDrop={handleDrop} />
+        </section>
+
+        <section className="flex flex-col gap-6 w-full mx-auto">
+          <label className="text-4xl font-bold text-gray-800">
+            Add an image to your project
+          </label>
+          <p>Displayed in the header of the project page.</p>
+          <Dropzone name="banner" onDrop={handleDrop} />
         </section>
       </form>
     </FormProvider>
