@@ -191,7 +191,7 @@ const CreateProjectForm: FC<{
               name="projectAddress"
               label="Project Address"
               description="Donations which exceed the 2% max supply cap for reward tokens will be sent to this address."
-              placeholder="Enter project address"
+              placeholder="0x..."
               rules={{
                 required: "Project Address is required",
                 validate: (value) => {
