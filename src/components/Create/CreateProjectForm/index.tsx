@@ -11,6 +11,7 @@ import { SocialMediaInput } from "./SocialMediaInput";
 import { validators } from "./vaildators";
 import { RichTextEditor } from "@/components/RichTextEditor";
 import Image from "next/image";
+import { IconAlertCircleOutline } from "@/components/Icons/IconAlertCircleOutline";
 
 export interface FormData {
   tokenName: string;
@@ -177,6 +178,13 @@ const CreateProjectForm: FC<{
           <h1 className="text-4xl font-bold text-gray-800">
             Your Multisig Address
           </h1>
+          <div className="rounded-lg border border-link-700 bg-link-100 text-link-700 flex gap-4 p-4 items-center">
+            <IconAlertCircleOutline />
+            <p>
+              Make sure you provide the same address you provided on your ABC
+              launcher flow.
+            </p>
+          </div>
           <div className="flex flex-col p-6 gap-6">
             <div className="flex gap-2 border-b pb-2">
               <Image
