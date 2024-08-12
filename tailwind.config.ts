@@ -30,6 +30,10 @@ const config: Config = {
           600: "#2EA096",
           700: "#1B8C82",
         },
+        link: {
+          100: "#CAE9FF",
+          700: "#2C66CD",
+        },
         peach: "#FBBA80",
       },
       backgroundImage: {
