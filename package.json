@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.4",
+    "@giveth/ui-design-system": "^1.11.34",
     "@tanstack/react-query": "^5.51.21",
     "@web3modal/wagmi": "^5.0.11",
     "axios": "^1.7.3",
@@ -17,6 +19,9 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.2",
+    "react-intl": "^6.6.8",
+    "react-quill": "^2.0.0",
+    "styled-components": "^6.1.12",
     "swiper": "^11.1.9",
     "viem": "^2.18.8",
     "wagmi": "^2.12.2"
