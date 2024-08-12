@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useState, useRef, FC } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext, RegisterOptions } from "react-hook-form";
-import { uploadToIPFS } from "./service";
 import axios from "axios";
 import { IconX } from "../Icons/IconX";
+import { uploadToIPFS } from "@/services/ipfs";
 
 interface DropzoneProps {
-  onDrop: (acceptedFile: File, ipfsHash: string) => void;
+  onDrop: (name: string, acceptedFile: File, ipfsHash: string) => void;
   name: string;
   rules?: RegisterOptions;
 }
@@ -50,7 +50,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
       abortControllerRef.current = null;
 
       if (ipfsHash) {
-        onDrop(file, ipfsHash);
+        onDrop(name, file, ipfsHash);
         setIpfsHash(ipfsHash);
         setValue(name, ipfsHash, { shouldValidate: true }); // Set value and trigger validation
       }
@@ -128,11 +128,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
               />
             ) : (
               <>
-                <p>
-                  {name === "profilePhoto"
-                    ? "Drop your Profile photo here"
-                    : "Drag & drop an image here or ,"}
-                </p>
+                <p>Drag & drop an image her</p>
                 <p>or</p>
                 <p className="font-bold">Browse Files</p>
               </>
