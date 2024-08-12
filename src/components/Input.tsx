@@ -5,6 +5,7 @@ import { useState } from "react";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label?: string;
+  description?: string;
   rules?: RegisterOptions;
   maxLength?: number;
   showCounter?: boolean;
@@ -13,6 +14,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<InputProps> = ({
   name,
   label,
+  description,
   rules,
   type = "text",
   maxLength,
@@ -52,6 +54,9 @@ const Input: React.FC<InputProps> = ({
             props.className
           }`}
         />
+        {description && (
+          <p className="text-sm text-gray-500 mt-1">{description}</p>
+        )}
         {errors[name] && (
           <p className="absolute text-red-500 text-xs -bottom-4">
             {(errors[name]?.message as string) || "Error"}
