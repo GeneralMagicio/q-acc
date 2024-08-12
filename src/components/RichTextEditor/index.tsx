@@ -39,22 +39,44 @@ export const RichTextEditor: React.FC = () => {
           input.onchange = async () => {
             const file = input.files?.[0];
             if (file) {
-              // Perform the image upload here
-              const imageIpfsHash = await uploadToIPFS(file);
+              // Create a base64 preview of the image
+              const reader = new FileReader();
+              reader.onload = async (e) => {
+                const base64ImageSrc = e.target?.result;
 
-              if (!imageIpfsHash) {
-                console.error("Failed to upload image to IPFS");
-                return;
-              }
-              const imageUrl = getIpfsAddress(imageIpfsHash);
+                // Insert the base64 image into the editor with 60% opacity
+                const range = quillInstanceRef.current.getSelection(true);
+                quillInstanceRef.current.insertEmbed(
+                  range.index,
+                  "image",
+                  base64ImageSrc
+                );
 
-              // Insert the image URL into the editor
-              const range = quillInstanceRef.current.getSelection();
-              quillInstanceRef.current.insertEmbed(
-                range.index,
-                "image",
-                imageUrl
-              );
+                const imageElement =
+                  quillInstanceRef.current.root.querySelector(
+                    `img[src="${base64ImageSrc}"]`
+                  ) as HTMLImageElement;
+                if (imageElement) {
+                  imageElement.style.opacity = "0.6";
+                }
+
+                // Perform the image upload
+                const imageIpfsHash = await uploadToIPFS(file);
+
+                if (!imageIpfsHash) {
+                  console.error("Failed to upload image to IPFS");
+                  return;
+                }
+
+                const imageUrl = getIpfsAddress(imageIpfsHash);
+
+                // Replace the base64 image source with the uploaded IPFS URL and set full opacity
+                if (imageElement) {
+                  imageElement.setAttribute("src", imageUrl);
+                  imageElement.style.opacity = "1.0";
+                }
+              };
+              reader.readAsDataURL(file);
             }
           };
         };
