@@ -1,17 +1,7 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
-import Input from "@/components/Input";
-import Checkbox from "@/components/Checkbox";
-import { Dropzone } from "@/components/DropZone";
-import { isAddress } from "viem";
 import { type FC, useState } from "react";
-import Textarea from "../../TextArea";
-import { SocialMediaInput } from "../../SocialMediaInput";
-import { validators } from "../../SocialMediaInput/vaildators";
-import { RichTextEditor } from "@/components/RichTextEditor";
-import Image from "next/image";
-import { IconAlertCircleOutline } from "@/components/Icons/IconAlertCircleOutline";
 import { TeamForm } from "./TeamForm";
 import { Button, ButtonColor } from "@/components/Button";
 
@@ -53,9 +43,6 @@ const CreateTeamForm: FC = () => {
             Add a new team member
           </Button>
         </div>
-        <Button color={ButtonColor.Giv} type="submit" className="mt-4">
-          Submit
-        </Button>
       </form>
     </FormProvider>
   );
