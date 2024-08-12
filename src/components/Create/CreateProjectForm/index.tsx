@@ -9,6 +9,7 @@ import { type FC } from "react";
 import Textarea from "../../TextArea";
 import { SocialMediaInput } from "./SocialMediaInput";
 import { validators } from "./vaildators";
+import { RichTextEditor } from "@/components/RichTextEditor";
 
 export interface FormData {
   tokenName: string;
@@ -152,6 +153,7 @@ const CreateProjectForm: FC<{
               </span>
             </p>
           </div>
+          <RichTextEditor />
         </section>
 
         <section className="flex flex-col gap-6">
