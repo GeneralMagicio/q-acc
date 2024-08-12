@@ -10,6 +10,7 @@ import Textarea from "../../TextArea";
 import { SocialMediaInput } from "./SocialMediaInput";
 import { validators } from "./vaildators";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import Image from "next/image";
 
 export interface FormData {
   tokenName: string;
@@ -174,27 +175,40 @@ const CreateProjectForm: FC<{
 
         <section className="flex flex-col gap-4 w-full mx-auto">
           <h1 className="text-4xl font-bold text-gray-800">
-            Enter Project Address
+            Your Multisig Address
           </h1>
-          <Input
-            name="projectAddress"
-            label="Project Address"
-            placeholder="Enter project address"
-            rules={{
-              required: "Project Address is required",
-              validate: (value) => {
-                return isAddress(value) ? true : "Address in not valid"; // Add your validation logic here
-              },
-            }}
-          />
-
-          <Checkbox
-            name="addressConfirmed"
-            label="I confirm I have access to this address."
-            rules={{
-              required: "You must confirm you have access to this address.",
-            }}
-          />
+          <div className="flex flex-col p-6 gap-6">
+            <div className="flex gap-2 border-b pb-2">
+              <Image
+                src="/images/chains/polygon.svg"
+                alt="polygon"
+                width={24}
+                height={24}
+              />
+              <span className="text-gray-900">Polygon address</span>
+            </div>
+            <Input
+              name="projectAddress"
+              label="Project Address"
+              description="Donations which exceed the 2% max supply cap for reward tokens will be sent to this address."
+              placeholder="Enter project address"
+              rules={{
+                required: "Project Address is required",
+                validate: (value) => {
+                  return isAddress(value) ? true : "Address in not valid"; // Add your validation logic here
+                },
+              }}
+            />
+            <div className="border-t pt-2">
+              <Checkbox
+                name="addressConfirmed"
+                label="I confirm I have access to this address."
+                rules={{
+                  required: "You must confirm you have access to this address.",
+                }}
+              />
+            </div>
+          </div>
         </section>
 
         <section className="flex flex-col gap-6 w-full mx-auto">
@@ -207,7 +221,7 @@ const CreateProjectForm: FC<{
 
         <section className="flex flex-col gap-6 w-full mx-auto">
           <label className="text-4xl font-bold text-gray-800">
-            Add an image to your project
+            Add an imageImage to your project
           </label>
           <p>Displayed in the header of the project page.</p>
           <Dropzone name="banner" onDrop={handleDrop} />
