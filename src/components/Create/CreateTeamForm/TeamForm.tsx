@@ -57,7 +57,11 @@ export const TeamForm: React.FC<TeamFormProps> = ({ index }) => {
       </div>
       <div className="flex flex-col gap-6">
         {socialMediaLinks.map((socialMedia) => (
-          <SocialMediaInput key={socialMedia.name} {...socialMedia} />
+          <SocialMediaInput
+            key={socialMedia.name}
+            {...socialMedia}
+            name={`team[${index}].${socialMedia.name}`}
+          />
         ))}
       </div>
       <div className="flex flex-col gap-6 w-full mx-auto">
@@ -65,7 +69,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({ index }) => {
           Upload an Avatar
         </label>
         <p>Displayed in the header of the project page.</p>
-        <Dropzone name="logo" onDrop={handleDrop} />
+        <Dropzone name={`team[${index}].avatar`} onDrop={handleDrop} />
       </div>
     </section>
   );
