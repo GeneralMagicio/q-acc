@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css";
+import { uploadToIPFS } from "@/services/ipfs";
+import { getIpfsAddress } from "@/helpers/image";
 
 const toolbarOptions = [
   ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -38,7 +40,13 @@ export const RichTextEditor: React.FC = () => {
             const file = input.files?.[0];
             if (file) {
               // Perform the image upload here
-              const imageUrl = await uploadImage(file);
+              const imageIpfsHash = await uploadToIPFS(file);
+
+              if (!imageIpfsHash) {
+                console.error("Failed to upload image to IPFS");
+                return;
+              }
+              const imageUrl = getIpfsAddress(imageIpfsHash);
 
               // Insert the image URL into the editor
               const range = quillInstanceRef.current.getSelection();
@@ -73,16 +81,6 @@ export const RichTextEditor: React.FC = () => {
       quillInstanceRef.current = null;
     };
   }, []);
-
-  // Mock upload function - replace with your actual upload logic
-  const uploadImage = async (file: File) => {
-    // Implement your image upload logic here, e.g., uploading to a server or cloud storage
-    // For example, you might use fetch or axios to upload the file and get the URL
-    // Here's a placeholder that simulates an upload and returns a mock URL
-    const imageUrl =
-      "https://resource.flexclip.com/templates/cover/w400/save-the-date-wedding-invitation-instagram.webp"; // Replace with actual URL from upload response
-    return imageUrl;
-  };
 
   const getEditorContent = () => {
     if (quillInstanceRef.current) {

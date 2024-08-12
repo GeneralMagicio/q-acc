@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useState, useRef, FC } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext, RegisterOptions } from "react-hook-form";
-import { uploadToIPFS } from "./service";
 import axios from "axios";
 import { IconX } from "../Icons/IconX";
+import { uploadToIPFS } from "@/services/ipfs";
 
 interface DropzoneProps {
   onDrop: (name: string, acceptedFile: File, ipfsHash: string) => void;
