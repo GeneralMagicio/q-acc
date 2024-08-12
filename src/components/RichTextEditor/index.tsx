@@ -26,9 +26,39 @@ export const RichTextEditor: React.FC = () => {
     const initializeQuill = async () => {
       if (editorRef.current) {
         const { default: Quill } = await import("quill");
+
+        // Custom image handler
+        const imageHandler = () => {
+          const input = document.createElement("input");
+          input.setAttribute("type", "file");
+          input.setAttribute("accept", "image/*");
+          input.click();
+
+          input.onchange = async () => {
+            const file = input.files?.[0];
+            if (file) {
+              // Perform the image upload here
+              const imageUrl = await uploadImage(file);
+
+              // Insert the image URL into the editor
+              const range = quillInstanceRef.current.getSelection();
+              quillInstanceRef.current.insertEmbed(
+                range.index,
+                "image",
+                imageUrl
+              );
+            }
+          };
+        };
+
         const quillInstance = new Quill(editorRef.current, {
           modules: {
-            toolbar: toolbarOptions,
+            toolbar: {
+              container: toolbarOptions,
+              handlers: {
+                image: imageHandler, // Override the default image handler
+              },
+            },
           },
           theme: "snow",
         });
@@ -44,6 +74,16 @@ export const RichTextEditor: React.FC = () => {
     };
   }, []);
 
+  // Mock upload function - replace with your actual upload logic
+  const uploadImage = async (file: File) => {
+    // Implement your image upload logic here, e.g., uploading to a server or cloud storage
+    // For example, you might use fetch or axios to upload the file and get the URL
+    // Here's a placeholder that simulates an upload and returns a mock URL
+    const imageUrl =
+      "https://resource.flexclip.com/templates/cover/w400/save-the-date-wedding-invitation-instagram.webp"; // Replace with actual URL from upload response
+    return imageUrl;
+  };
+
   const getEditorContent = () => {
     if (quillInstanceRef.current) {
       const content = quillInstanceRef.current.root.innerHTML; // Get HTML content
@@ -53,12 +93,21 @@ export const RichTextEditor: React.FC = () => {
     return "";
   };
 
+  const handleSave = () => {
+    const content = getEditorContent();
+    // You can now send this content to a server or store it in the state
+    console.log("Saving content:", content);
+  };
+
   return (
     <div>
       <div
         ref={editorRef}
         style={{ height: "400px", border: "1px solid #ccc" }}
       ></div>
+      <button onClick={handleSave} style={{ marginTop: "10px" }}>
+        Save Content
+      </button>
     </div>
   );
 };
