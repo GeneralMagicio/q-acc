@@ -1,6 +1,5 @@
 import { useFormContext, RegisterOptions } from "react-hook-form";
 import type { TextareaHTMLAttributes } from "react";
-import { useState } from "react";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
@@ -22,12 +21,10 @@ const Textarea: React.FC<TextareaProps> = ({
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext();
-  const [value, setValue] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-  };
+  const value = watch(name, ""); // Watch the value of the textarea
 
   return (
     <div>
@@ -37,8 +34,6 @@ const Textarea: React.FC<TextareaProps> = ({
           {...register(name, rules)}
           rows={rows}
           maxLength={maxLength}
-          value={value}
-          onChange={handleChange}
           className={`px-4 py-4 block w-full rounded-lg border-2 pb-12 ${
             errors[name]
               ? "border-red-500 focus:border-red-500"
