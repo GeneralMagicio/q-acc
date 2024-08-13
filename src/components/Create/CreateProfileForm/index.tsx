@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
 
-interface ProfileFormData {
+export interface ProfileFormData {
   fullName: string;
   emailAddress: string;
   emailVerified: boolean;

@@ -22,7 +22,6 @@ const socialMediaLinks = [
     iconName: "linkedin.svg",
     rules: validators.linkedin,
   },
-
   {
     name: "farcaster",
     label: "Farcaster",
@@ -32,9 +31,11 @@ const socialMediaLinks = [
 ];
 
 export const TeamForm: React.FC<TeamFormProps> = ({ index }) => {
+  const { setValue } = useFormContext(); // Access setValue from form context
+
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      // setValue(name as keyof FormData, { file, ipfsHash });
+      setValue(`team[${index}].avatar`, { file, ipfsHash });
     }
   };
 

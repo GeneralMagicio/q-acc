@@ -1,16 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-
-interface ProfileData {
-  fullName: string;
-  emailAddress: string;
-  emailVerified: boolean;
-  profilePhoto: { file: File; ipfsHash: string } | null;
-}
+import { TeamMember } from "./CreateTeamForm";
+import { ProfileFormData } from "./CreateProfileForm";
+import { ProjectFormData } from "./CreateProjectForm";
 
 interface FormData {
-  profile: ProfileData;
-  project: any;
-  team: any;
+  profile: ProfileFormData;
+  project: ProjectFormData;
+  team: TeamMember[]; // Ensure team is an array of TeamMember objects
 }
 
 interface CreateContextType {
@@ -30,15 +26,39 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
       emailVerified: false,
       profilePhoto: null,
     },
-    project: {},
-    team: {},
+    project: {
+      projectName: "",
+      projectTeaser: "",
+      projectDescription: "",
+      website: "",
+      facebook: "",
+      twitter: "",
+      linkedin: "",
+      discord: "",
+      telegram: "",
+      instagram: "",
+      reddit: "",
+      youtube: "",
+      farcaster: "",
+      lens: "",
+      github: "",
+      projectAddress: "",
+      addressConfirmed: false,
+      logo: null,
+      banner: null,
+    },
+    team: [], // Initialize team as an empty array
   });
 
   const setFormData = (data: Partial<FormData>) => {
-    console.log("UP", data);
-    setFormDataState((prevData) => ({ ...prevData, ...data }));
-    console.log("inside", formData);
+    setFormDataState((prevData) => ({
+      ...prevData,
+      ...data,
+      team: data.team || prevData.team, // Ensure team array is merged correctly
+    }));
   };
+
+  console.log("formData", formData);
 
   return (
     <CreateContext.Provider value={{ formData, setFormData }}>
