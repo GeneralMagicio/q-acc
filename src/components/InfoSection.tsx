@@ -34,24 +34,6 @@ const InfoSection = () => {
             building the q/acc protocol based on the research of Commons Stack.
           </p>
         </div>
-        <button className=" p-[16px_24px] w-[230px] flex gap-2 justify-center items-center bg-[#5326EC] text-white rounded-full text-[12px] font-bold ">
-          Learn More
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="16"
-            viewBox="0 0 17 16"
-            fill="none"
-          >
-            <path
-              d="M6.5 4L10.5 8L6.5 12"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
       </div>
       <div className=" absolute bottom-0 left-0 bg-[#FBBA80] h-[26px] w-full"></div>
     </div>
