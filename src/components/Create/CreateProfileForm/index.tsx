@@ -41,7 +41,7 @@ const CreateProjectForm: FC = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CreateNavbar onBack={() => router.back()} nextLabel="project" />
+        <CreateNavbar onBack={() => router.push("/")} nextLabel="project" />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">
             <h1 className="font-bold text-[25px]">Create Your Profile</h1>
