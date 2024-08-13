@@ -1,6 +1,5 @@
-import { useFormContext, RegisterOptions } from "react-hook-form";
+import { useFormContext, RegisterOptions, get } from "react-hook-form";
 import type { InputHTMLAttributes } from "react";
-import { useEffect, useState } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -29,6 +28,9 @@ const Input: React.FC<InputProps> = ({
 
   const value = watch(name, "");
 
+  // Safely access the error message using react-hook-form's get utility
+  const error = get(errors, name);
+
   return (
     <div>
       {label && (
@@ -43,7 +45,7 @@ const Input: React.FC<InputProps> = ({
           maxLength={maxLength}
           {...props}
           className={`px-4 py-4 block w-full rounded-lg border-2 pr-12 ${
-            errors[name]
+            error
               ? "border-red-500 focus:border-red-500"
               : "border-gray-200 focus:border-gray-300"
           } focus:outline-none focus:ring-0 text-base sm:text-sm ${
@@ -53,9 +55,9 @@ const Input: React.FC<InputProps> = ({
         {description && (
           <p className="text-sm text-gray-500 mt-1">{description}</p>
         )}
-        {errors[name] && (
+        {error && (
           <p className="absolute text-red-500 text-xs -bottom-4">
-            {(errors[name]?.message as string) || "Error"}
+            {(error.message as string) || "Error"}
           </p>
         )}
         {showCounter && maxLength && (
