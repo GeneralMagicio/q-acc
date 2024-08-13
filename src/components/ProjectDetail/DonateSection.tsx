@@ -99,9 +99,9 @@ const DonateSection = () => {
     <div className=" lg:w-[312px]  bg-white lg:h-[450px] rounded-2xl p-6">
       <div className="flex flex-col  h-full justify-between">
         <div className="">{renderContent()}</div>
-        <h1 className="border">
+        <div className=" md:relative fixed bottom-0 w-full bg-white left-0 p-5 md:p-0">
           <ProjectDonateButton />
-        </h1>
+        </div>
       </div>
     </div>
   );
