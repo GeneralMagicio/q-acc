@@ -1,6 +1,6 @@
 import { useFormContext, RegisterOptions } from "react-hook-form";
 import type { InputHTMLAttributes } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -24,12 +24,10 @@ const Input: React.FC<InputProps> = ({
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext();
-  const [value, setValue] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+  const value = watch(name, "");
 
   return (
     <div>
@@ -44,8 +42,6 @@ const Input: React.FC<InputProps> = ({
           type={type}
           maxLength={maxLength}
           {...props}
-          value={value}
-          onChange={handleChange}
           className={`px-4 py-4 block w-full rounded-lg border-2 pr-12 ${
             errors[name]
               ? "border-red-500 focus:border-red-500"
