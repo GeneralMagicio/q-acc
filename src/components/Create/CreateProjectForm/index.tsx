@@ -15,6 +15,7 @@ import { IconAlertCircleOutline } from "@/components/Icons/IconAlertCircleOutlin
 import { useCreateContext } from "../CreateContext";
 import { useRouter } from "next/navigation";
 import CreateNavbar from "../CreateNavbar";
+import Routes from "@/lib/constants/Routes";
 
 export interface ProjectFormData {
   projectName: string;
@@ -137,7 +138,10 @@ const CreateProjectForm: FC = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CreateNavbar onBack={() => router.push("/")} nextLabel="team" />
+        <CreateNavbar
+          onBack={() => router.push(Routes.CreateProfile)}
+          nextLabel="team"
+        />
         <div className="bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-7">
             Create Your Project
