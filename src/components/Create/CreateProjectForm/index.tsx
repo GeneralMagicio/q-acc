@@ -12,15 +12,30 @@ import { validators } from "../../SocialMediaInput/vaildators";
 import { RichTextEditor } from "@/components/RichTextEditor";
 import Image from "next/image";
 import { IconAlertCircleOutline } from "@/components/Icons/IconAlertCircleOutline";
-import TempNav from "@/app/create/TempNav";
+import { useCreateContext } from "../CreateContext";
+import { useRouter } from "next/navigation";
+import CreateNavbar from "../CreateNavbar";
 
-export interface FormData {
-  tokenName: string;
-  tokenTicker: string;
-  logo: { file: File; ipfsHash: string } | null;
-  banner: { file: File; ipfsHash: string } | null;
+export interface ProjectFormData {
+  projectName: string;
+  projectTeaser: string;
+  projectDescription: string;
+  website: string;
+  facebook: string;
+  twitter: string;
+  linkedin: string;
+  discord: string;
+  telegram: string;
+  instagram: string;
+  reddit: string;
+  youtube: string;
+  farcaster: string;
+  lens: string;
+  github: string;
   projectAddress: string;
   addressConfirmed: boolean;
+  logo: { file: File; ipfsHash: string } | null;
+  banner: { file: File; ipfsHash: string } | null;
 }
 
 const socialMediaLinks = [
@@ -98,31 +113,31 @@ const socialMediaLinks = [
   },
 ];
 
-const CreateProjectForm: FC<{
-  onNext: () => void;
-  onBack: () => void;
-}> = ({ onNext, onBack }) => {
-  const methods = useForm<FormData>({
-    // defaultValues: formData,
+const CreateProjectForm: FC = () => {
+  const { formData, setFormData } = useCreateContext();
+  const methods = useForm<ProjectFormData>({
+    defaultValues: formData.project,
     mode: "onChange", // This enables validation on change
   });
+  const router = useRouter();
+
   const { handleSubmit, setValue, formState } = methods;
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue(name as keyof FormData, { file, ipfsHash });
+      setValue(name as keyof ProjectFormData, { file, ipfsHash });
     }
   };
 
-  const onSubmit = (data: FormData) => {
-    // setFormData(data);
-    onNext();
+  const onSubmit = (data: ProjectFormData) => {
+    setFormData({ project: data });
+    router.push("/create/team");
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TempNav onBack={onBack} nextLabel="team" />
+        <CreateNavbar onBack={() => router.push("/")} nextLabel="team" />
         <div className="bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-7">
             Create Your Project
