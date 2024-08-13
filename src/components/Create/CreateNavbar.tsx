@@ -52,7 +52,7 @@ const CreateNavbar = ({ onBack, nextLabel }: CreateNavbarProps) => {
             color={ButtonColor.Pink}
             type="submit"
           >
-            {nextLabel === "team" ? "Save" : "Save & Continue"}
+            {nextLabel ? "Save & Continue" : "Save"}
           </Button>
         </div>
       </div>
