@@ -7,7 +7,7 @@ import { type FC } from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
-import TempNav from "@/app/create/TempNav";
+import CreateNavbar from "../CreateNavbar";
 
 interface ProfileFormData {
   fullName: string;
@@ -15,10 +15,7 @@ interface ProfileFormData {
   emailVerified: boolean;
   profilePhoto: { file: File; ipfsHash: string } | null;
 }
-const CreateProjectForm: FC<{
-  onBack: () => void;
-  formRef: React.RefObject<HTMLFormElement>;
-}> = ({ onBack, formRef }) => {
+const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
   const router = useRouter();
 
@@ -43,8 +40,8 @@ const CreateProjectForm: FC<{
 
   return (
     <FormProvider {...methods}>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-        <TempNav onBack={onBack} nextLabel="project" />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CreateNavbar onBack={() => router.back()} nextLabel="project" />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">
             <h1 className="font-bold text-[25px]">Create Your Profile</h1>
@@ -70,7 +67,7 @@ const CreateProjectForm: FC<{
               <div className="flex items-center ml-3">
                 <Button
                   type="button"
-                  onClick={onBack}
+                  onClick={verifyEmail}
                   className="p-4 rounded-full shadow-baseShadow"
                 >
                   {"Verify Email Address"}
