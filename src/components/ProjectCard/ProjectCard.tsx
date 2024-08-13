@@ -52,7 +52,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({ className, ...props }) => {
             </div>
             <div className="flex gap-1 items-center">
               <p className="font-semibold text-gray-800">1.47221</p>
-              <p className="text-xs text-gray-400">in POL</p>
+              <p className="text-xs text-gray-400">in MATIC</p>
             </div>
           </div>
         </div>

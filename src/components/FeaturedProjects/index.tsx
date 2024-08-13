@@ -22,7 +22,7 @@ export const FeaturedProjects = () => {
     <div className="bg-white mt-4 py-10">
       <div className="container flex flex-col md:flex-row justify-between items-center mb-10">
         <h3 className="text-3xl text-gray-400 font-bold">
-          #QuadraticAccelerator
+          Welcome to Early Access
         </h3>
         <div className="flex gap-2 items-center">
           <div ref={prevElRef} className={navigationStyle}>
