@@ -35,7 +35,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({ index }) => {
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue(`team[${index}].avatar`, { file, ipfsHash });
+      setValue(name, { file, ipfsHash });
     }
   };
 
