@@ -1,12 +1,12 @@
 import React from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 
-interface TempNavProps {
+interface CreateNavbarProps {
   onBack: () => void;
-  nextLabel: "profile" | "project" | "team";
+  nextLabel?: "project" | "team";
   backLabel?: string;
 }
-const TempNav = ({ onBack, nextLabel }: TempNavProps) => {
+const CreateNavbar = ({ onBack, nextLabel }: CreateNavbarProps) => {
   const buttonLabels = [
     { profile: "Save & Continue", project: "Save & Continue", team: "Save" },
   ];
@@ -44,7 +44,9 @@ const TempNav = ({ onBack, nextLabel }: TempNavProps) => {
           </div>
         </Button>
         <div className="flex text-xs md:text-lg md:flex-row flex-col items-center gap-2">
-          <span className="font-bold ">{testLabels[nextLabel]}</span>
+          {nextLabel && (
+            <span className="font-bold ">{testLabels[nextLabel]}</span>
+          )}
           <Button
             className="p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center"
             color={ButtonColor.Pink}
@@ -58,4 +60,4 @@ const TempNav = ({ onBack, nextLabel }: TempNavProps) => {
   );
 };
 
-export default TempNav;
+export default CreateNavbar;
