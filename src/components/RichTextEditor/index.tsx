@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "quill/dist/quill.snow.css";
 import { useFormContext, RegisterOptions } from "react-hook-form";
 import { uploadToIPFS } from "@/services/ipfs";
@@ -26,6 +26,7 @@ interface RichTextEditorProps {
   label?: string;
   description?: string;
   rules?: RegisterOptions;
+  maxLength?: number;
 }
 
 enum QuillState {
@@ -39,6 +40,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   label,
   description,
   rules,
+  maxLength,
 }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstanceRef = useRef<any>(null);
@@ -46,7 +48,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext();
+  const [charCount, setCharCount] = useState(0);
 
   // Register the editor field with react-hook-form
   useEffect(() => {
@@ -120,8 +124,18 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           },
           theme: "snow",
         });
+
         quillInstanceRef.current = quillInstance;
         quillStateRef.current = QuillState.INITIALIZED;
+
+        // Track character count and update form value
+        quillInstance.on("text-change", () => {
+          const text = quillInstance.getText().trim();
+          setCharCount(text.length);
+          setValue(name, quillInstance.root.innerHTML, {
+            shouldValidate: true,
+          });
+        });
       }
     };
 
@@ -133,7 +147,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     return () => {
       quillInstanceRef.current = null;
     };
-  }, [name, register, rules]);
+  }, [name, register, setValue, rules]);
 
   const getEditorContent = () => {
     if (quillInstanceRef.current) {
@@ -155,6 +169,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       ></div>
       {description && (
         <p className="text-sm text-gray-500 mt-1">{description}</p>
+      )}
+      {maxLength && (
+        <div className="text-right text-sm text-gray-500 mt-1">
+          {charCount}/{maxLength} characters
+        </div>
       )}
       {errors[name] && (
         <p className="text-red-500 text-xs mt-1">

@@ -174,7 +174,18 @@ const CreateProjectForm: FC = () => {
                 </span>
               </p>
             </div>
-            <RichTextEditor />
+            <RichTextEditor
+              name="projectDescription"
+              rules={{
+                required: "Project Teaser is required",
+                minLength: {
+                  value: 200,
+                  message:
+                    "Project description must be at least 200 characters",
+                },
+              }}
+              maxLength={500}
+            />
           </section>
 
           <section className="flex flex-col gap-6">
