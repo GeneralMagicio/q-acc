@@ -46,9 +46,9 @@ const InfoSection = () => {
             <path
               d="M6.5 4L10.5 8L6.5 12"
               stroke="white"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </button>

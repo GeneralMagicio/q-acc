@@ -1,6 +1,8 @@
 const Routes = {
   Home: "/",
-  CreateProject: "/create",
+  CreateProfile: "/create/profile",
+  CreateProject: "/create/project",
+  CreateTeam: "/create/team",
   AllProjects: "/projects/all",
   Projects: "/projects",
   AllQFProjects: "/qf/all",

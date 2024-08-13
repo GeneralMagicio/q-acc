@@ -1,13 +1,12 @@
 import React from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 
-interface TempNavProps {
-  onNext?: () => void;
+interface CreateNavbarProps {
   onBack: () => void;
-  nextLabel: "profile" | "project" | "team";
+  nextLabel?: "project" | "team";
   backLabel?: string;
 }
-const TempNav = ({ onNext, onBack, nextLabel }: TempNavProps) => {
+const CreateNavbar = ({ onBack, nextLabel }: CreateNavbarProps) => {
   const buttonLabels = [
     { profile: "Save & Continue", project: "Save & Continue", team: "Save" },
   ];
@@ -36,22 +35,24 @@ const TempNav = ({ onNext, onBack, nextLabel }: TempNavProps) => {
               <path
                 d="M25.3332 15.9993H6.6665M6.6665 15.9993L15.9998 25.3327M6.6665 15.9993L15.9998 6.66602"
                 stroke="#030823"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
             Go Back
           </div>
         </Button>
         <div className="flex text-xs md:text-lg md:flex-row flex-col items-center gap-2">
-          <span className="font-bold ">{testLabels[nextLabel]}</span>
+          {nextLabel && (
+            <span className="font-bold ">{testLabels[nextLabel]}</span>
+          )}
           <Button
             className="p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center"
             color={ButtonColor.Pink}
-            onClick={onNext}
+            type="submit"
           >
-            {nextLabel === "team" ? "Save" : "Save & Continue"}
+            {nextLabel ? "Save & Continue" : "Save"}
           </Button>
         </div>
       </div>
@@ -59,4 +60,4 @@ const TempNav = ({ onNext, onBack, nextLabel }: TempNavProps) => {
   );
 };
 
-export default TempNav;
+export default CreateNavbar;
