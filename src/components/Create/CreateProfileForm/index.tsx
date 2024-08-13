@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import TempNav from "@/app/create/TempNav";
 
-interface ProfileData {
+interface ProfileFormData {
   fullName: string;
   emailAddress: string;
   emailVerified: boolean;
@@ -22,7 +22,7 @@ const CreateProjectForm: FC<{
   const { formData, setFormData } = useCreateContext();
   const router = useRouter();
 
-  const methods = useForm<ProfileData>({
+  const methods = useForm<ProfileFormData>({
     defaultValues: formData.profile,
     mode: "onChange",
   });
@@ -30,13 +30,13 @@ const CreateProjectForm: FC<{
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue("profilePhoto", { file, ipfsHash });
+      setValue(name as keyof ProfileFormData, { file, ipfsHash });
     }
   };
 
   const verifyEmail = (e: any) => {};
 
-  const onSubmit = (data: ProfileData) => {
+  const onSubmit = (data: ProfileFormData) => {
     setFormData({ profile: data });
     router.push("/create/project");
   };
