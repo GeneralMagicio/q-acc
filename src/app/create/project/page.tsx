@@ -15,7 +15,6 @@ export default function CreateProjectPage() {
   console.log("formData", formData);
   return (
     <div className="container">
-      <TempNav onNext={onNext} onBack={onBack} nextLabel="project" />
       <CreateProjectForm onNext={onNext} onBack={onBack} />
     </div>
   );

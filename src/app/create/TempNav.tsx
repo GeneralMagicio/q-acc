@@ -50,6 +50,7 @@ const TempNav = ({ onNext, onBack, nextLabel }: TempNavProps) => {
             className="p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center"
             color={ButtonColor.Pink}
             onClick={onNext}
+            type="submit"
           >
             {nextLabel === "team" ? "Save" : "Save & Continue"}
           </Button>

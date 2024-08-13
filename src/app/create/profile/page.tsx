@@ -23,7 +23,6 @@ export default function CreateProfilePage() {
 
   return (
     <div className="container">
-      <TempNav onNext={onNext} onBack={onBack} nextLabel="profile" />
       <CreateProfileForm onBack={onBack} formRef={formRef} />
     </div>
   );
