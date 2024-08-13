@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css";
+import { useFormContext, RegisterOptions } from "react-hook-form";
 import { uploadToIPFS } from "@/services/ipfs";
 import { getIpfsAddress } from "@/helpers/image";
 
@@ -20,12 +21,39 @@ const toolbarOptions = [
   ["clean"], // remove formatting button
 ];
 
-export const RichTextEditor: React.FC = () => {
+interface RichTextEditorProps {
+  name: string;
+  label?: string;
+  description?: string;
+  rules?: RegisterOptions;
+}
+
+enum QuillState {
+  NOT_INITIALIZED,
+  INITIALIZING,
+  INITIALIZED,
+}
+
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({
+  name,
+  label,
+  description,
+  rules,
+}) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstanceRef = useRef<any>(null);
+  const quillStateRef = useRef<any>(QuillState.NOT_INITIALIZED);
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
+  // Register the editor field with react-hook-form
   useEffect(() => {
+    register(name, rules);
+
     const initializeQuill = async () => {
+      quillStateRef.current = QuillState.INITIALIZING;
       if (editorRef.current) {
         const { default: Quill } = await import("quill");
 
@@ -93,41 +121,46 @@ export const RichTextEditor: React.FC = () => {
           theme: "snow",
         });
         quillInstanceRef.current = quillInstance;
-        console.log("Quill instance initialized", quillInstance);
+        quillStateRef.current = QuillState.INITIALIZED;
       }
     };
-    initializeQuill();
+
+    if (quillStateRef.current === QuillState.NOT_INITIALIZED) {
+      initializeQuill();
+    }
 
     // Cleanup on unmount
     return () => {
       quillInstanceRef.current = null;
     };
-  }, []);
+  }, [name, register, rules]);
 
   const getEditorContent = () => {
     if (quillInstanceRef.current) {
-      const content = quillInstanceRef.current.root.innerHTML; // Get HTML content
-      console.log("Editor content:", content);
-      return content;
+      return quillInstanceRef.current.root.innerHTML; // Get HTML content
     }
     return "";
   };
 
-  const handleSave = () => {
-    const content = getEditorContent();
-    // You can now send this content to a server or store it in the state
-    console.log("Saving content:", content);
-  };
-
   return (
     <div>
+      {label && (
+        <label className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+      )}
       <div
         ref={editorRef}
         style={{ height: "400px", border: "1px solid #ccc" }}
       ></div>
-      <button onClick={handleSave} style={{ marginTop: "10px" }}>
-        Save Content
-      </button>
+      {description && (
+        <p className="text-sm text-gray-500 mt-1">{description}</p>
+      )}
+      {errors[name] && (
+        <p className="text-red-500 text-xs mt-1">
+          {(errors[name]?.message as string) || "Error"}
+        </p>
+      )}
     </div>
   );
 };
