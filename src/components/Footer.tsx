@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href={Routes.AllProjects}
+                  href={Routes.Projects}
                   className="text-gray-700 hover:underline"
                 >
                   Projects
