@@ -3,6 +3,8 @@ import { Banner } from "@/components/Banner";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
 import InfoSection from "@/components/InfoSection";
+import Routes from "@/lib/constants/Routes";
+import Link from "next/link";
 import React from "react";
 
 export default function CreatorPage() {
@@ -24,13 +26,15 @@ export default function CreatorPage() {
           The Quadratic Accelerator is a collaborative entity under Giveth
           building the q/acc protocol based on the research of Commons Stack.
         </p>
-        <Button
-          className="mx-auto !py-6 !px-10"
-          color={ButtonColor.Pink}
-          styleType={ButtonStyle.Solid}
-        >
-          Create Project
-        </Button>
+        <Link href={Routes.CreateProfile}>
+          <Button
+            className="mx-auto !py-6 !px-10"
+            color={ButtonColor.Pink}
+            styleType={ButtonStyle.Solid}
+          >
+            Create Project
+          </Button>
+        </Link>
       </InfoSection>
       <About />
       <InfoSection title="Le’ts create your project">
@@ -44,13 +48,15 @@ export default function CreatorPage() {
           The Quadratic Accelerator is a collaborative entity under Giveth
           building the q/acc protocol based on the research of Commons Stack.
         </p>
-        <Button
-          className="mx-auto !py-6 !px-10"
-          color={ButtonColor.Pink}
-          styleType={ButtonStyle.Solid}
-        >
-          Create Project
-        </Button>
+        <Link href={Routes.CreateProfile}>
+          <Button
+            className="mx-auto !py-6 !px-10"
+            color={ButtonColor.Pink}
+            styleType={ButtonStyle.Solid}
+          >
+            Create Project
+          </Button>
+        </Link>
       </InfoSection>
       <Collaborator />
     </main>
