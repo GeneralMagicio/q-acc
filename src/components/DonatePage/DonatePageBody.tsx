@@ -107,8 +107,9 @@ const DonatePageBody = () => {
           <div className="flex flex-col text-[#1D1E1F]">
             <h2 className="text-base">Make it anonymous</h2>
             <p className="text-xs">
-              By checking this, we won't consider your profile information as a
-              donor for this donation and won't show it on public pages.
+              By checking this, we won&apos;t consider your profile information
+              as a donor for this donation and won&apos;t show it on public
+              pages.
             </p>
           </div>
         </div>
