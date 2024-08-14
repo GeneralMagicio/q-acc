@@ -19,7 +19,7 @@ export const FeaturedProjects = () => {
   const [_, setSwiperInstance] = useState<SwiperClass>();
 
   return (
-    <div className="bg-white mt-4 py-10">
+    <div className="bg-white py-10">
       <div className="container flex flex-col md:flex-row justify-between items-center mb-10">
         <h3 className="text-3xl text-gray-400 font-bold">
           Welcome to Early Access

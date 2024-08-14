@@ -7,7 +7,7 @@ import React from "react";
 
 export default function CreatorPage() {
   return (
-    <main className="">
+    <main className="flex flex-col gap-4">
       <Banner
         title1="Welcome to"
         title2="Season one"

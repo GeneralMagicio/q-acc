@@ -8,7 +8,7 @@ import InfoSection from "@/components/InfoSection";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="flex flex-col gap-4">
       <Banner
         title1="the future of"
         title2="tokenization"
