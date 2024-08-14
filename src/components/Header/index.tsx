@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { ConnectButton } from "./ConnectButton/ConnectButton";
-import { IconX } from "./Icons/IconX";
+import { ConnectButton } from "../ConnectButton/ConnectButton";
+import { IconX } from "../Icons/IconX";
 
 export const Header = () => {
   return (
