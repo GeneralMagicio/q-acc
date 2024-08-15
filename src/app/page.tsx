@@ -1,30 +1,31 @@
 "use client";
 
 import { Banner } from "@/components/Banner";
-import { Button } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
 import { FeaturedProjects } from "@/components/FeaturedProjects";
-import { IconArrowRight } from "@/components/Icons/IconArrowRight";
-import { ProjectCard } from "@/components/ProjectCard/ProjectCard";
-import { checkWhiteList } from "@/services/check-white-list";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
 import About from "@/components/About";
 import InfoSection from "@/components/InfoSection";
 
 export default function Home() {
-  const [loading, setLoading] = useState(false);
-  const { open: openWeb3Modal } = useWeb3Modal();
-  const { address } = useAccount();
-  const router = useRouter();
-
   return (
-    <main className="">
-      <Banner />
-      <InfoSection />
+    <main className="flex flex-col gap-4">
+      <Banner
+        title1="the future of"
+        title2="tokenization"
+        subTitle="q/acc = QF*ABC"
+      />
+      <InfoSection title="About q/acc">
+        <p>
+          Quadratic Acceleration (q/acc) combines the strengths of Quadratic
+          Funding (QF) with those of Augmented Bonding Curves (ABC) in order to
+          create a new mechanism for launching tokens with built-in liquidity, a
+          passive revenue stream and a clear path to community growth.
+        </p>
+        <p>
+          The Quadratic Accelerator is a collaborative entity under Giveth
+          building the q/acc protocol based on the research of Commons Stack.
+        </p>
+      </InfoSection>
       <About />
       <FeaturedProjects />
       <Collaborator />
