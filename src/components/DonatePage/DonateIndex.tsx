@@ -1,13 +1,20 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import DonateNavbar from "./DonatePageNavbar";
 import DonatePageBody from "./DonatePageBody";
+import DonateSuccessPage from "./DonateSuccessPage";
 
 const DonateIndex = () => {
-  const donataionSuccess = false;
-  return (
+  const [donataionSuccess, setDonationSuccess] = useState<boolean>(true);
+  return donataionSuccess ? (
+    <>
+      <DonateNavbar />
+      <DonateSuccessPage />
+    </>
+  ) : (
     <div>
       <DonateNavbar />
-      {donataionSuccess ? <h1>Succes Page</h1> : <DonatePageBody />}
+      <DonatePageBody />
     </div>
   );
 };
