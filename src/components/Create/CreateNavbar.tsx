@@ -2,7 +2,7 @@ import React from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 
 interface CreateNavbarProps {
-  onBack: () => void;
+  onBack: (event: any) => void;
   nextLabel?: "project" | "team";
   backLabel?: string;
 }
