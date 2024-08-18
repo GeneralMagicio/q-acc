@@ -1,11 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
 
-const InfoSection = () => {
+interface InfoSectionProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const InfoSection: FC<InfoSectionProps> = ({ title, children }) => {
   return (
     <div className="relative flex flex-col items-center gap-20  self-stretch bg-[#FFF]">
       <div className="container flex flex-col gap-6  items-start p-[80px_40px] ">
         <h1 className=" relative font-bold text-[41px] ">
-          About q/acc
+          {title}
           <svg
             className=" absolute right-[-45%] top-[-30%]"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,37 +26,8 @@ const InfoSection = () => {
           </svg>
         </h1>
         <div className="text-[24px] leading-9 text-[#4F576A] font-redHatText flex flex-col gap-4">
-          <p>
-            Quadratic Acceleration (q/acc) combines the strengths of Quadratic
-            Funding (QF) with those of Augmented Bonding Curves (ABC) in order
-            to create a new mechanism for launching tokens with built-in
-            liquidity, a passive revenue stream and a clear path to community
-            growth.
-          </p>
-
-          <p>
-            The Quadratic Accelerator is a collaborative entity under Giveth
-            building the q/acc protocol based on the research of Commons Stack.
-          </p>
+          {children}
         </div>
-        <button className=" p-[16px_24px] w-[230px] flex gap-2 justify-center items-center bg-[#5326EC] text-white rounded-full text-[12px] font-bold ">
-          Learn More
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="16"
-            viewBox="0 0 17 16"
-            fill="none"
-          >
-            <path
-              d="M6.5 4L10.5 8L6.5 12"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
       </div>
       <div className=" absolute bottom-0 left-0 bg-[#FBBA80] h-[26px] w-full"></div>
     </div>

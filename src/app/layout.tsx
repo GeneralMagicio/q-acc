@@ -7,6 +7,7 @@ import { wagmiConfig } from "@/config/wagmi";
 import Web3ModalProvider from "@/context/wagmi";
 import { headers } from "next/headers";
 import { Footer } from "@/components/Footer";
+import { UserController } from "@/components/Controllers/UserController";
 
 const nunito = Nunito_Sans({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={nunito.className}>
         <div className="min-h-screen flex flex-col relative overflow-x-hidden">
           <Web3ModalProvider initialState={initialState}>
+            <UserController />
             <Header />
             <div className="flex-1">{children}</div>
             <Footer />
