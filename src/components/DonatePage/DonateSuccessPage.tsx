@@ -1,6 +1,10 @@
 import React from "react";
 import { Button, ButtonColor } from "../Button";
 import { IconXSocial } from "../Icons/IconXSocial";
+import { IconTokenSchedule } from "../Icons/IconTokenSchedule";
+import { IconFacebook } from "../Icons/IconFacebook";
+import { IconLinkedin } from "../Icons/IconLinkedin";
+import { IconViewTransaction } from "../Icons/IconViewTransaction";
 const DonateSuccessPage = () => {
   return (
     <div className="bg-[#F7F7F9] w-full  py-10 absolute z-40 my-20">
@@ -52,7 +56,12 @@ const DonateSuccessPage = () => {
             {/* Token Lock Schedule */}
 
             <div className="flex flex-col p-4 border-[1px] border-[#D7DDEA] rounded-lg  gap-2">
-              <h1 className="font-bold  text-[#1D1E1F]">Token Lock Schedule</h1>
+              <div className="flex gap-2 items-center">
+                <h1 className="font-medium  text-[#1D1E1F]">
+                  Token Lock Schedule{" "}
+                </h1>
+                <IconTokenSchedule />
+              </div>
               <hr />
               <h2 className="text-[#4F576A]">
                 One year lock followed by{" "}
@@ -65,8 +74,8 @@ const DonateSuccessPage = () => {
               <h2 className="text-xl">Share this with your friends</h2>
               <div className="flex gap-6  justify-center">
                 <IconXSocial />
-                <IconXSocial />
-                <IconXSocial />
+                <IconLinkedin />
+                <IconFacebook />
               </div>
             </div>
           </div>
@@ -81,11 +90,11 @@ const DonateSuccessPage = () => {
           </div>
 
           <div className="text-xl font-redHatText">
-            <h3 className="text-[#82899A]">
+            <h3 className="text-[#82899A] flex gap-2">
               Donation to Ethereum Colombia
-              <span className="text-[#E1458D] text-xl">
+              <span className="text-[#E1458D] text-xl flex gap-2">
                 {" "}
-                View the transaction
+                View the transaction <IconViewTransaction />
               </span>
             </h3>
           </div>
