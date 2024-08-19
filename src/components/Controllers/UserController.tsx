@@ -2,11 +2,13 @@
 
 import { checkWhiteList } from "@/services/check-white-list";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
+import { HoldModal } from "../HoldModal";
 
 export const UserController = () => {
+  const [showHoldModal, setShowHoldModal] = useState(false);
   const { address, isConnecting, chain } = useAccount();
   const router = useRouter();
 
@@ -17,11 +19,15 @@ export const UserController = () => {
       if (isWhiteListed && !isProjectCreated) {
         // redirect whitelisted users who didn't create project to creator page
         router.push("/creator");
+      } else if (!isWhiteListed) {
+        setShowHoldModal(true);
       }
     }
     if (!address) return;
     checkAddress(address);
   }, [address, router]);
 
-  return null;
+  return showHoldModal ? (
+    <HoldModal isOpen={showHoldModal} onClose={() => setShowHoldModal(false)} />
+  ) : null;
 };
