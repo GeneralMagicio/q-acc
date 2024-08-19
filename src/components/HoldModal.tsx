@@ -10,7 +10,7 @@ interface HoldModalProps extends BaseModalProps {}
 
 export const HoldModal: FC<HoldModalProps> = (props) => {
   return (
-    <Modal {...props} title="Hold On">
+    <Modal {...props} title="Hold On" showCloseButton>
       <div className=" ">
         <h1 className="font-bold text-2xl">Sorry!</h1>
         <p className="mt-4 mb-10">
@@ -19,16 +19,16 @@ export const HoldModal: FC<HoldModalProps> = (props) => {
           in error, reach out the the Quadratic Accelerator team..
         </p>
         <div className="flex justify-center">
-          <Link href={links.DISCORD}>
+          <Link href={links.FARCASTER}>
             <Button styleType={ButtonStyle.Text} color={ButtonColor.Gray}>
               <div className="flex items-center gap-1">
                 <Image
-                  src="/images/icons/social/discord.svg"
+                  src="/images/icons/social/farcaster.svg"
                   alt="discord"
                   width={24}
                   height={24}
                 />
-                <span>Qacc on Discord</span>
+                <span>Qacc on Farcaster</span>
               </div>
             </Button>
           </Link>

@@ -1,12 +1,19 @@
 "use client";
+
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { fetchUserInfo } from "./service";
 import type { Address } from "viem";
 import Image from "next/image";
+import type { FC, HTMLProps } from "react";
 
-export const ConnectButton: React.FC = () => {
+interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
+
+export const ConnectButton: FC<ConnectButtonProps> = ({
+  className,
+  ...props
+}) => {
   const [user, setUser] = useState<IUser>();
   const { open } = useWeb3Modal();
   const { address, isConnecting, chain } = useAccount();
@@ -31,11 +38,11 @@ export const ConnectButton: React.FC = () => {
     : "";
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`} {...props}>
       <button
         onClick={handleConnect}
         disabled={isConnecting}
-        className={`px-4 py-3  rounded-full transition-colors duration-300 flex items-center justify-center gap-2
+        className={`px-4 py-3  rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
           ${
             address
               ? "bg-white text-gray-900 shadow-sm hover:shadow-md"
