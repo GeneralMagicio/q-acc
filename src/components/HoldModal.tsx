@@ -19,7 +19,11 @@ export const HoldModal: FC<HoldModalProps> = (props) => {
           in error, reach out the the Quadratic Accelerator team..
         </p>
         <div className="flex justify-center">
-          <Link href={links.FARCASTER}>
+          <a
+            href={links.FARCASTER}
+            target="_blank"
+            referrerPolicy="no-referrer"
+          >
             <Button styleType={ButtonStyle.Text} color={ButtonColor.Gray}>
               <div className="flex items-center gap-1">
                 <Image
@@ -31,8 +35,8 @@ export const HoldModal: FC<HoldModalProps> = (props) => {
                 <span>Qacc on Farcaster</span>
               </div>
             </Button>
-          </Link>
-          <Link href={links.TWITTER}>
+          </a>
+          <a href={links.TWITTER} target="_blank" referrerPolicy="no-referrer">
             <Button styleType={ButtonStyle.Text} color={ButtonColor.Gray}>
               <div className="flex items-center gap-1">
                 <Image
@@ -44,7 +48,7 @@ export const HoldModal: FC<HoldModalProps> = (props) => {
                 <span>q/acc on X</span>
               </div>
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </Modal>
