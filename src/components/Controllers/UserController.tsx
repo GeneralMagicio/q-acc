@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
 import { HoldModal } from "../HoldModal";
+import Routes from "@/lib/constants/Routes";
 
 export const UserController = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
@@ -20,9 +21,9 @@ export const UserController = () => {
         setShowHoldModal(false);
         // redirect whitelisted users who didn't create project to creator page
         if (isProjectCreated) {
-          router.push("/creator");
+          router.push(Routes.Creator); // TODO: Update the route
         } else {
-          router.push("/creator");
+          router.push(Routes.Creator);
         }
       } else if (!isWhiteListed) {
         setShowHoldModal(true);
