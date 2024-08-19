@@ -2,14 +2,14 @@ import { FC } from "react";
 import { IIcon } from "./type";
 
 export const IconTokenSchedule: FC<IIcon> = ({
-  size = 24,
+  size = 17,
   color = "currentColor",
 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="17"
+      width={size}
+      height={size}
       viewBox="0 0 16 17"
       fill="none"
     >
