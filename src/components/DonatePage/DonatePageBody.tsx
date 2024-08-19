@@ -42,7 +42,7 @@ const DonatePageBody = () => {
             <div className="flex gap-1">
               <span className="text-sm">Available: 85000 MATIC</span>
 
-              <IconRefresh />
+              <IconRefresh size={16} />
             </div>
           </div>
 
@@ -67,7 +67,7 @@ const DonatePageBody = () => {
               <h1 className="font-bold  text-[#1D1E1F]">
                 Token Lock Schedule{" "}
               </h1>
-              <IconTokenSchedule />
+              <IconTokenSchedule size={17} />
             </div>
 
             <hr />
@@ -146,9 +146,9 @@ const DonatePageBody = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <div className="flex gap-1 items-center">
-                <IconABC />
+                <IconABC size={24} />
                 <span>ABC Price</span>
-                <IconInfo />
+                <IconInfo size={18} />
               </div>
               <div className="flex gap-8 font-redHatText">
                 <h2 className="w-1/2">
@@ -183,7 +183,7 @@ const DonatePageBody = () => {
           Want to spread the word about this project? Tell others now.
         </h1>
         <span className="text-xs  flex gap-2 font-medium text-[#E1458D]">
-          <IconShare />
+          <IconShare size={16} />
           Share
         </span>
       </div>

@@ -60,7 +60,7 @@ const DonateSuccessPage = () => {
                 <h1 className="font-medium  text-[#1D1E1F]">
                   Token Lock Schedule{" "}
                 </h1>
-                <IconTokenSchedule />
+                <IconTokenSchedule size={17} />
               </div>
               <hr />
               <h2 className="text-[#4F576A]">
@@ -73,9 +73,9 @@ const DonateSuccessPage = () => {
             <div className=" flex flex-col gap-2 text-center font-redHatText">
               <h2 className="text-xl">Share this with your friends</h2>
               <div className="flex gap-6  justify-center">
-                <IconXSocial />
-                <IconLinkedin />
-                <IconFacebook />
+                <IconXSocial size={25} />
+                <IconLinkedin size={25} />
+                <IconFacebook size={25} />
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@ const DonateSuccessPage = () => {
               Donation to Ethereum Colombia
               <span className="text-[#E1458D] text-xl flex gap-2">
                 {" "}
-                View the transaction <IconViewTransaction />
+                View the transaction <IconViewTransaction size={25} />
               </span>
             </h3>
           </div>
