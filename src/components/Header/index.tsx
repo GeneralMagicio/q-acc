@@ -21,8 +21,8 @@ const HEADER_ITEMS = [
 
 export const Header = () => {
   return (
-    <nav className="bg-white flex items-center p-6 gap-4 z-50 relative">
-      <div className="flex gap-4 items-center">
+    <nav className="bg-white flex items-center p-6 z-50 relative flex-wrap justify-between md:flex-nowrap ">
+      <div className="flex gap-4 items-center order-1">
         <Image
           src="/images/icons/logomark-dark.svg"
           alt="logo"
@@ -37,13 +37,13 @@ export const Header = () => {
           width={48}
         />
       </div>
-      <div className="flex">
+      <div className="flex order-3 flex-1 justify-between md:order-2 md:flex-grow-0">
         {HEADER_ITEMS.map((item, index) => (
           <HeaderItem key={index} label={item.label} route={item.route} />
         ))}
       </div>
-      <div className="flex-1"></div>
-      <ConnectButton />
+      <div className="flex-1 order-2 md:order-3"></div>
+      <ConnectButton className="order-2 md:order-3" />
     </nav>
   );
 };
