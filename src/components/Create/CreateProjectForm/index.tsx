@@ -139,8 +139,11 @@ const CreateProjectForm: FC = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          onBack={() => router.push(Routes.CreateProfile)}
-          nextLabel="team"
+          onBack={(event) => {
+            event.preventDefault();
+            router.push(Routes.CreateProfile);
+          }}
+          nextLabel="project"
         />
         <div className="bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-7">

@@ -46,7 +46,7 @@ const CreateProjectForm: FC = () => {
             event.preventDefault();
             router.push("/");
           }}
-          nextLabel="project"
+          nextLabel="privado"
         />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CreateNavbar from "../CreateNavbar";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
+import Routes from "@/lib/constants/Routes";
 
 interface IVerified {
   isVerified: boolean;
@@ -17,16 +18,16 @@ const index = () => {
   const verifyAccount = () => {};
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    router.push("/create/profile");
+    router.push(Routes.CreateProject);
   };
   return (
     <form onSubmit={handleSubmit}>
       <CreateNavbar
         onBack={(event) => {
           event.preventDefault();
-          router.push("/create/profile");
+          router.push(Routes.CreateProfile);
         }}
-        nextLabel="project"
+        disabled={!verified.isVerified}
       />
       <div className="w-full bg-white flex flex-col p-8 gap-10 rounded-2xl mt-6">
         <div>
