@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import CreateNavbar from "../CreateNavbar";
 import { useRouter } from "next/navigation";
@@ -8,10 +9,10 @@ interface IVerified {
   isVerified: boolean;
   error: boolean;
 }
-const index = () => {
+const VerifyPrivado = () => {
   const router = useRouter();
   const [verified, setVerified] = useState<IVerified>({
-    isVerified: true,
+    isVerified: false,
     error: false,
   });
 
@@ -40,7 +41,7 @@ const index = () => {
             <p className="text-[#1D1E1F] text-xl">
               All project owners and donors are required to verify their
               identity with our identity solution provider, Privado. You only
-              need to do it once, and it shouldn't take long.
+              need to do it once, and it shouldn&apos;t take long.
             </p>
           </div>
           <div className="flex flex-col gap-10 lg:flex-row justify-between">
@@ -147,4 +148,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default VerifyPrivado;
