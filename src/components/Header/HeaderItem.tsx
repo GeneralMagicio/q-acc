@@ -15,7 +15,7 @@ export const HeaderItem: FC<HeaderItemProps> = ({ label, route }) => {
   return (
     <Link href={route}>
       <div
-        className={`py-2 px-6 rounded-full ${
+        className={`py-2 px-6 rounded-full text-sm sm:text-base text-nowrap ${
           pathname === route ? "bg-giv-50" : "bg-transparent"
         }`}
       >
