@@ -16,14 +16,22 @@ export const UserController = () => {
     async function checkAddress(address: Address) {
       const isWhiteListed = await checkWhiteList(address);
       const isProjectCreated = false; //TODO: check if project is created
-      if (isWhiteListed && !isProjectCreated) {
+      if (isWhiteListed) {
+        setShowHoldModal(false);
         // redirect whitelisted users who didn't create project to creator page
-        router.push("/creator");
+        if (isProjectCreated) {
+          router.push("/creator");
+        } else {
+          router.push("/creator");
+        }
       } else if (!isWhiteListed) {
         setShowHoldModal(true);
       }
     }
-    if (!address) return;
+    if (!address) {
+      setShowHoldModal(false);
+      return;
+    }
     checkAddress(address);
   }, [address, router]);
 
