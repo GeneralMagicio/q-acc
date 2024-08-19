@@ -7,10 +7,11 @@ import { Address } from "viem";
 import { useAccount } from "wagmi";
 import { HoldModal } from "../HoldModal";
 import Routes from "@/lib/constants/Routes";
+import { signWithEVM } from "@/helpers/generateJWT";
 
 export const UserController = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
-  const { address, isConnecting, chain } = useAccount();
+  const { address, isConnecting, chain, connector } = useAccount();
   const router = useRouter();
 
   useEffect(() => {
@@ -33,6 +34,14 @@ export const UserController = () => {
       setShowHoldModal(false);
       return;
     }
+
+    async function checkSignedIn() {
+      if (!localStorage.getItem("token")) {
+        const token = await signWithEVM(address, 137, connector);
+        localStorage.setItem("token", token.jwt);
+      }
+    }
+    checkSignedIn();
     checkAddress(address);
   }, [address, router]);
 
