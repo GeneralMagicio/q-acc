@@ -10,7 +10,7 @@ interface HoldModalProps extends BaseModalProps {}
 
 export const HoldModal: FC<HoldModalProps> = (props) => {
   return (
-    <Modal {...props} title="Hold On">
+    <Modal {...props} title="Hold On" showCloseButton>
       <div className=" ">
         <h1 className="font-bold text-2xl">Sorry!</h1>
         <p className="mt-4 mb-10">
