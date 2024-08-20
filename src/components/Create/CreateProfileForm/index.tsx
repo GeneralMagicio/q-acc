@@ -8,6 +8,8 @@ import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
+import { requestGraphQL } from "@/helpers/request";
+import { UPDATE_USER } from "./queries";
 
 export interface ProfileFormData {
   fullName: string;
@@ -33,9 +35,27 @@ const CreateProjectForm: FC = () => {
 
   const verifyEmail = (e: any) => {};
 
-  const onSubmit = (data: ProfileFormData) => {
-    setFormData({ profile: data });
-    router.push("/create/verify-privado");
+  const onSubmit = async (data: ProfileFormData) => {
+    try {
+      const res = await requestGraphQL(
+        UPDATE_USER,
+        {
+          email: data.emailAddress,
+          firstName: data.fullName,
+          lastName: data.fullName,
+          avatar: data.profilePhoto?.ipfsHash,
+          newUser: true,
+        },
+        {
+          auth: true,
+        }
+      );
+      console.log("res", res);
+      setFormData({ profile: data });
+      router.push("/create/verify-privado");
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
