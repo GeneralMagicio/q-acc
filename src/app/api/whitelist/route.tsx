@@ -10,7 +10,8 @@ const whiteListedAddresses = [
   "0xD7542DC0F58095064BFEf6117fac82E4c5504d28",
   "0xA1179f64638adb613DDAAc32D918EB6BEB824104",
   "0xD5db3F8B0a236176587460dC85F0fC5705D78477",
-  "0x4ce6B0F604E1036AFFD0826764b51Fb72310964c", //my address
+  "0xd495C4EEdc060220fFc1e5F108e680c8c4A48f02", //my first address
+  "0x4ce6B0F604E1036AFFD0826764b51Fb72310964c", //my second address
 ];
 
 export async function POST(request: Request) {

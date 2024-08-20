@@ -3,11 +3,14 @@
 import { useForm, FormProvider } from "react-hook-form";
 import Input from "@/components/Input";
 import { Dropzone } from "@/components/DropZone";
-import { type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
+import { checkWhiteList } from "@/services/check-white-list";
+import { useAccount } from "wagmi";
+import { Address } from "viem";
 
 export interface ProfileFormData {
   fullName: string;
@@ -18,7 +21,8 @@ export interface ProfileFormData {
 const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
   const router = useRouter();
-
+  const { address, isConnecting, chain, connector } = useAccount();
+  const [isOwner, setIsOwner] = useState<boolean>(false);
   const methods = useForm<ProfileFormData>({
     defaultValues: formData.profile,
     mode: "onChange",
@@ -31,11 +35,25 @@ const CreateProjectForm: FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (!address) {
+      return;
+    }
+    const checkAddress = async (address: Address) => {
+      const isWhiteListed = await checkWhiteList(address);
+      setIsOwner(isWhiteListed);
+    };
+    checkAddress(address);
+  }, [address]);
   const verifyEmail = (e: any) => {};
 
   const onSubmit = (data: ProfileFormData) => {
     setFormData({ profile: data });
-    router.push("/create/verify-privado");
+    if (isOwner) {
+      router.push("/create/project");
+    } else {
+      router.push("/create/verify-privado");
+    }
   };
 
   return (
@@ -46,7 +64,7 @@ const CreateProjectForm: FC = () => {
             event.preventDefault();
             router.push("/");
           }}
-          nextLabel="privado"
+          nextLabel={isOwner ? "profile" : "privado"}
         />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">

@@ -19,6 +19,4 @@ export async function checkWhiteList(address: Address) {
     console.log("Error:", error);
     throw new Error("Error checking whitelist", error.message);
   }
-
-  return;
 }

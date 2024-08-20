@@ -3,7 +3,7 @@ import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 
 interface CreateNavbarProps {
   onBack: (event: any) => void;
-  nextLabel?: "privado" | "project" | "team";
+  nextLabel?: "profile" | "privado" | "project" | "team";
   backLabel?: string;
   disabled?: boolean;
 }
