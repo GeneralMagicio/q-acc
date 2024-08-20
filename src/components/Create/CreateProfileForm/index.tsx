@@ -35,13 +35,19 @@ const CreateProjectForm: FC = () => {
 
   const onSubmit = (data: ProfileFormData) => {
     setFormData({ profile: data });
-    router.push("/create/project");
+    router.push("/create/verify-privado");
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CreateNavbar onBack={() => router.push("/")} nextLabel="project" />
+        <CreateNavbar
+          onBack={(event) => {
+            event.preventDefault();
+            router.push("/");
+          }}
+          nextLabel="privado"
+        />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">
             <h1 className="font-bold text-[25px]">Create Your Profile</h1>

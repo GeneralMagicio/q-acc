@@ -2,15 +2,17 @@ import React from "react";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 
 interface CreateNavbarProps {
-  onBack: () => void;
-  nextLabel?: "project" | "team";
+  onBack: (event: any) => void;
+  nextLabel?: "privado" | "project" | "team";
   backLabel?: string;
+  disabled?: boolean;
 }
-const CreateNavbar = ({ onBack, nextLabel }: CreateNavbarProps) => {
+const CreateNavbar = ({ onBack, nextLabel, disabled }: CreateNavbarProps) => {
   const buttonLabels = [
     { profile: "Save & Continue", project: "Save & Continue", team: "Save" },
   ];
   const testLabels = {
+    privado: "Next: Verify your account",
     profile: "Next: Create your project",
     project: "Next: Add your team",
     team: "",
@@ -51,6 +53,7 @@ const CreateNavbar = ({ onBack, nextLabel }: CreateNavbarProps) => {
             className="p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center"
             color={ButtonColor.Pink}
             type="submit"
+            disabled={disabled ? true : false}
           >
             {nextLabel ? "Save & Continue" : "Save"}
           </Button>
