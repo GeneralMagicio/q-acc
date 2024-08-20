@@ -40,7 +40,7 @@ export const UserController = () => {
 
   useEffect(() => {
     if (!address || !connector || !chain?.id) return;
-    async function signUser() {
+    async function signInUser() {
       if (!localStorage.getItem("token")) {
         try {
           const token = await signWithEVM(address, chain?.id, connector);
@@ -50,7 +50,7 @@ export const UserController = () => {
         }
       }
     }
-    signUser();
+    signInUser();
   }, [address, chain?.id, connector]);
 
   return showHoldModal ? (
