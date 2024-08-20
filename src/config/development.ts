@@ -8,6 +8,7 @@ const config = {
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     "https://auth.serve.giveth.io/v1",
+  GIVETH_GQL_ENDPOINT: "https://impact-graph.serve.giveth.io/graphql",
 };
 
 export default config;
