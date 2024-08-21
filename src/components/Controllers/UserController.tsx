@@ -15,7 +15,12 @@ export const UserController = () => {
   const router = useRouter();
 
   useEffect(() => {
-    async function checkAddress(address: Address) {
+    if (!address) {
+      setShowHoldModal(false);
+      return;
+    }
+
+    async function checkAddressInWhiteList(address: Address) {
       const isWhiteListed = await checkWhiteList(address);
       const isProjectCreated = false; //TODO: check if project is created
       if (isWhiteListed) {
@@ -30,20 +35,23 @@ export const UserController = () => {
         setShowHoldModal(true);
       }
     }
-    if (!address) {
-      setShowHoldModal(false);
-      return;
-    }
+    checkAddressInWhiteList(address);
+  }, [address, router]);
 
-    async function checkSignedIn() {
+  useEffect(() => {
+    if (!address || !connector || !chain?.id) return;
+    async function signInUser() {
       if (!localStorage.getItem("token")) {
-        const token = await signWithEVM(address, 137, connector);
-        localStorage.setItem("token", token.jwt);
+        try {
+          const token = await signWithEVM(address, chain?.id, connector);
+          localStorage.setItem("token", token.jwt);
+        } catch (error) {
+          console.log("error", error);
+        }
       }
     }
-    checkSignedIn();
-    checkAddress(address);
-  }, [address, router]);
+    signInUser();
+  }, [address, chain?.id, connector]);
 
   return showHoldModal ? (
     <HoldModal isOpen={showHoldModal} onClose={() => setShowHoldModal(false)} />
