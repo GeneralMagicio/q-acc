@@ -10,12 +10,13 @@ import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
 import { requestGraphQL } from "@/helpers/request";
 import { UPDATE_USER } from "./queries";
+import { getIpfsAddress } from "@/helpers/image";
 
 export interface ProfileFormData {
   fullName: string;
   emailAddress: string;
   emailVerified: boolean;
-  profilePhoto: { file: File; ipfsHash: string } | null;
+  profilePhoto: string | null;
 }
 const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
@@ -29,7 +30,7 @@ const CreateProjectForm: FC = () => {
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue(name as keyof ProfileFormData, { file, ipfsHash });
+      setValue(name as keyof ProfileFormData, ipfsHash);
     }
   };
 
@@ -41,9 +42,8 @@ const CreateProjectForm: FC = () => {
         UPDATE_USER,
         {
           email: data.emailAddress,
-          firstName: data.fullName,
-          lastName: data.fullName,
-          avatar: data.profilePhoto?.ipfsHash,
+          fullName: data.fullName,
+          avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : null,
           newUser: true,
         },
         {

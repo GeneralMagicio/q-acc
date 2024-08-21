@@ -1,15 +1,11 @@
 export const UPDATE_USER = `mutation(
     $email: String
-	$firstName: String
-    $lastName: String
+	  $fullName: String
     $avatar: String
-    $newUser: Boolean
   ) {
     updateUser(
       email: $email
-      lastName: $lastName
-      firstName: $firstName
+      fullName: $fullName
       avatar: $avatar
-      newUser: $newUser
     )
   }`;
