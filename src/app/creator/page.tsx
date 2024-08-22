@@ -49,7 +49,7 @@ export default function CreatorPage() {
         </p>
         <Link href={Routes.CreateProfile}>
           <Button
-            className="mx-auto !py-6 !px-10"
+            className="mx-auto !py-6 !px-10 mt-20"
             color={ButtonColor.Pink}
             styleType={ButtonStyle.Solid}
           >
@@ -57,7 +57,7 @@ export default function CreatorPage() {
           </Button>
         </Link>
       </InfoSection>
-      <About />
+
       <Collaborator />
     </main>
   );
