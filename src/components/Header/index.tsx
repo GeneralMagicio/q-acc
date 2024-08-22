@@ -7,15 +7,11 @@ import Link from "next/link";
 
 const HEADER_ITEMS = [
   {
-    label: "For Donors",
+    label: "Home",
     route: Routes.Home,
   },
   {
-    label: "For Creators",
-    route: Routes.Creator,
-  },
-  {
-    label: "All Projects",
+    label: "Projects",
     route: Routes.Projects,
   },
 ];
