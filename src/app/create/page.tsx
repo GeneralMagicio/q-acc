@@ -8,7 +8,7 @@ import Routes from "@/lib/constants/Routes";
 import Link from "next/link";
 import React from "react";
 
-export default function CreatorPage() {
+export default function CreatePage() {
   return (
     <main className="flex flex-col gap-4">
       <Banner

@@ -25,11 +25,11 @@ export const UserController = () => {
       const isProjectCreated = false; //TODO: check if project is created
       if (isWhiteListed) {
         setShowHoldModal(false);
-        // redirect whitelisted users who didn't create project to creator page
+        // redirect whitelisted users who didn't create project to create page
         if (isProjectCreated) {
-          router.push(Routes.Creator); // TODO: Update the route
+          router.push(Routes.Create); // TODO: Update the route
         } else {
-          router.push(Routes.Creator);
+          router.push(Routes.Create);
         }
       } else if (!isWhiteListed) {
         setShowHoldModal(true);
