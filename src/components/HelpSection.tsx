@@ -23,6 +23,11 @@ export const HelpSection = () => {
         </a>
         .
       </p>
+      <p className="text-gray-400">
+        The q/acc program is proudly incubated under Giveth,
+        <br />
+        one of the pioneers in blockchain-based philanthropy and fundraising. 
+      </p>
     </div>
   );
 };
