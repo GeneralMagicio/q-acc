@@ -86,7 +86,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             </div>
           </div>
         ) : (
-          <div>Connect Wallet</div>
+          <div>q/acc Sign in</div>
         )}
       </button>
     </div>
