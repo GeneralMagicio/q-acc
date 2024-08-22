@@ -15,16 +15,37 @@ export default function CreatorPage() {
         title2="Season one"
         subTitle="q/acc = QF*ABC"
       />
-      <InfoSection title="Welcome to season one!">
+      <InfoSection title="Congratulations on making it to Season 1!">
         <p>
-          Quadratic Acceleration (q/acc) combines the strengths of Quadratic
-          Funding (QF) with those of Augmented Bonding Curves (ABC) in order to
-          create a new mechanism for launching tokens with built-in liquidity, a
-          passive revenue stream and a clear path to community growth.
+          We are thrilled to have you in the program! You were accepted into
+          this season because your project has shown significant potential, and
+          we are confident that you will contribute meaningfully to Polygon’s
+          ecosystem.
         </p>
         <p>
-          The Quadratic Accelerator is a collaborative entity under Giveth
-          building the q/acc protocol based on the research of Commons Stack.
+          Are you eager to launch your token via an Augmented Bonding Curve? We
+          thought so—and we&apos;re just as excited! In preparation, one of the
+          first things to do is create your project’s profile page here, in the
+          q/acc section of Giveth’s platform. 
+        </p>
+        <p>
+          This project page is where:
+          <ul className="list-disc pl-8">
+            <li>
+              your invited early access participants will make their
+              contributions to your project. 
+            </li>
+            <li>
+              your public donors will make their contributions during the q/acc
+              rounds.
+            </li>
+          </ul>
+        </p>
+        <p>
+          This is also the platform where you have a project dashboard to check
+          the status of contributions, token supply, token distribution and
+          more. It is also where your community will create profiles to
+          participate in the early access window and all q/acc rounds.
         </p>
         <Link href={Routes.CreateProfile}>
           <Button
@@ -37,27 +58,6 @@ export default function CreatorPage() {
         </Link>
       </InfoSection>
       <About />
-      <InfoSection title="Le’ts create your project">
-        <p>
-          Quadratic Acceleration (q/acc) combines the strengths of Quadratic
-          Funding (QF) with those of  Augmented Bonding Curves (ABC) in order to
-          create a new mechanism for launching tokens with built-in liquidity, a
-          passive revenue stream and a clear path to community growth.
-        </p>
-        <p>
-          The Quadratic Accelerator is a collaborative entity under Giveth
-          building the q/acc protocol based on the research of Commons Stack.
-        </p>
-        <Link href={Routes.CreateProfile}>
-          <Button
-            className="mx-auto !py-6 !px-10"
-            color={ButtonColor.Pink}
-            styleType={ButtonStyle.Solid}
-          >
-            Create Project
-          </Button>
-        </Link>
-      </InfoSection>
       <Collaborator />
     </main>
   );
