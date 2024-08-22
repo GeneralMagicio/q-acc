@@ -2,6 +2,7 @@ import About from "@/components/About";
 import { Banner } from "@/components/Banner";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
+import { HelpSection } from "@/components/HelpSection";
 import InfoSection from "@/components/InfoSection";
 import Routes from "@/lib/constants/Routes";
 import Link from "next/link";
@@ -28,19 +29,17 @@ export default function CreatorPage() {
           first things to do is create your project’s profile page here, in the
           q/acc section of Giveth’s platform. 
         </p>
-        <p>
-          This project page is where:
-          <ul className="list-disc pl-8">
-            <li>
-              your invited early access participants will make their
-              contributions to your project. 
-            </li>
-            <li>
-              your public donors will make their contributions during the q/acc
-              rounds.
-            </li>
-          </ul>
-        </p>
+        <p>This project page is where:</p>
+        <ul className="list-disc pl-8">
+          <li>
+            your invited early access participants will make their contributions
+            to your project. 
+          </li>
+          <li>
+            your public donors will make their contributions during the q/acc
+            rounds.
+          </li>
+        </ul>
         <p>
           This is also the platform where you have a project dashboard to check
           the status of contributions, token supply, token distribution and
@@ -57,7 +56,7 @@ export default function CreatorPage() {
           </Button>
         </Link>
       </InfoSection>
-
+      <HelpSection />
       <Collaborator />
     </main>
   );
