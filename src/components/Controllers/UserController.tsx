@@ -15,35 +15,43 @@ export const UserController = () => {
   const router = useRouter();
 
   useEffect(() => {
-    async function checkAddress(address: Address) {
-      const isWhiteListed = await checkWhiteList(address);
-      const isProjectCreated = false; //TODO: check if project is created
-      if (isWhiteListed) {
-        setShowHoldModal(false);
-        // redirect whitelisted users who didn't create project to creator page
-        // if (isProjectCreated) {
-        //   router.push(Routes.Creator); // TODO: Update the route
-        // } else {
-        //   router.push(Routes.Creator);
-        // }
-      } else if (!isWhiteListed) {
-        setShowHoldModal(true);
-      }
-    }
     if (!address) {
       setShowHoldModal(false);
       return;
     }
 
-    async function checkSignedIn() {
-      if (!localStorage.getItem("token")) {
-        const token = await signWithEVM(address, 137, connector);
-        localStorage.setItem("token", token.jwt);
+    async function checkAddressInWhiteList(address: Address) {
+      const isWhiteListed = await checkWhiteList(address);
+      const isProjectCreated = false; //TODO: check if project is created
+      if (isWhiteListed) {
+        setShowHoldModal(false);
+        // redirect whitelisted users who didn't create project to creator page
+        if (isProjectCreated) {
+          router.push(Routes.Creator); // TODO: Update the route
+        } else {
+          router.push(Routes.Creator);
+        }
+      } else if (!isWhiteListed) {
+        setShowHoldModal(true);
       }
     }
-    checkSignedIn();
-    checkAddress(address);
+    checkAddressInWhiteList(address);
   }, [address, router]);
+
+  useEffect(() => {
+    if (!address || !connector || !chain?.id) return;
+    async function signInUser() {
+      if (!localStorage.getItem("token")) {
+        try {
+          const token = await signWithEVM(address, chain?.id, connector);
+          localStorage.setItem("token", token.jwt);
+        } catch (error) {
+          console.log("error", error);
+        }
+      }
+    }
+    signInUser();
+  }, [address, chain?.id, connector]);
 
   return showHoldModal ? (
     <HoldModal isOpen={showHoldModal} onClose={() => setShowHoldModal(false)} />

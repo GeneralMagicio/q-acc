@@ -1,15 +1,18 @@
 import config from "@/config/configuration";
 
-export const fetchGraphQL = async <T>(
+export const requestGraphQL = async <T>(
   query: string,
   variables: Record<string, any> = {},
-  auth = false
+  options: { auth?: boolean; url?: string } = {}
 ): Promise<T> => {
-  const response = await fetch(config.GRAPHQL_ENDPOINT, {
+  const response = await fetch(options.url || config.GRAPHQL_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${auth ? localStorage.getItem("token") : ""}`, // Adjust if using different auth method
+      Authorization: `Bearer ${
+        options.auth ? localStorage.getItem("token") : ""
+      }`,
+      authversion: "2",
     },
     body: JSON.stringify({
       query,
