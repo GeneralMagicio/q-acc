@@ -8,12 +8,15 @@ import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
+import { requestGraphQL } from "@/helpers/request";
+import { UPDATE_USER } from "./queries";
+import { getIpfsAddress } from "@/helpers/image";
 
 export interface ProfileFormData {
   fullName: string;
   emailAddress: string;
   emailVerified: boolean;
-  profilePhoto: { file: File; ipfsHash: string } | null;
+  profilePhoto: string | null;
 }
 const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
@@ -27,15 +30,32 @@ const CreateProjectForm: FC = () => {
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue(name as keyof ProfileFormData, { file, ipfsHash });
+      setValue(name as keyof ProfileFormData, ipfsHash);
     }
   };
 
   const verifyEmail = (e: any) => {};
 
-  const onSubmit = (data: ProfileFormData) => {
-    setFormData({ profile: data });
-    router.push("/create/verify-privado");
+  const onSubmit = async (data: ProfileFormData) => {
+    try {
+      const res = await requestGraphQL(
+        UPDATE_USER,
+        {
+          email: data.emailAddress,
+          fullName: data.fullName,
+          avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : null,
+          newUser: true,
+        },
+        {
+          auth: true,
+        }
+      );
+      console.log("res", res);
+      setFormData({ profile: data });
+      router.push("/create/verify-privado");
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (

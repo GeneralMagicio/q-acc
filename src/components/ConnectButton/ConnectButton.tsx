@@ -22,9 +22,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
     if (!address) return;
     const fetchUser = async (address: Address) => {
       const data = await fetchUserInfo(address);
-      if (data) {
-        setUser(data);
-      }
+      if (data) setUser(data);
     };
     fetchUser(address);
   }, [address]);
@@ -88,7 +86,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             </div>
           </div>
         ) : (
-          <div>Connect Wallet</div>
+          <div>q/acc Sign in</div>
         )}
       </button>
     </div>
