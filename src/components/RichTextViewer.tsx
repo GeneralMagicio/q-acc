@@ -1,64 +1,78 @@
-import ReactQuill from "react-quill";
-import styled from "styled-components";
+import React from "react";
+import "quill/dist/quill.snow.css";
 
-export const QuillWrapper = styled.div`
-  .ql-container > .ql-editor {
-    word-break: break-word;
-    font-family: "Red Hat Text", sans-serif;
-    font-size: 16px;
-    p,
-    li,
-    blockquote {
-      line-height: 24px;
-    }
-    h1 {
-      font-family: "TeX Gyre Adventor", serif;
-      line-height: 45px;
-      margin-bottom: 10px;
-    }
-    h2 {
-      font-family: "TeX Gyre Adventor", serif;
-      line-height: 35px;
-      margin-bottom: 10px;
-    }
-    .ql-size-small {
-      line-height: 18px;
-    }
-    .ql-size-large {
-      line-height: 36px;
-    }
-    .ql-size-huge {
-      line-height: 56px;
-    }
-    blockquote {
-      border-left: 4px solid #ccc;
-      margin-bottom: 5px;
-      margin-top: 5px;
-      padding-left: 16px;
-    }
-    img {
-      max-width: 100%;
-    }
-    a {
-      color: #007bff !important;
-      &:hover {
-        text-decoration: underline !important;
-      }
-    }
-  }
-`;
-const RichTextViewer = (props: { content?: string }) => {
+interface RichTextViewerProps {
+  description: string;
+}
+
+const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
   return (
-    <Wrapper className=" container">
-      <ReactQuill value={props.content} readOnly theme="bubble" />
-    </Wrapper>
+    <div className="container">
+      <style>{`
+        .ql-container > .ql-editor {
+          word-break: break-word;
+          font-family: "Red Hat Text", sans-serif;
+          font-size: 16px;
+        }
+
+        .ql-container > .ql-editor p,
+        .ql-container > .ql-editor li,
+        .ql-container > .ql-editor blockquote {
+          line-height: 24px;
+        }
+
+        .ql-container > .ql-editor h1 {
+          font-family: "TeX Gyre Adventor", serif;
+          line-height: 45px;
+          margin-bottom: 10px;
+        }
+
+        .ql-container > .ql-editor h2 {
+          font-family: "TeX Gyre Adventor", serif;
+          line-height: 35px;
+          margin-bottom: 10px;
+        }
+
+        .ql-container > .ql-editor .ql-size-small {
+          line-height: 18px;
+        }
+
+        .ql-container > .ql-editor .ql-size-large {
+          line-height: 36px;
+        }
+
+        .ql-container > .ql-editor .ql-size-huge {
+          line-height: 56px;
+        }
+
+        .ql-container > .ql-editor blockquote {
+          border-left: 4px solid #ccc;
+          margin-bottom: 5px;
+          margin-top: 5px;
+          padding-left: 16px;
+        }
+
+        .ql-container > .ql-editor img {
+          max-width: 100%;
+        }
+
+        .ql-container > .ql-editor a {
+          color: #007bff !important;
+          cursor:pointer
+        }
+
+        .ql-container > .ql-editor a:hover {
+          text-decoration: underline !important;
+        }
+      `}</style>
+      <div className="ql-container">
+        <div
+          className="ql-editor"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      </div>
+    </div>
   );
 };
-
-const Wrapper = styled(QuillWrapper)`
-  .ql-container > .ql-editor {
-    padding: 0;
-  }
-`;
 
 export default RichTextViewer;
