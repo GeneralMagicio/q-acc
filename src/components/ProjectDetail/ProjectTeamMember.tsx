@@ -2,11 +2,13 @@ import React from "react";
 import { IconFacebook } from "../Icons/IconFacebook";
 import { IconXSocial } from "../Icons/IconXSocial";
 import { IconFarcaster } from "../Icons/IconFarcaster";
+import { IconLinkedin } from "../Icons/IconLinkedin";
 
 const iconMap: { [key: string]: React.ReactNode } = {
   facebook: <IconFacebook color="#4267B2" size={24} />,
   x: <IconXSocial color={"#26A7DE"} size={24} />,
   farcaster: <IconFarcaster size={24} />,
+  linkedin: <IconLinkedin size={24} />,
 };
 const socialMediaColor: { [key: string]: string } = {
   facebook: "#4267B2",
@@ -20,7 +22,7 @@ const socialMediaColor: { [key: string]: string } = {
   telegram: "#229ED9",
   github: "#1D1E1F",
 };
-const ProjectTeamMembers = () => {
+const ProjectTeamMembers = (teamMembers: any) => {
   const memebers = [
     {
       name: "Test Name",
@@ -36,7 +38,7 @@ const ProjectTeamMembers = () => {
         },
         {
           type: "FARCASTER",
-          link: "https://www.instagram.com/gen_ukraine/",
+          link: "https://www.instagram.com/gen_ukraine/1",
         },
       ],
     },
@@ -49,7 +51,7 @@ const ProjectTeamMembers = () => {
           link: "https://www.facebook.com/globalecovillagenetwork.ua/1",
         },
         {
-          type: "FACEBOOK",
+          type: "LINKEDIN",
           link: "https://www.instagram.com/lovel_george/2",
         },
         {
