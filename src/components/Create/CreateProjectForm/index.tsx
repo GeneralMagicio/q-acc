@@ -139,11 +139,9 @@ const CreateProjectForm: FC = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          onBack={(event) => {
-            event.preventDefault();
-            router.push(Routes.CreateProfile);
-          }}
-          nextLabel="project"
+          title="Create your project"
+          nextLabel="Add your team"
+          submitLabel="Save & continue"
         />
         <div className="bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-7">
@@ -180,7 +178,7 @@ const CreateProjectForm: FC = () => {
             <RichTextEditor
               name="projectDescription"
               rules={{
-                required: "Project Teaser is required",
+                required: "Project description is required",
                 minLength: {
                   value: 200,
                   message:
@@ -263,7 +261,7 @@ const CreateProjectForm: FC = () => {
 
           <section className="flex flex-col gap-6 w-full mx-auto">
             <label className="text-4xl font-bold text-gray-800">
-              Add an imageImage to your project
+              Add an image to your project
             </label>
             <p>Displayed in the header of the project page.</p>
             <Dropzone name="banner" onDrop={handleDrop} />

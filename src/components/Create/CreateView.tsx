@@ -1,14 +1,24 @@
-import About from "@/components/About";
+"use client";
+
 import { Banner } from "@/components/Banner";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
 import { HelpSection } from "@/components/HelpSection";
 import InfoSection from "@/components/InfoSection";
+import { useIsUserWhiteListed } from "@/hooks/useIsUserWhiteListed";
 import Routes from "@/lib/constants/Routes";
 import Link from "next/link";
-import React from "react";
+import { useEffect, useState } from "react";
+import { HoldModal } from "../Modals/HoldModal";
 
-export default function CreatorPage() {
+export const CreateView = () => {
+  const [showHoldModal, setShowHoldModal] = useState(false);
+  const { data: isUserWhiteListed } = useIsUserWhiteListed();
+
+  useEffect(() => {
+    setShowHoldModal(!isUserWhiteListed);
+  }, [isUserWhiteListed]);
+
   return (
     <main className="flex flex-col gap-4">
       <Banner
@@ -58,6 +68,12 @@ export default function CreatorPage() {
       </InfoSection>
       <HelpSection />
       <Collaborator />
+      {showHoldModal && (
+        <HoldModal
+          onClose={() => setShowHoldModal(false)}
+          isOpen={showHoldModal}
+        />
+      )}
     </main>
   );
-}
+};

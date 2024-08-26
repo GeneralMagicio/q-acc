@@ -1,6 +1,6 @@
 const Routes = {
   Home: "/",
-  Creator: "/creator",
+  Create: "/create",
   CreateProfile: "/create/profile",
   CreateProject: "/create/project",
   CreateTeam: "/create/team",

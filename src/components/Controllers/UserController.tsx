@@ -1,59 +1,90 @@
 "use client";
 
-import { checkWhiteList } from "@/services/check-white-list";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { Address } from "viem";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
-import { HoldModal } from "../HoldModal";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchUserInfo,
+  fetchGivethUserInfo,
+  checkUserIsWhiteListed,
+} from "../../services/user.service";
+import { useSignUser } from "@/hooks/useSignUser";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { CompleteProfileModal } from "../Modals/CompleteProfileModal";
+import { useRouter } from "next/navigation";
 import Routes from "@/lib/constants/Routes";
-import { signWithEVM } from "@/helpers/generateJWT";
 
 export const UserController = () => {
-  const [showHoldModal, setShowHoldModal] = useState(false);
-  const { address, isConnecting, chain, connector } = useAccount();
-  const router = useRouter();
+  const [showCompleteProfileModal, setShowCompleteProfileModal] =
+    useState(false);
+  const { address } = useAccount();
+  const isGivethUser = useRef(false);
+  const route = useRouter();
 
-  useEffect(() => {
-    if (!address) {
-      setShowHoldModal(false);
-      return;
-    }
-
-    async function checkAddressInWhiteList(address: Address) {
-      const isWhiteListed = await checkWhiteList(address);
-      const isProjectCreated = false; //TODO: check if project is created
-      if (isWhiteListed) {
-        setShowHoldModal(false);
-        // redirect whitelisted users who didn't create project to creator page
-        if (isProjectCreated) {
-          router.push(Routes.Creator); // TODO: Update the route
-        } else {
-          router.push(Routes.Creator);
-        }
-      } else if (!isWhiteListed) {
-        setShowHoldModal(true);
-      }
-    }
-    checkAddressInWhiteList(address);
-  }, [address, router]);
-
-  useEffect(() => {
-    if (!address || !connector || !chain?.id) return;
-    async function signInUser() {
-      if (!localStorage.getItem("token")) {
-        try {
-          const token = await signWithEVM(address, chain?.id, connector);
-          localStorage.setItem("token", token.jwt);
-        } catch (error) {
-          console.log("error", error);
+  const { data: user, isFetched } = useQuery({
+    queryKey: ["user", address],
+    queryFn: async () => {
+      console.log("fetching user info");
+      if (!address) return;
+      let data = await fetchUserInfo(address);
+      if (!data) {
+        const givethData = await fetchGivethUserInfo(address);
+        if (givethData && givethData.name) {
+          isGivethUser.current = true;
+          data = {
+            id: givethData.id,
+            email: givethData.email,
+            fullName: givethData.name,
+            avatar: givethData.avatar,
+          };
         }
       }
-    }
-    signInUser();
-  }, [address, chain?.id, connector]);
+      return data;
+    },
+    enabled: !!address,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
 
-  return showHoldModal ? (
-    <HoldModal isOpen={showHoldModal} onClose={() => setShowHoldModal(false)} />
+  useEffect(() => {
+    async function checkUser() {
+      console.log("***", address, isFetched);
+      if (!address || !isFetched) return;
+      if (!user) {
+        return setShowCompleteProfileModal(true);
+      }
+      console.log("address", address, user);
+      const isUserWhiteListed = await checkUserIsWhiteListed(address);
+      if (isUserWhiteListed) {
+        const isUserCreatedProject = false;
+        if (!isUserCreatedProject) {
+          route.push(Routes.Create);
+        }
+      }
+    }
+    checkUser();
+  }, [address, isFetched, route, user]);
+
+  const { data: token } = useSignUser();
+  const { mutateAsync: updateUser } = useUpdateUser();
+
+  useEffect(() => {
+    if (!isGivethUser.current || !token || !user) return;
+    isGivethUser.current = false;
+    const _user = {
+      email: user.email || undefined,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      newUser: true,
+    };
+    console.log("_user", _user);
+    updateUser(_user);
+  }, [token, updateUser, user]);
+
+  return showCompleteProfileModal ? (
+    <CompleteProfileModal
+      isOpen={showCompleteProfileModal}
+      onClose={() => setShowCompleteProfileModal(false)}
+    />
   ) : null;
 };

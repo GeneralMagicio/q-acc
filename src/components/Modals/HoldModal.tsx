@@ -1,6 +1,6 @@
 import { type FC } from "react";
-import Modal, { BaseModalProps } from "./Modal";
-import { Button, ButtonColor, ButtonStyle } from "./Button";
+import Modal, { BaseModalProps } from "../Modal";
+import { Button, ButtonColor, ButtonStyle } from "../Button";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
 import links from "@/lib/constants/links";

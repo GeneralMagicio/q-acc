@@ -27,10 +27,12 @@ const VerifyPrivado = () => {
   return (
     <form onSubmit={handleSubmit}>
       <CreateNavbar
-        onBack={(event) => {
-          event.preventDefault();
+        title="Identity verification"
+        onBack={(e) => {
+          e.preventDefault();
           router.push(Routes.CreateProfile);
         }}
+        submitLabel="Save"
         disabled={!verified.isVerified}
       />
       <div className="w-full bg-white flex flex-col p-8 gap-10 rounded-2xl mt-6">
