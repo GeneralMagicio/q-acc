@@ -14,9 +14,6 @@ const CreateNavbar = ({
   nextLabel,
   disabled,
 }: CreateNavbarProps) => {
-  const buttonLabels = [
-    { profile: "Save & Continue", project: "Save & Continue", team: "Save" },
-  ];
   const testLabels = {
     privado: "Next: Verify your account",
     profile: "Next: Create your project",
@@ -26,7 +23,7 @@ const CreateNavbar = ({
 
   return (
     <div>
-      <div className="flex justify-between bg-whitep p-4 bg-white rounded-2xl px-10 mt-5">
+      <div className="flex justify-between bg-white p-4 rounded-2xl px-10 mt-5">
         <div className="flex items-center gap-2 ">
           {onBack && (
             <Button
@@ -53,7 +50,7 @@ const CreateNavbar = ({
           )}
           <span className="font-bold text-lg">{title}</span>
         </div>
-        <div className="flex text-xs md:text-lg md:flex-row flex-col items-center gap-2">
+        <div className="flex text-xs md:text-lg md:flex-row flex-col items-center gap-4">
           {nextLabel && (
             <span className="font-bold ">{testLabels[nextLabel]}</span>
           )}
