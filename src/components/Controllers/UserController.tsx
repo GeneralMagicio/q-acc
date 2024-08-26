@@ -15,9 +15,11 @@ import {
 } from "../../services/user.service";
 import { useSignUser } from "@/hooks/useSignUser";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { CompleteProfileModal } from "../Modals/CompleteProfileModal";
 
 export const UserController = () => {
-  const [showHoldModal, setShowHoldModal] = useState(false);
+  const [showCompleteProfileModal, setShowCompleteProfileModal] =
+    useState(false);
   const { address } = useAccount();
   const isGivethUser = useRef(false);
 
@@ -65,7 +67,7 @@ export const UserController = () => {
         }
       }
       if (!data) {
-        setShowHoldModal(true);
+        setShowCompleteProfileModal(true);
       }
       return data;
     },
@@ -90,7 +92,10 @@ export const UserController = () => {
     updateUser(_user);
   }, [token, updateUser, user]);
 
-  return showHoldModal ? (
-    <HoldModal isOpen={showHoldModal} onClose={() => setShowHoldModal(false)} />
+  return showCompleteProfileModal ? (
+    <CompleteProfileModal
+      isOpen={showCompleteProfileModal}
+      onClose={() => setShowCompleteProfileModal(false)}
+    />
   ) : null;
 };
