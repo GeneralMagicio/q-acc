@@ -54,7 +54,7 @@ export const UserController = () => {
       let data = await fetchUserInfo(address);
       if (!data) {
         const givethData = await fetchGivethUserInfo(address);
-        if (givethData) {
+        if (givethData && givethData.name) {
           isGivethUser.current = true;
           data = {
             id: givethData.id,
@@ -63,6 +63,9 @@ export const UserController = () => {
             avatar: givethData.avatar,
           };
         }
+      }
+      if (!data) {
+        setShowHoldModal(true);
       }
       return data;
     },
