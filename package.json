@@ -20,7 +20,6 @@
     "react-hook-form": "^7.52.2",
     "react-quill": "^2.0.0",
     "siwe": "^2.3.2",
-    "styled-components": "^6.1.12",
     "swiper": "^11.1.9",
     "viem": "^2.18.8",
     "wagmi": "^2.12.2"
