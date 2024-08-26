@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 export const useIsUserWhiteListed = () => {
   const { address } = useAccount();
   return useQuery({
-    queryKey: ["isWhiteListed", address],
+    queryKey: ["isUserWhiteListed", address],
     queryFn: async () => {
       checkUserIsWhiteListed(address);
     },
