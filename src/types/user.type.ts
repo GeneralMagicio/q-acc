@@ -1,3 +1,10 @@
+export interface INewUer {
+  email: string;
+  fullName: string;
+  avatar?: string;
+  newUser: boolean;
+}
+
 export interface IUser {
   id: string;
   fullName: string;
