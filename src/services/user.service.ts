@@ -33,3 +33,21 @@ export const fetchGivethUserInfo = async (address: Address) => {
     console.error(error);
   }
 };
+
+export async function checkUserIsWhiteListed(address?: Address) {
+  if (!address) return false;
+  try {
+    const res = await fetch("/api/whitelist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ address }),
+    });
+    const data = await res.json();
+    return data.isWhiteListed;
+  } catch (error: any) {
+    console.log("Error:", error);
+    throw new Error("Error checking whitelist", error.message);
+  }
+}
