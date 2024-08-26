@@ -62,7 +62,7 @@ export const Button: FC<IButtonProps> = ({
   return (
     <button
       {...props}
-      className={`px-6 py-4 rounded-full text-base font-bold items-center flex ${variantClass} ${
+      className={`px-6 py-4 rounded-full text-xs font-bold items-center flex ${variantClass} ${
         isDisabled ? disabledClass : ""
       } ${className}`} // Combine the variant class with any additional classes
       disabled={isDisabled}
