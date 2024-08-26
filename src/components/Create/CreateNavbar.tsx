@@ -26,6 +26,7 @@ const CreateNavbar = ({
               className="   text-sm text-black"
               color={ButtonColor.Base}
               onClick={onBack}
+              type="button"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
