@@ -1,25 +1,30 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchUserInfo,
   fetchGivethUserInfo,
+  checkUserIsWhiteListed,
 } from "../../services/user.service";
 import { useSignUser } from "@/hooks/useSignUser";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
 import { CompleteProfileModal } from "../Modals/CompleteProfileModal";
+import { useRouter } from "next/navigation";
+import Routes from "@/lib/constants/Routes";
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
     useState(false);
   const { address } = useAccount();
   const isGivethUser = useRef(false);
+  const route = useRouter();
 
-  const { data: user } = useQuery({
+  const { data: user, isFetched } = useQuery({
     queryKey: ["user", address],
     queryFn: async () => {
+      console.log("fetching user info");
       if (!address) return;
       let data = await fetchUserInfo(address);
       if (!data) {
@@ -34,15 +39,31 @@ export const UserController = () => {
           };
         }
       }
-      if (!data) {
-        setShowCompleteProfileModal(true);
-      }
       return data;
     },
     enabled: !!address,
     staleTime: Infinity,
     gcTime: Infinity,
   });
+
+  useEffect(() => {
+    async function checkUser() {
+      console.log("***", address, isFetched);
+      if (!address || !isFetched) return;
+      if (!user) {
+        return setShowCompleteProfileModal(true);
+      }
+      console.log("address", address, user);
+      const isUserWhiteListed = await checkUserIsWhiteListed(address);
+      if (isUserWhiteListed) {
+        const isUserCreatedProject = false;
+        if (!isUserCreatedProject) {
+          route.push(Routes.Create);
+        }
+      }
+    }
+    checkUser();
+  }, [address, isFetched, route, user]);
 
   const { data: token } = useSignUser();
   const { mutateAsync: updateUser } = useUpdateUser();
