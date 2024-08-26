@@ -4,13 +4,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import Input from "@/components/Input";
 import { Dropzone } from "@/components/DropZone";
 import { type FC } from "react";
-import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
+import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
-import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
-import { requestGraphQL } from "@/helpers/request";
 import { getIpfsAddress } from "@/helpers/image";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { useFetchUser } from "@/hooks/useFetchUser";
 
 export interface ProfileFormData {
   fullName: string;
@@ -19,12 +18,16 @@ export interface ProfileFormData {
   profilePhoto: string | null;
 }
 const CreateProjectForm: FC = () => {
-  const { formData, setFormData } = useCreateContext();
   const router = useRouter();
+  const { data: user } = useFetchUser();
   const { mutateAsync: updateUser, isPending } = useUpdateUser();
 
   const methods = useForm<ProfileFormData>({
-    defaultValues: formData.profile,
+    defaultValues: {
+      fullName: user?.fullName || "",
+      emailAddress: user?.email || "",
+      profilePhoto: user?.avatar || null,
+    },
     mode: "onChange",
   });
   const { handleSubmit, setValue } = methods;
@@ -46,7 +49,6 @@ const CreateProjectForm: FC = () => {
     };
     const res: any = await updateUser(_user);
     if (res.updateUser) {
-      setFormData({ profile: data });
       router.push("/create/verify-privado");
     }
     console.log("res", res);

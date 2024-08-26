@@ -1,10 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { TeamMember } from "./CreateTeamForm";
-import { ProfileFormData } from "./CreateProfileForm";
 import { ProjectFormData } from "./CreateProjectForm";
 
 interface FormData {
-  profile: ProfileFormData;
   project: ProjectFormData;
   team: TeamMember[]; // Ensure team is an array of TeamMember objects
 }
@@ -20,12 +18,6 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [formData, setFormDataState] = useState<FormData>({
-    profile: {
-      fullName: "",
-      emailAddress: "",
-      emailVerified: false,
-      profilePhoto: null,
-    },
     project: {
       projectName: "",
       projectTeaser: "",
