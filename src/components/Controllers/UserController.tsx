@@ -1,14 +1,8 @@
 "use client";
 
-import { checkWhiteList } from "@/services/check-white-list";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { Address } from "viem";
 import { useAccount } from "wagmi";
-import { HoldModal } from "../Modals/HoldModal";
-import Routes from "@/lib/constants/Routes";
-import { signWithEVM } from "@/helpers/generateJWT";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   fetchUserInfo,
   fetchGivethUserInfo,
