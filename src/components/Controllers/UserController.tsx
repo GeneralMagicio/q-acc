@@ -17,32 +17,6 @@ export const UserController = () => {
   const { address } = useAccount();
   const isGivethUser = useRef(false);
 
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!address) {
-  //     setShowHoldModal(false);
-  //     return;
-  //   }
-
-  //   async function checkAddressInWhiteList(address: Address) {
-  //     const isWhiteListed = await checkWhiteList(address);
-  //     const isProjectCreated = false; //TODO: check if project is created
-  //     if (isWhiteListed) {
-  //       setShowHoldModal(false);
-  //       // redirect whitelisted users who didn't create project to create page
-  //       if (isProjectCreated) {
-  //         router.push(Routes.Create); // TODO: Update the route
-  //       } else {
-  //         router.push(Routes.Create);
-  //       }
-  //     } else if (!isWhiteListed) {
-  //       setShowHoldModal(true);
-  //     }
-  //   }
-  //   checkAddressInWhiteList(address);
-  // }, [address, router]);
-
   const { data: user } = useQuery({
     queryKey: ["user", address],
     queryFn: async () => {
