@@ -51,7 +51,10 @@ const CreateProjectForm: FC = () => {
     };
     const res: any = await updateUser(_user);
     if (res.updateUser) {
-      router.push("/create/verify-privado");
+      const dest = isUserWhiteListed
+        ? "/create/project"
+        : "/create/verify-privado";
+      router.push(dest);
     }
     console.log("res", res);
   };
