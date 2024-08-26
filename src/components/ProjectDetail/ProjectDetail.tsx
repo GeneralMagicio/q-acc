@@ -4,6 +4,7 @@ import ProjectDetailBanner from "./ProjectDetailBanner";
 import { useSearchParams } from "next/navigation";
 import ProjectTabs from "./ProjectTabs";
 import DonateSection from "./DonateSection";
+import ProjectDonationTable from "./ProjectDonationTable";
 export enum EProjectPageTabs {
   DONATIONS = "donations",
   MEMEBERS = "members",
@@ -38,7 +39,7 @@ const ProjectDetail = () => {
 
       <ProjectTabs activeTab={activeTab} slug={"slug"} />
       {activeTab === 0 && <>ABOUT</>}
-      {activeTab === 1 && <h1>Donation</h1>}
+      {activeTab === 1 && <ProjectDonationTable />}
       {activeTab === 2 && <h2>MEMEBR</h2>}
     </div>
   );
