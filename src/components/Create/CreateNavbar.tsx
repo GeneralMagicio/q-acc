@@ -4,23 +4,19 @@ import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 interface CreateNavbarProps {
   title: string;
   onBack?: (event: any) => void;
-  nextLabel?: "privado" | "project" | "team";
-  backLabel?: string;
+  nextLabel?: string;
+  submitLabel?: string;
   disabled?: boolean;
+  loading?: boolean;
 }
 const CreateNavbar = ({
   title,
   onBack,
   nextLabel,
+  submitLabel,
   disabled,
+  loading,
 }: CreateNavbarProps) => {
-  const testLabels = {
-    privado: "Next: Verify your account",
-    profile: "Next: Create your project",
-    project: "Next: Add your team",
-    team: "",
-  };
-
   return (
     <div>
       <div className="flex justify-between bg-white p-4 rounded-2xl px-10 mt-5">
@@ -51,16 +47,15 @@ const CreateNavbar = ({
           <span className="font-bold text-lg">{title}</span>
         </div>
         <div className="flex text-xs md:text-lg md:flex-row flex-col items-center gap-4">
-          {nextLabel && (
-            <span className="font-bold ">{testLabels[nextLabel]}</span>
-          )}
+          {nextLabel && <span className="font-bold ">Next: {nextLabel}</span>}
           <Button
             className="p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center"
             color={ButtonColor.Pink}
             type="submit"
             disabled={disabled ? true : false}
+            loading={loading}
           >
-            {nextLabel ? "Save & Continue" : "Save"}
+            {submitLabel}
           </Button>
         </div>
       </div>
