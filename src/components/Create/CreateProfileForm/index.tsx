@@ -4,13 +4,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import Input from "@/components/Input";
 import { Dropzone } from "@/components/DropZone";
 import { type FC } from "react";
-import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
+import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
-import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
-import { requestGraphQL } from "@/helpers/request";
-import { UPDATE_USER } from "./queries";
 import { getIpfsAddress } from "@/helpers/image";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { useFetchUser } from "@/hooks/useFetchUser";
+import { useIsUserWhiteListed } from "@/hooks/useIsUserWhiteListed";
 
 export interface ProfileFormData {
   fullName: string;
@@ -19,11 +19,17 @@ export interface ProfileFormData {
   profilePhoto: string | null;
 }
 const CreateProjectForm: FC = () => {
-  const { formData, setFormData } = useCreateContext();
   const router = useRouter();
+  const { data: user } = useFetchUser();
+  const { mutateAsync: updateUser, isPending } = useUpdateUser();
+  const { data: isUserWhiteListed } = useIsUserWhiteListed();
 
   const methods = useForm<ProfileFormData>({
-    defaultValues: formData.profile,
+    defaultValues: {
+      fullName: user?.fullName || "",
+      emailAddress: user?.email || "",
+      profilePhoto: user?.avatar || null,
+    },
     mode: "onChange",
   });
   const { handleSubmit, setValue } = methods;
@@ -37,36 +43,36 @@ const CreateProjectForm: FC = () => {
   const verifyEmail = (e: any) => {};
 
   const onSubmit = async (data: ProfileFormData) => {
-    try {
-      const res = await requestGraphQL(
-        UPDATE_USER,
-        {
-          email: data.emailAddress,
-          fullName: data.fullName,
-          avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : null,
-          newUser: true,
-        },
-        {
-          auth: true,
-        }
-      );
-      console.log("res", res);
-      setFormData({ profile: data });
-      router.push("/create/verify-privado");
-    } catch (error) {
-      console.log("error", error);
+    const _user = {
+      email: data.emailAddress,
+      fullName: data.fullName,
+      avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : undefined,
+      newUser: true,
+    };
+    const res: any = await updateUser(_user);
+    if (res.updateUser) {
+      const dest = isUserWhiteListed
+        ? "/create/project"
+        : "/create/verify-privado";
+      router.push(dest);
     }
+    console.log("res", res);
   };
+  console.log("isUserWhiteListed", isUserWhiteListed);
+
+  const nextLabel = isUserWhiteListed ? undefined : "Verify your identity";
+  const submitLabel = isUserWhiteListed
+    ? "Save & Create Project"
+    : "Save & Continue";
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          onBack={(event) => {
-            event.preventDefault();
-            router.push("/");
-          }}
-          nextLabel="privado"
+          title="Create Your Profile"
+          nextLabel={nextLabel}
+          submitLabel={submitLabel}
+          loading={isPending}
         />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">

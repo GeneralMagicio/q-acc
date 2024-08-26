@@ -51,7 +51,11 @@ const CreateTeamForm: FC = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-6">
-        <CreateNavbar onBack={() => router.push(Routes.CreateProject)} />
+        <CreateNavbar
+          title="Add your team"
+          onBack={() => router.push(Routes.CreateProject)}
+          submitLabel="Save"
+        />
         {teamMembers?.map((_, index) => (
           <TeamForm key={index} index={index} />
         ))}
