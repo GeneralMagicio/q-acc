@@ -58,8 +58,6 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
     }));
   };
 
-  console.log("formData", formData);
-
   return (
     <CreateContext.Provider value={{ formData, setFormData }}>
       {children}
