@@ -1,6 +1,6 @@
 export interface INewUer {
-  email: string;
   fullName: string;
+  email?: string;
   avatar?: string;
   newUser: boolean;
 }

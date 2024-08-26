@@ -9,7 +9,6 @@ export const useUpdateUser = () => {
   return useMutation({
     mutationKey: ["user", address],
     mutationFn: async (user: INewUer) => {
-      console.log("Mutation function called");
       return await requestGraphQL(
         UPDATE_USER,
         {
