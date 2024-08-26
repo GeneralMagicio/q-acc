@@ -1,12 +1,10 @@
 "use client";
 
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { fetchUserInfo } from "./service";
-import type { Address } from "viem";
 import Image from "next/image";
 import type { FC, HTMLProps } from "react";
+import { useFetchUser } from "@/hooks/useFetchUser";
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -14,18 +12,9 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   className,
   ...props
 }) => {
-  const [user, setUser] = useState<IUser>();
   const { open } = useWeb3Modal();
   const { address, isConnecting, chain } = useAccount();
-
-  useEffect(() => {
-    if (!address) return;
-    const fetchUser = async (address: Address) => {
-      const data = await fetchUserInfo(address);
-      if (data) setUser(data);
-    };
-    fetchUser(address);
-  }, [address]);
+  const { data: user } = useFetchUser();
 
   const handleConnect = () => {
     open();
@@ -40,7 +29,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
       <button
         onClick={handleConnect}
         disabled={isConnecting}
-        className={`px-4 py-3  rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
+        className={`px-4 py-3 rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
           ${
             address
               ? "bg-white text-gray-900 shadow-sm hover:shadow-md"
@@ -79,7 +68,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               className="rounded-full"
             />
             <div className="flex flex-col items-start">
-              <div className="text-sm">{shortAddress}</div>
+              <div className="text-sm">{user?.fullName || shortAddress}</div>
               <div className="text-[0.6rem] text-giv-800 max-w-32 whitespace-nowrap overflow-hidden text-ellipsis">
                 Connected to {chain?.name}
               </div>
