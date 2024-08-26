@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import ProjectTabs from "./ProjectTabs";
 import DonateSection from "./DonateSection";
 import ProjectTeamMembers from "./ProjectTeamMember";
-import { useFetchProjectById } from "@/hooks/useFetchProjectByID";
+import { useFetchProjectById } from "@/hooks/useFetchProjectById";
 import { darwinia } from "viem/chains";
 export enum EProjectPageTabs {
   DONATIONS = "donations",

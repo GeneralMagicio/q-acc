@@ -54,11 +54,17 @@ export async function checkUserIsWhiteListed(address?: Address) {
 }
 
 export const fetchProjectById = async (id: number, address?: Address) => {
-  const variables = address ? { id, address } : { id };
   try {
-    const res = await requestGraphQL<{ projectById: any }>(GET_PROJECT_BY_ID, {
-      id,
-    });
+    const res = await requestGraphQL<{ projectById: any }>(
+      GET_PROJECT_BY_ID,
+      {
+        id,
+        address,
+      },
+      {
+        auth: true,
+      }
+    );
     return res?.projectById;
   } catch (error) {
     console.error(error);
