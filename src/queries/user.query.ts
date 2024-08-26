@@ -22,3 +22,15 @@ export const GET_GIVETH_USER_BY_ADDRESS = `
 		}
 	}
 `;
+
+export const UPDATE_USER = `mutation(
+    $email: String
+	  $fullName: String
+    $avatar: String
+  ) {
+    updateUser(
+      email: $email
+      fullName: $fullName
+      avatar: $avatar
+    )
+  }`;
