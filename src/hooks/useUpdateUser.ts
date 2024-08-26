@@ -10,7 +10,7 @@ export const useUpdateUser = () => {
     mutationKey: ["user", address],
     mutationFn: async (user: INewUer) => {
       console.log("Mutation function called");
-      await requestGraphQL(
+      return await requestGraphQL(
         UPDATE_USER,
         {
           email: user.email,
