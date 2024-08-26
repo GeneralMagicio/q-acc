@@ -10,6 +10,7 @@ import CreateNavbar from "../CreateNavbar";
 import { getIpfsAddress } from "@/helpers/image";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
 import { useFetchUser } from "@/hooks/useFetchUser";
+import { useIsUserWhiteListed } from "@/hooks/useIsUserWhiteListed";
 
 export interface ProfileFormData {
   fullName: string;
@@ -21,6 +22,7 @@ const CreateProjectForm: FC = () => {
   const router = useRouter();
   const { data: user } = useFetchUser();
   const { mutateAsync: updateUser, isPending } = useUpdateUser();
+  const { data: isUserWhiteListed } = useIsUserWhiteListed();
 
   const methods = useForm<ProfileFormData>({
     defaultValues: {
@@ -53,11 +55,22 @@ const CreateProjectForm: FC = () => {
     }
     console.log("res", res);
   };
+  console.log("isUserWhiteListed", isUserWhiteListed);
+
+  const nextLabel = isUserWhiteListed ? undefined : "Verify your identity";
+  const submitLabel = isUserWhiteListed
+    ? "Save & Create Project"
+    : "Save & Continue";
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CreateNavbar title="Create Your Profile" nextLabel="privado" />
+        <CreateNavbar
+          title="Create Your Profile"
+          nextLabel={nextLabel}
+          submitLabel={submitLabel}
+          loading={isPending}
+        />
         <div className=" bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg">
           <div className="flex flex-col items-start justify-start mb-10">
             <h1 className="font-bold text-[25px]">Create Your Profile</h1>
