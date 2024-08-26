@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { useCreateContext } from "../CreateContext";
 import CreateNavbar from "../CreateNavbar";
 import { requestGraphQL } from "@/helpers/request";
-import { UPDATE_USER } from "./queries";
 import { getIpfsAddress } from "@/helpers/image";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
 
 export interface ProfileFormData {
   fullName: string;
@@ -21,6 +21,7 @@ export interface ProfileFormData {
 const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
   const router = useRouter();
+  const { mutateAsync: updateUser, isPending } = useUpdateUser();
 
   const methods = useForm<ProfileFormData>({
     defaultValues: formData.profile,
@@ -37,25 +38,18 @@ const CreateProjectForm: FC = () => {
   const verifyEmail = (e: any) => {};
 
   const onSubmit = async (data: ProfileFormData) => {
-    try {
-      const res = await requestGraphQL(
-        UPDATE_USER,
-        {
-          email: data.emailAddress,
-          fullName: data.fullName,
-          avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : null,
-          newUser: true,
-        },
-        {
-          auth: true,
-        }
-      );
-      console.log("res", res);
+    const _user = {
+      email: data.emailAddress,
+      fullName: data.fullName,
+      avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : undefined,
+      newUser: true,
+    };
+    const res: any = await updateUser(_user);
+    if (res.updateUser) {
       setFormData({ profile: data });
       router.push("/create/verify-privado");
-    } catch (error) {
-      console.log("error", error);
     }
+    console.log("res", res);
   };
 
   return (
