@@ -7,7 +7,7 @@ export const useIsUserWhiteListed = () => {
   return useQuery({
     queryKey: ["isUserWhiteListed", address],
     queryFn: async () => {
-      checkUserIsWhiteListed(address);
+      return checkUserIsWhiteListed(address);
     },
     enabled: !!address,
   });
