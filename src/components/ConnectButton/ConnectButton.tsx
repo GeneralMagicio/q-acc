@@ -3,8 +3,8 @@
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount } from "wagmi";
 import Image from "next/image";
-import type { FC, HTMLProps } from "react";
 import { useFetchUser } from "@/hooks/useFetchUser";
+import type { FC, HTMLProps } from "react";
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -65,7 +65,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               alt="Profile Pic"
               width={24}
               height={24}
-              className="rounded-full"
+              className="rounded-full w-6 h-6"
             />
             <div className="flex flex-col items-start">
               <div className="text-sm">{user?.fullName || shortAddress}</div>

@@ -1,6 +1,6 @@
-import links from "@/lib/constants/links";
 import Image from "next/image";
 import React from "react";
+import links from "@/lib/constants/links";
 
 export const HelpSection = () => {
   return (

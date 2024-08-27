@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { ProjectsBanner } from "./ProjectsBanner";
 import { ProjectCard } from "../ProjectCard/ProjectCard";

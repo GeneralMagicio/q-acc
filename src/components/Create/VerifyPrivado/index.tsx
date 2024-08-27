@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import CreateNavbar from "../CreateNavbar";
 import { useRouter } from "next/navigation";
+import CreateNavbar from "../CreateNavbar";
 import { Button } from "@/components/Button";
 import Routes from "@/lib/constants/Routes";
 import { IconError } from "@/components/Icons/IconError";
@@ -55,8 +55,8 @@ const VerifyPrivado = () => {
                 verified.error
                   ? "bg-[#FFD6D0] border-[#C71D06] "
                   : verified.isVerified
-                  ? "bg-[#D2FFFB] border-[#1B8C82] "
-                  : "bg-[#F6F3FF] border-[#8668FC] "
+                    ? "bg-[#D2FFFB] border-[#1B8C82] "
+                    : "bg-[#F6F3FF] border-[#8668FC] "
               }`}
             >
               {verified.error ? (

@@ -1,9 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ConnectButton } from "../ConnectButton/ConnectButton";
 import { IconX } from "../Icons/IconX";
 import Routes from "@/lib/constants/Routes";
 import { HeaderItem } from "./HeaderItem";
-import Link from "next/link";
 
 const HEADER_ITEMS = [
   {

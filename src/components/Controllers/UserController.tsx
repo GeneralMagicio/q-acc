@@ -1,20 +1,19 @@
 "use client";
 
-import React, { use, useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import {
   fetchUserInfo,
   fetchGivethUserInfo,
   checkUserIsWhiteListed,
 } from "../../services/user.service";
 import { CompleteProfileModal } from "../Modals/CompleteProfileModal";
-import { useRouter } from "next/navigation";
 import Routes from "@/lib/constants/Routes";
 import { SignModal } from "../Modals/SignModal";
 import { getLocalStorageToken } from "@/helpers/generateJWT";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
-import { on } from "events";
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =

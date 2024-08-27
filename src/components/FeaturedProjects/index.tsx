@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import { ProjectCard } from "../ProjectCard/ProjectCard";
 import { Swiper, SwiperSlide, type SwiperClass } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import { ProjectCard } from "../ProjectCard/ProjectCard";
 import "swiper/css";
 import { IconPointerLeft } from "../Icons/IconPointerLeft";
 import { IconPointerRight } from "../Icons/IconPointerRight";

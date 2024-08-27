@@ -1,7 +1,7 @@
 import { type FC } from "react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Modal, { BaseModalProps } from "./Modal";
 import { Button } from "./Button";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 interface ConnectModalProps extends BaseModalProps {}
 

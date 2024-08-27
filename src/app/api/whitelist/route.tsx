@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   // Check if the address is whitelisted
   const isWhiteListed = whiteListedAddresses.some(
     (whitelistedAddress) =>
-      whitelistedAddress.toLowerCase() === address.toLowerCase()
+      whitelistedAddress.toLowerCase() === address.toLowerCase(),
   );
 
   // For this example, we'll just return the received address

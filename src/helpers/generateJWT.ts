@@ -5,7 +5,7 @@ import config from "@/config/configuration";
 // Generate Nonce
 export const fetchNonce = async (): Promise<string> => {
   const nonceResponse: any = await fetch(
-    `${config.AUTH_BASE_ROUTE}/nonce`
+    `${config.AUTH_BASE_ROUTE}/nonce`,
   ).then((n) => {
     return n.json();
   });
@@ -17,7 +17,7 @@ export const fetchNonce = async (): Promise<string> => {
 export const createSiweMessage = async (
   address: string,
   chainId: number,
-  statement: string
+  statement: string,
 ) => {
   let domain = "qacc.io";
   try {
@@ -49,12 +49,12 @@ export const createSiweMessage = async (
 export const signWithEVM = async (
   address?: string,
   chainId?: number,
-  connector?: Connector
+  connector?: Connector,
 ) => {
   const siweMessage: any = await createSiweMessage(
     address!,
     chainId!,
-    "Login into Giveth services"
+    "Login into Giveth services",
   );
 
   const { message, nonce } = siweMessage;
