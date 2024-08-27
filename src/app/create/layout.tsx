@@ -3,13 +3,13 @@
 import { CreateProvider } from '@/components/Create/CreateContext';
 
 export default function CreateLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<CreateProvider>
-			<section>{children}</section>
-		</CreateProvider>
-	);
+  return (
+    <CreateProvider>
+      <section>{children}</section>
+    </CreateProvider>
+  );
 }

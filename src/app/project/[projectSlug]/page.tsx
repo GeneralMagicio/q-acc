@@ -3,7 +3,7 @@
 import ProjectDetail from '@/components/ProjectDetail/ProjectDetail';
 
 const ProjectRoute = () => {
-	return <ProjectDetail />;
+  return <ProjectDetail />;
 };
 
 export default ProjectRoute;
