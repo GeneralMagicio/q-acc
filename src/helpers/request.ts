@@ -1,4 +1,5 @@
 import config from "@/config/configuration";
+import { getCurrentUserToken } from "./generateJWT";
 
 export const requestGraphQL = async <T>(
   query: string,
@@ -9,9 +10,7 @@ export const requestGraphQL = async <T>(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        options.auth ? localStorage.getItem("token") : ""
-      }`,
+      Authorization: `Bearer ${options.auth ? getCurrentUserToken() : ""}`,
       authversion: "2",
     },
     body: JSON.stringify({
