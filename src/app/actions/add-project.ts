@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 export async function addProject(
   tokenName: string,
@@ -7,17 +7,17 @@ export async function addProject(
   projectAddress: string,
 ) {
   // Add project to database
-  console.log("Adding token to database...");
+  console.log('Adding token to database...');
   const response = await fetch(`${process.env.MONGODB_URL}/action/insertOne`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "api-key": process.env.MONGODB_API_KEY || "",
+      'Content-Type': 'application/json',
+      'api-key': process.env.MONGODB_API_KEY || '',
     },
     body: JSON.stringify({
-      dataSource: "giveth",
-      database: "abc-launcher",
-      collection: "project",
+      dataSource: 'giveth',
+      database: 'abc-launcher',
+      collection: 'project',
       document: {
         tokenName,
         tokenTicker,
@@ -28,7 +28,7 @@ export async function addProject(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to insert data");
+    throw new Error('Failed to insert data');
   }
 
   return await response.json();

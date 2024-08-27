@@ -28,91 +28,91 @@ export const validators = {
   tooShort: {
     pattern: {
       value: regexList.tooShort,
-      message: "Too Short",
+      message: 'Too Short',
     },
   },
   email: {
     pattern: {
       value: regexList.email,
-      message: "Invalid Email Address",
+      message: 'Invalid Email Address',
     },
   },
   website: {
     pattern: {
       value: regexList.website,
-      message: "Invalid URL",
+      message: 'Invalid URL',
     },
   },
   twitter: {
     pattern: {
       value: regexList.twitter,
-      message: "Invalid X (Twitter) URL",
+      message: 'Invalid X (Twitter) URL',
     },
   },
   facebook: {
     pattern: {
       value: regexList.facebook,
-      message: "Invalid facebook URL",
+      message: 'Invalid facebook URL',
     },
   },
   linkedin: {
     pattern: {
       value: regexList.linkedin,
-      message: "Invalid linkedIn URL",
+      message: 'Invalid linkedIn URL',
     },
   },
   instagram: {
     pattern: {
       value: regexList.instagram,
-      message: "Invalid instagram URL",
+      message: 'Invalid instagram URL',
     },
   },
   youtube: {
     pattern: {
       value: regexList.youtube,
-      message: "Invalid youtube URL",
+      message: 'Invalid youtube URL',
     },
   },
   reddit: {
     pattern: {
       value: regexList.reddit,
-      message: "Invalid reddit URL",
+      message: 'Invalid reddit URL',
     },
   },
   farcaster: {
     pattern: {
       value: regexList.website,
-      message: "Invalid reddit URL",
+      message: 'Invalid reddit URL',
     },
   },
   lens: {
     pattern: {
       value: regexList.website,
-      message: "Invalid reddit URL",
+      message: 'Invalid reddit URL',
     },
   },
   discord: {
     pattern: {
       value: regexList.discord,
-      message: "Invalid discord URL",
+      message: 'Invalid discord URL',
     },
   },
   telegram: {
     pattern: {
       value: regexList.telegram,
-      message: "Invalid telegram URL",
+      message: 'Invalid telegram URL',
     },
   },
   whatsapp: {
     pattern: {
       value: regexList.phone,
-      message: "Invalid phone number",
+      message: 'Invalid phone number',
     },
   },
   github: {
     pattern: {
       value: regexList.github,
-      message: "Invalid GitHub URL",
+      message: 'Invalid GitHub URL',
     },
   },
 };
@@ -121,57 +121,57 @@ export const requiredOptions = {
   email: {
     required: {
       value: true,
-      message: "Email is required",
+      message: 'Email is required',
     },
     ...validators.email,
   },
   lastName: {
     required: {
       value: true,
-      message: "Last name is required",
+      message: 'Last name is required',
     },
   },
   firstName: {
     required: {
       value: true,
-      message: "First name is required",
+      message: 'First name is required',
     },
   },
   name: {
     required: {
       value: true,
-      message: "Name is required",
+      message: 'Name is required',
     },
   },
   website: {
     required: {
       value: true,
-      message: "Url is required",
+      message: 'Url is required',
     },
     ...validators.website,
   },
   field: {
     required: {
       value: true,
-      message: "This field is required",
+      message: 'This field is required',
     },
   },
   date: {
     required: {
       value: true,
-      message: "Date is required",
+      message: 'Date is required',
     },
   },
   title: {
     required: {
       value: true,
-      message: "Title is required",
+      message: 'Title is required',
     },
   },
   walletAddress: {
     required: {
       value: true,
-      message: "Wallet address is required",
+      message: 'Wallet address is required',
     },
   },
 };

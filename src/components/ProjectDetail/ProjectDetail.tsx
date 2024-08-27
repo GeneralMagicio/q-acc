@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import ProjectDetailBanner from "./ProjectDetailBanner";
-import ProjectTabs from "./ProjectTabs";
-import DonateSection from "./DonateSection";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import ProjectDetailBanner from './ProjectDetailBanner';
+import ProjectTabs from './ProjectTabs';
+import DonateSection from './DonateSection';
 export enum EProjectPageTabs {
-  DONATIONS = "donations",
-  MEMEBERS = "members",
+  DONATIONS = 'donations',
+  MEMEBERS = 'members',
 }
 
 const ProjectDetail = () => {
@@ -14,7 +14,7 @@ const ProjectDetail = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
-    switch (searchParams.get("tab")) {
+    switch (searchParams.get('tab')) {
       case EProjectPageTabs.DONATIONS:
         setActiveTab(1);
         break;
@@ -25,18 +25,18 @@ const ProjectDetail = () => {
         setActiveTab(0);
         break;
     }
-  }, [searchParams.get("tab")]);
+  }, [searchParams.get('tab')]);
   return (
-    <div className="">
-      <div className="container">
-        <div className="flex gap-6 flex-col lg:flex-row mt-10">
+    <div className=''>
+      <div className='container'>
+        <div className='flex gap-6 flex-col lg:flex-row mt-10'>
           <ProjectDetailBanner />
 
           <DonateSection />
         </div>
       </div>
 
-      <ProjectTabs activeTab={activeTab} slug={"slug"} />
+      <ProjectTabs activeTab={activeTab} slug={'slug'} />
       {activeTab === 0 && <>ABOUT</>}
       {activeTab === 1 && <h1>Donation</h1>}
       {activeTab === 2 && <h2>MEMEBR</h2>}
