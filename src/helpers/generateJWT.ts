@@ -105,3 +105,15 @@ export const getLocalStorageToken = (address: string) => {
     localStorage.removeItem("token");
   }
 };
+
+export const getCurrentUserToken = () => {
+  try {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const tokenObj = JSON.parse(storedToken);
+      return tokenObj.jwt;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
