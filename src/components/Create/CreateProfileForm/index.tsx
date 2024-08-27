@@ -58,7 +58,6 @@ const CreateProjectForm: FC = () => {
     }
     console.log("res", res);
   };
-  console.log("isUserWhiteListed", isUserWhiteListed);
 
   const nextLabel = isUserWhiteListed ? undefined : "Verify your identity";
   const submitLabel = isUserWhiteListed
