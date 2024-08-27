@@ -20,7 +20,6 @@ export const UserController = () => {
     useState(false);
   const [showSignModal, setShowSignModal] = useState(false);
   const { address } = useAccount();
-  const isGivethUser = useRef(false);
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
   const { data: user, isFetched } = useQuery({
@@ -29,18 +28,6 @@ export const UserController = () => {
       console.log('fetching user info');
       if (!address) return;
       let data = await fetchUserInfo(address);
-      if (!data) {
-        const givethData = await fetchGivethUserInfo(address);
-        if (givethData && givethData.name) {
-          isGivethUser.current = true;
-          data = {
-            id: givethData.id,
-            email: givethData.email,
-            fullName: givethData.name,
-            avatar: givethData.avatar,
-          };
-        }
-      }
       return data;
     },
     enabled: !!address,
@@ -49,18 +36,22 @@ export const UserController = () => {
   });
 
   const onSign = useCallback(async () => {
-    console.log('Signed');
+    console.log('Signed', user);
     setShowSignModal(false);
 
     // Save user info to QAcc if user is Giveth user
-    if (isGivethUser.current && user) {
-      const _user = {
-        email: user.email || undefined,
-        fullName: user.fullName,
-        avatar: user.avatar,
-        newUser: true,
-      };
-      updateUser(_user);
+    if (address && !user?.fullName && !user?.email) {
+      const givethData = await fetchGivethUserInfo(address);
+      if (givethData && (givethData.name || givethData.email)) {
+        const _user = {
+          id: givethData.id,
+          email: givethData.email || undefined,
+          fullName: givethData.name,
+          avatar: givethData.avatar,
+          newUser: true,
+        };
+        updateUser(_user);
+      }
     }
 
     // Check user profile completion
