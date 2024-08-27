@@ -5,7 +5,6 @@ export const GET_USER_BY_ADDRESS = `
 			id
 			avatar
 			email
-			name
 		}
 	}
 `;
