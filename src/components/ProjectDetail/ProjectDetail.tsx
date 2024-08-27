@@ -4,6 +4,9 @@ import { useSearchParams } from 'next/navigation';
 import ProjectDetailBanner from './ProjectDetailBanner';
 import ProjectTabs from './ProjectTabs';
 import DonateSection from './DonateSection';
+import { useFetchProjectById } from '@/hooks/useFetchProjectById';
+import ProjectTeamMembers from './ProjectTeamMember';
+
 export enum EProjectPageTabs {
   DONATIONS = 'donations',
   MEMEBERS = 'members',
@@ -12,6 +15,12 @@ export enum EProjectPageTabs {
 const ProjectDetail = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
+  const projectId = 1;
+
+  const { data: projectById } = useFetchProjectById(projectId);
+  console.log(projectById);
+
+  // const teamMembers = projectById.members;
 
   useEffect(() => {
     switch (searchParams.get('tab')) {
@@ -39,7 +48,9 @@ const ProjectDetail = () => {
       <ProjectTabs activeTab={activeTab} slug={'slug'} />
       {activeTab === 0 && <>ABOUT</>}
       {activeTab === 1 && <h1>Donation</h1>}
-      {activeTab === 2 && <h2>MEMEBR</h2>}
+
+      {/* Pass team members later */}
+      {activeTab === 2 && <ProjectTeamMembers />}
     </div>
   );
 };
