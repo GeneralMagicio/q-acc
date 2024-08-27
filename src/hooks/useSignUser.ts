@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
-import { getLocalStorageToken, signWithEVM } from "@/helpers/generateJWT";
+import { useQuery } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
+import { getLocalStorageToken, signWithEVM } from '@/helpers/generateJWT';
 
 export const useSignUser = (onSinged?: () => void) => {
   const { address, chain, connector } = useAccount();
   return useQuery({
-    queryKey: ["token", address],
+    queryKey: ['token', address],
     queryFn: async () => {
       if (!address) return;
       // Check if token exists in localStorage
@@ -21,12 +21,12 @@ export const useSignUser = (onSinged?: () => void) => {
         const newToken = await signWithEVM(address, chain?.id, connector);
         if (newToken) {
           onSinged?.();
-          localStorage.setItem("token", JSON.stringify(newToken));
+          localStorage.setItem('token', JSON.stringify(newToken));
           return newToken;
         }
         return null;
       } catch (error) {
-        console.log("Error generating token:", error);
+        console.log('Error generating token:', error);
         return null;
       }
     },

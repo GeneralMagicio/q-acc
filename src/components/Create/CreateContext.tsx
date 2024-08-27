@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { TeamMember } from "./CreateTeamForm";
-import { ProjectFormData } from "./CreateProjectForm";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { TeamMember } from './CreateTeamForm';
+import { ProjectFormData } from './CreateProjectForm';
 
 interface FormData {
   project: ProjectFormData;
@@ -19,22 +19,22 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [formData, setFormDataState] = useState<FormData>({
     project: {
-      projectName: "",
-      projectTeaser: "",
-      projectDescription: "",
-      website: "",
-      facebook: "",
-      twitter: "",
-      linkedin: "",
-      discord: "",
-      telegram: "",
-      instagram: "",
-      reddit: "",
-      youtube: "",
-      farcaster: "",
-      lens: "",
-      github: "",
-      projectAddress: "",
+      projectName: '',
+      projectTeaser: '',
+      projectDescription: '',
+      website: '',
+      facebook: '',
+      twitter: '',
+      linkedin: '',
+      discord: '',
+      telegram: '',
+      instagram: '',
+      reddit: '',
+      youtube: '',
+      farcaster: '',
+      lens: '',
+      github: '',
+      projectAddress: '',
       addressConfirmed: false,
       logo: null,
       banner: null,
@@ -43,7 +43,7 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const setFormData = (data: Partial<FormData>) => {
-    setFormDataState((prevData) => ({
+    setFormDataState(prevData => ({
       ...prevData,
       ...data,
       team: data.team || prevData.team, // Ensure team array is merged correctly
@@ -60,7 +60,7 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
 export const useCreateContext = () => {
   const context = useContext(CreateContext);
   if (!context) {
-    throw new Error("useCreateContext must be used within a CreateProvider");
+    throw new Error('useCreateContext must be used within a CreateProvider');
   }
   return context;
 };

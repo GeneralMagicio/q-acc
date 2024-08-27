@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import CreateProfileForm from "@/components/Create/CreateProfileForm";
+import CreateProfileForm from '@/components/Create/CreateProfileForm';
 
 export default function CreateProfilePage() {
   return (
-    <div className="container">
+    <div className='container'>
       <CreateProfileForm />
     </div>
   );

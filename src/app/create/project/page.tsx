@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import CreateProjectForm from "@/components/Create/CreateProjectForm";
+import CreateProjectForm from '@/components/Create/CreateProjectForm';
 export default function CreateProjectPage() {
   return (
-    <div className="container">
+    <div className='container'>
       <CreateProjectForm />
     </div>
   );

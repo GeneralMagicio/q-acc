@@ -1,11 +1,11 @@
-import { Address } from "viem";
-import { requestGraphQL } from "@/helpers/request";
+import { Address } from 'viem';
+import { requestGraphQL } from '@/helpers/request';
 import {
   GET_USER_BY_ADDRESS,
   GET_GIVETH_USER_BY_ADDRESS,
-} from "../queries/user.query";
-import config from "@/config/configuration";
-import type { IUser, IGivethUser } from "@/types/user.type";
+} from '../queries/user.query';
+import config from '@/config/configuration';
+import type { IUser, IGivethUser } from '@/types/user.type';
 
 export const fetchUserInfo = async (address: Address) => {
   try {
@@ -39,17 +39,17 @@ export const fetchGivethUserInfo = async (address: Address) => {
 export async function checkUserIsWhiteListed(address?: Address) {
   if (!address) return false;
   try {
-    const res = await fetch("/api/whitelist", {
-      method: "POST",
+    const res = await fetch('/api/whitelist', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ address }),
     });
     const data = await res.json();
     return data.isWhiteListed;
   } catch (error: any) {
-    console.log("Error:", error);
-    throw new Error("Error checking whitelist", error.message);
+    console.log('Error:', error);
+    throw new Error('Error checking whitelist', error.message);
   }
 }
