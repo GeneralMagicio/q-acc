@@ -65,7 +65,7 @@ export const fetchProjectById = async (id: number, address?: Address) => {
       },
       {
         auth: true,
-      }
+      },
     );
     return res?.projectById;
   } catch (error) {
