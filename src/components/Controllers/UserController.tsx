@@ -65,7 +65,7 @@ export const UserController = () => {
     }
 
     // Check user profile completion
-    if (!user) {
+    if (!user?.email || !user?.fullName) {
       setShowCompleteProfileModal(true);
     }
 
