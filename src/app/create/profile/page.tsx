@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import CreateProfileForm from "@/components/Create/CreateProfileForm";
-import { useRef, type FC } from "react";
-import TempNav from "../../../components/Create/CreateNavbar";
-import { useRouter } from "next/navigation";
+import CreateProfileForm from '@/components/Create/CreateProfileForm';
 
 export default function CreateProfilePage() {
   return (
-    <div className="container">
+    <div className='container'>
       <CreateProfileForm />
     </div>
   );

@@ -1,15 +1,15 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import ProjectDetailBanner from "./ProjectDetailBanner";
-import { useSearchParams } from "next/navigation";
-import ProjectTabs from "./ProjectTabs";
-import DonateSection from "./DonateSection";
-import ProjectTeamMembers from "./ProjectTeamMember";
-import { useFetchProjectById } from "@/hooks/useFetchProjectById";
-import { darwinia } from "viem/chains";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import ProjectDetailBanner from './ProjectDetailBanner';
+import ProjectTabs from './ProjectTabs';
+import DonateSection from './DonateSection';
+import { useFetchProjectById } from '@/hooks/useFetchProjectById';
+import ProjectTeamMembers from './ProjectTeamMember';
+
 export enum EProjectPageTabs {
-  DONATIONS = "donations",
-  MEMEBERS = "members",
+  DONATIONS = 'donations',
+  MEMEBERS = 'members',
 }
 
 const ProjectDetail = () => {
@@ -23,7 +23,7 @@ const ProjectDetail = () => {
   // const teamMembers = projectById.members;
 
   useEffect(() => {
-    switch (searchParams.get("tab")) {
+    switch (searchParams.get('tab')) {
       case EProjectPageTabs.DONATIONS:
         setActiveTab(1);
         break;
@@ -34,18 +34,18 @@ const ProjectDetail = () => {
         setActiveTab(0);
         break;
     }
-  }, [searchParams.get("tab")]);
+  }, [searchParams.get('tab')]);
   return (
-    <div className="">
-      <div className="container">
-        <div className="flex gap-6 flex-col lg:flex-row mt-10">
+    <div className=''>
+      <div className='container'>
+        <div className='flex gap-6 flex-col lg:flex-row mt-10'>
           <ProjectDetailBanner />
 
           <DonateSection />
         </div>
       </div>
 
-      <ProjectTabs activeTab={activeTab} slug={"slug"} />
+      <ProjectTabs activeTab={activeTab} slug={'slug'} />
       {activeTab === 0 && <>ABOUT</>}
       {activeTab === 1 && <h1>Donation</h1>}
 
