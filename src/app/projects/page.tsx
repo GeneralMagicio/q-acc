@@ -1,7 +1,7 @@
-import { ProjectsView } from "@/components/Projects";
+import { ProjectsView } from '@/components/Projects';
 
 const ProjectsRoute = () => {
-  return <ProjectsView />;
+	return <ProjectsView />;
 };
 
 export default ProjectsRoute;

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import ProjectDetail from "@/components/ProjectDetail/ProjectDetail";
+import ProjectDetail from '@/components/ProjectDetail/ProjectDetail';
 
 const ProjectRoute = () => {
-  return <ProjectDetail />;
+	return <ProjectDetail />;
 };
 
 export default ProjectRoute;

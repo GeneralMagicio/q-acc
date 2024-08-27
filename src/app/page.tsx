@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Banner } from "@/components/Banner";
-import Collaborator from "@/components/Collaborator";
-import { FeaturedProjects } from "@/components/FeaturedProjects";
-import About from "@/components/About";
-import InfoSection from "@/components/InfoSection";
+import { Banner } from '@/components/Banner';
+import Collaborator from '@/components/Collaborator';
+import { FeaturedProjects } from '@/components/FeaturedProjects';
+import About from '@/components/About';
+import InfoSection from '@/components/InfoSection';
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-4">
+    <main className='flex flex-col gap-4'>
       <Banner
-        title1="the future of"
-        title2="tokenization"
-        subTitle="q/acc = QF*ABC"
+        title1='the future of'
+        title2='tokenization'
+        subTitle='q/acc = QF*ABC'
       />
-      <InfoSection title="About q/acc">
+      <InfoSection title='About q/acc'>
         <p>
           Quadratic Acceleration (q/acc) combines the strengths of Quadratic
           Funding (QF) with those of Augmented Bonding Curves (ABC) in order to
