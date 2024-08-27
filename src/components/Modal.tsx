@@ -52,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({
         <div>{children}</div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

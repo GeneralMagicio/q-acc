@@ -1,9 +1,9 @@
+import React from "react";
+import { useFormContext } from "react-hook-form";
 import { Dropzone } from "@/components/DropZone";
 import Input from "@/components/Input";
 import { SocialMediaInput } from "@/components/SocialMediaInput";
 import { validators } from "@/components/SocialMediaInput/vaildators";
-import React from "react";
-import { useFormContext } from "react-hook-form";
 
 interface TeamFormProps {
   index: number;

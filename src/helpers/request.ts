@@ -4,7 +4,7 @@ import { getCurrentUserToken } from "./generateJWT";
 export const requestGraphQL = async <T>(
   query: string,
   variables: Record<string, any> = {},
-  options: { auth?: boolean; url?: string } = {}
+  options: { auth?: boolean; url?: string } = {},
 ): Promise<T> => {
   const response = await fetch(options.url || config.GRAPHQL_ENDPOINT, {
     method: "POST",

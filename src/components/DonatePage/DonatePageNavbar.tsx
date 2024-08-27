@@ -1,6 +1,6 @@
 import React from "react";
-import { ConnectButton } from "../ConnectButton/ConnectButton";
 import Link from "next/link";
+import { ConnectButton } from "../ConnectButton/ConnectButton";
 import { IconGoBack } from "../Icons/IconGoBack";
 
 const DonateNavbar = () => {

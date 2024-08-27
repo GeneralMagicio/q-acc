@@ -81,12 +81,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                 quillInstanceRef.current.insertEmbed(
                   range.index,
                   "image",
-                  base64ImageSrc
+                  base64ImageSrc,
                 );
 
                 const imageElement =
                   quillInstanceRef.current.root.querySelector(
-                    `img[src="${base64ImageSrc}"]`
+                    `img[src="${base64ImageSrc}"]`,
                   ) as HTMLImageElement;
                 if (imageElement) {
                   imageElement.style.opacity = "0.6";

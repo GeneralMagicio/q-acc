@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
+import { Button, ButtonColor } from "@/components/Button";
 
 interface CreateNavbarProps {
   title: string;

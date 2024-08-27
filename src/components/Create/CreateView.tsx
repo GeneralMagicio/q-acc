@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Banner } from "@/components/Banner";
 import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
 import Collaborator from "@/components/Collaborator";
@@ -7,8 +9,6 @@ import { HelpSection } from "@/components/HelpSection";
 import InfoSection from "@/components/InfoSection";
 import { useIsUserWhiteListed } from "@/hooks/useIsUserWhiteListed";
 import Routes from "@/lib/constants/Routes";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import { HoldModal } from "../Modals/HoldModal";
 
 export const CreateView = () => {

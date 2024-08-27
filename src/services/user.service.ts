@@ -1,5 +1,5 @@
-import { requestGraphQL } from "@/helpers/request";
 import { Address } from "viem";
+import { requestGraphQL } from "@/helpers/request";
 import {
   GET_USER_BY_ADDRESS,
   GET_GIVETH_USER_BY_ADDRESS,
@@ -11,7 +11,7 @@ export const fetchUserInfo = async (address: Address) => {
   try {
     const res = await requestGraphQL<{ userByAddress: IUser }>(
       GET_USER_BY_ADDRESS,
-      { address }
+      { address },
     );
     return res?.userByAddress;
   } catch (error) {
@@ -26,7 +26,7 @@ export const fetchGivethUserInfo = async (address: Address) => {
       { address },
       {
         url: config.GIVETH_GQL_ENDPOINT,
-      }
+      },
     );
     return res?.userByAddress;
   } catch (error) {

@@ -38,12 +38,12 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
         (progressEvent) => {
           if (progressEvent.total) {
             const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
+              (progressEvent.loaded * 100) / progressEvent.total,
             );
             setUploadProgress(progress);
           }
         },
-        controller.signal // Pass the AbortController signal for cancellation
+        controller.signal, // Pass the AbortController signal for cancellation
       );
 
       setIsLoading(false);
@@ -55,7 +55,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
         setValue(name, ipfsHash, { shouldValidate: true }); // Set value and trigger validation
       }
     },
-    [onDrop, setValue, name]
+    [onDrop, setValue, name],
   );
 
   const cancelUpload = () => {

@@ -4,7 +4,7 @@ export async function addProject(
   tokenName: string,
   tokenTicker: string,
   iconHash: string,
-  projectAddress: string
+  projectAddress: string,
 ) {
   // Add project to database
   console.log("Adding token to database...");

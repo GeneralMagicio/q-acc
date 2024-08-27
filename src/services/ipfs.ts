@@ -3,7 +3,7 @@ import axios, { type AxiosProgressEvent } from "axios";
 export const uploadToIPFS = async (
   file: File,
   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<string | null> => {
   try {
     const formData = new FormData();

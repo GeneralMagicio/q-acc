@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
 import { cookieToInitialState } from "wagmi";
-import { wagmiConfig } from "@/config/wagmi";
-import Web3ModalProvider from "@/context/wagmi";
 import { headers } from "next/headers";
+import Web3ModalProvider from "@/context/wagmi";
+import { wagmiConfig } from "@/config/wagmi";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserController } from "@/components/Controllers/UserController";
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(
     wagmiConfig,
-    headers().get("cookie")
+    headers().get("cookie"),
   );
   return (
     <html lang="en">

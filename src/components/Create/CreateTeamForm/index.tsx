@@ -2,10 +2,10 @@
 
 import { useForm, FormProvider } from "react-hook-form";
 import { type FC } from "react";
+import { useRouter } from "next/navigation";
 import { TeamForm } from "./TeamForm";
 import { Button, ButtonColor } from "@/components/Button";
 import { useCreateContext } from "../CreateContext";
-import { useRouter } from "next/navigation";
 import Routes from "@/lib/constants/Routes";
 import CreateNavbar from "../CreateNavbar";
 
@@ -56,9 +56,7 @@ const CreateTeamForm: FC = () => {
           onBack={() => router.push(Routes.CreateProject)}
           submitLabel="Save"
         />
-        {teamMembers?.map((_, index) => (
-          <TeamForm key={index} index={index} />
-        ))}
+        {teamMembers?.map((_, index) => <TeamForm key={index} index={index} />)}
         <div className="bg-white p-6 rounded-xl flex justify-between mt-6 items-center">
           <b>More team members?</b>
           <Button color={ButtonColor.Giv} onClick={addTeamMember}>

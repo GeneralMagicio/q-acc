@@ -1,11 +1,11 @@
-import type { FC } from "react";
-import Modal, { BaseModalProps } from "../Modal";
-import { Button, ButtonColor, ButtonStyle } from "../Button";
 import Image from "next/image";
 import Link from "next/link";
+import Modal, { BaseModalProps } from "../Modal";
+import { Button, ButtonColor, ButtonStyle } from "../Button";
 import { IconArrowRight } from "../Icons/IconArrowRight";
 import Routes from "@/lib/constants/Routes";
 import { useSignUser } from "@/hooks/useSignUser";
+import type { FC } from "react";
 
 interface SignModalProps extends BaseModalProps {
   onSign?: () => void;

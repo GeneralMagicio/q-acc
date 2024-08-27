@@ -1,6 +1,6 @@
-import { getLocalStorageToken, signWithEVM } from "@/helpers/generateJWT";
 import { useQuery } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
+import { getLocalStorageToken, signWithEVM } from "@/helpers/generateJWT";
 
 export const useSignUser = (onSinged?: () => void) => {
   const { address, chain, connector } = useAccount();

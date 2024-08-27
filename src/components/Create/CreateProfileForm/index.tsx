@@ -1,11 +1,11 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
+import { type FC } from "react";
+import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import { Dropzone } from "@/components/DropZone";
-import { type FC } from "react";
 import { Button } from "@/components/Button";
-import { useRouter } from "next/navigation";
 import CreateNavbar from "../CreateNavbar";
 import { getIpfsAddress } from "@/helpers/image";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
