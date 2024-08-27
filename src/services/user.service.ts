@@ -12,6 +12,7 @@ export const fetchUserInfo = async (address: Address) => {
     const res = await requestGraphQL<{ userByAddress: IUser }>(
       GET_USER_BY_ADDRESS,
       { address },
+      { auth: true }
     );
     return res?.userByAddress;
   } catch (error) {
@@ -26,7 +27,8 @@ export const fetchGivethUserInfo = async (address: Address) => {
       { address },
       {
         url: config.GIVETH_GQL_ENDPOINT,
-      },
+        auth: true,
+      }
     );
     return res?.userByAddress;
   } catch (error) {
