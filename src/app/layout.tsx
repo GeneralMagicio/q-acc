@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { cookieToInitialState } from "wagmi";
@@ -8,6 +7,7 @@ import { wagmiConfig } from "@/config/wagmi";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { UserController } from "@/components/Controllers/UserController";
+import type { Metadata } from "next";
 
 const nunito = Nunito_Sans({ subsets: ["latin"] });
 
