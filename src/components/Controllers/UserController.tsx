@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,6 @@ import {
   checkUserIsWhiteListed,
 } from '../../services/user.service';
 import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
-import Routes from '@/lib/constants/Routes';
 import { SignModal } from '../Modals/SignModal';
 import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
@@ -64,7 +63,7 @@ export const UserController = () => {
     if (isUserWhiteListed) {
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
-        route.push(Routes.Create);
+        // route.push(Routes.Create); //TODO: should we redirect or not
       }
     }
   }, [address, route, updateUser, user]);
