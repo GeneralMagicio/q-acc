@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useAccount } from "wagmi";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import {
   fetchUserInfo,
   fetchGivethUserInfo,
   checkUserIsWhiteListed,
-} from "../../services/user.service";
-import { CompleteProfileModal } from "../Modals/CompleteProfileModal";
-import Routes from "@/lib/constants/Routes";
-import { SignModal } from "../Modals/SignModal";
-import { getLocalStorageToken } from "@/helpers/generateJWT";
-import { useUpdateUser } from "@/hooks/useUpdateUser";
+} from '../../services/user.service';
+import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
+import Routes from '@/lib/constants/Routes';
+import { SignModal } from '../Modals/SignModal';
+import { getLocalStorageToken } from '@/helpers/generateJWT';
+import { useUpdateUser } from '@/hooks/useUpdateUser';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -24,9 +24,9 @@ export const UserController = () => {
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
   const { data: user, isFetched } = useQuery({
-    queryKey: ["user", address],
+    queryKey: ['user', address],
     queryFn: async () => {
-      console.log("fetching user info");
+      console.log('fetching user info');
       if (!address) return;
       let data = await fetchUserInfo(address);
       if (!data) {
@@ -49,7 +49,7 @@ export const UserController = () => {
   });
 
   const onSign = useCallback(async () => {
-    console.log("Signed");
+    console.log('Signed');
     setShowSignModal(false);
 
     // Save user info to QAcc if user is Giveth user

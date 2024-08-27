@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Banner } from "@/components/Banner";
-import { Button, ButtonColor, ButtonStyle } from "@/components/Button";
-import Collaborator from "@/components/Collaborator";
-import { HelpSection } from "@/components/HelpSection";
-import InfoSection from "@/components/InfoSection";
-import { useIsUserWhiteListed } from "@/hooks/useIsUserWhiteListed";
-import Routes from "@/lib/constants/Routes";
-import { HoldModal } from "../Modals/HoldModal";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Banner } from '@/components/Banner';
+import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
+import Collaborator from '@/components/Collaborator';
+import { HelpSection } from '@/components/HelpSection';
+import InfoSection from '@/components/InfoSection';
+import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+import Routes from '@/lib/constants/Routes';
+import { HoldModal } from '../Modals/HoldModal';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
@@ -20,13 +20,13 @@ export const CreateView = () => {
   }, [isUserWhiteListed]);
 
   return (
-    <main className="flex flex-col gap-4">
+    <main className='flex flex-col gap-4'>
       <Banner
-        title1="Welcome to"
-        title2="Season one"
-        subTitle="q/acc = QF*ABC"
+        title1='Welcome to'
+        title2='Season one'
+        subTitle='q/acc = QF*ABC'
       />
-      <InfoSection title="Congratulations on making it to Season 1!">
+      <InfoSection title='Congratulations on making it to Season 1!'>
         <p>
           We are thrilled to have you in the program! You were accepted into
           this season because your project has shown significant potential, and
@@ -40,7 +40,7 @@ export const CreateView = () => {
           q/acc section of Giveth’s platform. 
         </p>
         <p>This project page is where:</p>
-        <ul className="list-disc pl-8">
+        <ul className='list-disc pl-8'>
           <li>
             your invited early access participants will make their contributions
             to your project. 
@@ -58,7 +58,7 @@ export const CreateView = () => {
         </p>
         <Link href={Routes.CreateProfile}>
           <Button
-            className="mx-auto !py-6 !px-10 mt-20"
+            className='mx-auto !py-6 !px-10 mt-20'
             color={ButtonColor.Pink}
             styleType={ButtonStyle.Solid}
           >

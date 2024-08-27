@@ -1,5 +1,5 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
 interface CheckboxProps {
   name: string;
@@ -15,16 +15,16 @@ const Checkbox: React.FC<CheckboxProps> = ({ name, label, rules }) => {
 
   return (
     <div>
-      <label className="inline-flex items-center">
+      <label className='inline-flex items-center'>
         <input
-          type="checkbox"
+          type='checkbox'
           {...register(name, rules)}
-          className="form-checkbox"
+          className='form-checkbox'
         />
-        <span className="ml-2">{label}</span>
+        <span className='ml-2'>{label}</span>
       </label>
       {errors[name] && (
-        <p className="text-red-500 text-xs mt-1">
+        <p className='text-red-500 text-xs mt-1'>
           {errors[name]?.message as string}
         </p>
       )}

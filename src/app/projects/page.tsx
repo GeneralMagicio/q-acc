@@ -1,4 +1,4 @@
-import { ProjectsView } from "@/components/Projects";
+import { ProjectsView } from '@/components/Projects';
 
 const ProjectsRoute = () => {
   return <ProjectsView />;

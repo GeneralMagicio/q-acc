@@ -1,5 +1,5 @@
-import React from "react";
-import DonateIndex from "@/components/DonatePage/DonateIndex";
+import React from 'react';
+import DonateIndex from '@/components/DonatePage/DonateIndex';
 
 const page = () => {
   return (
