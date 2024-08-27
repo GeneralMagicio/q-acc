@@ -94,3 +94,26 @@ export const signWithEVM = async (
     return Promise.reject(error);
   }
 };
+
+export const getLocalStorageToken = (address: string) => {
+  const storedToken = localStorage.getItem("token");
+  if (storedToken) {
+    const tokenObj = JSON.parse(storedToken);
+    if (tokenObj.publicAddress.toLowerCase() === address.toLowerCase()) {
+      return storedToken;
+    }
+    localStorage.removeItem("token");
+  }
+};
+
+export const getCurrentUserToken = () => {
+  try {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const tokenObj = JSON.parse(storedToken);
+      return tokenObj.jwt;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
