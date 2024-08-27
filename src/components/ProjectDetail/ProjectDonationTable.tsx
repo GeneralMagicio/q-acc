@@ -121,39 +121,59 @@ const ProjectDonationTable = () => {
         <div>
           <h1>All Donations</h1>
         </div>
-        {/* <div className="flex gap-10 md:flex-row flex-col  items-center">
-          <div className="w-[80%] overflow-x-auto ">
-            <table className="w-full table-auto">
-              <thead>
-                <tr className="flex justify-between border-b-2">
-                  <th className="p-2 flex gap-2 ">
-                    Donor <IconABC />
-                  </th>
-                  <th className="p-2 flex gap-2 ">
-                    Donated On <IconABC />
-                  </th>
-                  <th className="p-2 flex gap-2 ">
-                    Round <IconABC />
-                  </th>
-                  <th className="p-2 flex gap-2 ">
-                    Amount[MATIC] <IconABC />
-                  </th>
-                  <th className="p-2 flex gap-2 ">
-                    Reward Token <IconABC />
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="flex gap-2 justify-start ">
-                  <td className="p-2">sds</td>
-                  <td>sd</td>
-                  <td>sd</td>
-                  <td>sd</td>
-                  <td>sd</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className=" flex  justify-center">
+
+        <div className="flex gap-10 md:flex-row flex-col">
+          <div className="flex flex-col w-2/3 font-redHatText overflow-x-auto">
+            <div className="flex justify-between border-b-4">
+              {rowHeaders.map((rowHeader, index) => (
+                <div
+                  key={index}
+                  className="p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]"
+                >
+                  {rowHeader}
+                  <button onClick={() => orderChangeHandler(rowHeader)}>
+                    <IconSort size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {pageDonations.donations.map((donation) => (
+              <>
+                <div className=" flex justify-between ">
+                  <div className="p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]">
+                    {donation.user ? donation.user.name : "Anonymous"}
+                  </div>
+                  <div className="p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]">
+                    {new Date(donation.createdAt).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      year: "numeric",
+                      month: "short",
+                    })}
+                  </div>
+                  <div className="p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]">
+                    Early Bird
+                  </div>
+                  <div className="p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]">
+                    <div className="flex flex-col">
+                      <div className="flex gap-1 items-center">
+                        <span className="font-medium">1200</span>
+                        <IconViewTransaction size={16} />
+                      </div>
+
+                      <span className="text-xs font-medium  text-[#A5ADBF]">
+                        $ 233
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]">
+                    600 ABC
+                  </div>
+                </div>
+              </>
+            ))}
+
+            <div className="flex justify-center">
               <Pagination
                 currentPage={page}
                 totalCount={30}
@@ -163,66 +183,14 @@ const ProjectDonationTable = () => {
             </div>
           </div>
 
-          <div className="p-6 w-[310px]  shadow-lg rounded-lg"></div>
-        </div> */}
-
-        <div className="flex flex-col w-[80%] font-redHatText">
-          <div className="flex justify-between border-b-4">
-            {rowHeaders.map((rowHeader, index) => (
-              <div
-                key={index}
-                className="p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center"
-              >
-                {rowHeader}
-                <button onClick={() => orderChangeHandler(rowHeader)}>
-                  <IconSort size={16} />
-                </button>
+          <div className="w-1/4 border p-6 flex flex-col">
+            <div className=" flex flex-col gap-2">
+              <div>
+                <span>Total Donations</span>
               </div>
-            ))}
-          </div>
 
-          {pageDonations.donations.map((donation) => (
-            <>
-              <div className=" flex justify-between border-b">
-                <div className="p-[18px_4px] flex gap-2 text-start  w-full">
-                  {donation.user ? donation.user.name : "Anonymous"}
-                </div>
-                <div className="p-[18px_4px] flex gap-2 text-start  w-full">
-                  {new Date(donation.createdAt).toLocaleDateString("en-US", {
-                    day: "numeric",
-                    year: "numeric",
-                    month: "short",
-                  })}
-                </div>
-                <div className="p-[18px_4px] flex gap-2 text-start  w-full">
-                  Early Bird
-                </div>
-                <div className="p-[18px_4px] flex gap-2 text-start  w-full">
-                  <div className="flex flex-col">
-                    <div className="flex gap-1 items-center">
-                      <span className="font-medium">1200</span>
-                      <IconViewTransaction size={16} />
-                    </div>
-
-                    <span className="text-xs font-medium text-[#A5ADBF]">
-                      $ 233
-                    </span>
-                  </div>
-                </div>
-                <div className="p-[18px_4px] flex gap-2 text-start  w-full">
-                  600 ABC
-                </div>
-              </div>
-            </>
-          ))}
-
-          <div className="flex justify-center">
-            <Pagination
-              currentPage={page}
-              totalCount={30}
-              setPage={setPage}
-              itemPerPage={10}
-            />
+              <h1>$970,257</h1>
+            </div>
           </div>
         </div>
       </div>
