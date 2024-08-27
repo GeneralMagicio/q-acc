@@ -3,6 +3,7 @@ import { requestGraphQL } from '@/helpers/request';
 import {
   GET_USER_BY_ADDRESS,
   GET_GIVETH_USER_BY_ADDRESS,
+  GET_PROJECT_BY_ID,
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type { IUser, IGivethUser } from '@/types/user.type';
@@ -53,3 +54,21 @@ export async function checkUserIsWhiteListed(address?: Address) {
     throw new Error('Error checking whitelist', error.message);
   }
 }
+
+export const fetchProjectById = async (id: number, address?: Address) => {
+  try {
+    const res = await requestGraphQL<{ projectById: any }>(
+      GET_PROJECT_BY_ID,
+      {
+        id,
+        address,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.projectById;
+  } catch (error) {
+    console.error(error);
+  }
+};
