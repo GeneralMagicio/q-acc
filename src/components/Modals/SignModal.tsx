@@ -12,7 +12,7 @@ interface SignModalProps extends BaseModalProps {
 }
 
 export const SignModal: FC<SignModalProps> = (props) => {
-  const { refetch } = useSignUser(props.onSign);
+  const { refetch, isFetching } = useSignUser(props.onSign);
 
   return (
     <Modal {...props} className="max-w-xl">
@@ -26,6 +26,7 @@ export const SignModal: FC<SignModalProps> = (props) => {
             styleType={ButtonStyle.Solid}
             color={ButtonColor.Pink}
             onClick={() => refetch()}
+            loading={isFetching}
           >
             <div className="flex items-center gap-1">
               <span>Authenticate Wallet</span>
