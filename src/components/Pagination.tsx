@@ -71,7 +71,7 @@ const Pagination = (props: IPagination) => {
 
   if (pageCount < 2) return null;
   return (
-    <div className="flex mt-4 gap-4 items-center">
+    <div className="flex mt-4 gap-4 items-center overflow-x-auto">
       <PaginationItem
         onClick={() => {
           if (currentPage > 0) setPage((page) => page - 1);
