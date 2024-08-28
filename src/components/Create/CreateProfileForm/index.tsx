@@ -34,7 +34,6 @@ const CreateProjectForm: FC = () => {
   });
   const {
     handleSubmit,
-    setValue,
     reset,
     formState: { isDirty },
   } = methods;
