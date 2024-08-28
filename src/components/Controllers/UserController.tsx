@@ -13,6 +13,7 @@ import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
+import Routes from '@/lib/constants/Routes';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -21,7 +22,11 @@ export const UserController = () => {
   const { address } = useAccount();
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
-  const { data: user, isFetched } = useQuery({
+  const {
+    data: user,
+    isFetched,
+    refetch,
+  } = useQuery({
     queryKey: ['user', address],
     queryFn: async () => {
       console.log('fetching user info');
@@ -37,6 +42,10 @@ export const UserController = () => {
   const onSign = useCallback(async () => {
     console.log('Signed', user);
     setShowSignModal(false);
+
+    // refetch user data after sign
+    await refetch();
+    if (!user?.isSignedIn) return;
 
     // Save user info to QAcc if user is Giveth user
     if (address && !user?.fullName && !user?.email) {
@@ -63,22 +72,35 @@ export const UserController = () => {
     if (isUserWhiteListed) {
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
-        // route.push(Routes.Create); //TODO: should we redirect or not
+        route.push(Routes.Create); //TODO: should we redirect or not
       }
     }
-  }, [address, route, updateUser, user]);
+  }, [address, refetch, updateUser, user]);
 
   useEffect(() => {
     if (!address || !isFetched) return;
     const localStorageToken = getLocalStorageToken(address);
 
     // Show sign modal if token is not present in local storage
-    if (localStorageToken) {
+    if (localStorageToken && user?.isSignedIn) {
       onSign();
       return;
     }
+    localStorage.removeItem('token');
     setShowSignModal(true);
-  }, [address, isFetched, onSign]);
+  }, [address, isFetched, onSign, user?.isSignedIn]);
+
+  useEffect(() => {
+    const handleShowSignInModal = () => {
+      setShowSignModal(true);
+    };
+
+    window.addEventListener('showSignInModal', handleShowSignInModal);
+
+    return () => {
+      window.removeEventListener('showSignInModal', handleShowSignInModal);
+    };
+  }, []);
 
   return showSignModal ? (
     <SignModal

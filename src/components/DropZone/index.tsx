@@ -6,6 +6,7 @@ import { useFormContext, RegisterOptions } from 'react-hook-form';
 import axios from 'axios';
 import { IconX } from '../Icons/IconX';
 import { uploadToIPFS } from '@/services/ipfs';
+import { getIpfsAddress } from '@/helpers/image';
 
 interface DropzoneProps {
   onDrop: (name: string, acceptedFile: File, ipfsHash: string) => void;
@@ -21,7 +22,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const { register, setValue, trigger } = useFormContext();
+  const { register, setValue, trigger, watch } = useFormContext();
 
   const onDropCallback = useCallback(
     async (acceptedFiles: File[]) => {
@@ -52,7 +53,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
       if (ipfsHash) {
         onDrop(name, file, ipfsHash);
         setIpfsHash(ipfsHash);
-        setValue(name, ipfsHash, { shouldValidate: true }); // Set value and trigger validation
+        setValue(name, getIpfsAddress(ipfsHash), { shouldValidate: true }); // Set value and trigger validation
       }
     },
     [onDrop, setValue, name],
@@ -93,7 +94,42 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
     trigger(name);
   }, [selectedImage, trigger, name, ipfsHash, isLoading]);
 
-  return (
+  const formValue = watch(name);
+
+  return formValue ? (
+    <div className='flex flex-col gap-6'>
+      <div className='py-14 border-[1px] border-dashed border-giv-500 p-4 rounded-2xl text-center bg-gray-100 text-gray-400 cursor-pointer'>
+        <img
+          src={formValue}
+          alt='Selected Image'
+          className='block mb-4 mx-auto'
+        />
+      </div>
+      <div className='flex flex-col gap-1'>
+        <div className='flex justify-between overflow-hidden max-w-full'>
+          <p className='text-xs text-nowrap max-w-full overflow-hidden text-ellipsis'>
+            Uploaded
+          </p>
+          <button
+            type='button'
+            onClick={() => {
+              setValue(name, null);
+            }}
+            className='px-2 text-xs text-pink-500 rounded border-none flex gap-1 items-center'
+          >
+            <IconX size={8} />
+            <span>Delete</span>
+          </button>
+        </div>
+        <div className='relative w-full bg-gray-200 h-2 rounded-lg overflow-hidden mb-4'>
+          <div
+            className='absolute top-0 left-0 h-full bg-giv-500 transition-all'
+            style={{ width: `${100}%` }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  ) : (
     <>
       <div
         {...getRootProps()}
