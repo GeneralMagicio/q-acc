@@ -1,3 +1,5 @@
+import { IProjectTeamMember } from './team.type';
+
 export enum ChainType {
   SOLANA = 'SOLANA',
   EVM = 'EVM',
@@ -40,15 +42,19 @@ export interface IProjectSocialMedia {
 
 export interface IProjectCreation {
   title: string;
-  description: string;
-  impactLocation?: any;
-  categories: any;
-  organisationId: number;
+  description?: string;
+  impactLocation?: string;
+  categories?: string[];
+  organisationId?: number;
   walletAddress?: string;
   addresses?: IWalletAddress[];
   image?: string;
+  teaser?: string;
+  icon?: string;
   isDraft?: boolean;
   socialMedia?: IProjectSocialMedia[];
+  adminUserId?: number;
+  teamMembers?: IProjectTeamMember[];
 }
 
 export interface IProject {
