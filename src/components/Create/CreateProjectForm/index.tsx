@@ -5,6 +5,7 @@ import { isAddress } from 'viem';
 import { type FC } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
 import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
@@ -15,6 +16,13 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
+import {
+  ChainType,
+  EProjectSocialMediaType,
+  IProjectCreation,
+} from '@/types/project.type';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import config from '@/config/configuration';
 
 export interface ProjectFormData {
   projectName: string;
@@ -40,73 +48,73 @@ export interface ProjectFormData {
 
 const socialMediaLinks = [
   {
-    name: 'website',
+    name: EProjectSocialMediaType.WEBSITE,
     label: 'Website',
     iconName: 'web.svg',
     rules: validators.website,
   },
   {
-    name: 'facebook',
+    name: EProjectSocialMediaType.FACEBOOK,
     label: 'Facebook',
     iconName: 'facebook.svg',
     rules: validators.facebook,
   },
   {
-    name: 'twitter',
+    name: EProjectSocialMediaType.X,
     label: 'Twitter',
     iconName: 'twitter.svg',
     rules: validators.twitter,
   },
   {
-    name: 'linkedin',
+    name: EProjectSocialMediaType.LINKEDIN,
     label: 'LinkedIn',
     iconName: 'linkedin.svg',
     rules: validators.linkedin,
   },
   {
-    name: 'discord',
+    name: EProjectSocialMediaType.DISCORD,
     label: 'Discord',
     iconName: 'discord.svg',
     rules: validators.discord,
   },
   {
-    name: 'telegram',
+    name: EProjectSocialMediaType.TELEGRAM,
     label: 'Telegram',
     iconName: 'telegram.svg',
     rules: validators.telegram,
   },
   {
-    name: 'instagram',
+    name: EProjectSocialMediaType.INSTAGRAM,
     label: 'Instagram',
     iconName: 'instagram.svg',
     rules: validators.instagram,
   },
   {
-    name: 'reddit',
+    name: EProjectSocialMediaType.REDDIT,
     label: 'Reddit',
     iconName: 'reddit.svg',
     rules: validators.reddit,
   },
   {
-    name: 'youtube',
+    name: EProjectSocialMediaType.YOUTUBE,
     label: 'YouTube',
     iconName: 'youtube.svg',
     rules: validators.youtube,
   },
   {
-    name: 'farcaster',
+    name: EProjectSocialMediaType.FARCASTER,
     label: 'Farcaster',
     iconName: 'farcaster.svg',
     rules: validators.farcaster,
   },
   {
-    name: 'lens',
+    name: EProjectSocialMediaType.LENS,
     label: 'Lens',
     iconName: 'lens.svg',
     rules: validators.lens,
   },
   {
-    name: 'github',
+    name: EProjectSocialMediaType.GITHUB,
     label: 'GitHub',
     iconName: 'github.svg',
     rules: validators.github,
@@ -114,6 +122,8 @@ const socialMediaLinks = [
 ];
 
 const CreateProjectForm: FC = () => {
+  const { address } = useAccount();
+  const { data: user } = useFetchUser();
   const { formData, setFormData } = useCreateContext();
   const methods = useForm<ProjectFormData>({
     defaultValues: formData.project,
@@ -130,7 +140,36 @@ const CreateProjectForm: FC = () => {
   };
 
   const onSubmit = (data: ProjectFormData) => {
-    console.log('data', data);
+    const socialMediaKeys = Object.values(EProjectSocialMediaType);
+    const project: IProjectCreation = {
+      title: data.projectName,
+      description: data.projectDescription,
+      walletAddress: address,
+      addresses: [
+        {
+          address: data.projectAddress,
+          isRecipient: true,
+          chainType: ChainType.EVM,
+          networkId: config.SUPPORTED_CHAINS[0].id,
+        },
+      ],
+      image: data.banner?.ipfsHash,
+      icon: data.logo?.ipfsHash,
+      teaser: data.projectTeaser,
+      socialMedia: Object.entries(data)
+        .filter(
+          ([key, value]) =>
+            value &&
+            socialMediaKeys.includes(
+              key.toUpperCase() as EProjectSocialMediaType,
+            ),
+        )
+        .map(([key, value]) => ({
+          type: key.toUpperCase() as EProjectSocialMediaType,
+          link: value,
+        })),
+    };
+    console.log('project', project);
     // setFormData({ project: data });
     // router.push('/create/team');
   };
