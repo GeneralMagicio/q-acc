@@ -7,7 +7,6 @@ import Input from '@/components/Input';
 import { Dropzone } from '@/components/DropZone';
 import { Button } from '@/components/Button';
 import CreateNavbar from '../CreateNavbar';
-import { getIpfsAddress } from '@/helpers/image';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
@@ -51,11 +50,7 @@ const CreateProjectForm: FC = () => {
     }
   }, [user, reset, isDirty]);
 
-  const handleDrop = (name: string, file: File, ipfsHash: string) => {
-    if (file) {
-      setValue(name as keyof ProfileFormData, getIpfsAddress(ipfsHash));
-    }
-  };
+  const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
   const verifyEmail = (e: any) => {};
 
