@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/Input';
 import { Dropzone } from '@/components/DropZone';
@@ -18,6 +18,7 @@ export interface ProfileFormData {
   emailVerified: boolean;
   profilePhoto: string | null;
 }
+
 const CreateProjectForm: FC = () => {
   const router = useRouter();
   const { data: user } = useFetchUser();
@@ -32,7 +33,23 @@ const CreateProjectForm: FC = () => {
     },
     mode: 'onChange',
   });
-  const { handleSubmit, setValue } = methods;
+  const {
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { isDirty },
+  } = methods;
+
+  // Update form values when user data is fetched, only if the form hasn't been modified by the user
+  useEffect(() => {
+    if (user && !isDirty) {
+      reset({
+        fullName: user.fullName || '',
+        emailAddress: user.email || '',
+        profilePhoto: user.avatar || null,
+      });
+    }
+  }, [user, reset, isDirty]);
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
@@ -73,7 +90,7 @@ const CreateProjectForm: FC = () => {
           submitLabel={submitLabel}
           loading={isPending}
         />
-        <div className=' bg-white w-full mt-5 mb-5 rounded-2xl p-8  shadow-lg'>
+        <div className='bg-white w-full mt-5 mb-5 rounded-2xl p-8 shadow-lg'>
           <div className='flex flex-col items-start justify-start mb-10'>
             <h1 className='font-bold text-[25px]'>Create Your Profile</h1>
           </div>
@@ -86,7 +103,7 @@ const CreateProjectForm: FC = () => {
                 name='fullName'
                 label='Full Name'
                 placeholder='Enter your full name'
-                rules={{ required: 'Full  Name is required' }}
+                rules={{ required: 'Full Name is required' }}
               />
               <div></div>
               <Input
@@ -110,7 +127,7 @@ const CreateProjectForm: FC = () => {
             <div className='border-b-2 text-[18px] font-bold text-[#4F576A]'>
               Profile Photo
             </div>
-            <div className=' w-full md:w-1/3'>
+            <div className='w-full md:w-1/3'>
               <Dropzone name='profilePhoto' onDrop={handleDrop} />
             </div>
           </div>
