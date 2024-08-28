@@ -13,6 +13,7 @@ import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
+import Routes from '@/lib/constants/Routes';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -71,7 +72,7 @@ export const UserController = () => {
     if (isUserWhiteListed) {
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
-        // route.push(Routes.Create); //TODO: should we redirect or not
+        route.push(Routes.Create); //TODO: should we redirect or not
       }
     }
   }, [address, refetch, updateUser, user]);
