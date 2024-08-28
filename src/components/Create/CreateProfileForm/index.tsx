@@ -53,7 +53,7 @@ const CreateProjectForm: FC = () => {
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
-      setValue(name as keyof ProfileFormData, ipfsHash);
+      setValue(name as keyof ProfileFormData, getIpfsAddress(ipfsHash));
     }
   };
 
@@ -63,7 +63,7 @@ const CreateProjectForm: FC = () => {
     const _user = {
       email: data.emailAddress,
       fullName: data.fullName,
-      avatar: data.profilePhoto ? getIpfsAddress(data.profilePhoto) : undefined,
+      avatar: data.profilePhoto ? data.profilePhoto : undefined,
       newUser: true,
     };
     const res: any = await updateUser(_user);
