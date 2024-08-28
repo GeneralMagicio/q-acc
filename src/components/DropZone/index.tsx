@@ -6,6 +6,7 @@ import { useFormContext, RegisterOptions } from 'react-hook-form';
 import axios from 'axios';
 import { IconX } from '../Icons/IconX';
 import { uploadToIPFS } from '@/services/ipfs';
+import { getIpfsAddress } from '@/helpers/image';
 
 interface DropzoneProps {
   onDrop: (name: string, acceptedFile: File, ipfsHash: string) => void;
@@ -52,7 +53,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
       if (ipfsHash) {
         onDrop(name, file, ipfsHash);
         setIpfsHash(ipfsHash);
-        setValue(name, ipfsHash, { shouldValidate: true }); // Set value and trigger validation
+        setValue(name, getIpfsAddress(ipfsHash), { shouldValidate: true }); // Set value and trigger validation
       }
     },
     [onDrop, setValue, name],
