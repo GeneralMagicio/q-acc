@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from '../Pagination';
-import { IconABC } from '../Icons/IconABC';
-import { IconShare } from '../Icons/IconShare';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';

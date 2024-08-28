@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import ProjectDetailBanner from './ProjectDetailBanner';
 import { useSearchParams } from 'next/navigation';
+import ProjectDetailBanner from './ProjectDetailBanner';
+
 import ProjectTabs from './ProjectTabs';
 import DonateSection from './DonateSection';
 import ProjectDonationTable from './ProjectDonationTable';

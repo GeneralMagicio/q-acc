@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 interface IPagination {
   setPage: Dispatch<SetStateAction<number>>;
@@ -19,16 +19,16 @@ const PaginationItem: React.FC<IPaginationItemProps> = ({
   isDisabled = false,
   isActive = false,
 }) => {
-  const baseStyle = "text-black";
-  const disabledStyle = "text-black";
-  const activeStyle = isActive ? "font-bold" : "";
-  const cursorStyle = isDisabled ? "cursor-not-allowed " : "cursor-pointer";
+  const baseStyle = 'text-black';
+  const disabledStyle = 'text-black';
+  const activeStyle = isActive ? 'font-bold' : '';
+  const cursorStyle = isDisabled ? 'cursor-not-allowed ' : 'cursor-pointer';
 
   return (
     <button
       onClick={onClick}
       className={`px-4 py-2 text-black ${cursorStyle} ${activeStyle} ${
-        isDisabled ? disabledStyle : ""
+        isDisabled ? disabledStyle : ''
       }`}
       disabled={isDisabled}
     >
@@ -62,7 +62,7 @@ const Pagination = (props: IPagination) => {
         i == current_page - (offset + 1) ||
         i == current_page + (offset + 1)
       ) {
-        _pages.push("...");
+        _pages.push('...');
       }
     }
     setPages(_pages);
@@ -71,10 +71,10 @@ const Pagination = (props: IPagination) => {
 
   if (pageCount < 2) return null;
   return (
-    <div className="flex mt-4 gap-4 items-center overflow-x-auto">
+    <div className='flex mt-4 gap-4 items-center overflow-x-auto'>
       <PaginationItem
         onClick={() => {
-          if (currentPage > 0) setPage((page) => page - 1);
+          if (currentPage > 0) setPage(page => page - 1);
         }}
         isDisabled={currentPage === 0}
       >
@@ -94,7 +94,7 @@ const Pagination = (props: IPagination) => {
 
       <PaginationItem
         onClick={() => {
-          if (currentPage + 1 < pageCount) setPage((page) => page + 1);
+          if (currentPage + 1 < pageCount) setPage(page => page + 1);
         }}
         isDisabled={currentPage + 1 >= pageCount}
       >

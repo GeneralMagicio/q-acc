@@ -8,11 +8,6 @@ import {
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type { IUser, IGivethUser } from '@/types/user.type';
-import {
-  EDirection,
-  IOrder,
-} from '@/components/ProjectDetail/ProjectDonationTable';
-
 export const fetchUserInfo = async (address: Address) => {
   try {
     const res = await requestGraphQL<{ userByAddress: IUser }>(
