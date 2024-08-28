@@ -46,8 +46,8 @@ export interface IProjectCreation {
   impactLocation?: string;
   categories?: string[];
   organisationId?: number;
-  walletAddress?: string;
-  addresses?: IWalletAddress[];
+  // walletAddress?: string;
+  // addresses?: IWalletAddress[];
   image?: string;
   teaser?: string;
   icon?: string;
@@ -55,6 +55,7 @@ export interface IProjectCreation {
   socialMedia?: IProjectSocialMedia[];
   adminUserId?: number;
   teamMembers?: IProjectTeamMember[];
+  address: string;
 }
 
 export interface IProject {

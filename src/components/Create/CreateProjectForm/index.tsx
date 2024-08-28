@@ -17,12 +17,11 @@ import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutlin
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
 import {
-  ChainType,
   EProjectSocialMediaType,
   IProjectCreation,
 } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import config from '@/config/configuration';
+import { useCreateProject } from '@/hooks/useCreateProject';
 
 export interface ProjectFormData {
   projectName: string;
@@ -124,6 +123,7 @@ const socialMediaLinks = [
 const CreateProjectForm: FC = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
+  const { mutateAsync: createProject } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
   const methods = useForm<ProjectFormData>({
     defaultValues: formData.project,
@@ -139,20 +139,15 @@ const CreateProjectForm: FC = () => {
     }
   };
 
-  const onSubmit = (data: ProjectFormData) => {
+  const onSubmit = async (data: ProjectFormData) => {
+    if (!user?.id || !address) return;
     const socialMediaKeys = Object.values(EProjectSocialMediaType);
     const project: IProjectCreation = {
       title: data.projectName,
       description: data.projectDescription,
-      walletAddress: address,
-      addresses: [
-        {
-          address: data.projectAddress,
-          isRecipient: true,
-          chainType: ChainType.EVM,
-          networkId: config.SUPPORTED_CHAINS[0].id,
-        },
-      ],
+      adminUserId: Number(user.id),
+      organisationId: 1,
+      address: data.projectAddress,
       image: data.banner?.ipfsHash,
       icon: data.logo?.ipfsHash,
       teaser: data.projectTeaser,
@@ -170,6 +165,7 @@ const CreateProjectForm: FC = () => {
         })),
     };
     console.log('project', project);
+    createProject(project);
     // setFormData({ project: data });
     // router.push('/create/team');
   };
