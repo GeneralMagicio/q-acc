@@ -30,102 +30,13 @@ export interface IOrder {
 const ProjectDonationTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const id = 101;
+
+  // get project data from context
+  const id = 19;
   const [order, setOrder] = useState<IOrder>({
     by: EOrderBy.CreationDate,
     direction: EDirection.DESC,
   });
-  const tempPageDonations = {
-    donations: [
-      {
-        id: '1',
-        createdAt: '2024-08-26T10:00:00Z',
-        donationType: 'REGULAR',
-        anonymous: false,
-        user: {
-          id: 'user-1',
-          name: 'John Doe',
-          profilePicture: 'https://example.com/john-doe.jpg',
-        },
-        status: 'Completed',
-        transactionNetworkId: 1,
-        chainType: 'Ethereum',
-        amount: '100.00',
-        currency: 'ETH',
-        transactionId:
-          '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-        valueUsd: '250.00',
-      },
-      {
-        id: '2',
-        createdAt: '2024-08-25T09:30:00Z',
-        donationType: 'POIGNART',
-        anonymous: true,
-        user: null,
-        status: 'Pending',
-        transactionNetworkId: 137,
-        chainType: 'Polygon',
-        amount: '200.00',
-        currency: 'MATIC',
-        transactionId:
-          '0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
-        valueUsd: '150.00',
-      },
-      {
-        id: '3',
-        createdAt: '2024-08-24T15:20:00Z',
-        donationType: 'REGULAR',
-        anonymous: false,
-        user: {
-          id: 'user-2',
-          name: 'Jane Smith',
-          profilePicture: 'https://example.com/jane-smith.jpg',
-        },
-        status: 'Completed',
-        transactionNetworkId: 1,
-        chainType: 'Ethereum',
-        amount: '50.00',
-        currency: 'ETH',
-        transactionId:
-          '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
-        valueUsd: '125.00',
-      },
-      {
-        id: '4',
-        createdAt: '2024-08-23T08:10:00Z',
-        donationType: 'REGULAR',
-        anonymous: true,
-        user: null,
-        status: 'Failed',
-        transactionNetworkId: 56,
-        chainType: 'BinanceSmartChain',
-        amount: '300.00',
-        currency: 'BNB',
-        transactionId:
-          '0x9876543210abcdef9876543210abcdef9876543210abcdef9876543210abcdef',
-        valueUsd: '180.00',
-      },
-      {
-        id: '5',
-        createdAt: '2024-08-22T11:45:00Z',
-        donationType: 'REGULAR',
-        anonymous: false,
-        user: {
-          id: 'user-3',
-          name: 'Michael Brown',
-          profilePicture: 'https://example.com/michael-brown.jpg',
-        },
-        status: 'Completed',
-        transactionNetworkId: 137,
-        chainType: 'Polygon',
-        amount: '75.00',
-        currency: 'MATIC',
-        transactionId:
-          '0x123456abcdef123456abcdef123456abcdef123456abcdef123456abcdef123456',
-        valueUsd: '95.00',
-      },
-    ],
-  };
 
   const [pageDonations, setPageDonations] = useState<any>();
 
@@ -135,7 +46,7 @@ const ProjectDonationTable = () => {
         id,
         itemPerPage,
         page * itemPerPage,
-        // { field: order.by, direction: order.direction },
+        { field: order.by, direction: order.direction },
       );
 
       if (data) {
@@ -166,7 +77,11 @@ const ProjectDonationTable = () => {
   };
 
   if (totalCount === 0) {
-    return <h1>skdjfn</h1>;
+    return (
+      <div className='bg-white w-full h-[500px] flex items-center justify-center text-5xl'>
+        No Donations Yet
+      </div>
+    );
   }
 
   return (
@@ -306,7 +221,7 @@ const ProjectDonationTable = () => {
                     Total donars
                   </span>
                 </div>
-                <span>24</span>
+                <span>{totalCount}</span>
               </div>
             </div>
           </div>
