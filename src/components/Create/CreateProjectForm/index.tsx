@@ -41,8 +41,8 @@ export interface ProjectFormData {
   github: string;
   projectAddress: string;
   addressConfirmed: boolean;
-  logo: { file: File; ipfsHash: string } | null;
-  banner: { file: File; ipfsHash: string } | null;
+  logo: string | null;
+  banner: string | null;
 }
 
 const socialMediaLinks = [
@@ -133,11 +133,7 @@ const CreateProjectForm: FC = () => {
 
   const { handleSubmit, setValue } = methods;
 
-  const handleDrop = (name: string, file: File, ipfsHash: string) => {
-    if (file) {
-      setValue(name as keyof ProjectFormData, { file, ipfsHash });
-    }
-  };
+  const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
   const onSubmit = async (data: ProjectFormData) => {
     if (!user?.id || !address) return;
@@ -148,8 +144,8 @@ const CreateProjectForm: FC = () => {
       adminUserId: Number(user.id),
       organisationId: 1,
       address: data.projectAddress,
-      image: data.banner?.ipfsHash,
-      icon: data.logo?.ipfsHash,
+      image: data.banner || undefined,
+      icon: data.logo || undefined,
       teaser: data.projectTeaser,
       socialMedia: Object.entries(data)
         .filter(
