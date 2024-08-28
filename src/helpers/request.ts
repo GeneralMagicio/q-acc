@@ -6,7 +6,7 @@ export const requestGraphQL = async <T>(
   variables: Record<string, any> = {},
   options: { auth?: boolean; url?: string } = {},
 ): Promise<T> => {
-  const response = await fetch(options.url || config.GRAPHQL_ENDPOINT, {
+  const response = await fetch(options.url || config.GIVETH_GQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

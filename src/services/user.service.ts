@@ -3,14 +3,15 @@ import { requestGraphQL } from '@/helpers/request';
 import {
   GET_USER_BY_ADDRESS,
   GET_GIVETH_USER_BY_ADDRESS,
-<<<<<<< HEAD
   GET_PROJECT_BY_ID,
   GET_PROJECT_DONATIONS_BY_ID,
-=======
->>>>>>> 03fc4a3aab265502c3c196b748519bb02296db1c
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type { IUser, IGivethUser } from '@/types/user.type';
+import {
+  EDirection,
+  IOrder,
+} from '@/components/ProjectDetail/ProjectDonationTable';
 
 export const fetchUserInfo = async (address: Address) => {
   try {
@@ -78,17 +79,19 @@ export const fetchProjectById = async (id: number, address?: Address) => {
 };
 
 export const fecthProjectDonationsById = async (
-  id: number,
+  projectId: number,
   take: number,
   skip: number,
+  // orderBy: { field: any; direction: any },
 ) => {
   try {
     const res = await requestGraphQL<{ donationsByProjectId: any }>(
       GET_PROJECT_DONATIONS_BY_ID,
       {
-        projectId: id,
+        projectId,
         take,
         skip,
+        // orderBy,
       },
       {
         auth: true,
