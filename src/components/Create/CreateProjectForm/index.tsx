@@ -130,8 +130,9 @@ const CreateProjectForm: FC = () => {
   };
 
   const onSubmit = (data: ProjectFormData) => {
-    setFormData({ project: data });
-    router.push('/create/team');
+    console.log('data', data);
+    // setFormData({ project: data });
+    // router.push('/create/team');
   };
 
   return (
