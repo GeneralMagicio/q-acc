@@ -165,8 +165,8 @@ const CreateProjectForm: FC = () => {
         })),
     };
     console.log('project', project);
+    setFormData({ project: data });
     createProject(project);
-    // setFormData({ project: data });
     // router.push('/create/team');
   };
 
