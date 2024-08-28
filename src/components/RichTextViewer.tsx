@@ -1,5 +1,5 @@
-import React from "react";
-import "quill/dist/quill.snow.css";
+import React from 'react';
+import 'quill/dist/quill.snow.css';
 
 interface RichTextViewerProps {
   description: string;
@@ -7,7 +7,7 @@ interface RichTextViewerProps {
 
 const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
   return (
-    <div className="container">
+    <div className='container'>
       <style>{`
         .ql-container > .ql-editor {
           word-break: break-word;
@@ -65,9 +65,9 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
           text-decoration: underline !important;
         }
       `}</style>
-      <div className="ql-container">
+      <div className='ql-container'>
         <div
-          className="ql-editor"
+          className='ql-editor'
           dangerouslySetInnerHTML={{ __html: description }}
         />
       </div>

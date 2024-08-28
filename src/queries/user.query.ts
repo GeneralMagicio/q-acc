@@ -3,8 +3,10 @@ export const GET_USER_BY_ADDRESS = `
 		userByAddress(address: $address) {
 			__typename
 			id
+			fullName: name
 			avatar
 			email
+			isSignedIn
 		}
 	}
 `;
@@ -19,6 +21,7 @@ export const GET_GIVETH_USER_BY_ADDRESS = `
 			firstName
 			lastName
 			name
+			isSignedIn
 		}
 	}
 `;

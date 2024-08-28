@@ -1,24 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import "quill/dist/quill.snow.css";
-import { useFormContext, RegisterOptions } from "react-hook-form";
-import { uploadToIPFS } from "@/services/ipfs";
-import { getIpfsAddress } from "@/helpers/image";
+import React, { useEffect, useRef, useState } from 'react';
+import 'quill/dist/quill.snow.css';
+import { useFormContext, RegisterOptions } from 'react-hook-form';
+import { uploadToIPFS } from '@/services/ipfs';
+import { getIpfsAddress } from '@/helpers/image';
 
 const toolbarOptions = [
-  ["bold", "italic", "underline", "strike"], // toggled buttons
-  ["blockquote", "code-block"],
-  ["link", "image", "video", "formula"],
+  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link', 'image', 'video', 'formula'],
   [{ header: 1 }, { header: 2 }], // custom button values
-  [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-  [{ script: "sub" }, { script: "super" }], // superscript/subscript
-  [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-  [{ direction: "rtl" }], // text direction
-  [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+  [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+  [{ direction: 'rtl' }], // text direction
+  [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   [{ color: [] }, { background: [] }], // dropdown with defaults from theme
   [{ font: [] }],
   [{ align: [] }],
-  ["clean"], // remove formatting button
+  ['clean'], // remove formatting button
 ];
 
 interface RichTextEditorProps {
@@ -59,13 +59,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     const initializeQuill = async () => {
       quillStateRef.current = QuillState.INITIALIZING;
       if (editorRef.current) {
-        const { default: Quill } = await import("quill");
+        const { default: Quill } = await import('quill');
 
         // Custom image handler
         const imageHandler = () => {
-          const input = document.createElement("input");
-          input.setAttribute("type", "file");
-          input.setAttribute("accept", "image/*");
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
           input.click();
 
           input.onchange = async () => {
@@ -73,30 +73,30 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             if (file) {
               // Create a base64 preview of the image
               const reader = new FileReader();
-              reader.onload = async (e) => {
+              reader.onload = async e => {
                 const base64ImageSrc = e.target?.result;
 
                 // Insert the base64 image into the editor with 60% opacity
                 const range = quillInstanceRef.current.getSelection(true);
                 quillInstanceRef.current.insertEmbed(
                   range.index,
-                  "image",
-                  base64ImageSrc
+                  'image',
+                  base64ImageSrc,
                 );
 
                 const imageElement =
                   quillInstanceRef.current.root.querySelector(
-                    `img[src="${base64ImageSrc}"]`
+                    `img[src="${base64ImageSrc}"]`,
                   ) as HTMLImageElement;
                 if (imageElement) {
-                  imageElement.style.opacity = "0.6";
+                  imageElement.style.opacity = '0.6';
                 }
 
                 // Perform the image upload
                 const imageIpfsHash = await uploadToIPFS(file);
 
                 if (!imageIpfsHash) {
-                  console.error("Failed to upload image to IPFS");
+                  console.error('Failed to upload image to IPFS');
                   return;
                 }
 
@@ -104,8 +104,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
                 // Replace the base64 image source with the uploaded IPFS URL and set full opacity
                 if (imageElement) {
-                  imageElement.setAttribute("src", imageUrl);
-                  imageElement.style.opacity = "1.0";
+                  imageElement.setAttribute('src', imageUrl);
+                  imageElement.style.opacity = '1.0';
                 }
               };
               reader.readAsDataURL(file);
@@ -122,14 +122,14 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
               },
             },
           },
-          theme: "snow",
+          theme: 'snow',
         });
 
         quillInstanceRef.current = quillInstance;
         quillStateRef.current = QuillState.INITIALIZED;
 
         // Track character count and update form value
-        quillInstance.on("text-change", () => {
+        quillInstance.on('text-change', () => {
           const text = quillInstance.getText().trim();
           setCharCount(text.length);
           setValue(name, quillInstance.root.innerHTML, {
@@ -153,31 +153,31 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     if (quillInstanceRef.current) {
       return quillInstanceRef.current.root.innerHTML; // Get HTML content
     }
-    return "";
+    return '';
   };
 
   return (
     <div>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className='block text-sm font-medium text-gray-700'>
           {label}
         </label>
       )}
       <div
         ref={editorRef}
-        style={{ height: "400px", border: "1px solid #ccc" }}
+        style={{ height: '400px', border: '1px solid #ccc' }}
       ></div>
       {description && (
-        <p className="text-sm text-gray-500 mt-1">{description}</p>
+        <p className='text-sm text-gray-500 mt-1'>{description}</p>
       )}
       {maxLength && (
-        <div className="text-right text-sm text-gray-500 mt-1">
+        <div className='text-right text-sm text-gray-500 mt-1'>
           {charCount}/{maxLength} characters
         </div>
       )}
       {errors[name] && (
-        <p className="text-red-500 text-xs mt-1">
-          {(errors[name]?.message as string) || "Error"}
+        <p className='text-red-500 text-xs mt-1'>
+          {(errors[name]?.message as string) || 'Error'}
         </p>
       )}
     </div>

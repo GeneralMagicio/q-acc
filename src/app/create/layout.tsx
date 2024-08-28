@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import { CreateProvider } from "@/components/Create/CreateContext";
-import Link from "next/link";
+import { CreateProvider } from '@/components/Create/CreateContext';
 
 export default function CreateLayout({
   children,

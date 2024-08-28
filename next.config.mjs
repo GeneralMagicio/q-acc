@@ -2,15 +2,15 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      { protocol: "https", port: "", hostname: "ipfs.io" },
+      { protocol: 'https', port: '', hostname: 'ipfs.io' },
       {
-        protocol: "https",
-        hostname: "giveth.mypinata.cloud",
+        protocol: 'https',
+        hostname: 'giveth.mypinata.cloud',
       },
     ],
   },
-  webpack: (config) => {
-    config.externals.push("pino-pretty", "lokijs", "encoding");
+  webpack: config => {
+    config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
   },
 };
