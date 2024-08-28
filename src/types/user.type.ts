@@ -10,6 +10,7 @@ export interface IUser {
   fullName: string;
   email: string;
   avatar: string;
+  isSignedIn: boolean;
 }
 
 export interface IGivethUser {

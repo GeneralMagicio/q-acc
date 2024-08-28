@@ -20,8 +20,8 @@ export const useSignUser = (onSinged?: () => void) => {
       try {
         const newToken = await signWithEVM(address, chain?.id, connector);
         if (newToken) {
-          onSinged?.();
           localStorage.setItem('token', JSON.stringify(newToken));
+          onSinged?.();
           return newToken;
         }
         return null;
