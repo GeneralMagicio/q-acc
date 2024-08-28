@@ -123,7 +123,7 @@ const socialMediaLinks = [
 const CreateProjectForm: FC = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
-  const { mutateAsync: createProject } = useCreateProject();
+  const { mutateAsync: createProject, isPending } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
   const methods = useForm<ProjectFormData>({
     defaultValues: formData.project,
@@ -131,7 +131,7 @@ const CreateProjectForm: FC = () => {
   });
   const router = useRouter();
 
-  const { handleSubmit, setValue, formState } = methods;
+  const { handleSubmit, setValue } = methods;
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
     if (file) {
@@ -166,8 +166,10 @@ const CreateProjectForm: FC = () => {
     };
     console.log('project', project);
     setFormData({ project: data });
-    createProject(project);
-    // router.push('/create/team');
+    const res = await createProject(project);
+    if (res) {
+      router.push('/create/team');
+    }
   };
 
   return (
@@ -177,6 +179,7 @@ const CreateProjectForm: FC = () => {
           title='Create your project'
           nextLabel='Add your team'
           submitLabel='Save & continue'
+          loading={isPending}
         />
         <div className='bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8'>
           <h1 className='text-2xl font-bold text-gray-800 mb-7'>
