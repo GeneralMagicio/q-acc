@@ -1,21 +1,29 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import ProjectDetailBanner from "./ProjectDetailBanner";
-import { useSearchParams } from "next/navigation";
-import ProjectTabs from "./ProjectTabs";
-import DonateSection from "./DonateSection";
-import ProjectDonationTable from "./ProjectDonationTable";
+'use client';
+import React, { useEffect, useState } from 'react';
+import ProjectDetailBanner from './ProjectDetailBanner';
+import { useSearchParams } from 'next/navigation';
+import ProjectTabs from './ProjectTabs';
+import DonateSection from './DonateSection';
+import ProjectDonationTable from './ProjectDonationTable';
+import ProjectTeamMembers from './ProjectTeamMember';
+import { useFetchProjectById } from '@/hooks/useFetchProjectById';
 export enum EProjectPageTabs {
-  DONATIONS = "donations",
-  MEMEBERS = "members",
+  DONATIONS = 'donations',
+  MEMEBERS = 'members',
 }
 
 const ProjectDetail = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
+  const projectId = 1;
+
+  const { data: projectById } = useFetchProjectById(projectId);
+  console.log(projectById);
+
+  // const teamMembers = projectById.members;
 
   useEffect(() => {
-    switch (searchParams.get("tab")) {
+    switch (searchParams.get('tab')) {
       case EProjectPageTabs.DONATIONS:
         setActiveTab(1);
         break;
@@ -26,21 +34,23 @@ const ProjectDetail = () => {
         setActiveTab(0);
         break;
     }
-  }, [searchParams.get("tab")]);
+  }, [searchParams.get('tab')]);
   return (
-    <div className="">
-      <div className="container">
-        <div className="flex gap-6 flex-col lg:flex-row mt-10">
+    <div className=''>
+      <div className='container'>
+        <div className='flex gap-6 flex-col lg:flex-row mt-10'>
           <ProjectDetailBanner />
 
           <DonateSection />
         </div>
       </div>
 
-      <ProjectTabs activeTab={activeTab} slug={"slug"} />
+      <ProjectTabs activeTab={activeTab} slug={'slug'} />
       {activeTab === 0 && <>ABOUT</>}
       {activeTab === 1 && <ProjectDonationTable />}
-      {activeTab === 2 && <h2>MEMEBR</h2>}
+
+      {/* Pass team members later */}
+      {activeTab === 2 && <ProjectTeamMembers />}
     </div>
   );
 };

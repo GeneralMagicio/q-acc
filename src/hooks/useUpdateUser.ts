@@ -1,13 +1,13 @@
-import { requestGraphQL } from "@/helpers/request";
-import { UPDATE_USER } from "@/queries/user.query";
-import { INewUer } from "@/types/user.type";
-import { useMutation } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useMutation } from '@tanstack/react-query';
+import { useAccount } from 'wagmi';
+import { requestGraphQL } from '@/helpers/request';
+import { UPDATE_USER } from '@/queries/user.query';
+import { INewUer } from '@/types/user.type';
 
 export const useUpdateUser = () => {
   const { address } = useAccount();
   return useMutation({
-    mutationKey: ["user", address],
+    mutationKey: ['user', address],
     mutationFn: async (user: INewUer) => {
       return await requestGraphQL(
         UPDATE_USER,
@@ -19,7 +19,7 @@ export const useUpdateUser = () => {
         },
         {
           auth: true,
-        }
+        },
       );
     },
   });

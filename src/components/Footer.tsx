@@ -1,23 +1,23 @@
-"use client";
-import React from "react";
-import Link from "next/link";
-import { IconXSocial } from "./Icons/IconXSocial";
-import { IconFarcaster } from "./Icons/IconFarcaster";
-import Routes from "@/lib/constants/Routes";
-import { IconMirror } from "./Icons/IconMirror";
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { IconXSocial } from './Icons/IconXSocial';
+import { IconFarcaster } from './Icons/IconFarcaster';
+import Routes from '@/lib/constants/Routes';
+import { IconMirror } from './Icons/IconMirror';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-100 py-8">
-      <div className=" container">
-        <div className="flex  flex-col lg:flex-row justify-between items-center">
-          <div className="flex flex-row  w-full">
-            <div className="mb-4 lg:mb-0 w-[50%]">
-              <ul className="space-y-2">
+    <footer className='bg-gray-100 py-8'>
+      <div className=' container'>
+        <div className='flex  flex-col lg:flex-row justify-between items-center'>
+          <div className='flex flex-row  w-full'>
+            <div className='mb-4 lg:mb-0 w-[50%]'>
+              <ul className='space-y-2'>
                 <li>
                   <Link
                     href={Routes.Home}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     Home
                   </Link>
@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     href={Routes.AllProjects}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     Projects
                   </Link>
@@ -33,19 +33,19 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     href={Routes.AboutUs}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     Whitepaper
                   </Link>
                 </li>
               </ul>
             </div>
-            <div className="mb-4 lg:mb-0">
-              <ul className="space-y-2">
+            <div className='mb-4 lg:mb-0'>
+              <ul className='space-y-2'>
                 <li>
                   <Link
                     href={Routes.Faq}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     FAQ
                   </Link>
@@ -53,7 +53,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     href={Routes.AboutUs}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     Privacy Policy
                   </Link>
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     href={Routes.Terms}
-                    className="text-gray-700 hover:underline"
+                    className='text-gray-700 hover:underline'
                   >
                     Terms and Conditions
                   </Link>
@@ -70,26 +70,26 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 items-center">
-            <div className="flex items-center sm:gap-8 gap-6">
+          <div className='flex flex-col gap-4 items-center'>
+            <div className='flex items-center sm:gap-8 gap-6'>
               <Link
-                target="_blank"
-                href={"https://x.com/theqacc"}
-                className="text-gray-700 hover:text-gray-900"
+                target='_blank'
+                href={'https://x.com/theqacc'}
+                className='text-gray-700 hover:text-gray-900'
               >
                 <IconXSocial />
               </Link>
               <Link
-                target="_blank"
-                href={"https://warpcast.com/theqacc"}
-                className="text-gray-700 hover:text-gray-900"
+                target='_blank'
+                href={'https://warpcast.com/theqacc'}
+                className='text-gray-700 hover:text-gray-900'
               >
                 <IconFarcaster />
               </Link>
               <Link
-                target="_blank"
-                href={"https://mirror.xyz/qacc.eth"}
-                className="text-gray-700 hover:text-gray-900"
+                target='_blank'
+                href={'https://mirror.xyz/qacc.eth'}
+                className='text-gray-700 hover:text-gray-900'
               >
                 <IconMirror />
               </Link>

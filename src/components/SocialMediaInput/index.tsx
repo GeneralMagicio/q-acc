@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { FC } from "react";
-import { type RegisterOptions } from "react-hook-form";
-import Input from "../Input";
+import Image from 'next/image';
+import { FC } from 'react';
+import { type RegisterOptions } from 'react-hook-form';
+import Input from '../Input';
 
 interface SocialMediaInputProps {
   name: string;
@@ -21,8 +21,8 @@ export const SocialMediaInput: FC<SocialMediaInputProps> = ({
   rules,
 }) => {
   return (
-    <div className="flex gap-12 items-center ">
-      <div className="flex gap-2 items-center mb-2 w-36">
+    <div className='flex gap-12 items-center '>
+      <div className='flex gap-2 items-center mb-2 w-36'>
         <Image
           src={`/images/icons/social/${iconName}`}
           alt={`${label} icon`}
@@ -31,7 +31,7 @@ export const SocialMediaInput: FC<SocialMediaInputProps> = ({
         />
         <label>{label}</label>
       </div>
-      <div className="w-full">
+      <div className='w-full'>
         <Input name={name} placeholder={placeholder} rules={rules} />
       </div>
     </div>
