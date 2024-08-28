@@ -103,3 +103,51 @@ export const GET_PROJECT_BY_ID = `
       }
     }
   }`;
+
+export const GET_PROJECT_DONATIONS_BY_ID = `
+query (
+    $take: Int
+    $skip: Int
+    $traceable: Boolean
+    $qfRoundId: Int
+    $projectId: Int!
+    $searchTerm: String
+    $status: String
+    $orderBy: SortBy
+  ) {
+    donationsByProjectId(
+      take: $take
+      skip: $skip
+      traceable: $traceable
+      qfRoundId: $qfRoundId
+      projectId: $projectId
+      searchTerm: $searchTerm
+      status: $status
+      orderBy: $orderBy
+    ) {
+      donations {
+        id
+        transactionId
+        transactionNetworkId
+        toWalletAddress
+        fromWalletAddress
+        currency
+        anonymous
+        valueUsd
+        amount
+        qfRound {
+          id
+        }
+        status
+        user {
+          id
+          walletAddress
+          firstName
+          email
+        }
+        createdAt
+      }
+      totalCount
+      totalUsdBalance
+    }
+  }`;
