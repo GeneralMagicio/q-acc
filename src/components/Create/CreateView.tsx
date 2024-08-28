@@ -56,7 +56,7 @@ export const CreateView = () => {
           more. It is also where your community will create profiles to
           participate in the early access window and all q/acc rounds.
         </p>
-        <Link href={Routes.CreateProfile}>
+        <Link href={Routes.CreateProject}>
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
             color={ButtonColor.Pink}

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-import { fetchProjectById } from '@/services/user.service';
+import { fetchProjectById } from '@/services/project.service';
 
 export const useFetchProjectById = (projectId: number) => {
   const { address } = useAccount();

@@ -5,6 +5,7 @@ import { isAddress } from 'viem';
 import { type FC } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
 import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
@@ -15,6 +16,12 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
+import {
+  EProjectSocialMediaType,
+  IProjectCreation,
+} from '@/types/project.type';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { useCreateProject } from '@/hooks/useCreateProject';
 
 export interface ProjectFormData {
   projectName: string;
@@ -34,79 +41,79 @@ export interface ProjectFormData {
   github: string;
   projectAddress: string;
   addressConfirmed: boolean;
-  logo: { file: File; ipfsHash: string } | null;
-  banner: { file: File; ipfsHash: string } | null;
+  logo: string | null;
+  banner: string | null;
 }
 
 const socialMediaLinks = [
   {
-    name: 'website',
+    name: EProjectSocialMediaType.WEBSITE,
     label: 'Website',
     iconName: 'web.svg',
     rules: validators.website,
   },
   {
-    name: 'facebook',
+    name: EProjectSocialMediaType.FACEBOOK,
     label: 'Facebook',
     iconName: 'facebook.svg',
     rules: validators.facebook,
   },
   {
-    name: 'twitter',
+    name: EProjectSocialMediaType.X,
     label: 'Twitter',
     iconName: 'twitter.svg',
     rules: validators.twitter,
   },
   {
-    name: 'linkedin',
+    name: EProjectSocialMediaType.LINKEDIN,
     label: 'LinkedIn',
     iconName: 'linkedin.svg',
     rules: validators.linkedin,
   },
   {
-    name: 'discord',
+    name: EProjectSocialMediaType.DISCORD,
     label: 'Discord',
     iconName: 'discord.svg',
     rules: validators.discord,
   },
   {
-    name: 'telegram',
+    name: EProjectSocialMediaType.TELEGRAM,
     label: 'Telegram',
     iconName: 'telegram.svg',
     rules: validators.telegram,
   },
   {
-    name: 'instagram',
+    name: EProjectSocialMediaType.INSTAGRAM,
     label: 'Instagram',
     iconName: 'instagram.svg',
     rules: validators.instagram,
   },
   {
-    name: 'reddit',
+    name: EProjectSocialMediaType.REDDIT,
     label: 'Reddit',
     iconName: 'reddit.svg',
     rules: validators.reddit,
   },
   {
-    name: 'youtube',
+    name: EProjectSocialMediaType.YOUTUBE,
     label: 'YouTube',
     iconName: 'youtube.svg',
     rules: validators.youtube,
   },
   {
-    name: 'farcaster',
+    name: EProjectSocialMediaType.FARCASTER,
     label: 'Farcaster',
     iconName: 'farcaster.svg',
     rules: validators.farcaster,
   },
   {
-    name: 'lens',
+    name: EProjectSocialMediaType.LENS,
     label: 'Lens',
     iconName: 'lens.svg',
     rules: validators.lens,
   },
   {
-    name: 'github',
+    name: EProjectSocialMediaType.GITHUB,
     label: 'GitHub',
     iconName: 'github.svg',
     rules: validators.github,
@@ -114,6 +121,9 @@ const socialMediaLinks = [
 ];
 
 const CreateProjectForm: FC = () => {
+  const { address } = useAccount();
+  const { data: user } = useFetchUser();
+  const { mutateAsync: createProject, isPending } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
   const methods = useForm<ProjectFormData>({
     defaultValues: formData.project,
@@ -121,17 +131,41 @@ const CreateProjectForm: FC = () => {
   });
   const router = useRouter();
 
-  const { handleSubmit, setValue, formState } = methods;
+  const { handleSubmit, setValue } = methods;
 
-  const handleDrop = (name: string, file: File, ipfsHash: string) => {
-    if (file) {
-      setValue(name as keyof ProjectFormData, { file, ipfsHash });
-    }
-  };
+  const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
-  const onSubmit = (data: ProjectFormData) => {
+  const onSubmit = async (data: ProjectFormData) => {
+    if (!user?.id || !address) return;
+    const socialMediaKeys = Object.values(EProjectSocialMediaType);
+    const project: IProjectCreation = {
+      title: data.projectName,
+      description: data.projectDescription,
+      adminUserId: Number(user.id),
+      organisationId: 1,
+      address: data.projectAddress,
+      image: data.banner || undefined,
+      icon: data.logo || undefined,
+      teaser: data.projectTeaser,
+      socialMedia: Object.entries(data)
+        .filter(
+          ([key, value]) =>
+            value &&
+            socialMediaKeys.includes(
+              key.toUpperCase() as EProjectSocialMediaType,
+            ),
+        )
+        .map(([key, value]) => ({
+          type: key.toUpperCase() as EProjectSocialMediaType,
+          link: value,
+        })),
+    };
+    console.log('project', project);
     setFormData({ project: data });
-    router.push('/create/team');
+    const res = await createProject(project);
+    if (res) {
+      router.push('/create/team');
+    }
   };
 
   return (
@@ -141,6 +175,7 @@ const CreateProjectForm: FC = () => {
           title='Create your project'
           nextLabel='Add your team'
           submitLabel='Save & continue'
+          loading={isPending}
         />
         <div className='bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8'>
           <h1 className='text-2xl font-bold text-gray-800 mb-7'>
