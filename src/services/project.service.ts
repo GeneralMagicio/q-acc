@@ -1,4 +1,4 @@
-import { Address } from 'cluster';
+import { Address } from 'viem';
 import { requestGraphQL } from '@/helpers/request';
 import config from '@/config/configuration';
 import { IProjectCreation } from '@/types/project.type';
