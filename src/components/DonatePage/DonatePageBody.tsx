@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { Button, ButtonColor } from '../Button';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconABC } from '../Icons/IconABC';
@@ -10,7 +10,12 @@ import { IconShare } from '../Icons/IconShare';
 import { IconInfo } from '../Icons/IconInfo';
 
 const DonatePageBody = () => {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
+  const { data: balanceData, isLoading: isBalanceLoading } = useBalance({
+    address,
+    // Adjust this if needed to specify MATIC token
+  });
+  console.log('Avalibae', balanceData);
   const handleDonate = () => {
     console.log('Donated');
   };
@@ -40,8 +45,9 @@ const DonatePageBody = () => {
 
             {/* Avaliable token */}
             <div className='flex gap-1'>
-              <span className='text-sm'>Available: 85000 MATIC</span>
-
+              {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
+              Available:{' '}
+              {isBalanceLoading ? 'Loading...' : `${balanceData} MATIC`}
               <IconRefresh size={16} />
             </div>
           </div>

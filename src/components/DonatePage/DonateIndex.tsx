@@ -5,7 +5,7 @@ import DonatePageBody from './DonatePageBody';
 import DonateSuccessPage from './DonateSuccessPage';
 
 const DonateIndex = () => {
-  const [donataionSuccess, setDonationSuccess] = useState<boolean>(true);
+  const [donataionSuccess, setDonationSuccess] = useState<boolean>(false);
   return donataionSuccess ? (
     <>
       <DonateNavbar />
