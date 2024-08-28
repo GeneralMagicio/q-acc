@@ -96,13 +96,17 @@ export const signWithEVM = async (
 };
 
 export const getLocalStorageToken = (address: string) => {
-  const storedToken = localStorage.getItem('token');
-  if (storedToken) {
-    const tokenObj = JSON.parse(storedToken);
-    if (tokenObj.publicAddress.toLowerCase() === address.toLowerCase()) {
-      return storedToken;
+  try {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      const tokenObj = JSON.parse(storedToken);
+      if (tokenObj.publicAddress.toLowerCase() === address.toLowerCase()) {
+        return storedToken;
+      }
+      localStorage.removeItem('token');
     }
-    localStorage.removeItem('token');
+  } catch (error) {
+    console.error(error);
   }
 };
 
