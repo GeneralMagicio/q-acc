@@ -89,6 +89,18 @@ export const UserController = () => {
     setShowSignModal(true);
   }, [address, isFetched, onSign, user?.isSignedIn]);
 
+  useEffect(() => {
+    const handleShowSignInModal = () => {
+      setShowSignModal(true);
+    };
+
+    window.addEventListener('showSignInModal', handleShowSignInModal);
+
+    return () => {
+      window.removeEventListener('showSignInModal', handleShowSignInModal);
+    };
+  }, []);
+
   return showSignModal ? (
     <SignModal
       isOpen={showSignModal}

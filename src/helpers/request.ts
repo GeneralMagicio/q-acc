@@ -11,7 +11,7 @@ export const requestGraphQL = async <T>(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${options.auth ? getCurrentUserToken() : ''}`,
-      authversion: '2',
+      authVersion: '2',
     },
     body: JSON.stringify({
       query,
@@ -22,7 +22,18 @@ export const requestGraphQL = async <T>(
   const { data, errors } = await response.json();
 
   if (errors) {
-    throw new Error(errors.map((error: any) => error.message).join(', '));
+    const errorMessages = errors.map((error: any) => error.message).join(', ');
+
+    // Check if any error message contains "Authentication required."
+    if (errorMessages.includes('Authentication required.')) {
+      // Dispatch a custom event to show the sign-in modal
+      window.dispatchEvent(new CustomEvent('showSignInModal'));
+
+      // Optionally, you could also throw a specific error or handle it here
+      throw new Error('Authentication required. Please sign in.');
+    }
+
+    throw new Error(errorMessages);
   }
 
   return data;
