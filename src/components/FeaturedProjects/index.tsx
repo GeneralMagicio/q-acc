@@ -1,10 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
+import Link from 'next/link';
 import { ProjectCard } from '../ProjectCard/ProjectCard';
 import 'swiper/css';
 import { IconPointerLeft } from '../Icons/IconPointerLeft';
 import { IconPointerRight } from '../Icons/IconPointerRight';
+import Routes from '@/lib/constants/Routes';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
@@ -40,7 +42,9 @@ export const FeaturedProjects = () => {
       <div className='one-side-container flex flex-col md:flex-row overflow-hidden !pl-0 pb-10'>
         <div className='shadow-xl rounded-r-xl py-10 px-6 flex flex-col justify-center items-center gap-12'>
           <h2 className='text-6xl font-bold'>This Season&apos;s Projects</h2>
-          <p className='text-giv-500 font-bold'>Explore </p>
+          <Link href={Routes.Projects}>
+            <p className='text-giv-500 font-bold'>Explore </p>
+          </Link>
         </div>
         <div className='w-full'>
           <Swiper
