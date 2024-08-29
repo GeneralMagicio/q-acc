@@ -1,18 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useAccount, useBalance, http } from 'wagmi';
-import { Button, ButtonColor } from '../Button';
+import React, { useState } from 'react';
+import { useAccount, useBalance, useWaitForTransactionReceipt } from 'wagmi';
+import { parseEther } from 'viem';
+
+import { sendTransaction as wagmiSendTransaction } from '@wagmi/core';
+import { wagmiConfig } from '@/config/wagmi';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconABC } from '../Icons/IconABC';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
 import { IconInfo } from '../Icons/IconInfo';
-import { parseEther } from 'viem';
-import { useWaitForTransactionReceipt } from 'wagmi';
-import { sendTransaction as wagmiSendTransaction } from '@wagmi/core';
-import { wagmiConfig } from '@/config/wagmi';
+
 import DonateSuccessPage from './DonateSuccessPage';
+import { Button, ButtonColor } from '../Button';
 
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
@@ -40,8 +41,6 @@ const DonatePageBody = () => {
     console.log('Refetched');
     refetch();
   };
-
-  console.log('Avalibae', balanceData?.formatted);
 
   const handleDonate = async () => {
     const to = projectAddress as `0x${string}`;

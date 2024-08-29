@@ -1,8 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import DonateNavbar from './DonatePageNavbar';
 import DonatePageBody from './DonatePageBody';
-import DonateSuccessPage from './DonateSuccessPage';
 
 const DonateIndex = () => {
   return (

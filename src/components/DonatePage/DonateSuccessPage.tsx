@@ -5,7 +5,6 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconFacebook } from '../Icons/IconFacebook';
 import { IconLinkedin } from '../Icons/IconLinkedin';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
-import Link from 'next/link';
 
 interface transactionHashType {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
