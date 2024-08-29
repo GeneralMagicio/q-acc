@@ -22,6 +22,9 @@ import {
 } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
+import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
+import links from '@/lib/constants/links';
 
 export interface ProjectFormData {
   projectName: string;
@@ -129,6 +132,7 @@ const CreateProjectForm: FC = () => {
     defaultValues: formData.project,
     mode: 'onChange', // This enables validation on change
   });
+  const { data: isWhiteListed, isFetching } = useIsUserWhiteListed();
   const router = useRouter();
 
   const { handleSubmit, setValue } = methods;
@@ -168,7 +172,9 @@ const CreateProjectForm: FC = () => {
     }
   };
 
-  return (
+  return isFetching ? (
+    <div>Loading...</div>
+  ) : isWhiteListed ? (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
@@ -303,6 +309,49 @@ const CreateProjectForm: FC = () => {
         </div>
       </form>
     </FormProvider>
+  ) : (
+    <div className='flex flex-col justify-center items-center py-20'>
+      <div className='max-w-2xl bg-white p-6 rounded-xl'>
+        <h1 className='font-bold text-2xl'>Sorry!</h1>
+        <p className='mt-4 mb-10'>
+          The connected address is not on the allow list for any project. Double
+          check you are connected with the right address. If you believe this is
+          in error, reach out the the Quadratic Accelerator team..
+        </p>
+        <div className='flex justify-center'>
+          <a
+            href={links.FARCASTER}
+            target='_blank'
+            referrerPolicy='no-referrer'
+          >
+            <Button styleType={ButtonStyle.Text} color={ButtonColor.Gray}>
+              <div className='flex items-center gap-1'>
+                <Image
+                  src='/images/icons/social/farcaster.svg'
+                  alt='discord'
+                  width={24}
+                  height={24}
+                />
+                <span>Qacc on Farcaster</span>
+              </div>
+            </Button>
+          </a>
+          <a href={links.TWITTER} target='_blank' referrerPolicy='no-referrer'>
+            <Button styleType={ButtonStyle.Text} color={ButtonColor.Gray}>
+              <div className='flex items-center gap-1'>
+                <Image
+                  src='/images/icons/social/twitter.svg'
+                  alt='x'
+                  width={24}
+                  height={24}
+                />
+                <span>q/acc on X</span>
+              </div>
+            </Button>
+          </a>
+        </div>
+      </div>
+    </div>
   );
 };
 
