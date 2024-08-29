@@ -5,7 +5,12 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconFacebook } from '../Icons/IconFacebook';
 import { IconLinkedin } from '../Icons/IconLinkedin';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
-const DonateSuccessPage = () => {
+import Link from 'next/link';
+
+interface transactionHashType {
+  transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
+}
+const DonateSuccessPage = (props: transactionHashType) => {
   return (
     <div className='bg-[#F7F7F9] w-full  py-10 absolute z-40 my-20'>
       <div className='container w-full flex  flex-col gap-14 '>
@@ -92,10 +97,15 @@ const DonateSuccessPage = () => {
           <div className='text-xl font-redHatText'>
             <h3 className='text-[#82899A] flex gap-2'>
               Donation to Ethereum Colombia
-              <span className='text-[#E1458D] text-xl flex gap-2'>
-                {' '}
-                View the transaction <IconViewTransaction size={25} />
-              </span>
+              <a
+                href={`https://cardona-zkevm.polygonscan.com/tx/${props.transactionHash}`}
+                target='_blank'
+              >
+                <span className='text-[#E1458D] text-xl flex gap-2'>
+                  {' '}
+                  View the transaction <IconViewTransaction size={25} />
+                </span>
+              </a>
             </h3>
           </div>
 

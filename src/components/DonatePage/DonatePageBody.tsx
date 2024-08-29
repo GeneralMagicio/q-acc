@@ -1,6 +1,6 @@
 'use client';
-import React from 'react';
-import { useAccount, useBalance } from 'wagmi';
+import React, { useEffect, useState } from 'react';
+import { useAccount, useBalance, http } from 'wagmi';
 import { Button, ButtonColor } from '../Button';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconABC } from '../Icons/IconABC';
@@ -8,20 +8,58 @@ import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
 import { IconInfo } from '../Icons/IconInfo';
+import { parseEther } from 'viem';
+import { useWaitForTransactionReceipt } from 'wagmi';
+import { sendTransaction as wagmiSendTransaction } from '@wagmi/core';
+import { wagmiConfig } from '@/config/wagmi';
+import DonateSuccessPage from './DonateSuccessPage';
 
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
-  const { data: balanceData, isLoading: isBalanceLoading } = useBalance({
+  const { chain } = useAccount();
+  const [inputAmount, setInputAmount] = useState<any>('');
+  const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
+  const projectAddress = '0x4ce6B0F604E1036AFFD0826764b51Fb72310964c';
+
+  const {
+    data: balanceData,
+    isLoading: isBalanceLoading,
+    refetch,
+  } = useBalance({
     address,
-    // Adjust this if needed to specify MATIC token
+    chainId: chain?.id,
   });
-  console.log('Avalibae', balanceData);
-  const handleDonate = () => {
-    console.log('Donated');
+
+  const handleRefetch = () => {
+    console.log('Refetched');
+    refetch();
+  };
+
+  console.log('Avalibae', balanceData?.formatted);
+
+  const handleDonate = async () => {
+    const to = projectAddress as `0x${string}`;
+    const value = inputAmount as string;
+    const hash = await wagmiSendTransaction(wagmiConfig, {
+      to: to,
+      value: parseEther(value),
+    });
+
+    setHash(hash);
+    console.log('Donated', hash);
   };
   const handleAnoynmous = () => {
     console.log('');
   };
+  if (isConfirmed) {
+    return <DonateSuccessPage transactionHash={hash} />;
+  }
   return (
     <div className='bg-[#F7F7F9] w-full  py-10 absolute z-40 my-20'>
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
@@ -35,20 +73,32 @@ const DonatePageBody = () => {
             <div className='border rounded-lg flex'>
               <div className='w-40 flex gap-2 p-4 border'>
                 <IconMatic size={24} />
-                <h1 className=' font-medium'>MATIC</h1>
+                <h1 className=' font-medium'>{balanceData?.symbol}</h1>
               </div>
               <input
+                onChange={e => setInputAmount(e.target.value)}
+                value={inputAmount}
                 type='number'
                 className='w-full boder rounded-lg px-4'
-              ></input>
+              />
             </div>
 
             {/* Avaliable token */}
             <div className='flex gap-1'>
               {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
-              Available:{' '}
-              {isBalanceLoading ? 'Loading...' : `${balanceData} MATIC`}
-              <IconRefresh size={16} />
+              <div
+                onClick={() => setInputAmount(balanceData?.formatted)}
+                className='cursor-pointer hover:underline'
+              >
+                Available:{' '}
+                {isBalanceLoading
+                  ? 'Loading...'
+                  : `${balanceData?.formatted} ${balanceData?.symbol}`}
+              </div>
+
+              <button onClick={handleRefetch}>
+                <IconRefresh size={16} />
+              </button>
             </div>
           </div>
 
@@ -105,6 +155,7 @@ const DonatePageBody = () => {
           <Button
             onClick={handleDonate}
             disabled={!isConnected}
+            loading={isConfirming}
             color={ButtonColor.Giv}
             className={`text-white justify-center ${
               isConnected ? 'opacity-100' : 'opacity-50 cursor-not-allowed'
