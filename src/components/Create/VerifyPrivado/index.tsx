@@ -22,7 +22,7 @@ const VerifyPrivado = () => {
   const verifyAccount = () => {};
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    router.push(Routes.CreateProject);
+    router.push(Routes.Home);
   };
   return (
     <form onSubmit={handleSubmit}>
