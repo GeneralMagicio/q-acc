@@ -3,6 +3,7 @@ import { requestGraphQL } from '@/helpers/request';
 import {
   GET_USER_BY_ADDRESS,
   GET_GIVETH_USER_BY_ADDRESS,
+  SAVE_DONATION,
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type { IUser, IGivethUser } from '@/types/user.type';
@@ -53,3 +54,34 @@ export async function checkUserIsWhiteListed(address?: Address) {
     throw new Error('Error checking whitelist', error.message);
   }
 }
+
+export const saveDonations = async (
+  projectId: number,
+  transactionNetworkId: number,
+  amount: number,
+  token: string,
+  transactionId: string,
+  tokenAddress: String,
+  anonymous: boolean,
+) => {
+  try {
+    const res = await requestGraphQL<{ createDonation: number }>(
+      SAVE_DONATION,
+      {
+        projectId,
+        transactionNetworkId,
+        amount,
+        token,
+        transactionId,
+        tokenAddress,
+        anonymous,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.createDonation;
+  } catch (error) {
+    console.error(error);
+  }
+};

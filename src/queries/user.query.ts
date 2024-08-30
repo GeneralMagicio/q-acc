@@ -37,3 +37,29 @@ export const UPDATE_USER = `mutation(
       avatar: $avatar
     )
   }`;
+
+export const SAVE_DONATION = `mutation (
+    $transactionId: String
+    $transactionNetworkId: Float!
+    $amount: Float!
+    $token: String!
+    $projectId: Float!
+    $transakId: String
+    $anonymous: Boolean
+    $referrerId: String
+    $safeTransactionId: String
+	$tokenAddress:String
+  ) {
+    createDonation(
+      transactionId: $transactionId
+      transactionNetworkId: $transactionNetworkId
+      amount: $amount
+      token: $token
+      projectId: $projectId
+      transakId: $transakId
+      anonymous: $anonymous
+      referrerId: $referrerId
+      safeTransactionId: $safeTransactionId
+	  tokenAddress:$tokenAddress
+    )
+  }`;

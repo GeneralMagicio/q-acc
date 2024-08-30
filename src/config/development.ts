@@ -9,6 +9,7 @@ const config = {
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     'https://auth.serve.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://impact-graph.serve.giveth.io/graphql',
+  NETWORK_RPC_ADDRESS: 'https://rpc.ankr.com/polygon_zkevm_cardona',
 };
 
 export default config;

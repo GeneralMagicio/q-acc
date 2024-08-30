@@ -1,10 +1,7 @@
 'use client';
-import React, { useState } from 'react';
-import { useAccount, useBalance, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther } from 'viem';
-
-import { sendTransaction as wagmiSendTransaction } from '@wagmi/core';
-import { wagmiConfig } from '@/config/wagmi';
+import React, { useEffect, useState } from 'react';
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
+import { createPublicClient, http } from 'viem';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconABC } from '../Icons/IconABC';
 import { IconMatic } from '../Icons/IconMatic';
@@ -14,48 +11,118 @@ import { IconInfo } from '../Icons/IconInfo';
 
 import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
+import { saveDonations } from '@/services/user.service';
+
+import {
+  fetchTokenDetails,
+  fetchTokenPrice,
+  handleErc20Transfer,
+} from '@/helpers/token';
+import config from '@/config/configuration';
 
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
   const { chain } = useAccount();
   const [inputAmount, setInputAmount] = useState<any>('');
+  const [tokenDetails, setTokenDetails] = useState<any>();
+  const [tokenPrice, setTokenPrice] = useState(1);
+  const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
-
+  const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
+  const client = createPublicClient({
+    chain: chain,
+    transport: http(config.NETWORK_RPC_ADDRESS),
+  });
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
 
-  const projectAddress = '0x4ce6B0F604E1036AFFD0826764b51Fb72310964c';
+  const tokenAddress = '0x58a9BB66e2A57aF82e6621F1e2D1483286956683'; //POL token address
+  const WMATIC = '0x97986A7526C6B7706C5e48bB8bE3644ab9f4747C';
 
-  const {
-    data: balanceData,
-    isLoading: isBalanceLoading,
-    refetch,
-  } = useBalance({
-    address,
-    chainId: chain?.id,
-  });
+  // later get from project context
+  const projectData = {
+    projectAddress: '0x85A2779454C0795714cA50080b67F6aCf453F264',
+    projectId: 19,
+  };
 
-  const handleRefetch = () => {
-    console.log('Refetched');
-    refetch();
+  useEffect(() => {
+    getTokenDetails();
+  }, [address, tokenAddress, chain]);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
+
+  const getTokenDetails = async () => {
+    if (!address) return;
+    const data = await fetchTokenDetails({
+      tokenAddress,
+      address,
+      client,
+    });
+    setTokenDetails(data);
+  };
+
+  const handleSaveDonation = async ({
+    projectId,
+    transactionNetworkId,
+    amount,
+    token,
+    transactionId,
+    tokenAddress,
+  }: any) => {
+    const data = await saveDonations(
+      projectId,
+      transactionNetworkId,
+      amount,
+      token,
+      transactionId,
+      tokenAddress,
+      anoynmous,
+    );
   };
 
   const handleDonate = async () => {
-    const to = projectAddress as `0x${string}`;
-    const value = inputAmount as string;
-    const hash = await wagmiSendTransaction(wagmiConfig, {
-      to: to,
-      value: parseEther(value),
-    });
+    try {
+      const hash = await handleErc20Transfer({
+        inputAmount,
+        tokenAddress,
+        projectData: projectData.projectAddress,
+      });
 
-    setHash(hash);
-    console.log('Donated', hash);
+      setHash(hash);
+    } catch (ContractFunctionExecutionError) {
+      console.log(ContractFunctionExecutionError);
+    }
+
+    if (isConfirmed && !hasSavedDonation) {
+      const token = 'POL';
+
+      handleSaveDonation({
+        projectId: projectData.projectId,
+        transactionNetworkId: chain?.id,
+        amount: inputAmount,
+        token,
+        transactionId: hash,
+        tokenAddress,
+      });
+
+      setHasSavedDonation(true); // Mark the donation as saved
+    }
   };
-  const handleAnoynmous = () => {
-    console.log('');
+
+  const handleRefetch = () => {
+    getTokenDetails();
+    console.log('Refetched');
   };
+
   if (isConfirmed) {
     return <DonateSuccessPage transactionHash={hash} />;
   }
@@ -69,30 +136,34 @@ const DonatePageBody = () => {
           {/* Input Box */}
 
           <div className='flex flex-col gap-2 font-redHatText'>
-            <div className='border rounded-lg flex'>
-              <div className='w-40 flex gap-2 p-4 border'>
+            <div className='border rounded-lg flex relative '>
+              <div className='w-40 flex gap-4 p-4 border '>
                 <IconMatic size={24} />
-                <h1 className=' font-medium'>{balanceData?.symbol}</h1>
+                <h1 className=' font-medium'>{tokenDetails?.symbol}</h1>
               </div>
               <input
                 onChange={e => setInputAmount(e.target.value)}
                 value={inputAmount}
                 type='number'
-                className='w-full boder rounded-lg px-4'
+                disabled={isConfirming}
+                className='w-full   border rounded-lg  px-4'
               />
+              <span className='absolute top-0 right-0 h-full flex items-center pr-5 text-gray-400 pointer-events-none'>
+                $ {inputAmount === '' ? 0 : inputAmount * tokenPrice}
+              </span>
             </div>
 
             {/* Avaliable token */}
             <div className='flex gap-1'>
               {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
               <div
-                onClick={() => setInputAmount(balanceData?.formatted)}
+                onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
                 className='cursor-pointer hover:underline'
               >
-                Available:{' '}
-                {isBalanceLoading
+                Available:
+                {!tokenDetails
                   ? 'Loading...'
-                  : `${balanceData?.formatted} ${balanceData?.symbol}`}
+                  : `${tokenDetails?.formattedBalance} ${tokenDetails?.symbol}`}
               </div>
 
               <button onClick={handleRefetch}>
@@ -145,7 +216,7 @@ const DonatePageBody = () => {
                 Donating to{' '}
                 <span className='font-medium'>The Community of Makers</span>
               </h2>
-              <span>---</span>
+              <span>{inputAmount}</span>
             </div>
           </div>
 
@@ -153,7 +224,7 @@ const DonatePageBody = () => {
 
           <Button
             onClick={handleDonate}
-            disabled={!isConnected}
+            disabled={!isConnected || inputAmount <= 0}
             loading={isConfirming}
             color={ButtonColor.Giv}
             className={`text-white justify-center ${
@@ -165,7 +236,10 @@ const DonatePageBody = () => {
           {/* Make it Anoynmous */}
           <div className='flex gap-2'>
             <div>
-              <input type='checkbox' onChange={handleAnoynmous} />
+              <input
+                type='checkbox'
+                onChange={() => setAnoynmous(!anoynmous)}
+              />
             </div>
             <div className='flex flex-col text-[#1D1E1F]'>
               <h2 className='text-base'>Make it anonymous</h2>

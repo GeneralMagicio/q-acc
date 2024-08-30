@@ -99,6 +99,17 @@ body {
   background-color: var(--scrollHoverColor);
 }
 
+/* Remove arrows from input tags */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 /* Fonts */
 @layer base {
   @font-face {
