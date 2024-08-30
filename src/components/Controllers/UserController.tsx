@@ -31,11 +31,9 @@ export const UserController = () => {
 
     // Save user info to QAcc if user is Giveth user
     if (address && !newUser?.fullName && !newUser?.email) {
-      console.log('****4');
       const givethData = await fetchGivethUserInfo(address);
-      console.log('****5');
+
       if (givethData && (givethData.name || givethData.email)) {
-        console.log('****6');
         const _user = {
           id: givethData.id,
           email: givethData.email || undefined,
@@ -43,33 +41,23 @@ export const UserController = () => {
           avatar: givethData.avatar,
           newUser: true,
         };
-        console.log('****7');
+
         await updateUser(_user);
       }
     }
-    console.log('****8');
 
     // Check user profile completion
     if (!newUser?.email || !newUser?.fullName) {
-      console.log('****9');
-
       setShowCompleteProfileModal(true);
       return;
     }
 
-    console.log('****10');
-
     // Check if user is whitelisted
     const isUserWhiteListed = await checkUserIsWhiteListed(address);
-    console.log('****11');
 
     if (isUserWhiteListed) {
-      console.log('****12');
-
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
-        console.log('****13');
-
         route.push(Routes.Create); //TODO: should we redirect or not
       }
     }
@@ -78,10 +66,8 @@ export const UserController = () => {
   useEffect(() => {
     if (!address) return;
     const localStorageToken = getLocalStorageToken(address);
-    console.log('****a1');
 
     if (localStorageToken) {
-      console.log('****a2');
       refetch();
       return;
     }
