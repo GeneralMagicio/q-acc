@@ -3,10 +3,11 @@ import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useSignUser } from '@/hooks/useSignUser';
+import { IUser } from '@/types/user.type';
 import type { FC } from 'react';
 
 interface SignModalProps extends BaseModalProps {
-  onSign?: () => void;
+  onSign?: (user: IUser) => void;
 }
 
 export const SignModal: FC<SignModalProps> = props => {
