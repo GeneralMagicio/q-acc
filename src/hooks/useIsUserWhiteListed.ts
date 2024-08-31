@@ -10,5 +10,7 @@ export const useIsUserWhiteListed = () => {
       return await checkUserIsWhiteListed(address);
     },
     enabled: !!address,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };

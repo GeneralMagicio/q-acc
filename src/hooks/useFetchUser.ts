@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { fetchUserInfo } from '@/services/user.service';
 
-export const useFetchUser = () => {
+export const useFetchUser = (enabled: boolean = false) => {
   const { address } = useAccount();
 
   return useQuery({
@@ -11,7 +11,7 @@ export const useFetchUser = () => {
       if (!address) return;
       return await fetchUserInfo(address);
     },
-    enabled: !!address,
+    enabled: enabled && !!address,
     staleTime: Infinity,
     gcTime: Infinity,
   });
