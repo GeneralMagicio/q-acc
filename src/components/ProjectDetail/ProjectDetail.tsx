@@ -5,6 +5,7 @@ import ProjectDetailBanner from './ProjectDetailBanner';
 
 import ProjectTabs from './ProjectTabs';
 import DonateSection from './DonateSection';
+import ProjectDonationTable from './ProjectDonationTable';
 import RichTextViewer from '../RichTextViewer';
 import ProjectSocials from './ProjectSocials';
 import ProjectTeamMembers from './ProjectTeamMember';
@@ -51,10 +52,9 @@ const ProjectDetail = () => {
       </div>
 
       <ProjectTabs activeTab={activeTab} slug={'slug'} />
+
       {activeTab === 0 && (
         <div className='flex flex-col gap-10 bg-white py-10'>
-          {/* <RichTextEditor name="projectDescription" /> */}
-
           <RichTextViewer description={description} />
           <div className='flex flex-col container'>
             <ProjectSocials />
@@ -62,8 +62,7 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {activeTab === 1 && <h1>Donation</h1>}
-
+      {activeTab === 1 && <ProjectDonationTable />}
       {/* Pass team members later */}
       {activeTab === 2 && <ProjectTeamMembers />}
     </div>
