@@ -7,7 +7,6 @@ export async function addProject(
   projectAddress: string,
 ) {
   // Add project to database
-  console.log('Adding token to database...');
   const response = await fetch(`${process.env.MONGODB_URL}/action/insertOne`, {
     method: 'POST',
     headers: {

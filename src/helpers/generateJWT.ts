@@ -106,6 +106,7 @@ export const getLocalStorageToken = (address: string) => {
       localStorage.removeItem('token');
     }
   } catch (error) {
+    localStorage.removeItem('token');
     console.error(error);
   }
 };

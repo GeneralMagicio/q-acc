@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import {
-  fetchUserInfo,
   fetchGivethUserInfo,
   checkUserIsWhiteListed,
 } from '../../services/user.service';
 import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
-import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import Routes from '@/lib/constants/Routes';
+import { getLocalStorageToken } from '@/helpers/generateJWT';
+import { IUser } from '@/types/user.type';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -22,34 +22,17 @@ export const UserController = () => {
   const { address } = useAccount();
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
-  const {
-    data: user,
-    isFetched,
-    refetch,
-  } = useQuery({
-    queryKey: ['user', address],
-    queryFn: async () => {
-      console.log('fetching user info');
-      if (!address) return;
-      let data = await fetchUserInfo(address);
-      return data;
-    },
-    enabled: !!address,
-    staleTime: Infinity,
-    gcTime: Infinity,
-  });
+  const { data: user, refetch } = useFetchUser();
 
-  const onSign = useCallback(async () => {
-    console.log('Signed', user);
+  const onSign = async (newUser: IUser) => {
+    console.log('Signed');
     setShowSignModal(false);
-
-    // refetch user data after sign
-    await refetch();
-    if (!user?.isSignedIn) return;
+    if (!newUser?.isSignedIn) return;
 
     // Save user info to QAcc if user is Giveth user
-    if (address && !user?.fullName && !user?.email) {
+    if (address && !newUser?.fullName && !newUser?.email) {
       const givethData = await fetchGivethUserInfo(address);
+
       if (givethData && (givethData.name || givethData.email)) {
         const _user = {
           id: givethData.id,
@@ -58,37 +41,40 @@ export const UserController = () => {
           avatar: givethData.avatar,
           newUser: true,
         };
-        updateUser(_user);
+
+        await updateUser(_user);
       }
     }
 
     // Check user profile completion
-    if (!user?.email || !user?.fullName) {
+    if (!newUser?.email || !newUser?.fullName) {
       setShowCompleteProfileModal(true);
+      return;
     }
 
     // Check if user is whitelisted
     const isUserWhiteListed = await checkUserIsWhiteListed(address);
+
     if (isUserWhiteListed) {
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
         route.push(Routes.Create); //TODO: should we redirect or not
       }
     }
-  }, [address, refetch, updateUser, user]);
+  };
 
   useEffect(() => {
-    if (!address || !isFetched) return;
+    if (!address) return;
     const localStorageToken = getLocalStorageToken(address);
 
-    // Show sign modal if token is not present in local storage
-    if (localStorageToken && user?.isSignedIn) {
-      onSign();
+    if (localStorageToken) {
+      refetch();
       return;
     }
+    // Show sign modal if token is not present in local storage
     localStorage.removeItem('token');
     setShowSignModal(true);
-  }, [address, isFetched, onSign, user?.isSignedIn]);
+  }, [address, refetch]);
 
   useEffect(() => {
     const handleShowSignInModal = () => {

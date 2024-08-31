@@ -5,7 +5,6 @@ import { type FC, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/Input';
 import { Dropzone } from '@/components/DropZone';
-import { Button } from '@/components/Button';
 import CreateNavbar from '../CreateNavbar';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
@@ -108,7 +107,7 @@ const CreateProjectForm: FC = () => {
                   required: 'Email Address is required',
                 }}
               />
-              <div className='flex items-center ml-3'>
+              {/* <div className='flex items-center ml-3'>
                 <Button
                   type='button'
                   onClick={verifyEmail}
@@ -116,7 +115,7 @@ const CreateProjectForm: FC = () => {
                 >
                   {'Verify Email Address'}
                 </Button>
-              </div>
+              </div> */}
             </div>
             <div className='border-b-2 text-[18px] font-bold text-[#4F576A]'>
               Profile Photo

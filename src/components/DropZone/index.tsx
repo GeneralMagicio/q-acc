@@ -71,11 +71,11 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
   const deleteUploadedImage = async () => {
     if (ipfsHash) {
       try {
-        await axios.delete('/api/ipfs', { data: { ipfsHash } });
         setUploadProgress(0);
         setSelectedImage(null);
         setIpfsHash(null);
         setIsLoading(false);
+        await axios.delete('/api/ipfs', { data: { ipfsHash } });
       } catch (error) {
         console.error('Error deleting from IPFS', error);
       }
