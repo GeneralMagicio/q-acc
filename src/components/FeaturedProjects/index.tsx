@@ -7,6 +7,7 @@ import 'swiper/css';
 import { IconPointerLeft } from '../Icons/IconPointerLeft';
 import { IconPointerRight } from '../Icons/IconPointerRight';
 import Routes from '@/lib/constants/Routes';
+import { IconChevronRight } from '../Icons/IconChevronRight';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
@@ -43,7 +44,10 @@ export const FeaturedProjects = () => {
         <div className='shadow-xl rounded-r-xl py-10 px-6 flex flex-col justify-center items-center gap-12'>
           <h2 className='text-6xl font-bold'>This Season&apos;s Projects</h2>
           <Link href={Routes.Projects}>
-            <p className='text-giv-500 font-bold'>Explore </p>
+            <div className='flex gap-1 text-giv-500 items-center'>
+              <p className='font-bold'>Explore </p>
+              <IconChevronRight size={32} />
+            </div>
           </Link>
         </div>
         <div className='w-full'>
