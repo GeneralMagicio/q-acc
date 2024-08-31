@@ -5,6 +5,7 @@ import {
   GET_GIVETH_USER_BY_ADDRESS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_DONATIONS_BY_ID,
+  SAVE_DONATION,
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type { IUser, IGivethUser } from '@/types/user.type';
@@ -93,6 +94,38 @@ export const fecthProjectDonationsById = async (
       },
     );
     return res?.donationsByProjectId;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const saveDonations = async (
+  projectId: number,
+  transactionNetworkId: number,
+  amount: number,
+  token: string,
+  transactionId: string,
+  tokenAddress: String,
+  anonymous: boolean,
+) => {
+  try {
+    console.log('Inde 2');
+    const res = await requestGraphQL<{ createDonation: number }>(
+      SAVE_DONATION,
+      {
+        projectId,
+        transactionNetworkId,
+        amount,
+        token,
+        transactionId,
+        tokenAddress,
+        anonymous,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.createDonation;
   } catch (error) {
     console.error(error);
   }

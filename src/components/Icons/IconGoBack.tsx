@@ -16,9 +16,9 @@ export const IconGoBack: FC<IIcon> = ({
       <path
         d='M7 10L3 14L7 18M4 14H22.375C26.0475 14 29 17.0831 29 20.75V22'
         stroke='#1D1E1F'
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   );
