@@ -60,6 +60,23 @@ const DonatePageBody = () => {
     fetchPrice();
   }, []);
 
+  useEffect(() => {
+    if (isConfirmed && !hasSavedDonation) {
+      const token = 'POL';
+
+      handleSaveDonation({
+        projectId: projectData.projectId,
+        transactionNetworkId: chain?.id,
+        amount: parseInt(inputAmount),
+        token,
+        transactionId: hash,
+        tokenAddress,
+      });
+
+      setHasSavedDonation(true); // Mark the donation as saved
+    }
+  }, [isConfirmed, hasSavedDonation]);
+
   const getTokenDetails = async () => {
     if (!address) return;
     const data = await fetchTokenDetails({
@@ -94,27 +111,12 @@ const DonatePageBody = () => {
       const hash = await handleErc20Transfer({
         inputAmount,
         tokenAddress,
-        projectData: projectData.projectAddress,
+        projectAddress: projectData.projectAddress,
       });
 
       setHash(hash);
     } catch (ContractFunctionExecutionError) {
       console.log(ContractFunctionExecutionError);
-    }
-
-    if (isConfirmed && !hasSavedDonation) {
-      const token = 'POL';
-
-      handleSaveDonation({
-        projectId: projectData.projectId,
-        transactionNetworkId: chain?.id,
-        amount: inputAmount,
-        token,
-        transactionId: hash,
-        tokenAddress,
-      });
-
-      setHasSavedDonation(true); // Mark the donation as saved
     }
   };
 
