@@ -5,7 +5,8 @@ import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
-import { fecthProjectDonationsById } from '@/services/user.service';
+import { useProjectContext } from '@/context/project.context';
+import { fecthProjectDonationsById } from '@/services/donation.services';
 
 const itemPerPage = 5;
 
@@ -28,7 +29,7 @@ export interface IOrder {
 const ProjectDonationTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-
+  const { projectData } = useProjectContext();
   // get project data from context
   const id = 19;
   const [order, setOrder] = useState<IOrder>({
@@ -41,7 +42,7 @@ const ProjectDonationTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        id,
+        parseInt(projectData?.id),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -57,7 +58,7 @@ const ProjectDonationTable = () => {
     };
 
     fetchProjectDonations();
-  }, [page, id, itemPerPage, totalCount, order]);
+  }, [page, projectData, itemPerPage, totalCount, order]);
 
   const orderChangeHandler = (orderBy: EOrderBy) => {
     if (orderBy === order.by) {

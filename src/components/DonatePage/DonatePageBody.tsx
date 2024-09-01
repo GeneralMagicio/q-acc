@@ -11,7 +11,6 @@ import { IconInfo } from '../Icons/IconInfo';
 
 import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
-import { saveDonations } from '@/services/user.service';
 
 import {
   fetchTokenDetails,
@@ -19,6 +18,7 @@ import {
   handleErc20Transfer,
 } from '@/helpers/token';
 import config from '@/config/configuration';
+import { saveDonations } from '@/services/donation.services';
 
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
@@ -44,7 +44,7 @@ const DonatePageBody = () => {
   // later get from project context
   const projectData = {
     projectAddress: '0x85A2779454C0795714cA50080b67F6aCf453F264',
-    projectId: 19,
+    projectId: 22,
   };
 
   useEffect(() => {

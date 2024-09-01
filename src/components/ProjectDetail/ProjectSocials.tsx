@@ -11,6 +11,7 @@ import { IconReddit } from '../Icons/IconReddit';
 import { IconWebsite } from '../Icons/IconWebsite';
 import { IconTelegram } from '../Icons/IconTelegram';
 import { IconGithub } from '../Icons/IconGithub';
+import { useProjectContext } from '@/context/project.context';
 
 const iconMap: { [key: string]: React.ReactNode } = {
   facebook: <IconFacebook color='#4267B2' size={16} />,
@@ -37,6 +38,8 @@ const socialMediaColor: { [key: string]: string } = {
   github: '#1D1E1F',
 };
 const ProjectSocials = () => {
+  const { projectData } = useProjectContext();
+
   const socialdata = [
     {
       type: 'FACEBOOK',
@@ -92,7 +95,7 @@ const ProjectSocials = () => {
       <br />
       <div className='flex flex-wrap gap-6'>
         {/* {projectData?.socialMedia?.map((social: IProjectSocialMedia) => ( */}
-        {socialdata?.map(social => {
+        {projectData?.socialMedia?.map((social: any) => {
           const color = socialMediaColor[social.type.toLowerCase()];
           const icon = iconMap[social.type.toLowerCase()];
           return (
