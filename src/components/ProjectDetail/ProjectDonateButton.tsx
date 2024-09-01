@@ -4,8 +4,10 @@ import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
 import { IconInfo } from '../Icons/IconInfo';
 import { IconABC } from '../Icons/IconABC';
+import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonateButton = () => {
+  const { projectData } = useProjectContext();
   const PriceInfo = () => (
     <div className='flex flex-col'>
       <div className='flex justify-start items-center gap-2'>
@@ -31,7 +33,7 @@ const ProjectDonateButton = () => {
           Starting Soon
         </Button>
       ) : (
-        <Link id='Donate_Project' href={'/donate'}>
+        <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
           <Button color={ButtonColor.Pink} className='w-full justify-center'>
             Donate
           </Button>
