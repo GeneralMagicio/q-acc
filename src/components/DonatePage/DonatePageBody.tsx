@@ -19,6 +19,7 @@ import {
 } from '@/helpers/token';
 import config from '@/config/configuration';
 import { saveDonations } from '@/services/donation.services';
+import { useDonateContext } from '@/context/donation.context';
 
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
@@ -29,6 +30,9 @@ const DonatePageBody = () => {
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
+
+  const { projectData } = useDonateContext();
+
   const client = createPublicClient({
     chain: chain,
     transport: http(config.NETWORK_RPC_ADDRESS),
@@ -42,10 +46,12 @@ const DonatePageBody = () => {
   const WMATIC = '0x97986A7526C6B7706C5e48bB8bE3644ab9f4747C';
 
   // later get from project context
-  const projectData = {
-    projectAddress: '0x85A2779454C0795714cA50080b67F6aCf453F264',
-    projectId: 22,
-  };
+  // const projectData = {
+  //   projectAddress: '0x85A2779454C0795714cA50080b67F6aCf453F264',
+  //   projectId: 22,
+  // };
+
+  console.log(projectData?.addresses[0].address, projectData?.id);
 
   useEffect(() => {
     getTokenDetails();
@@ -65,7 +71,7 @@ const DonatePageBody = () => {
       const token = 'POL';
 
       handleSaveDonation({
-        projectId: projectData.projectId,
+        projectId: parseInt(projectData?.id),
         transactionNetworkId: chain?.id,
         amount: parseInt(inputAmount),
         token,
@@ -111,7 +117,7 @@ const DonatePageBody = () => {
       const hash = await handleErc20Transfer({
         inputAmount,
         tokenAddress,
-        projectAddress: projectData.projectAddress,
+        projectAddress: projectData?.addresses[0].address,
       });
 
       setHash(hash);
@@ -259,7 +265,7 @@ const DonatePageBody = () => {
           <div
             className='w-full h-[250px] bg-cover bg-center rounded-3xl relative'
             style={{
-              backgroundImage: "url('/images/project-card/card-image.jpeg')",
+              backgroundImage: `url(${projectData?.image})`,
             }}
           >
             <div className=' flex flex-col absolute  bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%] gap-2'>
@@ -268,7 +274,7 @@ const DonatePageBody = () => {
               </div>
               <div className='flex flex-col text-white gap-2'>
                 <h1 className='text-2xl md:text-[41px]  font-bold leading-10'>
-                  The amazing Pancake project
+                  {projectData?.title}
                 </h1>
               </div>
             </div>
@@ -287,7 +293,7 @@ const DonatePageBody = () => {
                   <span className='text-base font-medium text-[#4F576A] '>
                     ~ 2.020
                   </span>{' '}
-                  in USD
+                  in POL
                 </h2>
                 <h2 className=''>
                   <span>~ 2.020</span> in USD

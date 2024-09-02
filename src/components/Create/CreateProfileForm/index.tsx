@@ -61,18 +61,16 @@ const CreateProjectForm: FC = () => {
     };
     const res: any = await updateUser(_user);
     if (res.updateUser) {
-      const dest = isUserWhiteListed
-        ? '/create/project'
-        : '/create/verify-privado';
-      router.push(dest);
+      // const dest = isUserWhiteListed
+      //   ? '/create/project'
+      //   : '/create/verify-privado';
+      router.push('/create/verify-privado');
     }
     console.log('res', res);
   };
 
-  const nextLabel = isUserWhiteListed ? undefined : 'Verify your identity';
-  const submitLabel = isUserWhiteListed
-    ? 'Save & Create Project'
-    : 'Save & Continue';
+  const nextLabel = 'Verify your identity';
+  const submitLabel = 'Save & Continue';
 
   return (
     <FormProvider {...methods}>

@@ -11,7 +11,7 @@ import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 
 const DonarSupports = () => {
-  const [showBreakDown, setShowBreakDown] = useState<boolean>(true);
+  const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
 
   const data = [
     {
