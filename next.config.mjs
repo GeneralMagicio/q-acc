@@ -7,6 +7,9 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'giveth.mypinata.cloud',
       },
+      {
+        hostname: 'example.com',
+      },
     ],
   },
   webpack: config => {

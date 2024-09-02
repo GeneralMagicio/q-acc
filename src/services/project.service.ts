@@ -1,9 +1,10 @@
 import { Address } from 'viem';
 import { requestGraphQL } from '@/helpers/request';
 import config from '@/config/configuration';
-import { IProjectCreation } from '@/types/project.type';
+import { IProject, IProjectCreation } from '@/types/project.type';
 import {
   CREATE_PROJECT,
+  GET_ALL_PROJECTS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
 } from '@/queries/project.query';
@@ -55,6 +56,26 @@ export const fetchProjectBySlug = async (slug: string, address?: Address) => {
       },
     );
     return res?.projectBySlug;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchAllProjects = async () => {
+  try {
+    const res = await requestGraphQL<{
+      allProjects: {
+        projects: IProject[];
+        totalCount: number;
+      };
+    }>(
+      GET_ALL_PROJECTS,
+      {},
+      {
+        auth: true,
+      },
+    );
+    return res?.allProjects;
   } catch (error) {
     console.error(error);
   }

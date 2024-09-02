@@ -8,6 +8,7 @@ import { IconPointerLeft } from '../Icons/IconPointerLeft';
 import { IconPointerRight } from '../Icons/IconPointerRight';
 import Routes from '@/lib/constants/Routes';
 import { IconChevronRight } from '../Icons/IconChevronRight';
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
@@ -15,9 +16,12 @@ const navigationStyle =
   'cursor-pointer rounded-full shadow-lg px-3 py-2 h-10 w-12 mx-2 select-none';
 
 export const FeaturedProjects = () => {
+  const { data: allProjects, isLoading } = useFetchAllProjects();
+
   const pagElRef = useRef<HTMLDivElement>(null);
   const nextElRef = useRef<HTMLDivElement>(null);
   const prevElRef = useRef<HTMLDivElement>(null);
+
   //Please don't remove this
   const [_, setSwiperInstance] = useState<SwiperClass>();
 
@@ -71,36 +75,20 @@ export const FeaturedProjects = () => {
             slidesPerView={'auto'}
             spaceBetween={4}
           >
-            <SwiperSlide className={`${swiperSlideStyle} pl-10`}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
+            {isLoading ? (
+              <h1>Loading Projects...</h1>
+            ) : (
+              allProjects?.projects.map(project => (
+                <SwiperSlide key={project.id} className={swiperSlideStyle}>
+                  <Link href={`/project/${project.slug}`}>
+                    <ProjectCard
+                      className={projectCardStyle}
+                      project={project}
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))
+            )}
           </Swiper>
         </div>
       </div>

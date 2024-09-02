@@ -57,7 +57,6 @@ export interface IProjectCreation {
   teamMembers?: IProjectTeamMember[];
   address: string;
 }
-
 export interface IProject {
   id: string;
   title?: string;
@@ -65,30 +64,82 @@ export interface IProject {
   image?: string;
   slug: string;
   creationDate?: string;
+  updatedAt: string;
   adminUserId?: number;
   description?: string;
   descriptionSummary?: string;
-  addresses?: IWalletAddress[];
+  teaser?: string;
+  walletAddress?: string;
   impactLocation?: string;
   qualityScore?: number;
   verified?: boolean;
-  adminUser: IAdminUser;
-  donations: {
-    id?: string;
-  }[];
+  traceCampaignId?: string;
+  listed?: boolean;
+  reviewStatus?: string;
+  givingBlocksId?: string;
+  totalReactions?: number;
   totalDonations?: number;
-  totalProjectUpdates?: number;
-  updatedAt: string;
-  latestUpdateCreationDate?: string;
+  totalTraceDonations?: number;
+  sumDonationValueUsdForActiveQfRound?: number;
+  countUniqueDonorsForActiveQfRound?: number;
+  countUniqueDonors?: number;
+  estimatedMatching?: {
+    projectDonationsSqrtRootSum?: number;
+    allProjectsSum?: number;
+    matchingPool?: number;
+  };
+  icon?: string;
+  abc?: {
+    tokenName?: string;
+    tokenTicker?: string;
+    issuanceTokenAddress?: string;
+    icon?: string;
+    orchestratorAddress?: string;
+    projectAddress?: string;
+    creatorAddress?: string;
+    nftContractAddress?: string;
+    chainId?: number;
+  };
+  status?: {
+    id: string;
+    symbol: string;
+    name: string;
+    description?: string;
+  };
+  categories?: {
+    name: string;
+    mainCategory?: {
+      title: string;
+      slug: string;
+      banner?: string;
+      description?: string;
+    };
+  }[];
+  reaction?: {
+    id: string;
+  };
+  adminUser: {
+    id: string;
+    email: string;
+    firstName: string;
+    walletAddress?: string;
+  };
   organization?: {
     name: string;
     label: string;
     supportCustomTokens: boolean;
-    disableRecurringDonations?: boolean;
   };
-  givbackFactor?: number;
-  countUniqueDonors?: number;
-  countUniqueDonorsForActiveQfRound?: number;
-  sumDonationValueUsdForActiveQfRound?: number;
-  socialMedia: IProjectSocialMedia[];
+  addresses?: {
+    address: string;
+    isRecipient: boolean;
+    networkId?: string;
+    chainType?: string;
+  }[];
+  qfRounds?: {
+    name: string;
+    isActive: boolean;
+    id: string;
+    maximumReward?: number;
+  }[];
+  socialMedia?: IProjectSocialMedia[];
 }
