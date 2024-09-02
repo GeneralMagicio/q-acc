@@ -1,19 +1,28 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
+import { IProject } from '@/types/project.type';
+import ProjectCardImage from './ProjectCardImage';
 
-interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  project: IProject;
+}
 
-export const ProjectCard: FC<ProjectCardProps> = ({ className, ...props }) => {
+export const ProjectCard: FC<ProjectCardProps> = ({
+  className,
+  project,
+  ...props
+}) => {
   return (
     <div
       className={`relative w-full rounded-xl bg-white overflow-hidden shadow-md shadow-gray-200 ${className}`}
       {...props}
     >
       <div className='relative h-48'>
-        <Image
-          src='/images/project-card/card-image.jpeg'
+        <ProjectCardImage
+          src={project.image}
           alt='Project Card'
           layout='fill'
+          fallbackSrc='/images/project-card/card-image.jpeg'
         />
       </div>
       <div className='relative p-6 text-start flex flex-col gap-4'>
@@ -26,13 +35,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({ className, ...props }) => {
           />
         </div>
         <div>
-          <p className='text-pink-500'>DEGEN</p>
-          <h2 className='text-lg font-bold'>Here is another awesome project</h2>
+          <p className='text-pink-500'>{project.title}</p>
+          <h2 className='text-lg font-bold'>
+            {project.teaser ? project.teaser : '\u00A0'}
+          </h2>
         </div>
-        <p className='text-gray-500'>
-          The Commons Simulator is a gamified simulation tool powered by a
-          cadCAD backend that was developed by the Commons Stack&apos;s
-          Decentralized Dev community.
+        <p className='text-gray-500 h-36 overflow-hidden text-ellipsis line-clamp-3'>
+          {project.descriptionSummary}
         </p>
         <div className='border-t-[1px]'></div>
         <div>

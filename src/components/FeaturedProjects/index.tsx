@@ -2,12 +2,14 @@ import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import { ProjectCard } from '../ProjectCard/ProjectCard';
 import 'swiper/css';
 import { IconPointerLeft } from '../Icons/IconPointerLeft';
 import { IconPointerRight } from '../Icons/IconPointerRight';
 import Routes from '@/lib/constants/Routes';
 import { IconChevronRight } from '../Icons/IconChevronRight';
+import { fetchAllProjects } from '@/services/project.service';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
@@ -15,6 +17,12 @@ const navigationStyle =
   'cursor-pointer rounded-full shadow-lg px-3 py-2 h-10 w-12 mx-2 select-none';
 
 export const FeaturedProjects = () => {
+  const { data: allProjects } = useQuery({
+    queryKey: ['allProjects'],
+    queryFn: fetchAllProjects,
+    gcTime: Infinity,
+    staleTime: Infinity,
+  });
   const pagElRef = useRef<HTMLDivElement>(null);
   const nextElRef = useRef<HTMLDivElement>(null);
   const prevElRef = useRef<HTMLDivElement>(null);
@@ -71,36 +79,11 @@ export const FeaturedProjects = () => {
             slidesPerView={'auto'}
             spaceBetween={4}
           >
-            <SwiperSlide className={`${swiperSlideStyle} pl-10`}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
-            <SwiperSlide className={swiperSlideStyle}>
-              <ProjectCard className={projectCardStyle} />
-            </SwiperSlide>
+            {allProjects?.projects.map(project => (
+              <SwiperSlide key={project.id} className={swiperSlideStyle}>
+                <ProjectCard className={projectCardStyle} project={project} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>
