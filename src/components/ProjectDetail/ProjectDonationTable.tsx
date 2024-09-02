@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
@@ -7,6 +8,8 @@ import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
+
+import { fetchTokenPrice } from '@/helpers/token';
 
 const itemPerPage = 5;
 
@@ -30,6 +33,7 @@ const ProjectDonationTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData } = useProjectContext();
+  const [tokenPrice, setTokenPrice] = useState(1);
   // get project data from context
   const id = 19;
   const [order, setOrder] = useState<IOrder>({
@@ -38,6 +42,15 @@ const ProjectDonationTable = () => {
   });
 
   const [pageDonations, setPageDonations] = useState<any>();
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
@@ -133,43 +146,46 @@ const ProjectDonationTable = () => {
 
             <div className='overflow-x-auto '>
               {pageDonations?.map((donation: any) => (
-                <>
-                  <div className=' flex justify-between '>
-                    <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                      {donation.user.firstName
-                        ? donation.user.firstName
-                        : 'Anoynomous'}
-                    </div>
-                    <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                      {new Date(donation.createdAt).toLocaleDateString(
-                        'en-US',
-                        {
-                          day: 'numeric',
-                          year: 'numeric',
-                          month: 'short',
-                        },
-                      )}
-                    </div>
-                    <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                      Early Bird
-                    </div>
-                    <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                      <div className='flex flex-col'>
-                        <div className='flex gap-1 items-center'>
-                          <span className='font-medium'>{donation.amount}</span>
+                <div
+                  key={donation.transactionId}
+                  className=' flex justify-between '
+                >
+                  <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
+                    {donation.user.firstName
+                      ? donation.user.firstName
+                      : 'Anoynomous'}
+                  </div>
+                  <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
+                    {new Date(donation.createdAt).toLocaleDateString('en-US', {
+                      day: 'numeric',
+                      year: 'numeric',
+                      month: 'short',
+                    })}
+                  </div>
+                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                    Early Bird
+                  </div>
+                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                    <div className='flex flex-col'>
+                      <div className='flex gap-1 items-center'>
+                        <span className='font-medium'>{donation.amount}</span>
+                        <Link
+                          target='_blank'
+                          href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
+                        >
                           <IconViewTransaction size={16} />
-                        </div>
-
-                        <span className='text-xs font-medium  text-[#A5ADBF]'>
-                          $ 233
-                        </span>
+                        </Link>
                       </div>
-                    </div>
-                    <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                      600 ABC
+
+                      <span className='text-xs font-medium  text-[#A5ADBF]'>
+                        $ {donation.amount * tokenPrice}
+                      </span>
                     </div>
                   </div>
-                </>
+                  <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
+                    600 ABC
+                  </div>
+                </div>
               ))}
             </div>
 
