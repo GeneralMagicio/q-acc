@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { TeamMember } from './CreateTeamForm';
 import { ProjectFormData } from './CreateProjectForm';
 
 interface FormData {
   project: ProjectFormData;
-  team: TeamMember[]; // Ensure team is an array of TeamMember objects
+  // team: TeamMember[]; // Ensure team is an array of TeamMember objects
 }
 
 interface CreateContextType {
@@ -38,15 +37,16 @@ export const CreateProvider: React.FC<{ children: ReactNode }> = ({
       addressConfirmed: false,
       logo: null,
       banner: null,
+      team: [],
     },
-    team: [], // Initialize team as an empty array
+    // team: [], // Initialize team as an empty array
   });
 
   const setFormData = (data: Partial<FormData>) => {
     setFormDataState(prevData => ({
       ...prevData,
       ...data,
-      team: data.team || prevData.team, // Ensure team array is merged correctly
+      // team: data.team || prevData.team, // Ensure team array is merged correctly
     }));
   };
 
