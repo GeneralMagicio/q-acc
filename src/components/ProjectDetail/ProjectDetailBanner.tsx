@@ -10,7 +10,7 @@ const ProjectDetailBanner = () => {
       : '/images/project-card/card-image.jpeg';
   return (
     <div
-      className='w-full h-[450px] lg:w-2/3  bg-cover bg-center rounded-3xl relative'
+      className='w-full h-[440px] lg:h-[500px] lg:w-2/3  bg-cover bg-center rounded-3xl relative'
       style={{
         backgroundImage: `url(${bgSrc})`,
       }}
