@@ -1,4 +1,4 @@
-import { IProjectTeamMember } from './team.type';
+import { TeamMember } from '@/components/Create/CreateTeamForm';
 
 export enum ChainType {
   SOLANA = 'SOLANA',
@@ -54,7 +54,7 @@ export interface IProjectCreation {
   isDraft?: boolean;
   socialMedia?: IProjectSocialMedia[];
   adminUserId?: number;
-  teamMembers?: IProjectTeamMember[];
+  teamMembers?: TeamMember[];
   address: string;
 }
 export interface IProject {

@@ -30,7 +30,6 @@ export interface TeamFormData {
 const CreateTeamForm: FC = () => {
   const { data: user } = useFetchUser();
   const { formData, setFormData } = useCreateContext();
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const methods = useForm<TeamFormData>({
     defaultValues: {
@@ -70,7 +69,6 @@ const CreateTeamForm: FC = () => {
 
   const onSubmit = async (data: TeamFormData) => {
     const teamMembers = data.team;
-    console.log('Team Meme', data.team);
     setFormData({
       project: {
         ...formData.project,
@@ -78,6 +76,7 @@ const CreateTeamForm: FC = () => {
       },
     });
 
+    console.log('TEAM', teamMembers);
     const projectData = {
       ...formData.project,
       team: teamMembers,
@@ -97,7 +96,9 @@ const CreateTeamForm: FC = () => {
         type: key.toUpperCase() as EProjectSocialMediaType,
         link: typeof value === 'string' ? value : '',
       }));
+
     if (!user?.id) return;
+
     const project: IProjectCreation = {
       title: projectData.projectName,
       description: projectData.projectDescription,
@@ -108,13 +109,7 @@ const CreateTeamForm: FC = () => {
       image: projectData.banner || undefined,
       icon: projectData.logo || undefined,
       socialMedia: socialMedia.length ? socialMedia : undefined, // Include only if there are social media entries
-      teamMembers: projectData.team.map(member => ({
-        name: member.name,
-        image: member.image?.ipfsHash || undefined, // Assuming image might be null
-        twitter: member.twitter || undefined,
-        linkedin: member.linkedin || undefined,
-        farcaster: member.farcaster || undefined,
-      })),
+      teamMembers: teamMembers,
     };
     console.log('Submitting project data:', project);
 

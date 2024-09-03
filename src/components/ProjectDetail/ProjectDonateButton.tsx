@@ -2,22 +2,23 @@ import Link from 'next/link';
 import React from 'react';
 import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
-import { IconInfo } from '../Icons/IconInfo';
 import { IconABC } from '../Icons/IconABC';
 import { useProjectContext } from '@/context/project.context';
 
 const ProjectDonateButton = () => {
   const { projectData } = useProjectContext();
   const PriceInfo = () => (
-    <div className='flex flex-col'>
-      <div className='flex justify-start items-center gap-2'>
+    <div className='flex flex-col gap-2 font-redHatText'>
+      <div className='flex justify-start items-center gap-2 '>
         <IconABC />
-        <span>PAN Price</span>
-        <IconInfo />
+        <span className='text-[#4F576A] font-medium'>ABC current value</span>
+        {/* <IconInfo /> */}
       </div>
-      <div className='flex items-center justify-between text-sm font-normal font-redHatText text-[#82899A] '>
-        <span>--- in USD</span>
-        <span>--- in MATIC</span>
+      <div className='flex items-center justify-between text-sm  text-[#82899A] '>
+        <h1>
+          <span className='text-[#1D1E1F] font-bold'>---</span> in POL
+        </h1>
+        <span className='text-[#4F576A] font-medium'>$ ---</span>
       </div>
     </div>
   );
@@ -35,7 +36,7 @@ const ProjectDonateButton = () => {
       ) : (
         <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
           <Button color={ButtonColor.Pink} className='w-full justify-center'>
-            Donate
+            Support
           </Button>
         </Link>
       )}

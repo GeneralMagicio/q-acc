@@ -10,17 +10,19 @@ export enum EDonationCardStates {
 
 const DonateSection = () => {
   let totalDonations = 10;
-  let currentState = 'last';
+  let currentState = 'early';
   const renderContent = () => {
     const renderDonationInfo = () => {
       return totalDonations && totalDonations !== 0 ? (
         <div className='mb-20px flex flex-col gap-2'>
-          <div className='inline-block w-fit text-sm text-gray-700 bg-gray-200 rounded-md px-1 py-1'>
-            Total Amount Raised in this round
+          <div className='inline-block w-fit text-sm text-[#82899A] bg-[#F7F7F9] rounded-md px-1 py-1'>
+            Total amount received
           </div>
-          <h3 className='text-[41px] font-bold'>$ {totalDonations}</h3>
+          <h3 className='text-[41px] font-bold'> {totalDonations} POL</h3>
+          <h2 className='text-[#1D1E1F] font-bold font-redHatText'>~ $ 0</h2>
           <p className='text-gray-700'>
-            Raised From <span className='font-bold'>{7}</span> Contributors
+            Raised From <span className='font-bold text-[#1D1E1F]'>{7}</span>{' '}
+            Contributors
           </p>
         </div>
       ) : (
@@ -34,7 +36,7 @@ const DonateSection = () => {
 
     const renderMintInfo = (state: string | null = null) => (
       <>
-        <div className=' p-3'>
+        <div className='pt-2'>
           {state === 'before' ? (
             <p className='text-[#A5ADBF]'>Early access window start in</p>
           ) : state === 'last' ? (
@@ -45,7 +47,7 @@ const DonateSection = () => {
 
           <p className='font-bold'>7 days, 8 hours, 32 min</p>
         </div>
-        <div className='flex justify-between mt-5'>
+        <div className='flex justify-between '>
           <p className='text-[#A5ADBF]'>Mint rounds remaining</p>
           <span className='mx-6 justify-start font-bold'>5</span>
         </div>
@@ -69,8 +71,8 @@ const DonateSection = () => {
         return (
           <>
             {renderDonationInfo()}
-            <div className='mt-4 mb-5'>
-              <span className='text-[#2EA096] p-1 rounded-lg bg-[#D2FFFB] text-xs'>
+            <div className='mt-4 '>
+              <span className='text-[#2EA096] p-1 rounded-lg bg-[#D2FFFB] text-xs px-2'>
                 You are on the early access list
               </span>
             </div>
@@ -96,7 +98,7 @@ const DonateSection = () => {
     }
   };
   return (
-    <div className=' lg:w-[312px]  bg-white lg:h-[450px] rounded-2xl p-6'>
+    <div className=' lg:w-[312px]  bg-white lg:m-h-[450px] rounded-2xl p-6'>
       <div className='flex flex-col  h-full justify-between'>
         <div className=''>{renderContent()}</div>
         <div className=' md:relative fixed bottom-0 w-full bg-white left-0 p-5 md:p-0 z-10'>
