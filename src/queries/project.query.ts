@@ -57,6 +57,19 @@ mutation ($project: CreateProjectInput!) {
   }
 `;
 
+export const CREATE_TEAM_MEMBERS = `
+mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
+    updateProject(projectId: $projectId, newProjectData: $newProjectData) {
+    teamMembers{
+      name
+      image
+      twitter
+      linkedin
+      farcaster
+    }
+    }
+  }
+`;
 export const GET_PROJECT_BY_ID = `
   query(
       $id: Float!,

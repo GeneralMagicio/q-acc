@@ -16,15 +16,13 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
-import {
-  EProjectSocialMediaType,
-  IProjectCreation,
-} from '@/types/project.type';
+import { EProjectSocialMediaType } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
 import links from '@/lib/constants/links';
+import { TeamMember } from '../CreateTeamForm';
 
 export interface ProjectFormData {
   projectName: string;
@@ -46,6 +44,7 @@ export interface ProjectFormData {
   addressConfirmed: boolean;
   logo: string | null;
   banner: string | null;
+  team: TeamMember[];
 }
 
 const socialMediaLinks = [
@@ -141,35 +140,8 @@ const CreateProjectForm: FC = () => {
 
   const onSubmit = async (data: ProjectFormData) => {
     if (!user?.id || !address) return;
-    const socialMediaKeys = Object.values(EProjectSocialMediaType);
-    const project: IProjectCreation = {
-      title: data.projectName,
-      description: data.projectDescription,
-      adminUserId: Number(user.id),
-      organisationId: 1,
-      address: data.projectAddress,
-      image: data.banner || undefined,
-      icon: data.logo || undefined,
-      teaser: data.projectTeaser,
-      socialMedia: Object.entries(data)
-        .filter(
-          ([key, value]) =>
-            value &&
-            socialMediaKeys.includes(
-              key.toUpperCase() as EProjectSocialMediaType,
-            ),
-        )
-        .map(([key, value]) => ({
-          type: key.toUpperCase() as EProjectSocialMediaType,
-          link: value,
-        })),
-    };
-    console.log('project', project);
     setFormData({ project: data });
-    const res = await createProject(project);
-    if (res) {
-      router.push('/create/team');
-    }
+    router.push('/create/team');
   };
 
   return isFetching ? (
