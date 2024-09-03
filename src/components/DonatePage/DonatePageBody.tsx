@@ -291,12 +291,12 @@ const DonatePageBody = () => {
               <div className='flex gap-8 font-redHatText'>
                 <h2 className='w-1/2'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    ~ 2.020
+                    ~ 2.02
                   </span>{' '}
                   in POL
                 </h2>
                 <h2 className=''>
-                  <span>~ 2.020</span> in USD
+                  <span>~ 2.02</span> in USD
                 </h2>
               </div>
             </div>

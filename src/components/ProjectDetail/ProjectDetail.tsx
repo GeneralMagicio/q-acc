@@ -10,6 +10,7 @@ import RichTextViewer from '../RichTextViewer';
 import ProjectSocials from './ProjectSocials';
 import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
+import { IconViewTransaction } from '../Icons/IconViewTransaction';
 export enum EProjectPageTabs {
   DONATIONS = 'donations',
   MEMEBERS = 'members',
@@ -56,6 +57,23 @@ const ProjectDetail = () => {
       {activeTab === 0 && (
         <div className='flex flex-col gap-10 bg-white py-10'>
           <RichTextViewer description={projectData?.description} />
+
+          <div className='container'>
+            <div
+              onClick={() => {
+                window.open(
+                  `https://www.google.com/${projectData?.addresses[0].address}`,
+                );
+              }}
+              className='  w-fit p-[10px_16px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
+            >
+              <span className='flex gap-4 text-[#5326EC]  font-bold'>
+                Project Contract address
+                <IconViewTransaction color='#5326EC' />
+              </span>
+            </div>
+          </div>
+
           <div className='flex flex-col container'>
             <ProjectSocials />
           </div>

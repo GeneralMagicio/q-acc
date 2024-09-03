@@ -61,7 +61,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
         ) : address ? (
           <div className='flex gap-2 items-center'>
             <Image
-              src={user?.avatar || '/images/placeholders/profile.svg'}
+              src={user?.avatar || '/images/placeholders/PFPQACC.png'}
               alt='Profile Pic'
               width={24}
               height={24}
