@@ -178,7 +178,7 @@ const ProjectDonationTable = () => {
                       </div>
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        $ {donation.amount * tokenPrice}
+                        $ {Math.round(donation.amount * tokenPrice * 100) / 100}
                       </span>
                     </div>
                   </div>

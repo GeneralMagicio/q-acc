@@ -297,7 +297,7 @@ export const SAVE_DONATION = `mutation (
 
 export const GET_ALL_PROJECTS = `
 {
-  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true) {
+  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest) {
      projects {
     id
     title
