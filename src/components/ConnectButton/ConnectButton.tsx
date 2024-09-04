@@ -2,11 +2,12 @@
 
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount } from 'wagmi';
-import { useFetchUser } from '@/hooks/useFetchUser';
+
 import Image from 'next/image';
 
 import { useState, type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
