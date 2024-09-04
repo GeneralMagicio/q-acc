@@ -9,8 +9,7 @@ const DashboardHeader = () => {
         <div
           className='w-[180px] h-[180px] bg-cover bg-center rounded-3xl relative'
           style={{
-            backgroundImage:
-              "url('https://staging.giveth.io/images/placeholders/profile.svg')",
+            backgroundImage: "url('/images/placeholders/PFPQACC.png')",
           }}
         ></div>
         <div className='flex flex-col gap-4 text-[#1D1E1F]'>
