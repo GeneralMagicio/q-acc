@@ -7,7 +7,7 @@ interface RichTextViewerProps {
 
 const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
   return (
-    <div className='container'>
+    <div className='container border-b-4 '>
       <style>{`
         .ql-container > .ql-editor {
           word-break: break-word;
