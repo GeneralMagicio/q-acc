@@ -308,6 +308,7 @@ export const GET_ALL_PROJECTS = `
     descriptionSummary
     creationDate
     updatedAt
+    teaser
     adminUserId
     description
     walletAddress

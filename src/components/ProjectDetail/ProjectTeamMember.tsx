@@ -31,10 +31,10 @@ const ProjectTeamMembers: React.FC<ProjectTeamMembersProps> = ({
         {teamMembers?.map((member: any, index: any) => (
           <div
             key={index}
-            className='flex flex-col p-6 border rounded-xl items-center min-w-[240px] gap-6 shadow-xl'
+            className='flex flex-col p-6 border rounded-xl items-center min-w-[240px] gap-6 shadow-xl bg-white'
           >
             <div
-              className='w-[128px] h-[128px] bg-cover'
+              className='w-[128px] h-[128px] bg-cover rounded-xl'
               style={{
                 backgroundImage: `url(${
                   member?.image
