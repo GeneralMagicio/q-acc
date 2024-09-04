@@ -16,9 +16,9 @@ export const IconChevronRight: FC<IIcon> = ({
       <path
         d='M11.5361 8.20582L18.8332 15.5029L11.5361 22.8'
         stroke={color}
-        stroke-width='1.82428'
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeWidth='1.82428'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   );
