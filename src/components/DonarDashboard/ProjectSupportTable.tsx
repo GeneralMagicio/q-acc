@@ -39,7 +39,7 @@ const ProjectSupportTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('19'),
+        parseInt('23'),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -50,8 +50,6 @@ const ProjectSupportTable = () => {
         setTotalCount(totalCount);
         setPageDonations(donations);
       }
-
-      console.log(pageDonations, 'donations');
     };
 
     fetchProjectDonations();
@@ -74,14 +72,14 @@ const ProjectSupportTable = () => {
 
   if (totalCount === 0) {
     return (
-      <div className='bg-white w-full h-[500px] flex items-center justify-center text-5xl'>
-        No Donations Yet
+      <div className='bg-white w-full h-[500px] flex items-center justify-center font-bold text-[25px] text-[#82899A]'>
+        This project didn’t receive any contributions yet.
       </div>
     );
   }
 
   return (
-    <div className='container flex  flex-col py-10 md:px-6 gap-10'>
+    <div className='container flex  flex-col py-1 md:px-6 gap-10'>
       {/* Search Bar */}
       <div className='flex  flex-col md:flex-row gap-4'>
         <div className='md:w-[80%] '>
@@ -159,54 +157,52 @@ const ProjectSupportTable = () => {
 
           <div className=''>
             {pageDonations?.map((donation: any) => (
-              <>
-                <div className=' flex justify-between '>
-                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                    {donation.user.firstName
-                      ? donation.user.firstName
-                      : 'Anoynomous'}
-                  </div>
-                  <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                    {new Date(donation.createdAt).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      year: 'numeric',
-                      month: 'short',
-                    })}
-                  </div>
-                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                    Early window - Round 1
-                  </div>
-                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                    <div className='flex flex-col'>
-                      <div className='flex gap-1 items-center'>
-                        <span className='font-medium'>{donation.amount}</span>
-                        <IconViewTransaction size={16} />
-                      </div>
-
-                      <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        $ 233
-                      </span>
+              <div key={donation.id} className=' flex justify-between '>
+                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                  {donation.user.firstName
+                    ? donation.user.firstName
+                    : 'Anoynomous'}
+                </div>
+                <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
+                  {new Date(donation.createdAt).toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    year: 'numeric',
+                    month: 'short',
+                  })}
+                </div>
+                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                  Early window - Round 1
+                </div>
+                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                  <div className='flex flex-col'>
+                    <div className='flex gap-1 items-center'>
+                      <span className='font-medium'>{donation.amount}</span>
+                      <IconViewTransaction size={16} />
                     </div>
-                  </div>
-                  <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                    600 ABC
-                  </div>
-                  <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                    6 Months 14 Days
-                  </div>
-                  <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                    <div className='flex flex-col'>
-                      <div className='flex gap-1 items-center'>
-                        <span className='font-medium'>Feb 24, 2024 End</span>
-                      </div>
 
-                      <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        Starts on Aug 30, 2024
-                      </span>
-                    </div>
+                    <span className='text-xs font-medium  text-[#A5ADBF]'>
+                      $ 233
+                    </span>
                   </div>
                 </div>
-              </>
+                <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  600 ABC
+                </div>
+                <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  6 Months 14 Days
+                </div>
+                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                  <div className='flex flex-col'>
+                    <div className='flex gap-1 items-center'>
+                      <span className='font-medium'>Feb 24, 2024 End</span>
+                    </div>
+
+                    <span className='text-xs font-medium  text-[#A5ADBF]'>
+                      Starts on Aug 30, 2024
+                    </span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
 
