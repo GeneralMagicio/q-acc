@@ -111,7 +111,10 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             >
               My Account
             </Link>
-            <Link href={''} className='p-2 hover:bg-[#F7F7F9] rounded-lg'>
+            <Link
+              href={'mailto:qacc@giveth.io'}
+              className='p-2 hover:bg-[#F7F7F9] rounded-lg'
+            >
               Do You Need Help?
             </Link>
           </div>

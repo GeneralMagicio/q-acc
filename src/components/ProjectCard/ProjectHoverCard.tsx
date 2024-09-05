@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 import { IconABC } from '../Icons/IconABC';
@@ -17,6 +17,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
@@ -76,11 +77,13 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </div>
           </div>
 
-          <Link id='Donate_Project' href={`/donate/${project.slug}`}>
-            <Button color={ButtonColor.Pink} className='w-full justify-center'>
-              Support
-            </Button>
-          </Link>
+          <Button
+            color={ButtonColor.Pink}
+            className='w-full justify-center'
+            onClick={() => router.push(`/donate/${project.slug}`)}
+          >
+            Support
+          </Button>
         </div>
       </div>
     </div>
