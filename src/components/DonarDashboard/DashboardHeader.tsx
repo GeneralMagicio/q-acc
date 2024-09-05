@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import { useAccount } from 'wagmi';
 
 const DashboardHeader = () => {
   const { address } = useAccount();

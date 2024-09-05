@@ -114,6 +114,7 @@ export const Dropzone: FC<DropzoneProps> = ({ name, rules, onDrop }) => {
             type='button'
             onClick={() => {
               setValue(name, null);
+              setSelectedImage(null);
             }}
             className='px-2 text-xs text-pink-500 rounded border-none flex gap-1 items-center'
           >

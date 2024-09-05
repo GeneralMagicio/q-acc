@@ -8,7 +8,6 @@ import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import ProjectSupportTable from './ProjectSupportTable';
 import { IconCreatedAt } from '../Icons/IconCreatedAt';
 import { IconTokenMinted } from '../Icons/IconTokenMinted';
-import { IconGift } from '../Icons/IconGift';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 
 const MyProjects = () => {
