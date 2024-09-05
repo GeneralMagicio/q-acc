@@ -9,14 +9,17 @@ import ProjectSupportTable from './ProjectSupportTable';
 import { IconCreatedAt } from '../Icons/IconCreatedAt';
 import { IconTokenMinted } from '../Icons/IconTokenMinted';
 import { IconGift } from '../Icons/IconGift';
+import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 
 const MyProjects = () => {
   const projectData = true;
 
-  if (!projectData) {
+  const { data: userWhiteListed } = useIsUserWhiteListed();
+
+  if (!userWhiteListed) {
     return (
-      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-5xl rounded-2xl'>
-        You dont have any project!
+      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
+        You don't have any project!
       </div>
     );
   }
@@ -143,9 +146,11 @@ const MyProjects = () => {
       </div>
 
       {/* Support Summary */}
-      <div className='bg-white flex p-6 flex-col rounded-xl gap-4  mt-8'>
+      {/* <div className='bg-white flex p-6 flex-col rounded-xl gap-4  mt-8'>
         <div className='border-b pb-4'>
-          <h1 className='text-[#1D1E1F] font-bold text-2xl'>Support Summary</h1>
+          <h1 className='text-[#1D1E1F] font-bold text-2xl'>
+            Contributions summary
+          </h1>
         </div>
 
         <div className='flex  flex-col md:flex-row justify-between font-redHatText'>
@@ -166,7 +171,7 @@ const MyProjects = () => {
           <div className='flex gap-4 items-center'>
             <IconTotalDonations size={32} />
             <span className='text-[#4F1D1E1F576A] font-bold text-[25px]'>
-              Total supports
+              Total contributions
             </span>
           </div>
 
@@ -177,15 +182,36 @@ const MyProjects = () => {
             <span className='text-[#82899A] font-medium'>~ $ 980,345</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* List of Supports */}
 
       <div className='bg-white flex p-6 flex-col gap-8 rounded-xl   mt-8'>
-        <div className='border-b pb-4'>
+        {/* <div className='border-b pb-4'>
           <h1 className='text-[#1D1E1F] font-bold text-2xl'>
             List of all supports
           </h1>
+        </div> */}
+        <div className='border-b pb-4'>
+          <h1 className='text-[#1D1E1F] font-bold text-2xl'>
+            Contributions summary
+          </h1>
+        </div>
+
+        <div className='flex  flex-col md:flex-row justify-between p-4 bg-[#EBECF2] md:items-center rounded-xl'>
+          <div className='flex gap-4 items-center'>
+            <IconTotalDonations size={32} />
+            <span className='text-[#4F1D1E1F576A] font-bold text-[25px]'>
+              Total contributions
+            </span>
+          </div>
+
+          <div className='flex items-center gap-4'>
+            <span className='text-[#1D1E1F] font-bold text-[25px]'>
+              1,880,451 POL
+            </span>
+            <span className='text-[#82899A] font-medium'>~ $ 980,345</span>
+          </div>
         </div>
 
         <ProjectSupportTable />
