@@ -10,7 +10,7 @@ import { IconChevronRight } from '../Icons/IconChevronRight';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
 
-const projectCardStyle = 'w-96';
+const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
 const navigationStyle =
   'cursor-pointer rounded-full shadow-lg px-3 py-2 h-10 w-12 mx-2 select-none';
