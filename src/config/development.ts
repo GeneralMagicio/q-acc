@@ -2,6 +2,7 @@ import { polygonZkEvmCardona } from 'wagmi/chains';
 
 const config = {
   SUPPORTED_CHAINS: [polygonZkEvmCardona] as const,
+  SCAN_URL: 'https://cardona-zkevm.polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
     'https://staging.qacc-be.generalmagic.io/graphql',

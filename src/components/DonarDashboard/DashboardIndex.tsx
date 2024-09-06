@@ -9,7 +9,7 @@ import MyProjects from './MyProjects';
 
 export enum EDashboardPageTabs {
   PROJECTS = 'projects',
-  SUPPORTS = 'supports',
+  CONTRIBUTIONS = 'contributions',
 }
 const DashboardIndex = () => {
   const searchParams = useSearchParams();
@@ -17,7 +17,7 @@ const DashboardIndex = () => {
 
   useEffect(() => {
     switch (searchParams.get('tab')) {
-      case EDashboardPageTabs.SUPPORTS:
+      case EDashboardPageTabs.CONTRIBUTIONS:
         setActiveTab(1);
         break;
       default:

@@ -40,27 +40,29 @@ const RewardsBreakDown = () => {
           <div className='flex flex-col gap-4 font-redHatText lg:w-1/2 w-full'>
             <div className='flex justify-between p-2'>
               <div className='flex gap-2'>
-                <IconTotalDonars size={24} />
-                <span>Total donars</span>
-              </div>
-              <span className='font-medium text-[#1D1E1F]'>24</span>
-            </div>
-
-            <div className='flex justify-between p-2'>
-              <div className='flex gap-2'>
                 <IconTotalSupply size={24} />
-                <span>Total supply</span>
+                <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='font-medium text-[#1D1E1F]'>
                 25,000,000,000 ABC
               </span>
             </div>
 
+            <div className='flex justify-between p-2'>
+              <div className='flex gap-2'>
+                <IconTotalDonars size={24} />
+                <span className='text-[#4F576A] font-medium'>
+                  Total supporters
+                </span>
+              </div>
+              <span className='font-medium text-[#1D1E1F]'>24</span>
+            </div>
+
             <div className='flex  flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
               <div className='flex gap-2'>
                 <IconTotalDonations size={24} />
                 <span className='font-medium text-[#1D1E1F]'>
-                  Total donations
+                  Total contributions
                 </span>
               </div>
               <div className='flex gap-1'>
