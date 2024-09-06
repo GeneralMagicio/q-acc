@@ -8,7 +8,7 @@ interface IDashboardTabs {
 }
 export enum EDashboardPageTabs {
   PROJECTS = 'projects',
-  SUPPORTS = 'supports',
+  CONTRIBUTIONS = 'contributions',
 }
 const DashboardTabs = (props: IDashboardTabs) => {
   const { activeTab, slug } = props;
@@ -18,12 +18,13 @@ const DashboardTabs = (props: IDashboardTabs) => {
   const tabsArray = [
     {
       title: 'My Projects',
+      badge: 1,
       query: EDashboardPageTabs.PROJECTS,
     },
     {
-      title: 'My Supports',
+      title: 'My Contributions',
       badge: 20,
-      query: EDashboardPageTabs.SUPPORTS,
+      query: EDashboardPageTabs.CONTRIBUTIONS,
     },
   ];
   return (
@@ -46,7 +47,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
                 {i.title}
                 {badgeCount(i.badge) && (
                   <span
-                    className={` text-white text-sm md:text-base rounded-full h-[22px] px-[9px] flex items-center ml-[6px] ${
+                    className={` text-white text-sm md:text-base rounded-full h-[22px] px-2 py-2 flex items-center ml-[6px] ${
                       activeTab === index ? 'bg-[#1D1E1F]' : 'bg-[#82899A]'
                     }`}
                   >

@@ -4,7 +4,6 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
-import { IconSearch } from '../Icons/IconSearch';
 
 const itemPerPage = 5;
 
@@ -80,34 +79,6 @@ const ProjectSupportTable = () => {
 
   return (
     <div className='container flex  flex-col py-1 md:px-6 gap-10'>
-      {/* Search Bar */}
-      <div className='flex  flex-col md:flex-row gap-4'>
-        <div className='md:w-[80%] '>
-          <div className='border rounded-lg flex relative w-full'>
-            <input
-              // onChange={e => setInputAmount(e.target.value)}
-              // value={inputAmount}
-              // type='number'
-              // disabled={isConfirming}
-              placeholder='Search for a wallet address or a donor name'
-              className='w-full   h-[56px] border rounded-lg  px-4'
-            />
-          </div>
-        </div>
-        {/* <Button
-          color={ButtonColor.Base}
-          className='border w-[200px] text-xl flex justify-center'
-        >
-          Search
-        </Button> */}
-        <div className='flex flex-col gap-4 font-redHatText w-[200px]'>
-          <div className='w-full p-[10px_16px] shadow-xl rounded-3xl  flex justify-center'>
-            <span className='flex gap-4 text-[#5326EC]  font-bold items-center'>
-              Search <IconSearch />
-            </span>
-          </div>
-        </div>
-      </div>
       <div className='flex gap-10 lg:flex-row flex-col '>
         <div className='flex flex-col w-full  font-redHatText overflow-x-auto'>
           <div className='flex justify-between'>
