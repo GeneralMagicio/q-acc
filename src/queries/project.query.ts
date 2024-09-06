@@ -205,6 +205,7 @@ export const GET_PROJECT_BY_SLUG = `
 			verified
 			totalDonations
 			description
+      teaser
 			addresses {
 				address
 				isRecipient

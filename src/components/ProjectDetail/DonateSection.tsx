@@ -21,8 +21,8 @@ const DonateSection = () => {
           <h3 className='text-[41px] font-bold'> {totalDonations} POL</h3>
           <h2 className='text-[#1D1E1F] font-bold font-redHatText'>~ $ 0</h2>
           <p className='text-gray-700'>
-            Raised From <span className='font-bold text-[#1D1E1F]'>{7}</span>{' '}
-            Contributors
+            Received from <span className='font-bold text-[#1D1E1F]'>{7}</span>{' '}
+            supporters
           </p>
         </div>
       ) : (

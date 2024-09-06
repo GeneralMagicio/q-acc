@@ -80,12 +80,12 @@ export const FeaturedProjects = () => {
             ) : (
               allProjects?.projects.map(project => (
                 <SwiperSlide key={project.id} className={swiperSlideStyle}>
-                  <Link href={`/project/${project.slug}`}>
-                    <ProjectHoverCard
-                      className={projectCardStyle}
-                      project={project}
-                    />
-                  </Link>
+                  {/* <Link href={`/project/${project.slug}`}> */}
+                  <ProjectHoverCard
+                    className={projectCardStyle}
+                    project={project}
+                  />
+                  {/* </Link> */}
                 </SwiperSlide>
               ))
             )}

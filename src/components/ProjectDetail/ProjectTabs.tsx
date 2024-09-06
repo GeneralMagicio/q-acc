@@ -7,7 +7,7 @@ interface IProjectTabs {
   slug: string;
 }
 export enum EProjectPageTabs {
-  DONATIONS = 'donations',
+  DONATIONS = 'supporters',
   MEMEBERS = 'members',
 }
 const ProjectTabs = (props: IProjectTabs) => {
@@ -18,7 +18,7 @@ const ProjectTabs = (props: IProjectTabs) => {
   const tabsArray = [
     { title: 'About' },
     {
-      title: 'Donations',
+      title: 'Supporters',
       badge: 20,
       query: EProjectPageTabs.DONATIONS,
     },
@@ -38,17 +38,17 @@ const ProjectTabs = (props: IProjectTabs) => {
               scroll={false}
             >
               <div
-                className={`flex px-6 py-[9px] rounded-full cursor-pointer text-sm md:text-base ${
+                className={`flex px-6 py-[9px] rounded-full cursor-pointer text-sm md:text-base font-redHatText font-medium ${
                   activeTab === index
-                    ? 'font-medium text-pink-500 bg-gray-200'
-                    : ''
+                    ? '  text-[#1D1E1F] bg-white shadow-tabShadow'
+                    : 'text-[#82899A]'
                 }`}
               >
                 {i.title}
                 {badgeCount(i.badge) && (
                   <span
                     className={` text-white text-sm md:text-base rounded-full h-[22px] px-[9px] flex items-center ml-[6px] ${
-                      activeTab === index ? 'bg-pink-500' : 'bg-gray-800'
+                      activeTab === index ? ' bg-gray-800' : 'bg-[#82899A]'
                     }`}
                   >
                     {i.badge}

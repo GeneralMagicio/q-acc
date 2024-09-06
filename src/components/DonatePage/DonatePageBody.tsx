@@ -386,9 +386,9 @@ const DonatePageBody = () => {
               <h1 className='text-4xl font-extrabold p-2'>$ 1,200</h1>
               <h2 className='text-[#1D1E1F] font-medium'>~ $ 980,345</h2>
               <p className='text-[#82899A]'>
-                Raised from{' '}
+                Received from{' '}
                 <span className='font-medium text-[#1D1E1F]'>25</span>{' '}
-                contributors
+                supporters
               </p>
             </div>
           </div>
