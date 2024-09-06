@@ -36,7 +36,7 @@ const ProjectDonateButton = () => {
       ) : (
         <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
           <Button color={ButtonColor.Pink} className='w-full justify-center'>
-            Support
+            Support This Project
           </Button>
         </Link>
       )}

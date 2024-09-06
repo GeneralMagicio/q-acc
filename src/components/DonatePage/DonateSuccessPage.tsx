@@ -32,11 +32,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
                 </h3>
               </div>
               <div className='text-[#4F576A] font-redHatText'>
-                <p>
-                  The Commons Simulator is a gamified simulation tool powered by
-                  a cadCAD backend that was developed by the Commons Stacks
-                  Decentralized Dev community.
-                </p>
+                <p>{projectData?.teaser}</p>
               </div>
             </div>
           </div>

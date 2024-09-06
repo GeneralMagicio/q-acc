@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Link from 'next/link';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
@@ -18,12 +17,13 @@ export const ProjectsView = () => {
             <h1>Loading Projects...</h1>
           ) : (
             allProjects?.projects?.map(project => (
-              <Link href={`/project/${project.slug}`} key={project.id}>
-                <ProjectHoverCard
-                  project={project}
-                  className={projectCardStyle}
-                />
-              </Link>
+              // <Link href={`/project/${project.slug}`} key={project.id}>
+              <ProjectHoverCard
+                key={project.id}
+                project={project}
+                className={projectCardStyle}
+              />
+              // </Link>
             ))
           )}
         </div>

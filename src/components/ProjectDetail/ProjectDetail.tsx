@@ -12,7 +12,7 @@ import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 export enum EProjectPageTabs {
-  DONATIONS = 'donations',
+  DONATIONS = 'supporters',
   MEMEBERS = 'members',
 }
 
