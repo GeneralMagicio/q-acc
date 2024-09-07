@@ -1,13 +1,14 @@
+// This is the layout file that works as a Server Component
 import { Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { cookieToInitialState } from 'wagmi';
 import { headers } from 'next/headers';
 import Web3ModalProvider from '@/context/wagmi';
 import { wagmiConfig } from '@/config/wagmi';
-import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UserController } from '@/components/Controllers/UserController';
 import type { Metadata } from 'next';
+import ClientLayout from './ClientLayout'; // Import the client-side layout
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 
@@ -25,16 +26,12 @@ export default function RootLayout({
     wagmiConfig,
     headers().get('cookie'),
   );
+
   return (
     <html lang='en'>
       <body className={nunito.className}>
         <div className='min-h-screen flex flex-col relative overflow-x-hidden'>
-          <Web3ModalProvider initialState={initialState}>
-            <UserController />
-            <Header />
-            <div className='flex-1'>{children}</div>
-            <Footer />
-          </Web3ModalProvider>
+          <ClientLayout initialState={initialState}>{children}</ClientLayout>
         </div>
       </body>
     </html>

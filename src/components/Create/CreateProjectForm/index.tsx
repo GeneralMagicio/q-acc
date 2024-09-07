@@ -123,7 +123,7 @@ const socialMediaLinks = [
 ];
 
 const CreateProjectForm: FC = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { data: user } = useFetchUser();
   const { mutateAsync: createProject, isPending } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
@@ -143,6 +143,10 @@ const CreateProjectForm: FC = () => {
     setFormData({ project: data });
     router.push('/create/team');
   };
+
+  if (!isConnected) {
+    return <h1>Connect user first</h1>;
+  }
 
   return isFetching ? (
     <div>Loading...</div>
