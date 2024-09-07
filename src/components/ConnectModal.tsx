@@ -14,7 +14,7 @@ export const ConnectModal: FC<ConnectModalProps> = props => {
       <div className='flex flex-col gap-10 '>
         <p>You need to connect your wallet to continue!</p>
         <div className='flex justify-end'>
-          <Button onClick={() => open()} className='mt-4'>
+          <Button onClick={() => open()} className='mt-4 shadow-baseShadow'>
             Connect Wallet
           </Button>
         </div>
