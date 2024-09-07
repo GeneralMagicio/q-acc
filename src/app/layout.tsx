@@ -3,12 +3,10 @@ import { Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { cookieToInitialState } from 'wagmi';
 import { headers } from 'next/headers';
-import Web3ModalProvider from '@/context/wagmi';
 import { wagmiConfig } from '@/config/wagmi';
-import { Footer } from '@/components/Footer';
-import { UserController } from '@/components/Controllers/UserController';
+import ClientLayout from './ClientLayout';
+
 import type { Metadata } from 'next';
-import ClientLayout from './ClientLayout'; // Import the client-side layout
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 

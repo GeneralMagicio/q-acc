@@ -1,10 +1,10 @@
 'use client'; // Ensure this component is a Client Component
-
+import { usePathname } from 'next/navigation';
 import Web3ModalProvider from '@/context/wagmi';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UserController } from '@/components/Controllers/UserController';
-import { usePathname } from 'next/navigation'; // Import usePathname
+// Import usePathname
 
 export default function ClientLayout({
   children,
