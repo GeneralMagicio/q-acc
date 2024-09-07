@@ -23,6 +23,7 @@ import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
 import links from '@/lib/constants/links';
 import { TeamMember } from '../CreateTeamForm';
+import { ConnectModal } from '@/components/ConnectModal';
 
 export interface ProjectFormData {
   projectName: string;
@@ -145,7 +146,16 @@ const CreateProjectForm: FC = () => {
   };
 
   if (!isConnected) {
-    return <h1>Connect user first</h1>;
+    return (
+      <>
+        <ConnectModal
+          isOpen={true}
+          onClose={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </>
+    );
   }
 
   return isFetching ? (
