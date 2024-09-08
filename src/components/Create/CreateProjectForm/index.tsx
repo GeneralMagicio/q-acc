@@ -16,15 +16,14 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
-import {
-  EProjectSocialMediaType,
-  IProjectCreation,
-} from '@/types/project.type';
+import { EProjectSocialMediaType } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
 import links from '@/lib/constants/links';
+import { TeamMember } from '../CreateTeamForm';
+import { ConnectModal } from '@/components/ConnectModal';
 
 export interface ProjectFormData {
   projectName: string;
@@ -46,6 +45,7 @@ export interface ProjectFormData {
   addressConfirmed: boolean;
   logo: string | null;
   banner: string | null;
+  team: TeamMember[];
 }
 
 const socialMediaLinks = [
@@ -124,7 +124,7 @@ const socialMediaLinks = [
 ];
 
 const CreateProjectForm: FC = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { data: user } = useFetchUser();
   const { mutateAsync: createProject, isPending } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
@@ -141,36 +141,22 @@ const CreateProjectForm: FC = () => {
 
   const onSubmit = async (data: ProjectFormData) => {
     if (!user?.id || !address) return;
-    const socialMediaKeys = Object.values(EProjectSocialMediaType);
-    const project: IProjectCreation = {
-      title: data.projectName,
-      description: data.projectDescription,
-      adminUserId: Number(user.id),
-      organisationId: 1,
-      address: data.projectAddress,
-      image: data.banner || undefined,
-      icon: data.logo || undefined,
-      teaser: data.projectTeaser,
-      socialMedia: Object.entries(data)
-        .filter(
-          ([key, value]) =>
-            value &&
-            socialMediaKeys.includes(
-              key.toUpperCase() as EProjectSocialMediaType,
-            ),
-        )
-        .map(([key, value]) => ({
-          type: key.toUpperCase() as EProjectSocialMediaType,
-          link: value,
-        })),
-    };
-    console.log('project', project);
     setFormData({ project: data });
-    const res = await createProject(project);
-    if (res) {
-      router.push('/create/team');
-    }
+    router.push('/create/team');
   };
+
+  if (!isConnected) {
+    return (
+      <>
+        <ConnectModal
+          isOpen={true}
+          onClose={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </>
+    );
+  }
 
   return isFetching ? (
     <div>Loading...</div>
@@ -225,8 +211,10 @@ const CreateProjectForm: FC = () => {
                     'Project description must be at least 200 characters',
                 },
               }}
+              defaultValue={formData.project.projectDescription}
               maxLength={500}
             />
+            {/* <Editor /> */}
           </section>
 
           <section className='flex flex-col gap-6'>

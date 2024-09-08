@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React, { FC } from 'react';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
+import { IconABC } from '../Icons/IconABC';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -17,7 +18,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       className={`relative w-full rounded-xl bg-white overflow-hidden shadow-md shadow-gray-200 ${className}`}
       {...props}
     >
-      <div className='relative h-48'>
+      <div className='relative h-48 font-redHatText'>
         <ProjectCardImage
           src={project.image}
           alt='Project Card'
@@ -45,23 +46,17 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         </p>
         <div className='border-t-[1px]'></div>
         <div>
-          <div className='flex gap-1'>
-            <Image
-              src={'/images/project-card/token-logo.svg'}
-              alt='token-logo'
-              width={24}
-              height={24}
-            />
-            <p className='text-gray-800'>DEGEN Price</p>
+          <div className='flex gap-2 items-center'>
+            <IconABC />
+            <p className='text-gray-800'>ABC current value</p>
           </div>
           <div className='mt-1 grid grid-cols-2'>
-            <div className='flex gap-1 items-center'>
-              <p className='font-semibold text-gray-800'>1.709</p>
-              <p className='text-xs text-gray-400'>in USD</p>
+            <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md'>
+              <p className='font-bold text-gray-800'>1.70</p>
+              <p className='text-xs text-gray-400'>in POL</p>
             </div>
             <div className='flex gap-1 items-center'>
-              <p className='font-semibold text-gray-800'>1.47221</p>
-              <p className='text-xs text-gray-400'>in MATIC</p>
+              <p className='text-base text-[#4F576A] font-medium'>~ $1.47</p>
             </div>
           </div>
         </div>

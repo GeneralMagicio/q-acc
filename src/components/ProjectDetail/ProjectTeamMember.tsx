@@ -31,15 +31,27 @@ const ProjectTeamMembers: React.FC<ProjectTeamMembersProps> = ({
         {teamMembers?.map((member: any, index: any) => (
           <div
             key={index}
-            className='flex flex-col p-6 border rounded-xl items-center min-w-[240px] gap-6 shadow-xl'
+            className='flex flex-col p-6 border rounded-xl items-center min-w-[240px] gap-6 shadow-xl bg-white'
           >
-            <div className='w-[128px] h-[128px]'>
-              <img
+            <div
+              className='w-[128px] h-[128px] bg-cover rounded-xl'
+              style={{
+                backgroundImage: `url(${
+                  member?.image
+                    ? member.image
+                    : '/images/placeholders/PFPQACC.png'
+                })`,
+              }}
+            >
+              {/* <img
+                className='rounded-lg'
                 src={
-                  'https://staging.giveth.io/images/placeholders/profile.svg'
+                  member.image
+                    ? member.image
+                    : '/images/placeholders/PFPQACC.png'
                 }
                 alt={`${member.name}'s profile`}
-              />
+              /> */}
             </div>
             <div className='flex flex-col gap-4 items-center mt-2'>
               <h1 className='text-[#1D1E1F] font-bold text-lg'>

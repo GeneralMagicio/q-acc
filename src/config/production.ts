@@ -3,6 +3,7 @@ import { EnvConfig } from '@/types/config.type';
 
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygonZkEvm] as const,
+  SCAN_URL: 'https://zkevm.polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
     'https://qacc-be.generalmagic.io/graphql',

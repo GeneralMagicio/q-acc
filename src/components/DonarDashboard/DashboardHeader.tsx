@@ -1,32 +1,48 @@
 import Link from 'next/link';
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import config from '@/config/configuration';
+import { IconIdentityVerified } from '../Icons/IconIdentityVerified';
 
 const DashboardHeader = () => {
+  const { address } = useAccount();
+  const { data: user } = useFetchUser();
   return (
     <div className='bg-white  w-ful p-10 '>
       <div className='container flex md:flex-row flex-col gap-6   items-center md:text-left text-center'>
         <div
           className='w-[180px] h-[180px] bg-cover bg-center rounded-3xl relative'
           style={{
-            backgroundImage:
-              "url('https://staging.giveth.io/images/placeholders/profile.svg')",
+            backgroundImage: `url(${user?.avatar || '/images/placeholders/PFPQACC.png'})`,
           }}
         ></div>
-        <div className='flex flex-col gap-4 text-[#1D1E1F]'>
-          <h1 className='text-[41px] font-bold leading-[56px] '>Lauren Luz</h1>
-          <h3 className='text-xl leading-8 font-redHatText'>
-            Lauren@giveth.io
-          </h3>
-          <div className='flex gap-2 md:gap-6 text-[#E1458D] font-redHatText flex-col md:flex-row'>
-            <Link href={'/create/profile'}>
-              <span>Edit Profile</span>
-            </Link>
+        <div className='flex flex-col gap-4 text-[#1D1E1F] w-full'>
+          <h1 className='text-[41px] font-bold leading-[56px] '>
+            {user?.fullName}
+          </h1>
+          <h3 className='text-xl leading-8 font-redHatText'>{user?.email}</h3>
+          <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
+            <div className='flex gap-2 text-[#E1458D] flex-col md:flex-row '>
+              <Link href={'/create/profile'}>
+                <span>Edit Profile</span>
+              </Link>
+              <Link
+                target='_blank'
+                href={`${config.SCAN_URL}/address/${address}`}
+              >
+                <h3 className='flex gap-2 items-center'>
+                  <span>{address}</span>
+                  <IconViewTransaction size={18} />
+                </h3>
+              </Link>
+            </div>
 
-            <h3 className='flex gap-2 items-center'>
-              <span>0x17c8020de84d4097b053453423f9d33ff8e62507f</span>
-              <IconViewTransaction size={18} />
-            </h3>
+            <div className='px-1 py-2 bg-[#5CD3C9] rounded-lg font-medium flex text-sm'>
+              <IconIdentityVerified />
+              Identity verified{' '}
+            </div>
           </div>
         </div>
       </div>

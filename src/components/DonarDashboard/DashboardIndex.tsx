@@ -5,10 +5,11 @@ import DashboardHeader from './DashboardHeader';
 import DashboardTabs from './DashboardTabs';
 
 import DonarSupports from './DonarSupports';
+import MyProjects from './MyProjects';
 
 export enum EDashboardPageTabs {
   PROJECTS = 'projects',
-  SUPPORTS = 'supports',
+  CONTRIBUTIONS = 'contributions',
 }
 const DashboardIndex = () => {
   const searchParams = useSearchParams();
@@ -16,7 +17,7 @@ const DashboardIndex = () => {
 
   useEffect(() => {
     switch (searchParams.get('tab')) {
-      case EDashboardPageTabs.SUPPORTS:
+      case EDashboardPageTabs.CONTRIBUTIONS:
         setActiveTab(1);
         break;
       default:
@@ -29,7 +30,7 @@ const DashboardIndex = () => {
       <DashboardHeader />
       <DashboardTabs activeTab={activeTab} slug={'slug'} />
 
-      {activeTab === 0 && <h1>Projcts</h1>}
+      {activeTab === 0 && <MyProjects />}
       {activeTab === 1 && <DonarSupports />}
     </div>
   );

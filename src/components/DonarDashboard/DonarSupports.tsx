@@ -9,6 +9,8 @@ import RewardsBreakDown from './RewardsBreakDown';
 import { IconMinted } from '../Icons/IconMinted';
 import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
+import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
+import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
@@ -68,14 +70,6 @@ const DonarSupports = () => {
 
                 <div className='flex justify-between p-2'>
                   <div className='flex gap-2'>
-                    <IconTotalDonars size={24} />
-                    <span>Total Supporters</span>
-                  </div>
-                  <span className='font-medium text-[#1D1E1F]'>24</span>
-                </div>
-
-                <div className='flex justify-between p-2'>
-                  <div className='flex gap-2'>
                     <IconTotalSupply size={24} />
                     <span>Total Supply</span>
                   </div>
@@ -84,11 +78,19 @@ const DonarSupports = () => {
                   </span>
                 </div>
 
+                <div className='flex justify-between p-2'>
+                  <div className='flex gap-2'>
+                    <IconTotalDonars size={24} />
+                    <span>Total supporters</span>
+                  </div>
+                  <span className='font-medium text-[#1D1E1F]'>24</span>
+                </div>
+
                 <div className='flex  flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
                   <div className='flex gap-2'>
                     <IconTotalDonations size={24} />
                     <span className='font-medium text-[#1D1E1F]'>
-                      Total supports
+                      Total contributions
                     </span>
                   </div>
                   <div className='flex gap-1'>
@@ -105,19 +107,24 @@ const DonarSupports = () => {
 
             {/* Project Claim and Reward */}
             <div className='flex flex-col gap-4 w-full lg:w-1/2  font-redHatText'>
-              <div className='flex - gap-2'>
+              <div className='flex items-center gap-2'>
                 <IconABC size={24} />
                 <span className='text-[#4F576A] font-medium'>
                   ABC current value
                 </span>
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    Bonding curves have a mint price and a burn price. This
+                    shows the mint price.
+                  </div>
+                </div>
               </div>
               <div className='flex justify-between text-[#1D1E1F] font-medium'>
                 <h2>
-                  2.02 <span className='text-[#4F576A] text-xs'>in POL</span>
+                  2.02 <span className='text-[#4F576A] text-xs'> POL</span>
                 </h2>
-                <h2>
-                  3.88 <span className='text-[#4F576A] text-xs'>in USD</span>
-                </h2>
+                <h2 className='text-[#4F576A]'>$ 3.88</h2>
               </div>
               <hr />
 
@@ -127,10 +134,12 @@ const DonarSupports = () => {
                 time.
               </h1>
 
-              <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg'>
+              <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg '>
                 <div className='flex gap-2'>
                   <IconTotalDonations size={24} />
-                  <span>Your support</span>
+                  <span className='text-[#4F576A] font-medium '>
+                    Your contribution
+                  </span>
                 </div>
                 <span className='font-medium text-[#1D1E1F]'>4,705.94 POL</span>
               </div>
@@ -138,7 +147,9 @@ const DonarSupports = () => {
               <div className='flex justify-between p-2'>
                 <div className='flex gap-2'>
                   <IconMinted size={24} />
-                  <span>Your project tokens </span>
+                  <span className='text-[#4F576A] font-medium '>
+                    Your project tokens{' '}
+                  </span>
                 </div>
                 <div className='flex gap-1'>
                   <span className='font-medium text-[#1D1E1F]'>2500 ABC</span>
@@ -151,7 +162,9 @@ const DonarSupports = () => {
               <div className='flex justify-between p-2'>
                 <div className='flex gap-2'>
                   <IconLockedTokens size={24} />
-                  <span>Locked tokens</span>
+                  <span className='text-[#4F576A] font-medium '>
+                    Locked tokens
+                  </span>
                 </div>
                 <div className='flex gap-1'>
                   <span className='font-medium text-[#1D1E1F]'>800 ABC</span>
@@ -183,7 +196,7 @@ const DonarSupports = () => {
                 className='flex justify-center shadow-lg '
                 onClick={() => setShowBreakDown(true)}
               >
-                Supports & Rewards Breakdown
+                Tokens & Contributions Breakdown <IconBreakdownArrow />
               </Button>
             </div>
           </div>

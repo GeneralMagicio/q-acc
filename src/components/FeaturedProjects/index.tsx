@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import Link from 'next/link';
-import { ProjectCard } from '../ProjectCard/ProjectCard';
 import 'swiper/css';
 import { IconPointerLeft } from '../Icons/IconPointerLeft';
 import { IconPointerRight } from '../Icons/IconPointerRight';
 import Routes from '@/lib/constants/Routes';
 import { IconChevronRight } from '../Icons/IconChevronRight';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
+import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
@@ -80,12 +80,12 @@ export const FeaturedProjects = () => {
             ) : (
               allProjects?.projects.map(project => (
                 <SwiperSlide key={project.id} className={swiperSlideStyle}>
-                  <Link href={`/project/${project.slug}`}>
-                    <ProjectCard
-                      className={projectCardStyle}
-                      project={project}
-                    />
-                  </Link>
+                  {/* <Link href={`/project/${project.slug}`}> */}
+                  <ProjectHoverCard
+                    className={projectCardStyle}
+                    project={project}
+                  />
+                  {/* </Link> */}
                 </SwiperSlide>
               ))
             )}

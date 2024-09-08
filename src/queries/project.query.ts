@@ -57,6 +57,19 @@ mutation ($project: CreateProjectInput!) {
   }
 `;
 
+export const CREATE_TEAM_MEMBERS = `
+mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
+    updateProject(projectId: $projectId, newProjectData: $newProjectData) {
+    teamMembers{
+      name
+      image
+      twitter
+      linkedin
+      farcaster
+    }
+    }
+  }
+`;
 export const GET_PROJECT_BY_ID = `
   query(
       $id: Float!,
@@ -192,6 +205,7 @@ export const GET_PROJECT_BY_SLUG = `
 			verified
 			totalDonations
 			description
+      teaser
 			addresses {
 				address
 				isRecipient
@@ -284,7 +298,7 @@ export const SAVE_DONATION = `mutation (
 
 export const GET_ALL_PROJECTS = `
 {
-  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true) {
+  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest) {
      projects {
     id
     title
@@ -295,6 +309,7 @@ export const GET_ALL_PROJECTS = `
     descriptionSummary
     creationDate
     updatedAt
+    teaser
     adminUserId
     description
     walletAddress

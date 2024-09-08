@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { IIcon } from './type';
 
-export const IconChevronRight: FC<IIcon> = ({
+export const IconBreakdownArrow: FC<IIcon> = ({
   size = 16,
   color = 'currentColor',
 }) => {
@@ -10,13 +10,12 @@ export const IconChevronRight: FC<IIcon> = ({
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
-      viewBox='0 0 32 32'
+      viewBox='0 0 16 16'
       fill='none'
     >
       <path
-        d='M11.5361 8.20582L18.8332 15.5029L11.5361 22.8'
-        stroke={color}
-        strokeWidth='1.82428'
+        d='M3.00065 7.66667H12.334M12.334 7.66667L7.66732 12.3333M12.334 7.66667L7.66732 3'
+        stroke='#5326EC'
         strokeLinecap='round'
         strokeLinejoin='round'
       />

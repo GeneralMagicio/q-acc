@@ -6,7 +6,6 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 const envConfig = isProduction ? production : development;
 const config = {
   ...envConfig,
-  BASE_URL: process.env.NEXT_PUBLIC_BASE_URI || 'https://localhost:3000/',
 };
 
 export default config;

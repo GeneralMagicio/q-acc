@@ -101,7 +101,7 @@ const ProjectDonationTable = () => {
       <div className=' container flex  flex-col py-10 gap-10'>
         <div>
           <h1 className='text-[#1D1E1F] text-[25px] font-bold border-b-2 pb-3'>
-            All Donations
+            All supporters
           </h1>
         </div>
 
@@ -109,7 +109,7 @@ const ProjectDonationTable = () => {
           <div className='flex flex-col w-full lg:w-2/3 font-redHatText '>
             <div className='flex justify-between border-b-4 '>
               <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-                Donar
+                Supporter
                 {/* <button
                   onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
                 >
@@ -117,7 +117,7 @@ const ProjectDonationTable = () => {
                 </button> */}
               </div>
               <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-                Donated On
+                Date
                 <button
                   onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
                 >
@@ -131,13 +131,13 @@ const ProjectDonationTable = () => {
                 </button>
               </div>
               <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-                Amount [MATIC]
+                Amount [POL]
                 <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                   <IconSort size={16} />
                 </button>
               </div>
               <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-                Reward Token
+                Tokens
                 <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                   <IconSort size={16} />
                 </button>
@@ -173,12 +173,12 @@ const ProjectDonationTable = () => {
                           target='_blank'
                           href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
                         >
-                          <IconViewTransaction size={16} />
+                          <IconViewTransaction size={16} color='#4F576A' />
                         </Link>
                       </div>
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        $ {donation.amount * tokenPrice}
+                        $ {Math.round(donation.amount * tokenPrice * 100) / 100}
                       </span>
                     </div>
                   </div>
@@ -199,21 +199,33 @@ const ProjectDonationTable = () => {
             </div>
           </div>
 
-          <div className='w-full lg:w-1/4  p-6  gap-10 flex flex-col font-redHatText shadow-lg rounded-lg h-fit'>
+          <div className='w-full lg:w-1/4  p-6  gap-10 flex flex-col font-redHatText shadow-tabShadow rounded-lg h-fit'>
             <div className=' flex flex-col gap-2'>
               <div className='flex gap-2'>
                 <IconTotalDonations />
                 <span className='font-medium text-[#4F576A]'>
-                  Total Donations
+                  Total support
                 </span>
               </div>
 
-              <h1 className='text-[41px] font-bold leading-[56px]'>
-                $ 970,257
+              <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
+                1,880,451 POL
               </h1>
+              <h2 className='font-medium text-[#1D1E1F]'>~ $ 980,345</h2>
             </div>
 
-            <div className=' flex flex-col gap-4'>
+            <div className=' flex flex-col gap-4 font-redHatText'>
+              {/* Total Donars */}
+              <div className=' flex justify-between'>
+                <div className='flex gap-2'>
+                  <IconTotalDonars />
+                  <span className='font-medium text-[#4F576A]'>
+                    Total supporters
+                  </span>
+                </div>
+                <span className='font-semibold'>{totalCount}</span>
+              </div>
+
               {/* Total Supply */}
               <div>
                 <div className='flex gap-2'>
@@ -226,17 +238,6 @@ const ProjectDonationTable = () => {
                 <h3 className='font-medium text-[#1D1E1F]'>
                   25,000,000,000 ABC
                 </h3>
-              </div>
-
-              {/* Total Donars */}
-              <div className=' flex justify-between'>
-                <div className='flex gap-2'>
-                  <IconTotalDonars />
-                  <span className='font-medium text-[#4F576A]'>
-                    Total donars
-                  </span>
-                </div>
-                <span>{totalCount}</span>
               </div>
             </div>
           </div>
