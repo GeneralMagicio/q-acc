@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CreateNavbar from '../CreateNavbar';
@@ -8,11 +8,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconError } from '@/components/Icons/IconError';
 import { IconVerified } from '@/components/Icons/IconVerified';
 import { IconInfo } from '@/components/Icons/IconInfo';
-import {
-  usePrivado,
-  usePrivadoChainStatus,
-  useTriggerUserPrivadoStatusCheck,
-} from '@/hooks/usePrivado';
+import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IVerified {
@@ -21,39 +17,10 @@ interface IVerified {
 }
 const VerifyPrivado = () => {
   const router = useRouter();
-  const { verifyAccount } = usePrivado();
+  const { verifyAccount, isVerified, error, isLoading } = usePrivado();
   const userFetch = useFetchUser();
 
-  const privadaoChainStatus = usePrivadoChainStatus({
-    disable: userFetch.isPending || !!userFetch.data?.privadoVerified,
-  });
-
-  useTriggerUserPrivadoStatusCheck({
-    trigger:
-      userFetch.data?.privadoVerified === false &&
-      privadaoChainStatus.data === true,
-  });
-
-  const [verified, setVerified] = useState<IVerified>({
-    isVerified: false,
-    error: false,
-  });
-
-  const isLoading = privadaoChainStatus.isLoading || userFetch.isPending;
-
-  useEffect(() => {
-    setVerified({
-      isVerified:
-        userFetch.data?.privadoVerified ||
-        (privadaoChainStatus.data as boolean),
-      error: !!privadaoChainStatus.error || !!userFetch.error,
-    });
-  }, [
-    privadaoChainStatus.data,
-    privadaoChainStatus.error,
-    userFetch.data?.privadoVerified,
-    userFetch.error,
-  ]);
+  const verified: IVerified = { isVerified, error: !!error };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
