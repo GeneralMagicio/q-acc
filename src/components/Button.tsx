@@ -6,6 +6,7 @@ export enum ButtonColor {
   Gray = 'gray',
   Giv = 'giv',
   Base = 'base',
+  Green = 'green',
 }
 
 export enum ButtonStyle {
@@ -43,6 +44,11 @@ const variantClasses = {
     [ButtonStyle.Solid]: 'text-giv-500 bg-white',
     [ButtonStyle.Outline]: 'text-giv-500 border border-giv-500 bg-transparent',
     [ButtonStyle.Text]: 'text-giv-500 bg-transparent',
+  },
+  [ButtonColor.Green]: {
+    [ButtonStyle.Solid]: 'bg-white text-[#37B4A9]',
+    [ButtonStyle.Outline]: 'border bg-transparent',
+    [ButtonStyle.Text]: 'bg-transparent',
   },
 };
 

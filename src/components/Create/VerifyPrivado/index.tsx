@@ -1,12 +1,19 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CreateNavbar from '../CreateNavbar';
-import { Button } from '@/components/Button';
+import { Button, ButtonColor } from '@/components/Button';
 import Routes from '@/lib/constants/Routes';
 import { IconError } from '@/components/Icons/IconError';
 import { IconVerified } from '@/components/Icons/IconVerified';
 import { IconInfo } from '@/components/Icons/IconInfo';
+import {
+  usePrivado,
+  usePrivadoChainStatus,
+  useTriggerUserPrivadoStatusCheck,
+} from '@/hooks/usePrivado';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IVerified {
   isVerified: boolean;
@@ -14,12 +21,40 @@ interface IVerified {
 }
 const VerifyPrivado = () => {
   const router = useRouter();
+  const { verifyAccount } = usePrivado();
+  const userFetch = useFetchUser();
+
+  const privadaoChainStatus = usePrivadoChainStatus({
+    disable: userFetch.isPending || !!userFetch.data?.privadoVerified,
+  });
+
+  useTriggerUserPrivadoStatusCheck({
+    trigger:
+      userFetch.data?.privadoVerified === false &&
+      privadaoChainStatus.data === true,
+  });
+
   const [verified, setVerified] = useState<IVerified>({
     isVerified: false,
     error: false,
   });
 
-  const verifyAccount = () => {};
+  const isLoading = privadaoChainStatus.isLoading || userFetch.isPending;
+
+  useEffect(() => {
+    setVerified({
+      isVerified:
+        userFetch.data?.privadoVerified ||
+        (privadaoChainStatus.data as boolean),
+      error: !!privadaoChainStatus.error || !!userFetch.error,
+    });
+  }, [
+    privadaoChainStatus.data,
+    privadaoChainStatus.error,
+    userFetch.data?.privadoVerified,
+    userFetch.error,
+  ]);
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     router.push(Routes.Home);
@@ -44,45 +79,49 @@ const VerifyPrivado = () => {
         <div className='flex flex-col gap-8'>
           <div className='font-redHatText'>
             <p className='text-[#1D1E1F] text-xl'>
-              All project owners and donors are required to verify their
-              identity with our identity solution provider, Privado. You only
-              need to do it once, and it shouldn&apos;t take long.
+              We use zero knowledge ID to maintain the integrity of quadratic
+              acceleration. All participants are required to validate their
+              credentials with out identity partner, Privado.
             </p>
           </div>
           <div className='flex flex-col gap-10 lg:flex-row justify-between'>
-            <div
-              className={`flex p-4 border  rounded-lg gap-4 ${
-                verified.error
-                  ? 'bg-[#FFD6D0] border-[#C71D06] '
-                  : verified.isVerified
-                    ? 'bg-[#D2FFFB] border-[#1B8C82] '
-                    : 'bg-[#F6F3FF] border-[#8668FC] '
-              }`}
-            >
-              {verified.error ? (
-                <>
-                  <IconError />
-                  <span className='text-[#C71D06] font-redHatText text-sm'>
-                    We can&apos;t verify your account, please contact Qacc
-                    support team <b>qacc@giveth.io</b>
-                  </span>
-                </>
-              ) : verified.isVerified ? (
-                <>
-                  <IconVerified />
-                  <span className='text-[#1B8C82] font-redHatText text-sm'>
-                    You account has been successfully verified.
-                  </span>
-                </>
-              ) : (
-                <>
-                  <IconInfo size={17} color='#8668FC' />
-                  <span className='text-[#8668FC] font-redHatText text-sm'>
-                    Identity credentials are required.
-                  </span>
-                </>
-              )}
-            </div>
+            {!isLoading ? (
+              <div
+                className={`flex p-4 border  rounded-lg gap-4 ${
+                  verified.error
+                    ? 'bg-[#FFD6D0] border-[#C71D06] '
+                    : verified.isVerified
+                      ? 'bg-[#D2FFFB] border-[#1B8C82] '
+                      : 'bg-[#F6F3FF] border-[#8668FC] '
+                }`}
+              >
+                {verified.error ? (
+                  <>
+                    <IconError />
+                    <span className='text-[#C71D06] font-redHatText text-sm'>
+                      We can&apos;t verify your account, please contact Qacc
+                      support team <b>qacc@giveth.io</b>
+                    </span>
+                  </>
+                ) : verified.isVerified ? (
+                  <>
+                    <IconVerified />
+                    <span className='text-[#1B8C82] font-redHatText text-sm'>
+                      You account has been successfully verified.
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <IconInfo size={17} color='#8668FC' />
+                    <span className='text-[#8668FC] font-redHatText text-sm'>
+                      Identity credentials are required.
+                    </span>
+                  </>
+                )}
+              </div>
+            ) : (
+              <span></span>
+            )}
             <div className='font-redHatText font-bold'>
               {verified.error ? (
                 <Button
@@ -94,20 +133,26 @@ const VerifyPrivado = () => {
                 </Button>
               ) : verified.isVerified ? (
                 <Button
-                  disabled
                   type='button'
-                  onClick={verifyAccount}
-                  className='p-4 rounded-full opacity-100  shadow-baseShadow text-sm font-bold min-w-[200px] justify-center text-[#37B4A9]'
+                  className='p-4 rounded-full opacity-100  shadow-baseShadow text-sm font-bold min-w-[200px] justify-center '
+                  color={ButtonColor.Green}
                 >
                   Verified
+                  <Image
+                    src='/images/icons/tick.svg'
+                    alt='tick'
+                    height={16}
+                    width={16}
+                  />
                 </Button>
               ) : (
                 <Button
                   type='button'
+                  loading={isLoading}
                   onClick={verifyAccount}
                   className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
                 >
-                  Verify My Account
+                  {isLoading ? 'Loading' : 'Verify My Account'}
                 </Button>
               )}
             </div>
