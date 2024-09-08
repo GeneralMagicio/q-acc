@@ -211,8 +211,10 @@ const CreateProjectForm: FC = () => {
                     'Project description must be at least 200 characters',
                 },
               }}
+              defaultValue={formData.project.projectDescription}
               maxLength={500}
             />
+            {/* <Editor /> */}
           </section>
 
           <section className='flex flex-col gap-6'>

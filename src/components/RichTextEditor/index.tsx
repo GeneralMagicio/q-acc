@@ -27,6 +27,7 @@ interface RichTextEditorProps {
   description?: string;
   rules?: RegisterOptions;
   maxLength?: number;
+  defaultValue?: string;
 }
 
 enum QuillState {
@@ -41,6 +42,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   description,
   rules,
   maxLength,
+  defaultValue = '',
 }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstanceRef = useRef<any>(null);
@@ -54,81 +56,32 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   // Register the editor field with react-hook-form
   useEffect(() => {
-    register(name, rules);
-
     const initializeQuill = async () => {
-      quillStateRef.current = QuillState.INITIALIZING;
-      if (editorRef.current) {
+      if (
+        quillStateRef.current === QuillState.NOT_INITIALIZED &&
+        editorRef.current
+      ) {
+        quillStateRef.current = QuillState.INITIALIZING;
         const { default: Quill } = await import('quill');
-
-        // Custom image handler
-        const imageHandler = () => {
-          const input = document.createElement('input');
-          input.setAttribute('type', 'file');
-          input.setAttribute('accept', 'image/*');
-          input.click();
-
-          input.onchange = async () => {
-            const file = input.files?.[0];
-            if (file) {
-              // Create a base64 preview of the image
-              const reader = new FileReader();
-              reader.onload = async e => {
-                const base64ImageSrc = e.target?.result;
-
-                // Insert the base64 image into the editor with 60% opacity
-                const range = quillInstanceRef.current.getSelection(true);
-                quillInstanceRef.current.insertEmbed(
-                  range.index,
-                  'image',
-                  base64ImageSrc,
-                );
-
-                const imageElement =
-                  quillInstanceRef.current.root.querySelector(
-                    `img[src="${base64ImageSrc}"]`,
-                  ) as HTMLImageElement;
-                if (imageElement) {
-                  imageElement.style.opacity = '0.6';
-                }
-
-                // Perform the image upload
-                const imageIpfsHash = await uploadToIPFS(file);
-
-                if (!imageIpfsHash) {
-                  console.error('Failed to upload image to IPFS');
-                  return;
-                }
-
-                const imageUrl = getIpfsAddress(imageIpfsHash);
-
-                // Replace the base64 image source with the uploaded IPFS URL and set full opacity
-                if (imageElement) {
-                  imageElement.setAttribute('src', imageUrl);
-                  imageElement.style.opacity = '1.0';
-                }
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-        };
 
         const quillInstance = new Quill(editorRef.current, {
           modules: {
             toolbar: {
               container: toolbarOptions,
               handlers: {
-                image: imageHandler, // Override the default image handler
+                image: imageHandler, // Hook into the image handler defined below
               },
             },
           },
           theme: 'snow',
         });
-
         quillInstanceRef.current = quillInstance;
         quillStateRef.current = QuillState.INITIALIZED;
 
-        // Track character count and update form value
+        if (defaultValue) {
+          quillInstance.clipboard.dangerouslyPasteHTML(defaultValue); // Set the default value as HTML content
+        }
+
         quillInstance.on('text-change', () => {
           const text = quillInstance.getText().trim();
           setCharCount(text.length);
@@ -139,21 +92,44 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       }
     };
 
+    // Initialize Quill only if it's not initialized already
     if (quillStateRef.current === QuillState.NOT_INITIALIZED) {
       initializeQuill();
     }
 
-    // Cleanup on unmount
     return () => {
-      quillInstanceRef.current = null;
+      quillInstanceRef.current = null; // Clean up the instance on unmount
     };
-  }, [name, register, setValue, rules]);
+  }, [name, setValue]);
 
-  const getEditorContent = () => {
-    if (quillInstanceRef.current) {
-      return quillInstanceRef.current.root.innerHTML; // Get HTML content
-    }
-    return '';
+  // Image handler function
+  const imageHandler = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (file && quillInstanceRef.current) {
+        const range = quillInstanceRef.current.getSelection();
+        if (range) {
+          try {
+            const imageIpfsHash = await uploadToIPFS(file);
+            if (imageIpfsHash) {
+              const imageUrl = getIpfsAddress(imageIpfsHash);
+              quillInstanceRef.current.insertEmbed(
+                range.index,
+                'image',
+                imageUrl,
+              );
+            }
+          } catch (error) {
+            console.error('Error uploading image:', error);
+          }
+        }
+      }
+    };
   };
 
   return (
