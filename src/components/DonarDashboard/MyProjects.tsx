@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAccount } from 'wagmi';
 import { IconABC } from '../Icons/IconABC';
 import { Button, ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -15,12 +16,26 @@ import { IconSearch } from '../Icons/IconSearch';
 import { IconTributesReceived } from '../Icons/IconTributesReceived';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconDropDown } from '../Icons/IconDropDown';
+import { ConnectModal } from '../ConnectModal';
 
 const MyProjects = () => {
   const projectData = true;
-
+  const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
+
+  if (!isConnected) {
+    return (
+      <>
+        <ConnectModal
+          isOpen={true}
+          onClose={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </>
+    );
+  }
 
   if (!userWhiteListed) {
     return (
@@ -50,7 +65,7 @@ const MyProjects = () => {
             <div
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className='px-[10px] py-[16px] bg-[#F7F7F9] rounded-lg flex gap-2 text-[#1D1E1F] font-medium font-redHatText'
+              className='py-[10px] px-[16px] bg-[#F7F7F9] rounded-lg flex gap-2 text-[#1D1E1F] font-medium font-redHatText'
             >
               <span>Actions</span>
               <IconDropDown />
@@ -83,7 +98,7 @@ const MyProjects = () => {
                   "url('https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW')",
               }}
             >
-              <div className=' flex flex-col absolute  bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%] gap-2'>
+              <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
                 <div className='border rounded-md bg-white p-1 block w-fit'>
                   <IconABC size={40} />
                 </div>
@@ -133,11 +148,14 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex justify-between gap-8 '>
-              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium'>
-                2.02 POL
+            <div className='flex justify-between gap-8 font-redHatText items-center'>
+              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  gap-1'>
+                2.02
+                <span className='text-[#4F576A] text-xs'>POL</span>
               </div>
-              <div className='w-[20%] text-right'>~ $ 3.83</div>
+              <div className='w-[20%] text-[#4F576A] text-right font-medium'>
+                ~ $ 3.83
+              </div>
             </div>
 
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 border-b'>
@@ -197,7 +215,7 @@ const MyProjects = () => {
 
       {/* List of Supports */}
 
-      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl   mt-8'>
+      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl   my-8'>
         <div className='border-b pb-4'>
           <h1 className='text-[#1D1E1F] font-bold text-2xl'>
             Contributions summary
@@ -216,32 +234,58 @@ const MyProjects = () => {
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
               1,880,451 POL
             </span>
-            <span className='text-[#82899A] font-medium'>~ $ 980,345</span>
+            <span className='text-[#1D1E1F]  font-medium'>~ $ 980,345</span>
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className='flex  flex-col md:flex-row gap-4'>
+        <div className='flex  flex-col md:flex-row gap-4 md:items-center'>
           <div className='md:w-[80%] '>
-            <div className='border rounded-lg flex relative w-full'>
+            {/* <div className='border rounded-lg flex relative w-full items-center'>
+              <IconABC />
               <input
                 // onChange={e => setInputAmount(e.target.value)}
                 // value={inputAmount}
                 // type='number'
                 // disabled={isConfirming}
+                placeholder={` | Search for a wallet address or a donor name`}
+                className='w-full   h-[56px] border-y border-r rounded-r-lg  px-4'
+              />
+            </div> */}
+            <div className='relative'>
+              <span className='absolute inset-y-0 left-0 flex items-center pl-3 pr-1 border-r my-4 '>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='16'
+                  height='16'
+                  viewBox='0 0 16 16'
+                  fill='none'
+                >
+                  <path
+                    d='M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z'
+                    stroke='#A5ADBF'
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                  />
+                </svg>
+              </span>
+              <input
+                type='text'
+                className='pl-10 p-2 border h-[56px]  border-gray-300 rounded-lg w-full shadow-tabShadow'
                 placeholder='Search for a wallet address or a donor name'
-                className='w-full   h-[56px] border rounded-lg  px-4'
               />
             </div>
           </div>
+
           <div className='flex flex-col gap-4 font-redHatText w-[200px] cursor-pointer'>
-            <div className='w-full p-[10px_16px] shadow-tabShadow rounded-3xl  flex justify-center'>
+            <div className='w-full px-6 py-4 shadow-tabShadow rounded-full  flex justify-center'>
               <span className='flex gap-4 text-[#5326EC]  font-bold items-center'>
                 Search <IconSearch />
               </span>
             </div>
           </div>
         </div>
+
         <ProjectSupportTable />
       </div>
     </div>

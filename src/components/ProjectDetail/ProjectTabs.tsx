@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
+import { useProjectContext } from '@/context/project.context';
 
 interface IProjectTabs {
   activeTab: number;
@@ -12,6 +13,8 @@ export enum EProjectPageTabs {
 }
 const ProjectTabs = (props: IProjectTabs) => {
   const { activeTab, slug } = props;
+  const { totalDonationsCount } = useProjectContext();
+  console.log('total', totalDonationsCount);
   const badgeCount = (count?: number) => {
     return count || null;
   };
@@ -19,7 +22,7 @@ const ProjectTabs = (props: IProjectTabs) => {
     { title: 'About' },
     {
       title: 'Supporters',
-      badge: 20,
+      badge: totalDonationsCount,
       query: EProjectPageTabs.DONATIONS,
     },
     {
@@ -30,7 +33,7 @@ const ProjectTabs = (props: IProjectTabs) => {
   return (
     <div>
       <div className='w-full py-4 h-min mt-6 text-gray-800 bg-white overflow-x-auto shadow-[0_3px_20px_rgba(212,218,238,0.4)] relative'>
-        <div className='flex mx-auto max-w-[1200px] items-center gap-6 px-6'>
+        <div className='flex container  w-full  items-center gap-6 justify-start  px-0'>
           {tabsArray.map((i, index) => (
             <Link
               key={i.title}

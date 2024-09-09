@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
+import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 
 interface IDashboardTabs {
   activeTab: number;
@@ -11,16 +12,18 @@ export enum EDashboardPageTabs {
   CONTRIBUTIONS = 'contributions',
 }
 const DashboardTabs = (props: IDashboardTabs) => {
-  const { activeTab, slug } = props;
+  const { data: userWhiteListed } = useIsUserWhiteListed();
+  const { activeTab } = props;
   const badgeCount = (count?: number) => {
     return count || null;
   };
   const tabsArray = [
     {
       title: 'My Projects',
-      badge: 1,
+      badge: !userWhiteListed ? 0 : 1,
       query: EDashboardPageTabs.PROJECTS,
     },
+
     {
       title: 'My Contributions',
       badge: 20,
