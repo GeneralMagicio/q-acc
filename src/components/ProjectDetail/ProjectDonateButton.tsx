@@ -4,6 +4,7 @@ import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
 import { IconABC } from '../Icons/IconABC';
 import { useProjectContext } from '@/context/project.context';
+import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 const ProjectDonateButton = () => {
   const { projectData } = useProjectContext();
@@ -11,7 +12,18 @@ const ProjectDonateButton = () => {
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
         <IconABC />
-        <span className='text-[#4F576A] font-medium'>ABC current value</span>
+        <div className='flex gap-2 items-center'>
+          <span className='text-[#4F576A] font-medium'>ABC current value</span>
+          <div className='relative group'>
+            <IconTokenSchedule />
+            <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+              <h3 className='font-bold'>ABC Current Value</h3>
+              Bonding curves have a mint price and a burn price. This shows the
+              mint price.
+            </div>
+          </div>
+        </div>
+
         {/* <IconInfo /> */}
       </div>
       <div className='flex items-center justify-between text-sm  text-[#82899A] '>
