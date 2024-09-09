@@ -9,6 +9,7 @@ import ProjectSupportTable from './ProjectSupportTable';
 import { IconCreatedAt } from '../Icons/IconCreatedAt';
 import { IconTokenMinted } from '../Icons/IconTokenMinted';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+// import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 const MyProjects = () => {
   const projectData = true;
@@ -158,6 +159,14 @@ const MyProjects = () => {
             <span className='text-[#4F576A] font-medium'>
               Tributes received
             </span>
+            <div className='relative group'>
+              <IconTokenSchedule />
+              <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                <h3 className='font-bold'>Tributes received</h3>
+                These are the tributes your project receives from the mint and
+                burn transactions on the ABC.
+              </div>
+            </div>
           </div>
 
           <div>
