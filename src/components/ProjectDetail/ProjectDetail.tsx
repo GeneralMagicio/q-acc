@@ -45,7 +45,7 @@ const ProjectDetail = () => {
   return (
     <div className=''>
       <div className='container'>
-        <div className='flex gap-6 flex-col lg:flex-row mt-10'>
+        <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner />
 
           <DonateSection />
@@ -65,10 +65,10 @@ const ProjectDetail = () => {
                   `https://www.google.com/${projectData?.addresses[0].address}`,
                 );
               }}
-              className='  w-fit p-[10px_16px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
+              className='  w-fit px-6 py-[10px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
             >
-              <span className='flex gap-4 text-[#5326EC]  font-bold'>
-                Project Contract address
+              <span className='flex gap-4 text-[#5326EC]  font-bold font-redHatText'>
+                Project Contract Address
                 <IconViewTransaction color='#5326EC' />
               </span>
             </div>

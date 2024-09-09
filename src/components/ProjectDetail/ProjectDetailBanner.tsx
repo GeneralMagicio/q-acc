@@ -10,12 +10,12 @@ const ProjectDetailBanner = () => {
       : '/images/project-card/card-image.jpeg';
   return (
     <div
-      className='w-full h-[440px] lg:h-[500px] lg:w-2/3  bg-cover bg-center rounded-3xl relative'
+      className='w-full h-[440px] lg:h-[500px] lg:w-[80%]  bg-cover bg-center rounded-3xl relative'
       style={{
         backgroundImage: `url(${bgSrc})`,
       }}
     >
-      <div className=' flex flex-col absolute  bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%] gap-2'>
+      <div className=' flex flex-col absolute  bottom-[40px] left-[40px] md:bottom-[40px] md:left-[40px] gap-2'>
         <div className='border rounded-md bg-white p-1 block w-fit'>
           <Image
             height={64}

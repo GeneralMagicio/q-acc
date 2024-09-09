@@ -98,7 +98,7 @@ const DonateSection = () => {
     }
   };
   return (
-    <div className=' lg:w-[312px]  bg-white lg:m-h-[450px] rounded-2xl p-6'>
+    <div className=' lg:w-[30%]  bg-white lg:m-h-[450px] rounded-2xl p-6'>
       <div className='flex flex-col  h-full justify-between'>
         <div className=''>{renderContent()}</div>
         <div className=' md:relative fixed bottom-0 w-full bg-white left-0 p-5 md:p-0 z-10'>

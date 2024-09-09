@@ -40,49 +40,6 @@ const socialMediaColor: { [key: string]: string } = {
 const ProjectSocials = () => {
   const { projectData } = useProjectContext();
 
-  const socialdata = [
-    {
-      type: 'FACEBOOK',
-      link: 'https://www.facebook.com/globalecovillagenetwork.ua',
-    },
-    {
-      type: 'INSTAGRAM',
-      link: 'https://www.instagram.com/gen_ukraine/',
-    },
-    {
-      type: 'YOUTUBE',
-      link: 'https://www.youtube.com/channel/UCwxI6So5TBExWxsHFmNjtDg',
-    },
-    {
-      type: 'LINKEDIN',
-      link: 'https://www.linkedin.com/company/genukraine/mycompany/',
-    },
-    {
-      type: 'TELEGRAM',
-      link: 'https://t.me/gen_ukraine',
-    },
-    {
-      type: 'WEBSITE',
-      link: 'https://genukraine.com.ua/1',
-    },
-    {
-      type: 'x',
-      link: 'https://genukraine.com.ua/2',
-    },
-    {
-      type: 'Reddit',
-      link: 'https://genukraine.com.ua/3',
-    },
-    {
-      type: 'Discord',
-      link: 'https://genukraine.com.ua/4',
-    },
-    {
-      type: 'Github',
-      link: 'https://genukraine.com.ua/5',
-    },
-  ];
-
   const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
     return socialMediaUrl.replace('https://', '').replace('www.', '');
   };
@@ -90,7 +47,7 @@ const ProjectSocials = () => {
   return (
     <div>
       <h1 className='text-2xl font-redHatText text-[#82899A]'>
-        Find Us On our Social Media
+        Find us on our social media
       </h1>
       <br />
       <div className='flex flex-wrap gap-6'>
@@ -101,7 +58,7 @@ const ProjectSocials = () => {
           return (
             <div
               key={social.link}
-              className={`flex p-[16px_24px]  items-center gap-2 rounded-2xl border font-redHatText font-medium `}
+              className={`flex px-6 py-4 items-center gap-2 rounded-full  bg-white shadow-tabShadow  font-redHatText font-medium `}
               style={{ color: color }}
             >
               {icon}

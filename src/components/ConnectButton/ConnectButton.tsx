@@ -92,7 +92,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`bg-white  w-[250px] shadow-walletShadow p-4 md:right-4 rounded-xl absolute  ${isHovered && isConnected ? 'visible' : 'hidden '}`}
+        className={`bg-white  w-[250px] shadow-walletShadow p-4 md:right-4 rounded-xl absolute z-50 ${isHovered && isConnected ? 'visible' : 'hidden '}`}
       >
         <div className='flex flex-col gap-2 font-redHatText cursor-pointer'>
           <div

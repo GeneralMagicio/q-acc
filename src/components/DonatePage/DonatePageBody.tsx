@@ -25,6 +25,27 @@ interface ITokenSchedule {
   toolTip: string;
 }
 
+const PercentageButton = ({
+  percentage,
+  selectedPercentage,
+  handleClick,
+}: any) => {
+  const isSelected = selectedPercentage === percentage;
+
+  return (
+    <span
+      onClick={() => handleClick(percentage)}
+      className={`flex justify-center px-4 py-2 border text-sm rounded-3xl cursor-pointer ${
+        isSelected
+          ? 'bg-[#E7E1FF] text-[#5326EC] border-[#5326EC]'
+          : 'bg-[#F6F3FF] text-[#5326EC]'
+      }`}
+    >
+      {percentage === 100 ? 'MAX' : `${percentage}%`}
+    </span>
+  );
+};
+
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
   const { chain } = useAccount();
@@ -35,6 +56,8 @@ const DonatePageBody = () => {
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
+
+  const [selectedPercentage, setSelectedPercentage] = useState(0);
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
     message:
@@ -150,15 +173,25 @@ const DonatePageBody = () => {
   };
 
   const handlePercentageClick = (percentage: number) => {
-    const amount = (parseFloat(totalSupply) * percentage) / 100;
-    setInputAmount(amount.toString());
+    setSelectedPercentage((prevSelected): any => {
+      if (prevSelected === percentage) {
+        setInputAmount('');
+        return null;
+      } else {
+        // Set the new selected percentage and calculate the amount
+        const amount = (parseFloat(totalSupply) * percentage) / 100;
+        setInputAmount(amount.toString());
+        return percentage;
+      }
+    });
   };
 
   if (isConfirmed) {
     return <DonateSuccessPage transactionHash={hash} round={round} />;
   }
+  const percentages = [25, 50, 100];
   return (
-    <div className='bg-[#F7F7F9] w-full  py-10 absolute z-40 my-10'>
+    <div className='bg-[#F7F7F9] w-full my-10'>
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <div className='flex p-4 rounded-lg border-[1px] border-[#8668FC] bg-[#F6F3FF] gap-2 font-redHatText text-[#8668FC] flex-col'>
@@ -191,24 +224,14 @@ const DonatePageBody = () => {
             </div>
 
             <div className='flex gap-2 items-center'>
-              <span
-                onClick={() => handlePercentageClick(25)}
-                className=' flex justify-center px-4 py-2 border text-[#5326EC] text-sm border-[#5326EC] rounded-3xl bg-[#E7E1FF] cursor-pointer'
-              >
-                25%
-              </span>
-              <span
-                onClick={() => handlePercentageClick(50)}
-                className=' flex justify-center px-4 py-2 border text-[#5326EC] text-sm border-[#5326EC] rounded-3xl bg-[#E7E1FF] cursor-pointer'
-              >
-                50%
-              </span>
-              <span
-                onClick={() => handlePercentageClick(100)}
-                className=' flex justify-center px-4 py-2 border text-[#5326EC] text-sm border-[#5326EC] rounded-3xl bg-[#E7E1FF] cursor-pointer'
-              >
-                MAX
-              </span>
+              {percentages.map(percentage => (
+                <PercentageButton
+                  key={percentage}
+                  percentage={percentage}
+                  selectedPercentage={selectedPercentage}
+                  handleClick={handlePercentageClick}
+                />
+              ))}
             </div>
           </div>
           {/* Input Box */}
@@ -217,7 +240,9 @@ const DonatePageBody = () => {
             <div className='border rounded-lg flex relative '>
               <div className='md:w-40 flex gap-4 p-4 border '>
                 <IconMatic size={24} />
-                <h1 className=' font-medium'>{tokenDetails?.symbol}</h1>
+                <h1 className=' font-medium'>
+                  {tokenDetails?.symbol || 'POL'}
+                </h1>
               </div>
               <input
                 onChange={e => setInputAmount(e.target.value)}
@@ -227,7 +252,7 @@ const DonatePageBody = () => {
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
               />
               <span className='absolute text-sm  md:text-base top-0 right-0 h-full flex items-center pr-5 text-gray-400 pointer-events-none'>
-                ${' '}
+                ~ ${' '}
                 {inputAmount === ''
                   ? 0
                   : Math.floor(parseFloat(inputAmount) * tokenPrice * 100) /
@@ -242,7 +267,7 @@ const DonatePageBody = () => {
                 onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
                 className='cursor-pointer hover:underline'
               >
-                Available:
+                Available in your wallet:
                 {!tokenDetails
                   ? 'Loading...'
                   : `${tokenDetails?.formattedBalance} ${tokenDetails?.symbol}`}
@@ -260,9 +285,9 @@ const DonatePageBody = () => {
 
           <div className='flex flex-col p-4 border-[1px] border-[#D7DDEA] rounded-lg  gap-2'>
             <div className='flex gap-2 items-center'>
-              <h1 className='font-bold  text-[#1D1E1F]'>
+              <span className='font-medium  font-redHatText text-[#1D1E1F]'>
                 Token Unlock Schedule{' '}
-              </h1>
+              </span>
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -297,9 +322,16 @@ const DonatePageBody = () => {
 
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
-            <div className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full'>
+            <div
+              className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'
+              onClick={() => setTerms(!terms)}
+            >
               <div>
-                <input type='checkbox' onChange={() => setTerms(!terms)} />
+                <input
+                  type='checkbox'
+                  checked={terms}
+                  onChange={() => setTerms(!terms)}
+                />
               </div>
               <div className='flex flex-col text-[#1D1E1F] '>
                 <h2 className='text-base'>
@@ -312,10 +344,14 @@ const DonatePageBody = () => {
             </div>
 
             {/* Make it Anoynmous */}
-            <div className='flex gap-2 p-2'>
+            <div
+              className='flex gap-2 p-2 cursor-pointer'
+              onClick={() => setAnoynmous(!anoynmous)}
+            >
               <div>
                 <input
                   type='checkbox'
+                  checked={anoynmous}
                   onChange={() => setAnoynmous(!anoynmous)}
                 />
               </div>
@@ -339,7 +375,7 @@ const DonatePageBody = () => {
               backgroundImage: `url(${projectData?.image})`,
             }}
           >
-            <div className=' flex flex-col absolute  bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%] gap-2'>
+            <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
               <div className='border rounded-md bg-white p-1 block w-fit'>
                 <IconABC size={40} />
               </div>
@@ -367,11 +403,11 @@ const DonatePageBody = () => {
                 </div>
               </div>
               <div className='flex gap-8 font-redHatText'>
-                <h2 className='w-1/2'>
+                <h2 className='w-1/2 flex gap-1 items-center'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    ~ 2.02
-                  </span>{' '}
-                  in POL
+                    3.88
+                  </span>
+                  <span className='text-xs text-[#82899A]'>POL</span>
                 </h2>
                 <h2 className=''>
                   <span>~ $ 2.02</span>
@@ -383,7 +419,7 @@ const DonatePageBody = () => {
               <h2 className='text-sm text-[#82899A] bg-[#F7F7F9] rounded-md p-1 w-fit'>
                 Total amount received
               </h2>
-              <h1 className='text-4xl font-extrabold p-2'>$ 1,200</h1>
+              <h1 className='text-4xl font-extrabold p-2'>1,200 POL</h1>
               <h2 className='text-[#1D1E1F] font-medium'>~ $ 980,345</h2>
               <p className='text-[#82899A]'>
                 Received from{' '}
