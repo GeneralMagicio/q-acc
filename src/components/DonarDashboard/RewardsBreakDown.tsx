@@ -89,7 +89,9 @@ const RewardsBreakDown = () => {
             <div className='flex justify-between p-2'>
               <div className='flex gap-2'>
                 <IconMinted size={24} />
-                <span>Total tokens received</span>
+                <span className='text-[#4F576A] font-medium'>
+                  Total tokens received
+                </span>
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>2500 ABC</span>
@@ -100,7 +102,9 @@ const RewardsBreakDown = () => {
             <div className='flex justify-between p-2'>
               <div className='flex gap-2'>
                 <IconLockedTokens size={24} />
-                <span>Locked tokens</span>
+                <span className='text-[#4F576A] font-medium'>
+                  Locked tokens
+                </span>
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>800 ABC</span>
@@ -122,7 +126,7 @@ const RewardsBreakDown = () => {
             </div>
 
             <Button color={ButtonColor.Giv} className='flex justify-center '>
-              Claim Rewards
+              Claim Tokens
             </Button>
           </div>
         </div>

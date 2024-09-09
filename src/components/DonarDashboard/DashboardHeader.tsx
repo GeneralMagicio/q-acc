@@ -39,7 +39,7 @@ const DashboardHeader = () => {
               </Link>
             </div>
 
-            <div className='px-1 py-2 bg-[#5CD3C9] rounded-lg font-medium flex text-sm'>
+            <div className='px-2 py-1 bg-[#5CD3C9] rounded-lg font-medium flex  gap-2 font-redHatText items-center'>
               <IconIdentityVerified />
               Identity verified{' '}
             </div>
