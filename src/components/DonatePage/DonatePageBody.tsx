@@ -40,7 +40,7 @@ const DonatePageBody = () => {
     message:
       'Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens are locked for 6 months and unlocked in a 6 month stream.',
     toolTip:
-      'Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens are locked for 6 months and unlocked in a 6 month stream.',
+      'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
 
   const { projectData } = useDonateContext();
@@ -74,9 +74,9 @@ const DonatePageBody = () => {
 
     if (round === 'early') {
       const message =
-        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. ';
+        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
       const toolTip =
-        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. ';
+        'Tokens are locked for a period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
 
       setTokenSchedule({ message, toolTip });
     }
@@ -155,7 +155,7 @@ const DonatePageBody = () => {
   };
 
   if (isConfirmed) {
-    return <DonateSuccessPage transactionHash={hash} />;
+    return <DonateSuccessPage transactionHash={hash} round={round} />;
   }
   return (
     <div className='bg-[#F7F7F9] w-full  py-10 absolute z-40 my-10'>
@@ -177,7 +177,7 @@ const DonatePageBody = () => {
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F]'>
               <span className='flex gap-2 items-center  '>
-                You're 2% cap limit is
+                Your 2% cap limit is
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>

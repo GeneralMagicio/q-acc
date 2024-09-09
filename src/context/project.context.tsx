@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import { fetchProjectBySlug } from '@/services/project.service';
+import { fecthProjectDonationsById } from '@/services/donation.services';
 
 const ProjectContext = createContext<any>({
   projectData: undefined,
@@ -22,6 +23,7 @@ export const ProjectProvider = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [projectData, setProjectData] = useState<any | null>(null);
+  const [totalDonationsCount, setTotalDonationsCount] = useState(0);
   const [teamMembers, setTeamMembers] = useState<any>([]);
 
   useEffect(() => {
@@ -40,10 +42,29 @@ export const ProjectProvider = ({
     }
   }, [slug]);
 
+  useEffect(() => {
+    if (!projectData?.id) return;
+    const fetchProjectDonations = async () => {
+      const data = await fecthProjectDonationsById(
+        parseInt(projectData?.id),
+        1,
+        0,
+      );
+
+      if (data) {
+        const { donations, totalCount } = data;
+        setTotalDonationsCount(totalCount);
+      }
+    };
+
+    fetchProjectDonations();
+  });
+
   return (
     <ProjectContext.Provider
       value={{
         projectData,
+        totalDonationsCount,
       }}
     >
       {children}

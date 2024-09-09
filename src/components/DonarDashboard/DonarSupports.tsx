@@ -71,7 +71,9 @@ const DonarSupports = () => {
                 <div className='flex justify-between p-2'>
                   <div className='flex gap-2'>
                     <IconTotalSupply size={24} />
-                    <span>Total Supply</span>
+                    <span className='text-[#4F576A] font-medium font-redHatText'>
+                      Total Supply
+                    </span>
                   </div>
                   <span className='font-medium text-[#1D1E1F]'>
                     25,000,000,000 ABC
@@ -81,7 +83,9 @@ const DonarSupports = () => {
                 <div className='flex justify-between p-2'>
                   <div className='flex gap-2'>
                     <IconTotalDonars size={24} />
-                    <span>Total supporters</span>
+                    <span className='text-[#4F576A] font-medium  font-redHatText'>
+                      Total supporters
+                    </span>
                   </div>
                   <span className='font-medium text-[#1D1E1F]'>24</span>
                 </div>
@@ -189,7 +193,7 @@ const DonarSupports = () => {
 
               {/* Claim Rewards */}
               <Button color={ButtonColor.Giv} className='flex justify-center '>
-                Claim Rewards
+                Claim Tokens
               </Button>
               <Button
                 color={ButtonColor.Base}

@@ -7,6 +7,7 @@ import config from '@/config/configuration';
 
 interface transactionHashType {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
+  round?: string;
 }
 const DonateSuccessPage = (props: transactionHashType) => {
   const { projectData } = useDonateContext();
@@ -64,14 +65,21 @@ const DonateSuccessPage = (props: transactionHashType) => {
                 <h1 className='font-medium  text-[#1D1E1F]'>
                   Token Lock Schedule{' '}
                 </h1>
-                <IconTokenSchedule size={17} />
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    <h3 className='font-bold'>Token Lock Schedule</h3>
+                    {props.round === 'early'
+                      ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.`
+                      : `Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens will unlock in a stream over the following 6 months.`}
+                  </div>
+                </div>
               </div>
               <hr />
               <h2 className='text-[#4F576A]'>
-                Tokens are locked for <span className='font-bold'>2 years</span>{' '}
-                with a <span className='font-bold'>1-year cliff</span>. This
-                means that after 1 year, tokens will unlock in a stream over the
-                following 1 year.
+                {props.round === 'early'
+                  ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. `
+                  : 'Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens are locked for 6 months and unlocked in a 6 month stream.'}
               </h2>
             </div>
 

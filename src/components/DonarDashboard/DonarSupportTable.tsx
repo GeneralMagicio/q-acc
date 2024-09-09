@@ -74,8 +74,8 @@ const DonarSupportTable = () => {
 
   if (totalCount === 0) {
     return (
-      <div className='bg-white w-full h-[500px] flex items-center justify-center text-5xl'>
-        No Donations Yet
+      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
+        You didn’t support any project.
       </div>
     );
   }
