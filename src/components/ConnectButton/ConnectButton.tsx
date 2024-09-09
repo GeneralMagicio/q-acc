@@ -42,7 +42,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
         className={`px-4 py-3 rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
           ${
             address
-              ? 'bg-white text-gray-900 shadow-sm hover:shadow-md'
+              ? 'bg-white text-gray-900 shadow-tabShadow hover:shadow-md'
               : 'bg-pink-500 font-bold text-white hover:bg-pink-600'
           }
         `}

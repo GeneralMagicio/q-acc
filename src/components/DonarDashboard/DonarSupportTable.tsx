@@ -84,19 +84,19 @@ const DonarSupportTable = () => {
     <div className='container flex  flex-col py-10 md:px-6 gap-10'>
       <div>
         <h1 className='text-[#4F576A] text-[25px] font-bold border-b pb-2'>
-          Your supports & rewards breakdown
+          Your token & contributions breakdown{' '}
         </h1>
       </div>
       <div className='flex justify-between p-4 bg-[#F7F7F9] items-center rounded-xl'>
         <div className='flex gap-2'>
           <IconTotalDonations size={32} />
           <h1 className='text-[#1D1E1F] md:text-[25px] font-bold '>
-            All your supports
+            All your contributions
           </h1>
         </div>
 
         <div className='flex gap-2 text-[#1D1E1F] '>
-          <h1 className='md:text-[25px] font-bold '>4,705 MATIC</h1>
+          <h1 className='md:text-[25px] font-bold '>4,705 POL</h1>
           <span className='font-medium'>~ $ 2,255</span>
         </div>
       </div>
@@ -117,13 +117,13 @@ const DonarSupportTable = () => {
               </button>
             </div>
             <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-              Amount [MATIC]
+              Amount [POL]
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
             </div>
             <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-              Token
+              Tokens
               <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                 <IconSort size={16} />
               </button>

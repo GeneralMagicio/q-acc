@@ -5,14 +5,21 @@ import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import Routes from '@/lib/constants/Routes';
+import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 
 interface CompleteProfileModalProps extends BaseModalProps {}
 
 export const CompleteProfileModal: FC<CompleteProfileModalProps> = props => {
+  const { data: userWhitelisted } = useIsUserWhiteListed();
+
+  const modalTitle = userWhitelisted
+    ? 'Before you continue'
+    : 'Before you donate';
+
   return (
     <Modal {...props}>
       <div className='p-10'>
-        <h1 className='font-bold text-xl'>Before you donate</h1>
+        <h1 className='font-bold text-xl'>{modalTitle}</h1>
         <p className='mt-4 mb-10'>Set up your public profile to get started.</p>
         <Link href={Routes.CreateProfile}>
           <Button

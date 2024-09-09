@@ -3,6 +3,7 @@ import { Button, ButtonColor } from '../Button';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useDonateContext } from '@/context/donation.context';
+import config from '@/config/configuration';
 
 interface transactionHashType {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -105,7 +106,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
           <div className='text-xl font-redHatText'>
             <h3 className='text-[#82899A] flex gap-2'>
               <a
-                href={`https://cardona-zkevm.polygonscan.com/tx/${props.transactionHash}`}
+                href={`${config.SCAN_URL}/tx/${props.transactionHash}`}
                 target='_blank'
               >
                 <span className='text-[#E1458D] text-xl flex gap-2'>

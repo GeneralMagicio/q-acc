@@ -23,6 +23,7 @@ import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
 import links from '@/lib/constants/links';
 import { TeamMember } from '../CreateTeamForm';
+import { ConnectModal } from '@/components/ConnectModal';
 
 export interface ProjectFormData {
   projectName: string;
@@ -123,7 +124,7 @@ const socialMediaLinks = [
 ];
 
 const CreateProjectForm: FC = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { data: user } = useFetchUser();
   const { mutateAsync: createProject, isPending } = useCreateProject();
   const { formData, setFormData } = useCreateContext();
@@ -143,6 +144,19 @@ const CreateProjectForm: FC = () => {
     setFormData({ project: data });
     router.push('/create/team');
   };
+
+  if (!isConnected) {
+    return (
+      <>
+        <ConnectModal
+          isOpen={true}
+          onClose={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </>
+    );
+  }
 
   return isFetching ? (
     <div>Loading...</div>
@@ -197,8 +211,10 @@ const CreateProjectForm: FC = () => {
                     'Project description must be at least 200 characters',
                 },
               }}
+              defaultValue={formData.project.projectDescription}
               maxLength={500}
             />
+            {/* <Editor /> */}
           </section>
 
           <section className='flex flex-col gap-6'>

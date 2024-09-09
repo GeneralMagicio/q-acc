@@ -388,3 +388,9 @@ export const GET_ALL_PROJECTS = `
     totalCount
   }
 }`;
+
+export const CHECK_USER_PRIVADO_VERIFIED_STATE = `
+  mutation {
+    checkUserPrivadoVerifiedState
+  }
+`;

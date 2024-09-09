@@ -11,6 +11,7 @@ export interface IUser {
   email: string;
   avatar: string;
   isSignedIn: boolean;
+  privadoVerified: boolean;
 }
 
 export interface IGivethUser {
