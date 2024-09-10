@@ -48,7 +48,7 @@ const DonarSupports = () => {
                     "url('https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW')",
                 }}
               >
-                <div className=' flex flex-col absolute  bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%] gap-2'>
+                <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
                   <div className='border rounded-md bg-white p-1 block w-fit'>
                     <IconABC size={40} />
                   </div>
@@ -125,8 +125,8 @@ const DonarSupports = () => {
                 </div>
               </div>
               <div className='flex justify-between text-[#1D1E1F] font-medium'>
-                <h2>
-                  2.02 <span className='text-[#4F576A] text-xs'> POL</span>
+                <h2 className='flex gap-1 items-center'>
+                  2.02 <span className='text-[#4F576A] text-xs pb-1'> POL</span>
                 </h2>
                 <h2 className='text-[#4F576A]'>$ 3.88</h2>
               </div>

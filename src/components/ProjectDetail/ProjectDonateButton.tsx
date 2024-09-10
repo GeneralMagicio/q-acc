@@ -28,7 +28,7 @@ const ProjectDonateButton = () => {
       </div>
       <div className='flex items-center  text-sm  gap-2 text-[#82899A] '>
         <h1 className=' w-[200px] p-2 bg-[#F7F7F9] rounded-lg'>
-          <span className='text-[#1D1E1F] font-medium'>230</span>
+          <span className='text-[#1D1E1F] font-medium'>---</span>
           <span className='text-[#4F576A] text-xs '> POL</span>
         </h1>
         <span className='text-[#4F576A] font-medium'>$ ---</span>

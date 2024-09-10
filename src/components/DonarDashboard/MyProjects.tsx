@@ -136,6 +136,7 @@ const MyProjects = () => {
                 </span>
               </div>
             </div>
+
             <div className='flex gap-1 items-center'>
               <IconABC />
               ABC current value
@@ -148,8 +149,8 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex justify-between gap-8 font-redHatText items-center'>
-              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  gap-1'>
+            <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
+              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
                 2.02
                 <span className='text-[#4F576A] text-xs'>POL</span>
               </div>
@@ -158,7 +159,7 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 border-b'>
+            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b'>
               <div className='flex gap-2'>
                 <IconTotalSupply />
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
@@ -168,7 +169,7 @@ const MyProjects = () => {
               </span>
             </div>
 
-            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 border-b'>
+            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
               <div className='flex gap-2 items-center'>
                 <IconTributesReceived />
                 <span className='text-[#4F576A] font-medium'>
@@ -188,7 +189,7 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex justify-between'>
+            <div className='flex justify-between py-2'>
               <div className='flex gap-2'>
                 <IconTotalDonars />
                 <span className='text-[#4F576A] font-medium'>
@@ -198,7 +199,7 @@ const MyProjects = () => {
               <span className='text-[#1D1E1F] font-medium'>24</span>
             </div>
 
-            <div className='flex  flex-col md:flex-row gap-2 justify-between'>
+            <div className='flex  flex-col md:flex-row gap-2 justify-between py-2'>
               <div className='flex gap-2'>
                 <IconTokenMinted />
                 <span className='text-[#4F576A] font-medium'>
@@ -278,7 +279,7 @@ const MyProjects = () => {
           </div>
 
           <div className='flex flex-col gap-4 font-redHatText w-[200px] cursor-pointer'>
-            <div className='w-full px-6 py-4 shadow-tabShadow rounded-full  flex justify-center'>
+            <div className='w-full px-6 py-4 shadow-baseShadow rounded-full  flex justify-center'>
               <span className='flex gap-4 text-[#5326EC]  font-bold items-center'>
                 Search <IconSearch />
               </span>

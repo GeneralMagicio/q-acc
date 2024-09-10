@@ -42,7 +42,7 @@ const config: Config = {
       },
       boxShadow: {
         baseShadow: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
-        tabShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.70)',
+        tabShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.40)',
         walletShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.70)',
       },
     },
