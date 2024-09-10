@@ -6,7 +6,7 @@ import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 
-const itemPerPage = 1;
+const itemPerPage = 5;
 
 export enum EOrderBy {
   CreationDate = 'CreationDate',
@@ -39,7 +39,7 @@ const DonarSupportTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('43'),
+        parseInt('19'),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -104,37 +104,37 @@ const DonarSupportTable = () => {
       <div className='flex gap-10 lg:flex-row flex-col '>
         <div className='flex flex-col w-full  font-redHatText overflow-x-auto'>
           <div className='flex justify-between px-10'>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Date
               <button onClick={() => orderChangeHandler(EOrderBy.CreationDate)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Round
               <button onClick={() => orderChangeHandler(EOrderBy.Round)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Amount [POL]
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Tokens
               <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Unlock Remaining
               <button
                 onClick={() => orderChangeHandler(EOrderBy.Reward)}
               ></button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Stream Details
               <button
                 onClick={() => orderChangeHandler(EOrderBy.Reward)}
@@ -171,7 +171,7 @@ const DonarSupportTable = () => {
                   <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
                     600 ABC
                   </div>
-                  <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
                     6 Months 14 Days
                   </div>
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>

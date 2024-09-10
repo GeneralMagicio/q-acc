@@ -20,7 +20,7 @@ const PaginationItem: React.FC<IPaginationItemProps> = ({
   isActive = false,
 }) => {
   const baseStyle = 'text-black';
-  const disabledStyle = 'text-[#D7DDEA]';
+  const disabledStyle = 'text-black';
   const activeStyle = isActive ? 'font-bold' : '';
   const cursorStyle = isDisabled ? 'cursor-not-allowed ' : 'cursor-pointer';
 
@@ -78,7 +78,7 @@ const Pagination = (props: IPagination) => {
         }}
         isDisabled={currentPage === 0}
       >
-        <span className='flex items-center'>&lt; Prev</span>
+        Prev
       </PaginationItem>
       {pages.map((p, id) => (
         <PaginationItem
@@ -88,11 +88,7 @@ const Pagination = (props: IPagination) => {
           }}
           isActive={+p - 1 === currentPage}
         >
-          <span
-            className={`${+p - 1 === currentPage ? 'border-b-2 border-[#5326EC] p-1' : ''}`}
-          >
-            {p}
-          </span>
+          {p}
         </PaginationItem>
       ))}
 
@@ -102,7 +98,7 @@ const Pagination = (props: IPagination) => {
         }}
         isDisabled={currentPage + 1 >= pageCount}
       >
-        Next &gt;
+        Next
       </PaginationItem>
     </div>
   );

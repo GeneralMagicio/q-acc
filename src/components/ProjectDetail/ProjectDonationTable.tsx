@@ -103,9 +103,9 @@ const ProjectDonationTable = () => {
               This project has not received any contributions.
             </div>
           ) : (
-            <div className='flex flex-col w-full lg:w-2/3 font-redHatText overflow-x-auto '>
-              <div className='flex justify-between  '>
-                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
+            <div className='flex flex-col w-full lg:w-2/3 font-redHatText '>
+              <div className='flex justify-between border-b-4 '>
+                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
                   Supporter
                   {/* <button
               onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
@@ -113,7 +113,7 @@ const ProjectDonationTable = () => {
               <IconSort size={16} />
             </button> */}
                 </div>
-                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
+                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
                   Date
                   <button
                     onClick={() => orderChangeHandler(EOrderBy.CreationDate)}
@@ -121,19 +121,19 @@ const ProjectDonationTable = () => {
                     <IconSort size={16} />
                   </button>
                 </div>
-                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
+                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
                   Round
                   <button onClick={() => orderChangeHandler(EOrderBy.Round)}>
                     <IconSort size={16} />
                   </button>
                 </div>
-                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
+                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
                   Amount [POL]
                   <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                     <IconSort size={16} />
                   </button>
                 </div>
-                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
+                <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
                   Tokens
                   <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                     <IconSort size={16} />
@@ -141,7 +141,7 @@ const ProjectDonationTable = () => {
                 </div>
               </div>
 
-              <div className=' '>
+              <div className='overflow-x-auto '>
                 {pageDonations?.map((donation: any) => (
                   <div
                     key={donation.transactionId}
