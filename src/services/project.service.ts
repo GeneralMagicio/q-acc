@@ -7,6 +7,7 @@ import {
   GET_ALL_PROJECTS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
+  GET_PROJECT_BY_USER_ID,
 } from '@/queries/project.query';
 import type { IGivethUser } from '@/types/user.type';
 
@@ -76,6 +77,25 @@ export const fetchAllProjects = async () => {
       },
     );
     return res?.allProjects;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProjectByUserId = async (userId: number) => {
+  try {
+    const res = await requestGraphQL<{
+      project: IProject;
+    }>(
+      GET_PROJECT_BY_USER_ID,
+      {
+        userId,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.project;
   } catch (error) {
     console.error(error);
   }

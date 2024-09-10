@@ -17,12 +17,17 @@ import { IconTributesReceived } from '../Icons/IconTributesReceived';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconDropDown } from '../Icons/IconDropDown';
 import { ConnectModal } from '../ConnectModal';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 
 const MyProjects = () => {
-  const projectData = true;
+  const { data: userData } = useFetchUser(true);
+  const { data: projectData } = useFetchProjectByUserId(userData?.id);
   const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
+
+  console.log({projectData});
 
   if (!isConnected) {
     return (
