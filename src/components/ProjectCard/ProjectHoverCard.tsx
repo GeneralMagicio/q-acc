@@ -3,7 +3,6 @@ import React, { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
-import { IconABC } from '../Icons/IconABC';
 
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
