@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { Banner } from '@/components/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
@@ -10,7 +11,6 @@ import InfoSection from '@/components/InfoSection';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import Routes from '@/lib/constants/Routes';
 import { HoldModal } from '../Modals/HoldModal';
-import { useAccount } from 'wagmi';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
