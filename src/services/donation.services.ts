@@ -3,6 +3,7 @@ import {
   GET_PROJECT_DONATIONS_BY_ID,
   SAVE_DONATION,
 } from '@/queries/project.query';
+import { GET_USER_DONATIONS } from '@/queries/user.query';
 
 export const fecthProjectDonationsById = async (
   projectId: number,
@@ -56,6 +57,23 @@ export const saveDonations = async (
       },
     );
     return res?.createDonation;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchUserDonations = async (userId: number) => {
+  try {
+    const res = await requestGraphQL<{ donationsByUserId: any }>(
+      GET_USER_DONATIONS,
+      {
+        userId,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.donationsByUserId;
   } catch (error) {
     console.error(error);
   }
