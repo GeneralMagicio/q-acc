@@ -38,3 +38,64 @@ export const UPDATE_USER = `mutation(
       avatar: $avatar
     )
   }`;
+
+export const GET_USER_DONATIONS = `
+  query (
+    $take: Int
+    $skip: Int
+    $status: String
+    $orderBy: SortBy
+    $userId: Int!
+  ) {
+    donationsByUserId(
+      take: $take
+      skip: $skip
+      orderBy: $orderBy
+      userId: $userId
+      status: $status
+    ) {
+      donations {
+        id
+        transactionId
+        transactionNetworkId
+        toWalletAddress
+        fromWalletAddress
+        currency
+        anonymous
+        valueUsd
+        amount
+        status
+        cliff
+        rewardStreamStart
+        rewardStreamEnd
+        rewardTokenAmount
+        user {
+          id
+          walletAddress
+          email
+          firstName
+        }
+        project {
+          id
+          title
+          image
+          abc {
+            totalSupply
+            tokenName
+            projectAddress
+            tokenPrice
+            icon
+          }
+          totalDonations
+        }
+       qfRound {
+          id
+          name
+          isActive
+        }
+        createdAt
+      }
+      totalCount
+    }
+  }
+`;
