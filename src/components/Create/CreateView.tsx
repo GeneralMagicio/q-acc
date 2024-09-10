@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { Banner } from '@/components/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
@@ -13,11 +14,12 @@ import { HoldModal } from '../Modals/HoldModal';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
-  const { data: isUserWhiteListed } = useIsUserWhiteListed();
+  const { address } = useAccount();
+  const { data: isUserWhiteListed, isPending } = useIsUserWhiteListed();
 
   useEffect(() => {
-    setShowHoldModal(!isUserWhiteListed);
-  }, [isUserWhiteListed]);
+    setShowHoldModal(!!address && !isPending && !isUserWhiteListed);
+  }, [address, isUserWhiteListed, isPending]);
 
   return (
     <main className='flex flex-col gap-4'>
