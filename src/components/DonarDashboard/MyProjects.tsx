@@ -22,12 +22,14 @@ import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
-  const { data: projectData } = useFetchProjectByUserId(userData?.id);
+  const { data: projectData } = useFetchProjectByUserId(
+    parseInt(userData?.id ?? ''),
+  );
   const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
 
-  console.log({projectData});
+  console.log({ projectData });
 
   if (!isConnected) {
     return (

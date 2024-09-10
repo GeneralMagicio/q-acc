@@ -85,17 +85,20 @@ export const fetchAllProjects = async () => {
 export const fetchProjectByUserId = async (userId: number) => {
   try {
     const res = await requestGraphQL<{
-      project: IProject;
+      projectsByUserId: {
+        projects: IProject[];
+      };
     }>(
       GET_PROJECT_BY_USER_ID,
       {
         userId,
+        take: 1,
       },
       {
         auth: true,
       },
     );
-    return res?.project;
+    return res?.projectsByUserId.projects[0];
   } catch (error) {
     console.error(error);
   }
