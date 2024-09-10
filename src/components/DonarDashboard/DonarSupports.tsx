@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { IconABC } from '../Icons/IconABC';
+import React, { useEffect, useState } from 'react';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -11,59 +10,79 @@ import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { fetchUserDonations } from '@/services/donation.services';
+import { getIpfsAddress } from '@/helpers/image';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
+  const [donations, setDonations] = useState<any[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const data = [
-    {
-      type: 'FACEBOOK',
-      link: 'https://www.facebook.com/globalecovillagenetwork.ua',
-    },
-    {
-      type: 'INSTAGRAM',
-      link: 'https://www.instagram.com/gen_ukraine/',
-    },
-    {
-      type: 'YOUTUBE',
-      link: 'https://www.youtube.com/channel/UCwxI6So5TBExWxsHFmNjtDg',
-    },
-  ];
+  const userId = 2;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetchUserDonations(userId);
+        if (res) {
+          setDonations(res.donations);
+          setTotalCount(res.totalCount);
+        }
+      } catch (err) {
+        setError('Failed to fetch donations');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   if (!showBreakDown) {
     return (
       <div className='container flex flex-col gap-10'>
-        {data.map((item, index) => (
+        {donations.map(donation => (
           <div
-            key={index}
-            className='p-6 flex  lg:flex-row flex-col gap-14 bg-white  rounded-xl '
+            key={donation.id}
+            className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'
           >
             {/* Project Details */}
-            <div className='flex flex-col gap-10 w-full lg:w-1/2 '>
+            <div className='flex flex-col gap-10 w-full lg:w-1/2'>
               {/* Project Banner */}
               <div
                 className='w-full h-[230px] bg-cover bg-center rounded-3xl relative'
                 style={{
-                  backgroundImage:
-                    "url('https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW')",
+                  backgroundImage: `url('${donation.project.image}')`,
                 }}
               >
                 <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
                   <div className='border rounded-md bg-white p-1 block w-fit'>
-                    <IconABC size={40} />
+                    <img
+                      className='w-6 h-6 rounded-full'
+                      src={getIpfsAddress(
+                        donation.project.abc?.icon! ||
+                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                      )}
+                    />
                   </div>
                   <div className='flex flex-col text-white gap-2'>
-                    <h1 className='text-2xl md:text-[41px]  font-bold leading-10'>
-                      The amazing Pancake project
+                    <h1 className='text-2xl md:text-[41px] font-bold leading-10'>
+                      {donation.project.title}
                     </h1>
                   </div>
                 </div>
               </div>
 
               <div className='flex flex-col gap-4 font-redHatText'>
-                <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl  flex justify-center'>
-                  <span className='flex gap-4 text-[#5326EC]  font-bold'>
-                    Project Contract address{' '}
+                <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
+                  <span className='flex gap-4 text-[#5326EC] font-bold'>
+                    Project Contract Address{' '}
                     <IconViewTransaction color='#5326EC' />
                   </span>
                 </div>
@@ -76,7 +95,8 @@ const DonarSupports = () => {
                     </span>
                   </div>
                   <span className='font-medium text-[#1D1E1F]'>
-                    25,000,000,000 ABC
+                    {donation.project.abc.totalSupply || '-'}{' '}
+                    {donation.project.abc.tokenName}
                   </span>
                 </div>
 
@@ -87,10 +107,11 @@ const DonarSupports = () => {
                       Total supporters
                     </span>
                   </div>
+                  {/*todo: give total donors of project*/}
                   <span className='font-medium text-[#1D1E1F]'>24</span>
                 </div>
 
-                <div className='flex  flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
+                <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
                   <div className='flex gap-2'>
                     <IconTotalDonations size={24} />
                     <span className='font-medium text-[#1D1E1F]'>
@@ -99,10 +120,11 @@ const DonarSupports = () => {
                   </div>
                   <div className='flex gap-1'>
                     <span className='font-medium text-[#1D1E1F]'>
-                      1,637,000 POL
+                      {donation.project.totalDonations} POL
+                      {/*todo: calculate it as sum of donation amounts*/}
                     </span>
                     <span className='font-medium text-[#82899A]'>
-                      ~ $ 680,345
+                      ~ $ {donation.project.totalDonations}
                     </span>
                   </div>
                 </div>
@@ -112,9 +134,15 @@ const DonarSupports = () => {
             {/* Project Claim and Reward */}
             <div className='flex flex-col gap-4 w-full lg:w-1/2  font-redHatText'>
               <div className='flex items-center gap-2'>
-                <IconABC size={24} />
+                <img
+                  className='w-6 h-6 rounded-full'
+                  src={getIpfsAddress(
+                    donation.project.abc?.icon! ||
+                      'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                  )}
+                />
                 <span className='text-[#4F576A] font-medium'>
-                  ABC current value
+                  {donation.project.abc.tokenName} current value
                 </span>
                 <div className='relative group'>
                   <IconTokenSchedule />
@@ -126,26 +154,29 @@ const DonarSupports = () => {
               </div>
               <div className='flex justify-between text-[#1D1E1F] font-medium'>
                 <h2 className='flex gap-1 items-center'>
-                  2.02 <span className='text-[#4F576A] text-xs pb-1'> POL</span>
+                  2.02 <span className='text-[#4F576A] text-xs pb-1'>POL</span>
                 </h2>
                 <h2 className='text-[#4F576A]'>$ 3.88</h2>
               </div>
               <hr />
 
+              {/*todo: calculate it*/}
               <h1 className=' flex p-[4px_16px] bg-[#EBECF2]  w-fit rounded-md'>
                 You support this project{' '}
                 <span className='font-medium'>&nbsp;4&nbsp; </span>
-                time.
+                times.
               </h1>
 
-              <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg '>
+              <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg'>
                 <div className='flex gap-2'>
                   <IconTotalDonations size={24} />
                   <span className='text-[#4F576A] font-medium '>
                     Your contribution
                   </span>
                 </div>
-                <span className='font-medium text-[#1D1E1F]'>4,705.94 POL</span>
+                <span className='font-medium text-[#1D1E1F]'>
+                  {donation.amount} POL
+                </span>
               </div>
 
               <div className='flex justify-between p-2'>
@@ -156,9 +187,15 @@ const DonarSupports = () => {
                   </span>
                 </div>
                 <div className='flex gap-1'>
-                  <span className='font-medium text-[#1D1E1F]'>2500 ABC</span>
+                  <span className='font-medium text-[#1D1E1F]'>
+                    {' '}
+                    {donation.rewardTokenAmount || '-'}{' '}
+                    {donation.project.abc.tokenName}
+                  </span>
                   <span className='font-medium text-[#82899A]'>
-                    ~ $ 7,900.45
+                    ~ ${' '}
+                    {donation.rewardTokenAmount *
+                      donation.project.abc.tokenPrice || '-'}
                   </span>
                 </div>
               </div>
@@ -171,20 +208,27 @@ const DonarSupports = () => {
                   </span>
                 </div>
                 <div className='flex gap-1'>
-                  <span className='font-medium text-[#1D1E1F]'>800 ABC</span>
+                  {/*todo: calculate locked amount*/}
+                  <span className='font-medium text-[#1D1E1F]'>
+                    {donation.rewardTokenAmount || '-'}{' '}
+                    {donation.project.abc.tokenName}
+                  </span>
                   <span className='font-medium text-[#82899A]'>
-                    ~ $ 2,520.57
+                    ~ ${' '}
+                    {donation.rewardTokenAmount *
+                      donation.project.abc.tokenPrice || '-'}
                   </span>
                 </div>
               </div>
 
-              <div className='flex  flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#EBECF2] rounded-md'>
+              <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#EBECF2] rounded-md'>
                 <div className='flex gap-2'>
                   <IconAvailableTokens size={24} />
                   <span className='font-medium text-[#1D1E1F]'>
                     Available to claim
                   </span>
                 </div>
+                {/*todo: calculate this*/}
                 <div className='flex gap-1 font-medium text-[#1D1E1F]'>
                   <span>1,637,000 POL</span>
                   <span>~ $ 680,345</span>
@@ -210,7 +254,7 @@ const DonarSupports = () => {
   } else {
     return (
       <>
-        <div className='bg-white container  p-6 rounded-2xl flex items-center gap-3'>
+        <div className='bg-white container p-6 rounded-2xl flex items-center gap-3'>
           <button onClick={() => setShowBreakDown(false)}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
