@@ -31,7 +31,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         className={`relative  w-full  h-[430px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
-        <div className='relative h-[350px] font-redHatText'>
+        <div className='relative h-[350px] font-redHatText '>
           <ProjectCardImage
             src={project.image}
             alt='Project Card'
@@ -41,15 +41,28 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : 'bottom-[-80px] '}  rounded-xl p-6  transition-bottom duration-500 ease-in-out border`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : 'bottom-[-80px] '}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
-          <div className='absolute bg-white -top-11 left-[-1px] w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl'>
+          <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
               alt=''
               width={50}
               height={50}
             />
+            <svg
+              className=' absolute bottom-5 right-[-18px]'
+              xmlns='http://www.w3.org/2000/svg'
+              width='18'
+              height='18'
+              viewBox='0 0 18 18'
+              fill='none'
+            >
+              <path
+                d='M0 18V0C0 0 0.153782 10.1538 4 14C7.84622 17.8462 18 18 18 18H0Z'
+                fill='white'
+              />
+            </svg>
           </div>
 
           <div className='flex flex-col gap-4'>
@@ -57,10 +70,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <p className='text-pink-500'>{project.abc?.tokenName}</p>
               <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
-            <div>
-              <p className='text-gray-500 pb-4 overflow-hidden text-ellipsis   font-redHatText min-h-[100px] line-clamp-3 border-b text-sm'>
-                {/* {project.descriptionSummary} */}
-                {project.teaser ? project.teaser : '\u00A0'}
+            <div className='min-h-[100px] text-ellipsis border-b pb-3  '>
+              <p className='text-gray-500  overflow-hidden    font-redHatText  line-clamp-4 leading-6'>
+                {project.descriptionSummary}
+                {/* {project.teaser ? project.teaser : '\u00A0'} */}
               </p>
             </div>
 
@@ -92,7 +105,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               router.push(`/donate/${project.slug}`);
             }}
           >
-            Support
+            Support This Project
           </Button>
         </div>
       </div>
