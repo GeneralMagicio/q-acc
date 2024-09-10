@@ -76,9 +76,19 @@ body {
   box-shadow: none;
 }
 
-.swiper-pagination-bullet-active {
-  color: black;
+.swiper-pagination-bullet {
+  display: inline-block;
+  line-height: 1;
+  cursor: pointer;
 }
+
+.swiper-pagination-bullet-active {
+  display: inline-block;
+  color: black;
+  line-height: 1;
+  font-weight: bold;
+}
+
 ::-webkit-scrollbar {
   width: 20px;
   height: 20px;

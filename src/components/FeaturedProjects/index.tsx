@@ -13,7 +13,7 @@ import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-2';
 const navigationStyle =
-  'cursor-pointer rounded-full shadow-lg px-3 py-2 h-10 w-12 mx-2 select-none';
+  'cursor-pointer rounded-full px-3 py-2 h-10 w-12 mx-2 select-none shadow-[0_3px_20px_0_rgba(83,38,236,0.13)]';
 
 export const FeaturedProjects = () => {
   const { data: allProjects, isLoading } = useFetchAllProjects();
@@ -31,13 +31,13 @@ export const FeaturedProjects = () => {
         <h3 className='text-3xl text-gray-400 font-bold'>
           Welcome to Early Access
         </h3>
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-2 items-center justify-center'>
           <div ref={prevElRef} className={navigationStyle}>
             <IconPointerLeft size={24} />
           </div>
           <div
             ref={pagElRef}
-            className='flex gap-2 items-center text-xl text-gray-400'
+            className='flex gap-6 items-center text-xl text-gray-400 justify-center pt-1'
           ></div>
           <div ref={nextElRef} className={navigationStyle}>
             <IconPointerRight size={24} />
