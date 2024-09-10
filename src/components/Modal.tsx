@@ -1,4 +1,4 @@
-import { HTMLAttributes, useEffect } from 'react';
+import { HTMLAttributes, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IconX } from './Icons/IconX';
 
@@ -22,8 +22,15 @@ const Modal: React.FC<ModalProps> = ({
   children,
   className,
 }) => {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    if (isOpen) {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && mounted) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -31,9 +38,9 @@ const Modal: React.FC<ModalProps> = ({
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [isOpen]);
+  }, [isOpen, mounted]);
 
-  if (!isOpen) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
     <div className='fixed inset-0 z-40 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'>
