@@ -38,7 +38,7 @@ export const Header = () => {
             />
           </div>
         </Link>
-        <div className='flex order-3 flex-1 justify-between md:order-2 md:flex-grow-0 font-semibold font-redHatText'>
+        <div className='flex order-3 flex-1 sm:justify-between md:order-2 md:flex-grow-0 font-semibold font-redHatText'>
           {HEADER_ITEMS.map((item, index) => (
             <HeaderItem key={index} label={item.label} route={item.route} />
           ))}
