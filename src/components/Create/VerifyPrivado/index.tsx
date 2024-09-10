@@ -46,31 +46,37 @@ const VerifyPrivado = () => {
               credentials with out identity partner, Privado.
             </p>
           </div>
-          <div className='font-redHatText'>
-            <p className='text-gray-900 font-medium'>Here is how it works:</p>
-          </div>
-          <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
-            <div className='flex flex-col gap-4'>
-              <h6 className='text-gray-900 font-bold'>
-                1. Click the button below to go to Privado.
-              </h6>
-              <p className='text-gray-800 font-normal'>
-                A new tab will open where you can complete the verification
-                steps.
-              </p>
-            </div>
-          </div>
-          <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
-            <div className='flex flex-col gap-4'>
-              <h6 className='text-gray-900 font-bold'>
-                2. Verification may take up to 24 hours.
-              </h6>
-              <p className='text-gray-800 font-normal'>
-                Once your credentials are validated, we will show the success
-                status on your q/acc profile page.
-              </p>
-            </div>
-          </div>
+          {!verified.isVerified && !isLoading && (
+            <>
+              <div className='font-redHatText'>
+                <p className='text-gray-900 font-medium'>
+                  Here is how it works:
+                </p>
+              </div>
+              <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
+                <div className='flex flex-col gap-4'>
+                  <h6 className='text-gray-900 font-bold'>
+                    1. Click the button below to go to Privado.
+                  </h6>
+                  <p className='text-gray-800 font-normal'>
+                    A new tab will open where you can complete the verification
+                    steps.
+                  </p>
+                </div>
+              </div>
+              <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
+                <div className='flex flex-col gap-4'>
+                  <h6 className='text-gray-900 font-bold'>
+                    2. Verification may take up to 24 hours.
+                  </h6>
+                  <p className='text-gray-800 font-normal'>
+                    Once your credentials are validated, we will show the
+                    success status on your q/acc profile page.
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
           <div className='flex flex-col gap-10 lg:flex-row justify-between'>
             {!isLoading ? (
               <div
@@ -146,7 +152,7 @@ const VerifyPrivado = () => {
                     <>
                       Go to Privado
                       <Image
-                        src='/images/icons/arrowPurple.svg'
+                        src='/images/icons/arrow.svg'
                         alt='tick'
                         height={16}
                         width={16}
