@@ -10,14 +10,16 @@ import InfoSection from '@/components/InfoSection';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import Routes from '@/lib/constants/Routes';
 import { HoldModal } from '../Modals/HoldModal';
+import { useAccount } from 'wagmi';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
-  const { data: isUserWhiteListed } = useIsUserWhiteListed();
+  const { address } = useAccount();
+  const { data: isUserWhiteListed, isPending } = useIsUserWhiteListed();
 
   useEffect(() => {
-    setShowHoldModal(!isUserWhiteListed);
-  }, [isUserWhiteListed]);
+    setShowHoldModal(!!address && !isPending && !isUserWhiteListed);
+  }, [address, isUserWhiteListed, isPending]);
 
   return (
     <main className='flex flex-col gap-4'>
