@@ -38,7 +38,7 @@ const ProjectSupportTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('23'),
+        parseInt('46'),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -82,43 +82,43 @@ const ProjectSupportTable = () => {
       <div className='flex gap-10 lg:flex-row flex-col '>
         <div className='flex flex-col w-full  font-redHatText overflow-x-auto'>
           <div className='flex justify-between'>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Supporter
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Date
               <button onClick={() => orderChangeHandler(EOrderBy.CreationDate)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Round
               <button onClick={() => orderChangeHandler(EOrderBy.Round)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-4   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Amount [MATIC]
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Token
               <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Unlock Remaining
               <button
                 onClick={() => orderChangeHandler(EOrderBy.Reward)}
               ></button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-4  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Stream Details
               <button
                 onClick={() => orderChangeHandler(EOrderBy.Reward)}
