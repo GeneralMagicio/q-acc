@@ -32,7 +32,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
   ];
   return (
     <div>
-      <div className='w-full py-4 h-min mt-6 text-gray-800  overflow-x-auto'>
+      <div className='w-full py-4 h-min my-8 text-gray-800  overflow-x-auto'>
         <div className='flex container w-full   gap-6  justify-start'>
           {tabsArray.map((i, index) => (
             <Link
@@ -41,16 +41,16 @@ const DashboardTabs = (props: IDashboardTabs) => {
               scroll={false}
             >
               <div
-                className={`flex px-6 py-[9px] rounded-full cursor-pointer text-sm md:text-base ${
+                className={`flex px-6 py-[9px] rounded-full font-redHatText cursor-pointer text-sm md:text-base font-bold ${
                   activeTab === index
-                    ? ' font-extrabold text-[#1D1E1F] bg-white shadow-lg'
+                    ? ' text-[#1D1E1F] bg-white shadow-tabShadow'
                     : 'text-[#82899A]'
                 }`}
               >
                 {i.title}
                 {badgeCount(i.badge) && (
                   <span
-                    className={` text-white text-sm md:text-base rounded-full h-[22px] px-2 py-2 flex items-center ml-[6px] ${
+                    className={` text-white text-sm md:text-base  font-redHatText  font-medium rounded-full   px-2  flex  justify-center items-center ml-[4px] ${
                       activeTab === index ? 'bg-[#1D1E1F]' : 'bg-[#82899A]'
                     }`}
                   >

@@ -11,7 +11,7 @@ const HEADER_ITEMS = [
     route: Routes.Home,
   },
   {
-    label: 'All Projects',
+    label: 'Projects',
     route: Routes.Projects,
   },
 ];

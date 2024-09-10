@@ -10,10 +10,10 @@ const DashboardHeader = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
   return (
-    <div className='bg-white  w-ful p-10 '>
+    <div className='bg-white  w-ful pb-6 pt-8'>
       <div className='container flex md:flex-row flex-col gap-6   items-center md:text-left text-center'>
         <div
-          className='w-[180px] h-[180px] bg-cover bg-center rounded-3xl relative'
+          className='w-[180px] h-[180px] bg-cover bg-center  rounded-3xl relative'
           style={{
             backgroundImage: `url(${user?.avatar || '/images/placeholders/PFPQACC.png'})`,
           }}
@@ -24,7 +24,7 @@ const DashboardHeader = () => {
           </h1>
           <h3 className='text-xl leading-8 font-redHatText'>{user?.email}</h3>
           <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
-            <div className='flex gap-2 text-[#E1458D] flex-col md:flex-row '>
+            <div className='flex gap-8 text-[#E1458D] flex-col md:flex-row '>
               <Link href={'/create/profile'}>
                 <span>Edit Profile</span>
               </Link>

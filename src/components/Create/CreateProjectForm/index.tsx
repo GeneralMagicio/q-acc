@@ -23,7 +23,6 @@ import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { Button, ButtonStyle, ButtonColor } from '@/components/Button';
 import links from '@/lib/constants/links';
 import { TeamMember } from '../CreateTeamForm';
-import { ConnectModal } from '@/components/ConnectModal';
 
 export interface ProjectFormData {
   projectName: string;
@@ -144,19 +143,6 @@ const CreateProjectForm: FC = () => {
     setFormData({ project: data });
     router.push('/create/team');
   };
-
-  if (!isConnected) {
-    return (
-      <>
-        <ConnectModal
-          isOpen={true}
-          onClose={function (): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
-      </>
-    );
-  }
 
   return isFetching ? (
     <div>Loading...</div>

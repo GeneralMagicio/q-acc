@@ -6,7 +6,6 @@ import ProjectCardImage from './ProjectCardImage';
 import { IconABC } from '../Icons/IconABC';
 
 import { Button, ButtonColor } from '../Button';
-import { IconShare } from '../Icons/IconShare';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -18,33 +17,18 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [copied, setCopied] = useState(false);
   const router = useRouter();
 
   const handleCardClick = () => {
-    // Navigate to the project page when the card is clicked
     router.push(`/project/${project.slug}`);
   };
   return (
     <div className={`${className} relative cursor-pointer`}>
       <div
-        onClick={() => {
-          const pageUrl = window.location.origin + '/project/' + project.slug;
-          navigator.clipboard.writeText(pageUrl).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1000);
-          });
-        }}
-        className='absolute z-40 cursor-pointer p-2 bg-white rounded-full right-4  shadow-tabShadow top-3'
-      >
-        <IconShare color='#BBC3D5' />
-      </div>
-      {/* <Link href={`/project/${project.slug}`} key={project.id}> */}
-      <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full  h-[430px] rounded-xl bg-white overflow-hidden shadow-md shadow-gray-200 `}
+        className={`relative  w-full  h-[430px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
         <div className='relative h-[350px] font-redHatText'>
@@ -70,15 +54,13 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col'>
-              <p className='text-pink-500'>{project.title}</p>
-              <h2 className='text-lg font-bold'>
-                {' '}
-                {project.teaser ? project.teaser : '\u00A0'}
-              </h2>
+              <p className='text-pink-500'>{project.abc?.tokenName}</p>
+              <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
             <div>
-              <p className='text-gray-500 pb-4 overflow-hidden text-ellipsis  line-clamp-3 border-b text-sm'>
+              <p className='text-gray-500 pb-4 overflow-hidden text-ellipsis   font-redHatText min-h-[100px] line-clamp-3 border-b text-sm'>
                 {/* {project.descriptionSummary} */}
+                {project.teaser ? project.teaser : '\u00A0'}
               </p>
             </div>
 
@@ -114,7 +96,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           </Button>
         </div>
       </div>
-      {/* </Link> */}
     </div>
   );
 };

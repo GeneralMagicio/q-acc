@@ -306,10 +306,12 @@ const DonatePageBody = () => {
           <Button
             onClick={handleDonate}
             disabled={
-              !isConnected ||
-              parseFloat(inputAmount) <= 0 ||
               !terms ||
-              inputAmount > totalSupply
+              !isConnected ||
+              !(
+                parseFloat(inputAmount) >= 5 &&
+                parseFloat(inputAmount) <= parseFloat(totalSupply)
+              )
             }
             loading={isConfirming}
             color={ButtonColor.Giv}

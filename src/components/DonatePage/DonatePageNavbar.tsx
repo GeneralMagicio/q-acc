@@ -7,8 +7,8 @@ import { useDonateContext } from '@/context/donation.context';
 const DonateNavbar = () => {
   const { projectData } = useDonateContext();
   return (
-    <div className='bg-white flex items-center justify-between px-10 p-6 gap-4   w-full top-0  shadow-tabShadow'>
-      <div className='flex gap-4'>
+    <div className='bg-white flex items-center justify-between px-10 py-4 gap-4   w-full top-0  shadow-tabShadow'>
+      <div className='flex gap-4 items-center'>
         <Link href={`/project/${projectData?.slug}`}>
           <div className='p-4 rounded-full flex items-center border shadow-md'>
             <IconGoBack />
