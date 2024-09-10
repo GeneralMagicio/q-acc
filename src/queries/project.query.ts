@@ -394,3 +394,85 @@ export const CHECK_USER_PRIVADO_VERIFIED_STATE = `
     checkUserPrivadoVerifiedState
   }
 `;
+
+export const GET_PROJECT_BY_USER_ADDRESS = `
+ query 
+      (
+      $connectedWalletUserId: Int
+      ) 
+{ 
+		projectBySlug(
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			__typename
+			id
+			title
+			image
+			slug
+			verified
+			totalDonations
+			description
+      teaser
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+      teamMembers {
+      name
+      image
+      twitter
+      linkedin
+      farcaster
+    }
+			socialMedia {
+				type
+				link
+			}
+			totalProjectUpdates
+			creationDate
+			reaction {
+				id
+				userId
+			}
+			categories {
+				name
+				value
+				mainCategory {
+					title
+				}
+			}
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			listed
+			status {
+				id
+				name
+			}
+			organization {
+				name
+				label
+				supportCustomTokens
+			}
+			verificationFormStatus
+			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			campaigns {
+				id
+				title
+			}
+		}
+	}
+`;

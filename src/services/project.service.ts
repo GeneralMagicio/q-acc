@@ -7,6 +7,7 @@ import {
   GET_ALL_PROJECTS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
+  GET_PROJECT_BY_USER_ADDRESS,
 } from '@/queries/project.query';
 import type { IGivethUser } from '@/types/user.type';
 
@@ -76,6 +77,23 @@ export const fetchAllProjects = async () => {
       },
     );
     return res?.allProjects;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchUserProject = async (address: Address) => {
+  try {
+    const res = await requestGraphQL<{ projectData: IProject }>(
+      GET_PROJECT_BY_USER_ADDRESS,
+      { address },
+      {
+        url: config.GIVETH_GQL_ENDPOINT,
+        auth: true,
+      },
+    );
+    console.log(res);
+    return res?.projectData;
   } catch (error) {
     console.error(error);
   }

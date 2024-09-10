@@ -38,7 +38,7 @@ const ProjectSupportTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('23'),
+        parseInt('46'),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -142,7 +142,7 @@ const ProjectSupportTable = () => {
                   })}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                  Early window - Round 1
+                  Early window - Round 1NV
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
@@ -152,24 +152,24 @@ const ProjectSupportTable = () => {
                     </div>
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
-                      $ 233
+                      $ {donation.valueUsd}NV
                     </span>
                   </div>
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  600 ABC
+                  600 ABC NV
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  6 Months 14 Days
+                  6 Months 14 Days NV
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
                     <div className='flex gap-1 items-center'>
-                      <span className='font-medium'>Feb 24, 2024 End</span>
+                      <span className='font-medium'>Feb 24, 2024 EndNV</span>
                     </div>
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
-                      Starts on Aug 30, 2024
+                      Starts on Aug 30, 2024NV
                     </span>
                   </div>
                 </div>
