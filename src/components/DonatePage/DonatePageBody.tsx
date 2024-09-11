@@ -267,7 +267,7 @@ const DonatePageBody = () => {
                 onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
                 className='cursor-pointer hover:underline'
               >
-                Available in your wallet:
+                Available in your wallet: $
                 {!tokenDetails
                   ? 'Loading...'
                   : `${tokenDetails?.formattedBalance} ${tokenDetails?.symbol}`}
