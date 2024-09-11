@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { usePrivado } from '@/hooks/usePrivado';
+import { IconExternalLink } from '../Icons/IconExternalLink';
 
 export const PrivadoBanner = () => {
   const { isVerified, isLoading, verifyAccount } = usePrivado();
@@ -24,16 +25,11 @@ export const PrivadoBanner = () => {
             </p>
           </div>
           <div
-            className='flex flex-row gap-2 w-1/2 justify-start cursor-pointer'
+            className='flex flex-row gap-2 w-1/2 justify-start cursor-pointer center items-center'
             onClick={verifyAccount}
           >
             <p className='text-giv-500'>Check status with Privado</p>
-            <Image
-              src='/images/icons/external-link.svg'
-              alt='privado-verify'
-              height={12}
-              width={12}
-            />
+            <IconExternalLink size={12} />
           </div>
         </div>
       )}

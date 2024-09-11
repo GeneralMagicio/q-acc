@@ -6,6 +6,7 @@ import DashboardTabs from './DashboardTabs';
 
 import DonarSupports from './DonarSupports';
 import MyProjects from './MyProjects';
+import DashboardPrivado from './DashboardPrivado';
 
 export enum EDashboardPageTabs {
   PROJECTS = 'projects',
@@ -28,6 +29,7 @@ const DashboardIndex = () => {
   return (
     <div>
       <DashboardHeader />
+      <DashboardPrivado />
       <DashboardTabs activeTab={activeTab} slug={'slug'} />
 
       {activeTab === 0 && <MyProjects />}

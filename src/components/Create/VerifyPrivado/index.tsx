@@ -1,15 +1,15 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CreateNavbar from '../CreateNavbar';
 import { Button, ButtonColor } from '@/components/Button';
 import Routes from '@/lib/constants/Routes';
 import { IconError } from '@/components/Icons/IconError';
-import { IconVerified } from '@/components/Icons/IconVerified';
 import { IconInfo } from '@/components/Icons/IconInfo';
 import { usePrivado } from '@/hooks/usePrivado';
-import { useFetchUser } from '@/hooks/useFetchUser';
+import { IconVerifiedFilled } from '@/components/Icons/IconVerifiedFilled';
+import { IconVerified } from '@/components/Icons/IconVerified';
+import { IconArrowRight } from '@/components/Icons/IconArrowRight';
 
 interface IVerified {
   isVerified: boolean;
@@ -18,7 +18,6 @@ interface IVerified {
 const VerifyPrivado = () => {
   const router = useRouter();
   const { verifyAccount, isVerified, error, isLoading } = usePrivado();
-  const userFetch = useFetchUser();
 
   const verified: IVerified = { isVerified, error: !!error };
 
@@ -98,7 +97,7 @@ const VerifyPrivado = () => {
                   </>
                 ) : verified.isVerified ? (
                   <>
-                    <IconVerified />
+                    <IconVerifiedFilled />
                     <span className='text-[#1B8C82] font-redHatText text-sm'>
                       You account has been successfully verified.
                     </span>
@@ -132,12 +131,7 @@ const VerifyPrivado = () => {
                   color={ButtonColor.Green}
                 >
                   Verified
-                  <Image
-                    src='/images/icons/tick.svg'
-                    alt='tick'
-                    height={16}
-                    width={16}
-                  />
+                  <IconVerified size={16} />
                 </Button>
               ) : (
                 <Button
@@ -151,12 +145,7 @@ const VerifyPrivado = () => {
                   ) : (
                     <>
                       Go to Privado
-                      <Image
-                        src='/images/icons/arrow.svg'
-                        alt='tick'
-                        height={16}
-                        width={16}
-                      />
+                      <IconArrowRight size={16} />
                     </>
                   )}
                 </Button>

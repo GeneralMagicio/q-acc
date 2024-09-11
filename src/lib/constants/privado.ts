@@ -1,0 +1,32 @@
+export const KYC_EXCLUDED_COUNTRIES = {
+  Algeria: 12, // 012
+  Bangladesh: 50, // 050
+  Bolivia: 68, // 068
+  Belarus: 112,
+  'Myanmar (Burma)': 104,
+  'Côte d’Ivoire (Ivory Coast)': 384,
+  Egypt: 818,
+  'Republic of Crimea**(Ukraine)': 804,
+  Cuba: 192,
+  'Democratic Republic of the Congo': 180,
+  Iran: 364,
+  Iraq: 368,
+  Liberia: 430,
+  Libya: 434,
+  Mali: 466,
+  Morocco: 504,
+  Nepal: 524,
+  'North Korea': 408,
+  Kuwait: 414,
+  Oman: 512,
+  Qatar: 634,
+  Somalia: 706,
+  Sudan: 729,
+  Syria: 760,
+  Tunisia: 788,
+  'United Kingdom': 826,
+  'United States': 840,
+  Venezuela: 862,
+  Yemen: 887,
+  Zimbabwe: 716,
+};

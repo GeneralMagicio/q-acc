@@ -1,19 +1,20 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TeamForm } from './TeamForm';
-import { Button, ButtonColor } from '@/components/Button';
-import { useCreateContext } from '../CreateContext';
 import Routes from '@/lib/constants/Routes';
-import CreateNavbar from '../CreateNavbar';
 import { useCreateProject } from '@/hooks/useCreateProject';
 import {
   EProjectSocialMediaType,
   IProjectCreation,
 } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { useCreateContext } from '@/components/Create/CreateContext';
+import CreateNavbar from '@/components/Create/CreateNavbar';
+import { Button, ButtonColor } from '@/components/Button';
+import { TeamForm } from '@/components/Create/CreateTeamForm/TeamForm';
+import { updateProjectById } from '@/services/project.service';
 
 export interface TeamMember {
   name: string;
@@ -24,10 +25,10 @@ export interface TeamMember {
 }
 
 export interface TeamFormData {
-  team: TeamMember[]; // Array to store team member data
+  team: TeamMember[];
 }
 
-const CreateTeamForm: FC = () => {
+const EditTeamForm = ({ projectId }: { projectId: number }) => {
   const { data: user } = useFetchUser();
   const { formData, setFormData } = useCreateContext();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -36,14 +37,14 @@ const CreateTeamForm: FC = () => {
       team: formData.project.team.length
         ? formData.project.team
         : [{ name: '', image: null }],
-    }, // Initialize with existing team members or one empty member
-    mode: 'onChange', // This enables validation on change
+    },
+    mode: 'onChange',
   });
   const router = useRouter();
 
   const { handleSubmit, setValue, watch, reset } = methods;
 
-  const teamMembers = watch('team'); // Watch the team members array
+  const teamMembers = watch('team');
 
   const { mutateAsync: createProject, isPending, error } = useCreateProject();
 
@@ -76,7 +77,6 @@ const CreateTeamForm: FC = () => {
       },
     });
 
-    console.log('TEAM', teamMembers);
     const projectData = {
       ...formData.project,
       team: teamMembers,
@@ -104,17 +104,17 @@ const CreateTeamForm: FC = () => {
       description: projectData.projectDescription,
       teaser: projectData.projectTeaser,
       adminUserId: Number(user.id),
-      organisationId: 1, // Assuming you want to set a static organization ID
+      organisationId: 1,
       address: projectData.projectAddress,
       image: projectData.banner || undefined,
       icon: projectData.logo || undefined,
-      socialMedia: socialMedia.length ? socialMedia : undefined, // Include only if there are social media entries
+      socialMedia: socialMedia.length ? socialMedia : undefined,
       teamMembers: teamMembers,
     };
     console.log('Submitting project data:', project);
 
     try {
-      const res = await createProject(project);
+      const res = await updateProjectById(projectId, project);
       console.log(res);
       router.push(Routes.DashBoard);
     } catch (err: any) {
@@ -129,8 +129,8 @@ const CreateTeamForm: FC = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className='container mt-6'>
         <CreateNavbar
-          title='Add your team'
-          onBack={() => router.push(Routes.CreateProject)}
+          title='Edit your team'
+          onBack={() => router.push(`/edit/${projectId}/project`)}
           submitLabel='Save'
           disabled={isPending}
         />
@@ -159,4 +159,4 @@ const CreateTeamForm: FC = () => {
   );
 };
 
-export default CreateTeamForm;
+export default EditTeamForm;

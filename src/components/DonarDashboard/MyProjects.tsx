@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
+import Link from 'next/link';
 import { IconABC } from '../Icons/IconABC';
 import { Button, ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -17,12 +18,22 @@ import { IconTributesReceived } from '../Icons/IconTributesReceived';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconDropDown } from '../Icons/IconDropDown';
 import { ConnectModal } from '../ConnectModal';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
+import { formatDateMonthDayYear } from '@/helpers/date';
 
 const MyProjects = () => {
-  const projectData = true;
+  const { data: userData } = useFetchUser(true);
+  const { data: projectData } = useFetchProjectByUserId(
+    parseInt(userData?.id ?? ''),
+  );
+  const projectId = projectData?.id;
+  const projectSlug = projectData?.slug;
   const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
+
+  console.log({ projectData });
 
   if (!isConnected) {
     return (
@@ -44,6 +55,12 @@ const MyProjects = () => {
       </div>
     );
   }
+
+  // Setup project image
+  const backgroundImage = projectData?.image
+    ? `url(${projectData?.image})`
+    : '';
+
   return (
     <div className='container'>
       {/* Project Header */}
@@ -53,10 +70,12 @@ const MyProjects = () => {
             <div className='flex gap-2 items-center text-xs font-medium'>
               <IconCreatedAt />
               <span className='text-[#82899A]'>Create on</span>
-              <span className='text-[#4F576A]'>Jan 7, 2024</span>
+              <span className='text-[#4F576A]'>
+                {formatDateMonthDayYear(projectData?.creationDate ?? '')}
+              </span>
             </div>
             <h1 className='text-[#1D1E1F] text-[25px] font-bold'>
-              ABC Project number ( ONE )
+              {projectData?.title}
             </h1>
           </div>
 
@@ -75,14 +94,20 @@ const MyProjects = () => {
               onMouseLeave={() => setIsHovered(false)}
               className={`p-2 flex flex-col absolute bg-white md:left-[-100px] shadow-tabShadow rounded-xl  z-30 gap-2 w-[239px] ${isHovered ? 'visible' : 'hidden '} `}
             >
-              <span className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'>
+              <Link
+                href={`/project/${projectSlug}/`}
+                className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'
+              >
                 <IconViewProject />
                 View project
-              </span>
-              <span className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'>
+              </Link>
+              <Link
+                href={`edit/${projectId}/project`}
+                className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'
+              >
                 <IconEditProject />
                 Edit project
-              </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -94,8 +119,7 @@ const MyProjects = () => {
             <div
               className='w-full h-[230px] bg-cover bg-center rounded-3xl relative'
               style={{
-                backgroundImage:
-                  "url('https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW')",
+                backgroundImage: backgroundImage,
               }}
             >
               <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
@@ -254,8 +278,8 @@ const MyProjects = () => {
                   <path
                     d='M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z'
                     stroke='#A5ADBF'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
               </span>
@@ -276,7 +300,7 @@ const MyProjects = () => {
           </div>
         </div>
 
-        <ProjectSupportTable />
+        <ProjectSupportTable projectId={projectId ?? ''} />
       </div>
     </div>
   );

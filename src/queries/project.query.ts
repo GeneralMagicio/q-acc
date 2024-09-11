@@ -70,6 +70,47 @@ mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
     }
   }
 `;
+
+export const UPDATE_PROJECT_BY_ID = `
+mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
+    updateProject(projectId: $projectId, newProjectData: $newProjectData) {
+      id
+      title
+      description
+      descriptionSummary
+      image
+      slug
+      listed
+      reviewStatus
+    	teaser
+      verified
+      slugHistory
+      creationDate
+      adminUserId
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+    socialMedia {
+      type
+      link
+    }
+      addresses {
+        address
+        isRecipient
+        networkId
+        chainType
+      }
+      adminUser {
+        id
+        name
+        email
+        walletAddress
+      }
+    }
+  }
+`;
 export const GET_PROJECT_BY_ID = `
   query(
       $id: Float!,
@@ -80,8 +121,14 @@ export const GET_PROJECT_BY_ID = `
      connectedWalletUserId: $connectedWalletUserId){
       id
       slug,
+      teaser
+      socialMedia {
+				type
+				link
+			}
       verified
       title,
+      image
       listed,
       reviewStatus
       description,
@@ -393,6 +440,105 @@ export const CHECK_USER_PRIVADO_VERIFIED_STATE = `
   mutation {
     checkUserPrivadoVerifiedState
   }
+`;
+
+export const GET_PROJECT_BY_USER_ID = `
+ query ($take: Float, $skip: Float, $userId: Int!) {
+  projectsByUserId(take: $take, skip: $skip, userId: $userId) {
+    projects {
+      id
+      title
+      balance
+      description
+      image
+      slug
+      creationDate
+      adminUserId
+      walletAddress
+      impactLocation
+      listed
+      reviewStatus
+      givingBlocksId
+      qfRounds {
+        name
+        id
+      }
+      projectVerificationForm {
+        id
+        isTermAndConditionsAccepted
+        emailConfirmationTokenExpiredAt
+        email
+        emailConfirmationToken
+        emailConfirmationSent
+        emailConfirmationSentAt
+        emailConfirmedAt
+        emailConfirmed
+        projectRegistry {
+          organizationDescription
+          isNonProfitOrganization
+          organizationCountry
+          organizationWebsite
+          attachments
+          organizationName
+        }
+        personalInfo {
+          email
+          walletAddress
+          fullName
+        }
+        projectContacts {
+          name
+          url
+        }
+        milestones {
+          mission
+          foundationDate
+          achievedMilestones
+          achievedMilestonesProofs
+          problem
+          plans
+          impact
+        }
+        managingFunds {
+          description
+          relatedAddresses {
+            address
+            networkId
+            chainType
+            title
+          }
+        }
+        status
+      }
+      categories {
+        name
+      }
+      reaction {
+        reaction
+        id
+        projectUpdateId
+        userId
+      }
+      addresses {
+        address
+        isRecipient
+        networkId
+        chainType
+      }
+      organization {
+        label
+      }
+      adminUser {
+        firstName
+        email
+        id
+        walletAddress
+      }
+      qualityScore
+    }
+    totalCount
+  }
+}
 `;
 
 export const GET_PROJECT_DONATIONS_USERS_BY_ID = `
