@@ -248,6 +248,7 @@ export const GET_PROJECT_BY_SLUG = `
 			id
 			title
 			image
+      icon
 			slug
 			verified
 			totalDonations
