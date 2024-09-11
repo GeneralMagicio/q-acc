@@ -20,6 +20,7 @@ import { IconDropDown } from '../Icons/IconDropDown';
 import { ConnectModal } from '../ConnectModal';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
+import { formatDateMonthDayYear } from '@/helpers/date';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -54,6 +55,12 @@ const MyProjects = () => {
       </div>
     );
   }
+
+  // Setup project image
+  const backgroundImage = projectData?.image
+    ? `url(${projectData?.image})`
+    : '';
+
   return (
     <div className='container'>
       {/* Project Header */}
@@ -63,10 +70,12 @@ const MyProjects = () => {
             <div className='flex gap-2 items-center text-xs font-medium'>
               <IconCreatedAt />
               <span className='text-[#82899A]'>Create on</span>
-              <span className='text-[#4F576A]'>Jan 7, 2024</span>
+              <span className='text-[#4F576A]'>
+                {formatDateMonthDayYear(projectData?.creationDate ?? '')}
+              </span>
             </div>
             <h1 className='text-[#1D1E1F] text-[25px] font-bold'>
-              ABC Project number ( ONE )
+              {projectData?.title}
             </h1>
           </div>
 
@@ -110,8 +119,7 @@ const MyProjects = () => {
             <div
               className='w-full h-[230px] bg-cover bg-center rounded-3xl relative'
               style={{
-                backgroundImage:
-                  "url('https://giveth.mypinata.cloud/ipfs/QmcQFkNQ3o6f555whoRtFqJgPz6k9nb8WfNEBHk3j2i3CW')",
+                backgroundImage: backgroundImage,
               }}
             >
               <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
