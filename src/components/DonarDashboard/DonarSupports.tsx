@@ -5,14 +5,17 @@ import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { Button, ButtonColor } from '../Button';
 import RewardsBreakDown from './RewardsBreakDown';
-import { IconMinted } from '../Icons/IconMinted';
-import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
-import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
-import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
-import { fetchUserDonations } from '@/services/donation.services';
+import {
+  fetchProjectDonors,
+  fetchUserDonations,
+} from '@/services/donation.services';
 import { getIpfsAddress } from '@/helpers/image';
 import { fetchTokenPrice } from '@/helpers/token';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import {IconTokenSchedule} from "@/components/Icons/IconTokenSchedule";
+import {IconMinted} from "@/components/Icons/IconMinted";
+import {IconAvailableTokens} from "@/components/Icons/IconAvailableTokens";
+import {IconBreakdownArrow} from "@/components/Icons/IconBreakdownArrow";
 
 // Helper to group donations by project
 const groupDonationsByProject = (donations: any[]) => {
@@ -27,6 +30,22 @@ const groupDonationsByProject = (donations: any[]) => {
     },
     {} as Record<number, any[]>,
   );
+};
+
+// Helper function to calculate unique donors
+const calculateUniqueDonors = (donations: any[]) => {
+  const uniqueDonors = new Set();
+  donations.forEach(donation => {
+    if (donation.user?.walletAddress) {
+      uniqueDonors.add(donation.user.walletAddress);
+    }
+  });
+  return uniqueDonors.size;
+};
+
+// Helper function to calculate total contributions in POL
+const calculateTotalContributions = (donations: any[]) => {
+  return donations.reduce((total, donation) => total + donation.amount, 0);
 };
 
 // Calculate locked reward token amount based on stream data
@@ -73,6 +92,9 @@ const calculateClaimableRewardTokenAmount = (
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
   const [donations, setDonations] = useState<any[]>([]);
+  const [projectDonorData, setProjectDonorData] = useState<
+    Record<number, { uniqueDonors: number; totalContributions: number }>
+  >({});
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,10 +134,47 @@ const DonarSupports = () => {
     fetchPrice();
   }, []);
 
+  const donationsGroupedByProject = groupDonationsByProject(donations);
+
+  // Fetch project donations for all grouped projects
+  useEffect(() => {
+    const fetchProjectDonations = async () => {
+      const donorData: Record<
+        number,
+        { uniqueDonors: number; totalContributions: number }
+      > = {};
+
+      const projectIds = Object.keys(donationsGroupedByProject).map(Number);
+
+      for (const projectId of projectIds) {
+        try {
+          const donationsByProjectId = await fetchProjectDonors(projectId);
+          if (donationsByProjectId?.donations) {
+            donorData[projectId] = {
+              uniqueDonors: calculateUniqueDonors(
+                donationsByProjectId.donations,
+              ),
+              totalContributions: calculateTotalContributions(
+                donationsByProjectId.donations,
+              ),
+            };
+          }
+        } catch (err) {
+          setError('Failed to fetch project donations');
+          console.error(err);
+        }
+      }
+
+      setProjectDonorData(donorData);
+    };
+
+    if (donations.length > 0) {
+      fetchProjectDonations();
+    }
+  }, [donationsGroupedByProject]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-
-  const donationsGroupedByProject = groupDonationsByProject(donations);
 
   if (!showBreakDown) {
     return (
@@ -132,6 +191,12 @@ const DonarSupports = () => {
                 sum + (donation.rewardTokenAmount || 0),
               0,
             );
+
+            // Get unique donors and total contributions from the fetched donor data
+            const uniqueDonors =
+              projectDonorData[Number(projectId)]?.uniqueDonors || 0;
+            const totalContributions =
+              projectDonorData[Number(projectId)]?.totalContributions || 0;
 
             // Sum up locked and claimable amounts for all donations
             let totalLockedRewardTokens = 0;
@@ -214,7 +279,7 @@ const DonarSupports = () => {
                         </span>
                       </div>
                       <span className='font-medium text-[#1D1E1F]'>
-                        {project.totalSupporters || 0}
+                        {uniqueDonors}
                       </span>
                     </div>
 
@@ -227,7 +292,7 @@ const DonarSupports = () => {
                       </div>
                       <div className='flex gap-1'>
                         <span className='font-medium text-[#1D1E1F]'>
-                          {project.totalDonations / POLPrice || 0} POL
+                          {totalContributions || 0} POL{' '}
                         </span>
                         <span className='font-medium text-[#82899A]'>
                           ~ $ {project.totalDonations || 0}
