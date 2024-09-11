@@ -12,10 +12,10 @@ import {
 import { getIpfsAddress } from '@/helpers/image';
 import { fetchTokenPrice } from '@/helpers/token';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import {IconTokenSchedule} from "@/components/Icons/IconTokenSchedule";
-import {IconMinted} from "@/components/Icons/IconMinted";
-import {IconAvailableTokens} from "@/components/Icons/IconAvailableTokens";
-import {IconBreakdownArrow} from "@/components/Icons/IconBreakdownArrow";
+import { IconTokenSchedule } from '@/components/Icons/IconTokenSchedule';
+import { IconMinted } from '@/components/Icons/IconMinted';
+import { IconAvailableTokens } from '@/components/Icons/IconAvailableTokens';
+import { IconBreakdownArrow } from '@/components/Icons/IconBreakdownArrow';
 
 // Helper to group donations by project
 const groupDonationsByProject = (donations: any[]) => {
