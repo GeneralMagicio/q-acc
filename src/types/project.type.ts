@@ -99,6 +99,9 @@ export interface IProject {
     creatorAddress?: string;
     nftContractAddress?: string;
     chainId?: number;
+    totalSupply?: number;
+    tokenPrice?: number;
+    mintedAmount?: number;
   };
   status?: {
     id: string;

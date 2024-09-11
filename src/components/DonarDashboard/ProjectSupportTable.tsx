@@ -6,6 +6,7 @@ import { IconSort } from '../Icons/IconSort';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { fetchTokenPrice } from '@/helpers/token';
+import { useFetchProjectById } from '@/hooks/useFetchProjectById';
 
 const itemPerPage = 5;
 
@@ -28,7 +29,7 @@ export interface IOrder {
 const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const { projectData } = useProjectContext();
+  const { data: projectData } = useFetchProjectById(parseInt(projectId));
   const [tokenPrice, setTokenPrice] = useState(1);
 
   const [order, setOrder] = useState<IOrder>({
@@ -145,7 +146,7 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
               <div key={donation.id} className=' flex justify-between '>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   {donation.user.firstName
-                    ? donation.user.firstName
+                    ? donation.user.firstName + ' ' + donation.user.lastName
                     : 'Anoynomous'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
@@ -156,7 +157,9 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
                   })}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                  Early window - Round 1NV
+                  {donation.earlyAccessRound
+                    ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                    : '---'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
@@ -176,7 +179,11 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
                   </div>
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  600 ABC NV
+                  {donation.rewardTokenAmount
+                    ? donation.rewardTokenAmount
+                    : '---'}
+                  {'  '}
+                  {projectData?.abc?.tokenTicker}
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
                   6 Months 14 Days

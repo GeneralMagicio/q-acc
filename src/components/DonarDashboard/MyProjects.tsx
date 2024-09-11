@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -23,6 +23,13 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear } from '@/helpers/date';
 import config from '@/config/configuration';
+import { fecthProjectDonationsById } from '@/services/donation.services';
+import {
+  calculateTotalDonations,
+  calculateUniqueDonors,
+} from '@/helpers/donation';
+import { fetchTokenPrice } from '@/helpers/token';
+import { getIpfsAddress } from '@/helpers/image';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -34,8 +41,44 @@ const MyProjects = () => {
   const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
+  const [donations, setDonations] = useState<any[]>([]);
+  const [totalDonationsCount, setTotalDonationsCount] = useState(0);
+  const [uniqueDonars, setUniqueDonars] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [tokenPrice, setTokenPrice] = useState(1);
 
   console.log({ projectData });
+
+  useEffect(() => {
+    if (projectData?.id) {
+      const fetchProjectDonations = async () => {
+        const data = await fecthProjectDonationsById(
+          parseInt(projectData?.id),
+          1000,
+          0,
+        );
+
+        if (data) {
+          const { donations, totalCount } = data;
+          setDonations(donations);
+          setTotalDonationsCount(totalCount);
+          setUniqueDonars(calculateUniqueDonors(donations));
+          setTotalAmount(calculateTotalDonations(donations));
+        }
+      };
+      fetchProjectDonations();
+    }
+  }, [projectData]);
+
+  // Set POL token price
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
 
   if (!isConnected) {
     return (
@@ -169,8 +212,14 @@ const MyProjects = () => {
             </div>
 
             <div className='flex gap-1 items-center'>
-              <IconABC />
-              ABC current value
+              <img
+                className='w-6 h-6 rounded-full'
+                src={getIpfsAddress(
+                  projectData?.abc?.icon! ||
+                    'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                )}
+              />
+              {projectData?.abc?.tokenTicker} current value
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -182,11 +231,18 @@ const MyProjects = () => {
 
             <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
               <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                2.02
+                {projectData?.abc?.tokenPrice
+                  ? projectData?.abc?.tokenPrice
+                  : '---'}{' '}
                 <span className='text-[#4F576A] text-xs'>POL</span>
               </div>
               <div className='w-[20%] text-[#4F576A] text-right font-medium'>
-                ~ $ 3.83
+                ~ ${' '}
+                {projectData?.abc?.tokenPrice
+                  ? Math.round(
+                      projectData?.abc?.tokenPrice * tokenPrice * 100,
+                    ) / 100
+                  : '---'}
               </div>
             </div>
 
@@ -196,7 +252,10 @@ const MyProjects = () => {
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                25,000,000,000 ABC
+                {projectData?.abc?.totalSupply
+                  ? projectData?.abc?.totalSupply
+                  : '---'}{' '}
+                {projectData?.abc?.tokenTicker}
               </span>
             </div>
 
@@ -215,8 +274,12 @@ const MyProjects = () => {
                 </div>
               </div>
               <div className='flex gap-1'>
-                <span className='font-medium text-[#1D1E1F]'>29,500 POL</span>
-                <span className='font-medium text-[#82899A]'>~ $ 7,900</span>
+                <span className='font-medium text-[#1D1E1F]'>
+                  {totalAmount} POL
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+                </span>
               </div>
             </div>
 
@@ -227,7 +290,7 @@ const MyProjects = () => {
                   Total supporters
                 </span>
               </div>
-              <span className='text-[#1D1E1F] font-medium'>24</span>
+              <span className='text-[#1D1E1F] font-medium'>{uniqueDonars}</span>
             </div>
 
             <div className='flex  flex-col md:flex-row gap-2 justify-between py-2'>
@@ -238,7 +301,8 @@ const MyProjects = () => {
                 </span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                7,000,000,000 ABC
+                {projectData?.abc?.mintedAmount ?? 0}{' '}
+                {projectData?.abc?.tokenTicker}
               </span>
             </div>
           </div>
@@ -264,9 +328,11 @@ const MyProjects = () => {
 
           <div className='flex items-center gap-4'>
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
-              1,880,451 POL
+              {totalAmount} POL
             </span>
-            <span className='text-[#1D1E1F]  font-medium'>~ $ 980,345</span>
+            <span className='text-[#1D1E1F]  font-medium'>
+              ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+            </span>
           </div>
         </div>
 
