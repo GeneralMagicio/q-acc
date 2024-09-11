@@ -1,13 +1,22 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
+import { fetchTokenPrice } from '@/helpers/token';
 
 const ProjectDonateButton = () => {
   const { projectData } = useProjectContext();
+  const [tokenPrice, setTokenPrice] = useState(1);
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+    fetchPrice();
+  }, []);
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
@@ -36,10 +45,19 @@ const ProjectDonateButton = () => {
       </div>
       <div className='flex items-center  text-sm  gap-2 text-[#82899A] '>
         <h1 className=' w-[200px] p-2 bg-[#F7F7F9] rounded-lg'>
-          <span className='text-[#1D1E1F] font-medium'>---</span>
+          <span className='text-[#1D1E1F] font-medium'>
+            {projectData?.abc?.tokenPrices
+              ? projectData?.abc?.tokenPrices
+              : '---'}
+          </span>
           <span className='text-[#4F576A] text-xs '> POL</span>
         </h1>
-        <span className='text-[#4F576A] font-medium'>$ ---</span>
+        <span className='text-[#4F576A] font-medium'>
+          ${' '}
+          {projectData?.abc?.tokenPrice
+            ? Math.round(projectData?.abc?.tokenPrice * tokenPrice * 100) / 100
+            : '---'}
+        </span>
       </div>
     </div>
   );

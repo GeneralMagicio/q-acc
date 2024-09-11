@@ -103,7 +103,7 @@ const ProjectDonationTable = () => {
               This project has not received any contributions.
             </div>
           ) : (
-            <div className='flex flex-col w-full lg:w-2/3 font-redHatText overflow-x-auto '>
+            <div className='flex flex-col w-full lg:w-3/4 font-redHatText overflow-x-auto '>
               <div className='flex justify-between  '>
                 <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
                   Supporter
@@ -148,8 +148,10 @@ const ProjectDonationTable = () => {
                     className=' flex justify-between '
                   >
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                      {donation.user.firstName
-                        ? donation.user.firstName + ' ' + donation.user.lastName
+                      {!donation.anonymous
+                        ? donation?.user?.firstName +
+                          ' ' +
+                          donation?.user?.lastName
                         : 'Anoynomous'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
@@ -207,6 +209,7 @@ const ProjectDonationTable = () => {
             </div>
           )}
 
+          {/* Donation Card */}
           <div className='w-full lg:w-1/4  p-6  gap-10 flex flex-col font-redHatText shadow-tabShadow rounded-lg h-fit'>
             <div className=' flex flex-col gap-2'>
               <div className='flex gap-2'>
@@ -237,7 +240,7 @@ const ProjectDonationTable = () => {
               </div>
 
               {/* Total Supply */}
-              <div>
+              <div className='flex  flex-wrap  gap-2 justify-between'>
                 <div className='flex gap-2'>
                   <IconTotalSupply />
                   <span className='font-medium text-[#4F576A]'>
@@ -246,7 +249,10 @@ const ProjectDonationTable = () => {
                 </div>
 
                 <h3 className='font-medium text-[#1D1E1F]'>
-                  25,000,000,000 ABC
+                  {projectData?.abc?.totalSupply
+                    ? projectData?.abc?.totalSupply
+                    : '---'}{' '}
+                  {projectData?.abc?.tokenTicker}
                 </h3>
               </div>
             </div>
