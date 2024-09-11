@@ -4,6 +4,7 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useDonateContext } from '@/context/donation.context';
 import config from '@/config/configuration';
+import Link from 'next/link';
 
 interface transactionHashType {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -117,12 +118,14 @@ const DonateSuccessPage = (props: transactionHashType) => {
             </h3>
           </div>
 
-          <Button
-            color={ButtonColor.Giv}
-            className={`text-white justify-center w-[242px] text-sm`}
-          >
-            See More Projects
-          </Button>
+          <Link href={'/projects'}>
+            <Button
+              color={ButtonColor.Giv}
+              className={`text-white justify-center w-[242px] text-sm`}
+            >
+              See More Projects
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

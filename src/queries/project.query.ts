@@ -309,6 +309,17 @@ export const GET_PROJECT_BY_SLUG = `
 				allProjectsSum
 				matchingPool
 			}
+      abc {
+      tokenName
+      tokenTicker
+      issuanceTokenAddress
+      icon
+      orchestratorAddress
+      projectAddress
+      creatorAddress
+      nftContractAddress
+      chainId
+    }
 			campaigns {
 				id
 				title

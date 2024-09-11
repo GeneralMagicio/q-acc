@@ -12,6 +12,7 @@ const whiteListedAddresses = [
   '0xD5db3F8B0a236176587460dC85F0fC5705D78477',
   '0x4ce6B0F604E1036AFFD0826764b51Fb72310964c', //Lovel
   '0x29EE09Bd0f7f41EcD083Ad2708Df17691065790B', // Kechy
+  '0x02FBBB3CFD6a200C1428943C80c1E00671d3f89e', // Ben
 ];
 
 export async function POST(request: Request) {

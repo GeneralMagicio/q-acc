@@ -15,7 +15,7 @@ const DashboardHeader = () => {
     <div className='bg-white  w-ful pb-6 pt-8'>
       <div className='container flex md:flex-row flex-col gap-6   items-center md:text-left text-center'>
         <div
-          className='w-[150px] h-[150px] bg-cover bg-center  rounded-3xl relative'
+          className='min-w-[150px] min-h-[150px] bg-cover bg-center  rounded-3xl relative'
           style={{
             backgroundImage: `url(${user?.avatar || '/images/placeholders/PFPQACC.png'})`,
           }}
