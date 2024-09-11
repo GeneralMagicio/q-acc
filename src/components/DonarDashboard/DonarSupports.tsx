@@ -28,6 +28,47 @@ const groupDonationsByProject = (donations: any[]) => {
   );
 };
 
+// Calculate locked reward token amount based on stream data
+const calculateLockedRewardTokenAmount = (
+  rewardTokenAmount: number,
+  rewardStreamStart: Date,
+  rewardStreamEnd: Date,
+  cliff: number,
+) => {
+  const now = new Date();
+  const streamStart = new Date(rewardStreamStart);
+  const streamEnd = new Date(rewardStreamEnd);
+
+  if (!rewardTokenAmount || !rewardStreamStart || !rewardStreamEnd || !cliff) {
+    return 0;
+  }
+
+  if (now < streamStart) {
+    return rewardTokenAmount + cliff;
+  }
+
+  if (now > streamEnd) {
+    return 0;
+  }
+
+  const totalStreamTime = streamEnd.getTime() - streamStart.getTime();
+  const elapsedTime = now.getTime() - streamStart.getTime();
+  const remainingProportion = 1 - elapsedTime / totalStreamTime;
+
+  return rewardTokenAmount * remainingProportion;
+};
+
+// Calculate claimable reward token amount
+const calculateClaimableRewardTokenAmount = (
+  rewardTokenAmount: number,
+  lockedRewardTokenAmount: number | null,
+) => {
+  if (rewardTokenAmount === undefined || lockedRewardTokenAmount === null) {
+    return 0;
+  }
+  return rewardTokenAmount - lockedRewardTokenAmount;
+};
+
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
   const [donations, setDonations] = useState<any[]>([]);
@@ -86,6 +127,27 @@ const DonarSupports = () => {
                 sum + (donation.rewardTokenAmount || 0),
               0,
             );
+
+            // Sum up locked and claimable amounts for all donations
+            let totalLockedRewardTokens = 0;
+            let totalClaimableRewardTokens = 0;
+
+            projectDonations.forEach((donation: any) => {
+              const lockedRewardTokenAmount = calculateLockedRewardTokenAmount(
+                donation.rewardTokenAmount,
+                donation.rewardStreamStart,
+                donation.rewardStreamEnd,
+                donation.cliff,
+              );
+              const claimableRewardTokenAmount =
+                calculateClaimableRewardTokenAmount(
+                  donation.rewardTokenAmount,
+                  lockedRewardTokenAmount,
+                );
+
+              totalLockedRewardTokens += lockedRewardTokenAmount || 0;
+              totalClaimableRewardTokens += claimableRewardTokenAmount || 0;
+            });
 
             return (
               <div
@@ -210,7 +272,7 @@ const DonarSupports = () => {
                       </span>
                     )}
                     {projectDonations.length === 1 ? (
-                      <span className='font-medium'>&nbsp;once</span>
+                      <span className='font-bold'>&nbsp;once</span>
                     ) : (
                       'times'
                     )}
@@ -253,10 +315,23 @@ const DonarSupports = () => {
                         Available to claim
                       </span>
                     </div>
-                    {/* Todo: calculate available to claim */}
                     <div className='flex gap-1 font-medium text-[#1D1E1F]'>
-                      <span>1,637,000 POL</span>
-                      <span>~ $ 680,345</span>
+                      <span>
+                        {totalClaimableRewardTokens !== null
+                          ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc.tokenName}`
+                          : '-'}
+                      </span>
+                      <span>
+                        ~ $
+                        {totalClaimableRewardTokens !== null
+                          ? parseFloat(
+                              (
+                                totalClaimableRewardTokens *
+                                project.abc.tokenPrice
+                              ).toFixed(2),
+                            ).toString()
+                          : '-'}
+                      </span>
                     </div>
                   </div>
 
