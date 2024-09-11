@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
+import Link from 'next/link';
 import { IconABC } from '../Icons/IconABC';
 import { Button, ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -25,6 +26,8 @@ const MyProjects = () => {
   const { data: projectData } = useFetchProjectByUserId(
     parseInt(userData?.id ?? ''),
   );
+  const projectId = projectData?.id;
+  const projectSlug = projectData?.slug;
   const { address, isConnected } = useAccount();
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [isHovered, setIsHovered] = useState(false);
@@ -82,14 +85,20 @@ const MyProjects = () => {
               onMouseLeave={() => setIsHovered(false)}
               className={`p-2 flex flex-col absolute bg-white md:left-[-100px] shadow-tabShadow rounded-xl  z-30 gap-2 w-[239px] ${isHovered ? 'visible' : 'hidden '} `}
             >
-              <span className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'>
+              <Link
+                href={`/project/${projectSlug}/`}
+                className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'
+              >
                 <IconViewProject />
                 View project
-              </span>
-              <span className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'>
+              </Link>
+              <Link
+                href={`edit/${projectId}/project`}
+                className='p-2 flex gap-2 items-center hover:bg-[#F7F7F9] rounded-lg'
+              >
                 <IconEditProject />
                 Edit project
-              </span>
+              </Link>
             </div>
           </div>
         </div>
