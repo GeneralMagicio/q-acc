@@ -338,7 +338,11 @@ const DonarSupports = () => {
                   {/* Claim Rewards */}
                   <Button
                     color={ButtonColor.Giv}
-                    className='flex justify-center '
+                    className='flex justify-center'
+                    disabled={
+                      totalClaimableRewardTokens === null ||
+                      totalClaimableRewardTokens <= 0
+                    } // Disable if 0 or null
                   >
                     Claim Tokens
                   </Button>
