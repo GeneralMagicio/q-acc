@@ -59,7 +59,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     target='_blank'
-                    href={Routes.Faq}
+                    href={'https://qacc.giveth.io/#faq'}
                     className='text-gray-700 hover:underline'
                   >
                     FAQ
