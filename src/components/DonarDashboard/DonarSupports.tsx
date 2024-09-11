@@ -267,7 +267,8 @@ const DonarSupports = () => {
                         </span>
                       </div>
                       <span className='font-medium text-[#1D1E1F]'>
-                        {project.abc.totalSupply || '-'} {project.abc.tokenName}
+                        {project.abc.totalSupply || '-'}{' '}
+                        {project.abc.tokenTicker}
                       </span>
                     </div>
 
@@ -313,7 +314,7 @@ const DonarSupports = () => {
                       )}
                     />
                     <span className='text-[#4F576A] font-medium'>
-                      {project.abc.tokenName} current value
+                      {project.abc.tokenTicker} current value
                     </span>
                     <div className='relative group'>
                       <IconTokenSchedule />
@@ -370,7 +371,7 @@ const DonarSupports = () => {
                     </div>
                     <div className='flex gap-1'>
                       <span className='font-medium text-[#1D1E1F]'>
-                        {totalRewardTokens || '-'} {project.abc.tokenName}
+                        {totalRewardTokens || '-'} {project.abc.tokenTicker}
                       </span>
                       <span className='font-medium text-[#82899A]'>
                         ~ ${totalRewardTokens * project.abc.tokenPrice || '-'}
@@ -388,7 +389,7 @@ const DonarSupports = () => {
                     <div className='flex gap-1 font-medium text-[#1D1E1F]'>
                       <span>
                         {totalClaimableRewardTokens !== null
-                          ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc.tokenName}`
+                          ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc.tokenTicker}`
                           : '-'}
                       </span>
                       <span>
