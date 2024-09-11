@@ -461,6 +461,7 @@ export const GET_PROJECT_BY_USER_ID = `
       title
       balance
       description
+      teaser
       image
       slug
       creationDate
@@ -470,6 +471,7 @@ export const GET_PROJECT_BY_USER_ID = `
       listed
       reviewStatus
       givingBlocksId
+      icon
       qfRounds {
         name
         id
