@@ -119,7 +119,9 @@ const verifyAccount = () => {
   );
 
   // Open the Polygon ID Verification Web Wallet with the encoded verification request
-  window.open(`https://wallet.privado.id/#${base64EncodedVerificationRequest}`);
+  window.open(
+    `https://wallet-dev.privado.id/#${base64EncodedVerificationRequest}`,
+  );
 };
 export const usePrivado = () => {
   const userFetch = useFetchUser();

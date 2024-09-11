@@ -8,6 +8,7 @@ import {
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
   GET_PROJECT_BY_USER_ID,
+  UPDATE_PROJECT_BY_ID,
 } from '@/queries/project.query';
 import type { IGivethUser } from '@/types/user.type';
 
@@ -77,6 +78,27 @@ export const fetchAllProjects = async () => {
       },
     );
     return res?.allProjects;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateProjectById = async (
+  projectId: number,
+  newProjectData: any,
+) => {
+  try {
+    const res = await requestGraphQL<{ updateProject: any }>(
+      UPDATE_PROJECT_BY_ID,
+      {
+        projectId,
+        newProjectData,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.updateProject;
   } catch (error) {
     console.error(error);
   }

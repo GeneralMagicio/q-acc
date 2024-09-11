@@ -70,6 +70,47 @@ mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
     }
   }
 `;
+
+export const UPDATE_PROJECT_BY_ID = `
+mutation ($projectId: Float!, $newProjectData: UpdateProjectInput!) {
+    updateProject(projectId: $projectId, newProjectData: $newProjectData) {
+      id
+      title
+      description
+      descriptionSummary
+      image
+      slug
+      listed
+      reviewStatus
+    	teaser
+      verified
+      slugHistory
+      creationDate
+      adminUserId
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+    socialMedia {
+      type
+      link
+    }
+      addresses {
+        address
+        isRecipient
+        networkId
+        chainType
+      }
+      adminUser {
+        id
+        name
+        email
+        walletAddress
+      }
+    }
+  }
+`;
 export const GET_PROJECT_BY_ID = `
   query(
       $id: Float!,
@@ -80,8 +121,14 @@ export const GET_PROJECT_BY_ID = `
      connectedWalletUserId: $connectedWalletUserId){
       id
       slug,
+      teaser
+      socialMedia {
+				type
+				link
+			}
       verified
       title,
+      image
       listed,
       reviewStatus
       description,
