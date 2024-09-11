@@ -1,8 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
 import { useProjectContext } from '@/context/project.context';
+import { getIpfsAddress } from '@/helpers/image';
 const ProjectDetailBanner = () => {
   const { projectData } = useProjectContext();
+  console.log('data', projectData);
 
   const bgSrc =
     projectData?.image !== 'https://example.com/image.jpg'
@@ -17,15 +18,29 @@ const ProjectDetailBanner = () => {
     >
       <div className=' flex flex-col absolute  bottom-[40px] left-[40px] md:bottom-[40px] md:left-[40px] gap-2'>
         <div className='border rounded-md bg-white p-1 block w-fit'>
-          <Image
+          {/* <Image
             height={64}
-            width={65}
-            src={'/images/Vector.png'}
-            alt='abc vector'
-          />
+            width={64}
+            src={getIpfsAddress(
+              projectData.abc?.icon! ||
+                'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+            )}
+            alt='Token Tikcer'
+          /> */}
+          <div
+            className='w-[64px] h-[64px] bg-cover bg-center p-3 rounded-full'
+            style={{
+              backgroundImage: `url(${getIpfsAddress(
+                projectData.abc?.icon! ||
+                  'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+              )})`,
+            }}
+          ></div>
         </div>
         <div className='flex flex-col text-white gap-2'>
-          <h1 className='font-normal font-redHatText'>ABC</h1>
+          <h1 className='font-normal font-redHatText'>
+            {projectData?.abc?.tokenTicker}
+          </h1>
           <h1 className='text-4xl md:text-[41px]  font-bold leading-10'>
             {projectData?.title}
           </h1>

@@ -41,17 +41,21 @@ const ProjectTabs = (props: IProjectTabs) => {
               scroll={false}
             >
               <div
-                className={`flex px-6 py-[9px] rounded-full cursor-pointer text-sm md:text-base font-redHatText font-medium ${
-                  activeTab === index
-                    ? '  text-[#1D1E1F] bg-white shadow-tabShadow'
-                    : 'text-[#82899A]'
+                className={`flex px-6 py-[9px] rounded-full font-redHatText cursor-pointer text-sm md:text-base font-medium gap-1 items-center${
+                  activeTab === index ? '  bg-white shadow-tabShadow' : ''
                 }`}
               >
-                {i.title}
+                <span
+                  className={`${
+                    activeTab === index ? ' text-[#1D1E1F]' : 'text-[#82899A]'
+                  }`}
+                >
+                  {i.title}
+                </span>
                 {badgeCount(i.badge) && (
                   <span
-                    className={` text-white text-sm md:text-base rounded-full h-[22px] px-[9px] flex items-center ml-[6px] ${
-                      activeTab === index ? ' bg-gray-800' : 'bg-[#82899A]'
+                    className={`inline-flex items-center  text-white text-xs  min-w-6 min-h-6  font-redHatText  font-medium rounded-full   justify-center ${
+                      activeTab === index ? 'bg-[#1D1E1F]' : 'bg-[#82899A]'
                     }`}
                   >
                     {i.badge}

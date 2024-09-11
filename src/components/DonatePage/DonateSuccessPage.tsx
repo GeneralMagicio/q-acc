@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button, ButtonColor } from '../Button';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -117,12 +118,14 @@ const DonateSuccessPage = (props: transactionHashType) => {
             </h3>
           </div>
 
-          <Button
-            color={ButtonColor.Giv}
-            className={`text-white justify-center w-[242px] text-sm`}
-          >
-            See More Projects
-          </Button>
+          <Link href={'/projects'}>
+            <Button
+              color={ButtonColor.Giv}
+              className={`text-white justify-center w-[242px] text-sm`}
+            >
+              See More Projects
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

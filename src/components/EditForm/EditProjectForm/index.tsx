@@ -1,13 +1,11 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { isAddress } from 'viem';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
-import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
 import Textarea from '../../TextArea';
 import { SocialMediaInput } from '../../SocialMediaInput';
@@ -206,7 +204,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
             data?.socialMedia?.find((sm: any) => sm.type === 'GITHUB')?.link ||
             '',
           projectAddress: data?.addresses[0]?.address || '',
-          addressConfirmed: data?.addresses[0]?.isRecipient || false,
+          addressConfirmed: true,
           logo: data?.icon || null,
           banner: data?.image || null,
           team:
@@ -332,7 +330,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
                 launcher flow.
               </p>
             </div>
-            <div className='flex flex-col p-6 gap-6'>
+            <div className='flex flex-col p-6 gap-6 cursor-not-allowed opacity-60'>
               <div className='flex gap-2 border-b pb-2'>
                 <Image
                   src='/images/chains/polygon.svg'
@@ -347,22 +345,18 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
                 label='Project Address'
                 description='This is the address to which ABC tributes and arbitrage results will be sent.'
                 placeholder='0x...'
-                rules={{
-                  required: 'Project Address is required',
-                  validate: value => {
-                    return isAddress(value) ? true : 'Address in not valid'; // Add your validation logic here
-                  },
-                }}
+                disabled={true}
               />
               <div className='border-t pt-2'>
-                <Checkbox
-                  name='addressConfirmed'
-                  label='I confirm I have access to this address.'
-                  rules={{
-                    required:
-                      'You must confirm you have access to this address.',
-                  }}
+                <input
+                  type='checkbox'
+                  checked={true}
+                  disabled={true}
+                  className='form-checkbox'
                 />
+                <span className='ml-2'>
+                  I confirm I have access to this address.
+                </span>
               </div>
             </div>
           </section>

@@ -16,6 +16,7 @@ export const Footer: React.FC = () => {
               <ul className='space-y-2'>
                 <li>
                   <Link
+                    target='_blank'
                     href={Routes.Home}
                     className='text-gray-700 hover:underline'
                   >
@@ -24,6 +25,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    target='_blank'
                     href={Routes.AllProjects}
                     className='text-gray-700 hover:underline'
                   >
@@ -32,6 +34,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    target='_blank'
                     href={'https://qacc.giveth.io/'}
                     className='text-gray-700 hover:underline'
                   >
@@ -40,6 +43,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    target='_blank'
                     href={
                       'https://giveth.notion.site/The-q-acc-Paper-d21fa650fde1402882dcceb3b5c26d88'
                     }
@@ -54,6 +58,7 @@ export const Footer: React.FC = () => {
               <ul className='space-y-2'>
                 <li>
                   <Link
+                    target='_blank'
                     href={Routes.Faq}
                     className='text-gray-700 hover:underline'
                   >
@@ -62,6 +67,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    target='_blank'
                     href={Routes.AboutUs}
                     className='text-gray-700 hover:underline'
                   >
@@ -70,6 +76,7 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
+                    target='_blank'
                     href={Routes.Terms}
                     className='text-gray-700 hover:underline'
                   >
