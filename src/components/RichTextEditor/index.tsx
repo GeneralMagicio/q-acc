@@ -42,7 +42,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   description,
   rules,
   maxLength,
-  defaultValue = '',
+  defaultValue,
 }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillInstanceRef = useRef<any>(null);
@@ -77,8 +77,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         });
         quillInstanceRef.current = quillInstance;
         quillStateRef.current = QuillState.INITIALIZED;
+        console.log('OUT');
 
         if (defaultValue) {
+          console.log('INSIDE');
           quillInstance.clipboard.dangerouslyPasteHTML(defaultValue); // Set the default value as HTML content
         }
 
@@ -101,6 +103,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       quillInstanceRef.current = null; // Clean up the instance on unmount
     };
   }, [name, setValue]);
+
+  useEffect(() => {
+    if (quillStateRef.current === QuillState.INITIALIZED && defaultValue) {
+      quillInstanceRef.current.clipboard.dangerouslyPasteHTML(defaultValue);
+    }
+  }, [defaultValue]);
 
   // Image handler function
   const imageHandler = () => {
