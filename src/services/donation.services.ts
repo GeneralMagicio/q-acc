@@ -2,6 +2,7 @@ import { requestGraphQL } from '@/helpers/request';
 import {
   GET_PROJECT_DONATIONS_BY_ID,
   SAVE_DONATION,
+  GET_PROJECT_DONATIONS_USERS_BY_ID,
 } from '@/queries/project.query';
 import { GET_USER_DONATIONS } from '@/queries/user.query';
 
@@ -74,6 +75,24 @@ export const fetchUserDonations = async (userId: number) => {
       },
     );
     return res?.donationsByUserId;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProjectDonors = async (projectId: number) => {
+  try {
+    const res = await requestGraphQL<{ donationsByProjectId: any }>(
+      GET_PROJECT_DONATIONS_USERS_BY_ID,
+      {
+        projectId,
+      },
+      {
+        auth: true,
+      },
+    );
+    console.log('result:', res);
+    return res?.donationsByProjectId;
   } catch (error) {
     console.error(error);
   }
