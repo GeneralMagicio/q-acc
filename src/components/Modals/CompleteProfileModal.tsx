@@ -14,7 +14,7 @@ export const CompleteProfileModal: FC<CompleteProfileModalProps> = props => {
 
   const modalTitle = userWhitelisted
     ? 'Before you continue'
-    : 'Before you donate';
+    : 'Before you contribute';
 
   return (
     <Modal {...props}>
