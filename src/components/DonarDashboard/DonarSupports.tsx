@@ -12,6 +12,7 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { fetchUserDonations } from '@/services/donation.services';
 import { getIpfsAddress } from '@/helpers/image';
 import { fetchTokenPrice } from '@/helpers/token';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 // Helper to group donations by project
 const groupDonationsByProject = (donations: any[]) => {
@@ -76,13 +77,17 @@ const DonarSupports = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [POLPrice, setPOLPrice] = useState(1);
+  const { data: user } = useFetchUser();
 
-  const userId = 2;
+  const userId = user?.id;
+  if (!userId) {
+    throw new Error('user not found!');
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetchUserDonations(userId);
+        const res = await fetchUserDonations(parseInt(userId));
         if (res) {
           setDonations(res.donations);
           setTotalCount(res.totalCount);
