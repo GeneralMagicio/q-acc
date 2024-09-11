@@ -32,8 +32,8 @@ const DashboardTabs = (props: IDashboardTabs) => {
   ];
   return (
     <div>
-      <div className='w-full py-4 h-min my-8 text-gray-800  overflow-x-auto'>
-        <div className='flex container w-full   gap-6  justify-start'>
+      <div className='w-full py-4 h-min my-8 text-gray-800 overflow-x-auto'>
+        <div className='flex container w-full gap-6 justify-start'>
           {tabsArray.map((i, index) => (
             <Link
               key={i.title}
