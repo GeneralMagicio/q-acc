@@ -216,6 +216,13 @@ query (
         anonymous
         valueUsd
         amount
+        rewardTokenAmount
+        earlyAccessRound{
+      id
+      roundNumber
+      endDate
+      startDate
+    }
         qfRound {
           id
         }
@@ -224,6 +231,7 @@ query (
           id
           walletAddress
           firstName
+          lastName
           email
         }
         createdAt
