@@ -1,10 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button, ButtonColor } from '../Button';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useDonateContext } from '@/context/donation.context';
 import config from '@/config/configuration';
-import Link from 'next/link';
 
 interface transactionHashType {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop

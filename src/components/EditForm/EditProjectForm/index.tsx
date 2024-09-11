@@ -1,13 +1,11 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { isAddress } from 'viem';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
-import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
 import Textarea from '../../TextArea';
 import { SocialMediaInput } from '../../SocialMediaInput';

@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { useProjectContext } from '@/context/project.context';
 import { getIpfsAddress } from '@/helpers/image';
 const ProjectDetailBanner = () => {
