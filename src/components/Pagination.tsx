@@ -22,7 +22,9 @@ const PaginationItem: React.FC<IPaginationItemProps> = ({
   const baseStyle = 'text-black';
   const disabledStyle = 'text-[#D7DDEA]';
   const activeStyle = isActive ? 'font-bold' : '';
-  const cursorStyle = isDisabled ? 'cursor-not-allowed ' : 'cursor-pointer';
+  const cursorStyle = isDisabled
+    ? 'cursor-not-allowed text-opacity-40 '
+    : 'cursor-pointer font-medium';
 
   return (
     <button
@@ -89,7 +91,7 @@ const Pagination = (props: IPagination) => {
           isActive={+p - 1 === currentPage}
         >
           <span
-            className={`${+p - 1 === currentPage ? 'border-b-2 border-[#5326EC] p-1' : ''}`}
+            className={`${+p - 1 === currentPage ? 'border-b-2 border-[#5326EC] p-1' : 'text-opacity-50'}`}
           >
             {p}
           </span>

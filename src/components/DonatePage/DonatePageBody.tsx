@@ -20,6 +20,7 @@ import {
 import config from '@/config/configuration';
 import { saveDonations } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
+import { getIpfsAddress } from '@/helpers/image';
 
 interface ITokenSchedule {
   message: string;
@@ -67,7 +68,7 @@ const DonatePageBody = () => {
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
 
-  const { projectData } = useDonateContext();
+  const { projectData, totalAmount, uniqueDonars } = useDonateContext();
 
   const client = createPublicClient({
     chain: chain,
@@ -81,7 +82,10 @@ const DonatePageBody = () => {
   const tokenAddress = '0x58a9BB66e2A57aF82e6621F1e2D1483286956683'; //POL token address
   const WMATIC = '0x97986A7526C6B7706C5e48bB8bE3644ab9f4747C';
 
-  const totalSupply = '4000';
+  const totalTokenSupply = '57000000';
+  const totalSupply = 0.02 * parseFloat(totalTokenSupply) * 0.125;
+
+  // const totalSupply = totalPol * 0.125;
   let round = 'early';
 
   console.log(projectData?.addresses[0].address, projectData?.id);
@@ -180,7 +184,7 @@ const DonatePageBody = () => {
         return null;
       } else {
         // Set the new selected percentage and calculate the amount
-        const amount = (parseFloat(totalSupply) * percentage) / 100;
+        const amount = (totalSupply * percentage) / 100;
         setInputAmount(amount.toString());
         return percentage;
       }
@@ -252,6 +256,7 @@ const DonatePageBody = () => {
                 disabled={isConfirming}
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
               />
+
               <span className='absolute text-sm  md:text-base top-0 right-0 h-full flex items-center pr-5 text-gray-400 pointer-events-none'>
                 ~ ${' '}
                 {inputAmount === ''
@@ -260,7 +265,6 @@ const DonatePageBody = () => {
                     100}
               </span>
             </div>
-
             {/* Avaliable token */}
             <div className='flex gap-1'>
               {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
@@ -268,10 +272,10 @@ const DonatePageBody = () => {
                 onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
                 className='cursor-pointer hover:underline'
               >
-                Available in your wallet: $
+                Available in your wallet:{' '}
                 {!tokenDetails
                   ? 'Loading...'
-                  : `${tokenDetails?.formattedBalance} ${tokenDetails?.symbol}`}
+                  : `${Math.floor(tokenDetails?.formattedBalance * 100) / 100} ${tokenDetails?.symbol}`}
               </div>
 
               <button onClick={handleRefetch}>
@@ -311,7 +315,7 @@ const DonatePageBody = () => {
               !isConnected ||
               !(
                 parseFloat(inputAmount) >= 5 &&
-                parseFloat(inputAmount) <= parseFloat(totalSupply)
+                parseFloat(inputAmount) <= totalSupply
               )
             }
             loading={isConfirming}
@@ -399,8 +403,14 @@ const DonatePageBody = () => {
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col gap-1'>
               <div className='flex gap-1 items-center'>
-                <IconABC size={24} />
-                <span>ABC current value</span>
+                <img
+                  className='w-6 h-6 rounded-full'
+                  src={getIpfsAddress(
+                    projectData?.abc?.icon! ||
+                      'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                  )}
+                />
+                <span>{projectData?.abc?.tokenTicker} current value</span>
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -413,12 +423,21 @@ const DonatePageBody = () => {
               <div className='flex gap-8 font-redHatText'>
                 <h2 className='w-1/2 flex gap-1 items-center'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    3.88
+                    {projectData?.abc?.tokenPrices
+                      ? projectData?.abc?.tokenPrices
+                      : '---'}
                   </span>
                   <span className='text-xs text-[#82899A]'>POL</span>
                 </h2>
                 <h2 className=''>
-                  <span>~ $ 2.02</span>
+                  <span>
+                    ~ ${' '}
+                    {projectData?.abc?.tokenPrice
+                      ? Math.round(
+                          projectData?.abc?.tokenPrice * tokenPrice * 100,
+                        ) / 100
+                      : '---'}
+                  </span>
                 </h2>
               </div>
             </div>
@@ -427,11 +446,15 @@ const DonatePageBody = () => {
               <h2 className='text-sm text-[#82899A] bg-[#F7F7F9] rounded-md p-1 w-fit'>
                 Total amount received
               </h2>
-              <h1 className='text-4xl font-extrabold p-2'>1,200 POL</h1>
-              <h2 className='text-[#1D1E1F] font-medium'>~ $ 980,345</h2>
+              <h1 className='text-4xl font-extrabold p-2'>{totalAmount} POL</h1>
+              <h2 className='text-[#1D1E1F] font-medium'>
+                ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+              </h2>
               <p className='text-[#82899A]'>
                 Received from{' '}
-                <span className='font-medium text-[#1D1E1F]'>25</span>{' '}
+                <span className='font-medium text-[#1D1E1F]'>
+                  {uniqueDonars}
+                </span>{' '}
                 supporters
               </p>
             </div>
