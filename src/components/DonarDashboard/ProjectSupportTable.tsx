@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
@@ -161,7 +162,12 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
                   <div className='flex flex-col'>
                     <div className='flex gap-1 items-center'>
                       <span className='font-medium'>{donation.amount}</span>
-                      <IconViewTransaction size={16} />
+                      <Link
+                        target='_blank'
+                        href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
+                      >
+                        <IconViewTransaction size={16} />
+                      </Link>
                     </div>
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
