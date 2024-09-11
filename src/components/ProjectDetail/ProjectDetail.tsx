@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import ProjectDetailBanner from './ProjectDetailBanner';
 
 import ProjectTabs from './ProjectTabs';
@@ -11,7 +12,7 @@ import ProjectSocials from './ProjectSocials';
 import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
-import Link from 'next/link';
+
 import config from '@/config/configuration';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',

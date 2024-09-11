@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import { IconRefresh } from '../Icons/IconRefresh';
-import { IconABC } from '../Icons/IconABC';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
