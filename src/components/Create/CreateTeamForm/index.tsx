@@ -116,7 +116,7 @@ const CreateTeamForm: FC = () => {
     try {
       const res = await createProject(project);
       console.log(res);
-      router.push(Routes.AllProjects);
+      router.push(Routes.DashBoard);
     } catch (err: any) {
       setErrorMessage(
         err.message || 'Failed to create project. Please try again.',

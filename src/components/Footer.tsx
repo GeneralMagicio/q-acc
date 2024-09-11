@@ -32,10 +32,20 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
-                    href={Routes.AboutUs}
+                    href={'https://qacc.giveth.io/'}
                     className='text-gray-700 hover:underline'
                   >
-                    Whitepaper
+                    About q/acc
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={
+                      'https://giveth.notion.site/The-q-acc-Paper-d21fa650fde1402882dcceb3b5c26d88'
+                    }
+                    className='text-gray-700 hover:underline'
+                  >
+                    q/acc Paper
                   </Link>
                 </li>
               </ul>
