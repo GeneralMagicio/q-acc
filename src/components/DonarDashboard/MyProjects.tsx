@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
+import Image from 'next/image';
 import { IconABC } from '../Icons/IconABC';
-import { Button, ButtonColor } from '../Button';
+import { ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -21,6 +22,7 @@ import { ConnectModal } from '../ConnectModal';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear } from '@/helpers/date';
+import config from '@/config/configuration';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -124,25 +126,30 @@ const MyProjects = () => {
             >
               <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
                 <div className='border rounded-md bg-white p-1 block w-fit'>
-                  <IconABC size={40} />
+                  <Image
+                    src={projectData?.icon || '/images/project-card/logo.svg'}
+                    alt=''
+                    width={50}
+                    height={50}
+                  />
                 </div>
                 <div className='flex flex-col text-white gap-2'></div>
               </div>
             </div>
 
             <p className='text-[#4F576A] font-redHatText leading-6'>
-              The Commons Simulator is a gamified simulation tool powered by a
-              cadCAD backend that was developed by the Commons Stack's
-              Decentralized Dev community.
+              {projectData?.teaser}
             </p>
 
-            <Button
+            <Link
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
               color={ButtonColor.Base}
-              className='flex justify-center border border-[#5326EC] font-bold font-redHatText '
+              className='px-6 py-4 rounded-full text-xs font-bold items-center flex gap-2 justify-center border border-[#5326EC] font-redHatText text-giv-500 bg-white'
+              target='_blank'
             >
               Project Contract address{' '}
               <IconViewTransaction size={20} color={'#5326EC'} />
-            </Button>
+            </Link>
           </div>
 
           {/* Project Stats */}

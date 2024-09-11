@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import { IconRefresh } from '../Icons/IconRefresh';
@@ -267,7 +268,7 @@ const DonatePageBody = () => {
                 onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
                 className='cursor-pointer hover:underline'
               >
-                Available in your wallet:
+                Available in your wallet: $
                 {!tokenDetails
                   ? 'Loading...'
                   : `${tokenDetails?.formattedBalance} ${tokenDetails?.symbol}`}
@@ -379,7 +380,12 @@ const DonatePageBody = () => {
           >
             <div className=' flex flex-col absolute  bottom-[24px] left-[24px] md:bottom-[24px] md:left-[24px] gap-2'>
               <div className='border rounded-md bg-white p-1 block w-fit'>
-                <IconABC size={40} />
+                <Image
+                  src={projectData?.icon || '/images/project-card/logo.svg'}
+                  alt=''
+                  width={40}
+                  height={40}
+                />
               </div>
               <div className='flex flex-col text-white gap-2'>
                 <h1 className='text-2xl md:text-[41px]  font-bold leading-10'>

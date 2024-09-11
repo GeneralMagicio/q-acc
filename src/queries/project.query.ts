@@ -256,6 +256,7 @@ export const GET_PROJECT_BY_SLUG = `
 			id
 			title
 			image
+      icon
 			slug
 			verified
 			totalDonations
@@ -469,6 +470,7 @@ export const GET_PROJECT_BY_USER_ID = `
       title
       balance
       description
+      teaser
       image
       slug
       creationDate
@@ -478,9 +480,21 @@ export const GET_PROJECT_BY_USER_ID = `
       listed
       reviewStatus
       givingBlocksId
+      icon
       qfRounds {
         name
         id
+      }
+      abc {
+        tokenName
+        tokenTicker
+        issuanceTokenAddress
+        icon
+        orchestratorAddress
+        projectAddress
+        creatorAddress
+        nftContractAddress
+        chainId
       }
       projectVerificationForm {
         id
