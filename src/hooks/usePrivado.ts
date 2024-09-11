@@ -5,6 +5,7 @@ import config from '@/config/configuration';
 import { requestGraphQL } from '@/helpers/request';
 import { CHECK_USER_PRIVADO_VERIFIED_STATE } from '@/queries/project.query';
 import { useFetchUser } from './useFetchUser';
+import { KYC_EXCLUDED_COUNTRIES } from '@/lib/constants/privado';
 
 export const usePrivadoChainStatus = ({ disable }: { disable: boolean }) => {
   const { address } = useAccount();
@@ -73,6 +74,8 @@ export const useTriggerUserPrivadoStatusCheck = ({
 const verifyAccount = () => {
   // Define the verification request
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES);
+  console.log('countryCodes', excludedCountryCodes);
   const verificationRequest = {
     backUrl: `${baseUrl}/create/verify-privado`,
     finishUrl: `${baseUrl}/create/verify-privado`,
@@ -91,7 +94,7 @@ const verifyAccount = () => {
           type: 'AnimaProofOfIdentity',
           credentialSubject: {
             document_country_code: {
-              $nin: [840],
+              $nin: excludedCountryCodes,
             },
           },
         },
