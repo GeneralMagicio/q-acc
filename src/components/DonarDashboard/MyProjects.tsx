@@ -63,7 +63,7 @@ const MyProjects = () => {
           {/* DropDown */}
           <div className='relative w-fit cursor-pointer'>
             <div
-              onMouseEnter={() => setIsHovered(true)}
+              onClick={() => setIsHovered(!isHovered)}
               onMouseLeave={() => setIsHovered(false)}
               className='py-[10px] px-[16px] bg-[#F7F7F9] rounded-lg flex gap-2 text-[#1D1E1F] font-medium font-redHatText'
             >
@@ -242,17 +242,6 @@ const MyProjects = () => {
         {/* Search Bar */}
         <div className='flex  flex-col md:flex-row gap-4 md:items-center'>
           <div className='md:w-[80%] '>
-            {/* <div className='border rounded-lg flex relative w-full items-center'>
-              <IconABC />
-              <input
-                // onChange={e => setInputAmount(e.target.value)}
-                // value={inputAmount}
-                // type='number'
-                // disabled={isConfirming}
-                placeholder={` | Search for a wallet address or a donor name`}
-                className='w-full   h-[56px] border-y border-r rounded-r-lg  px-4'
-              />
-            </div> */}
             <div className='relative'>
               <span className='absolute inset-y-0 left-0 flex items-center pl-3 pr-1 border-r my-4 '>
                 <svg
@@ -265,8 +254,8 @@ const MyProjects = () => {
                   <path
                     d='M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z'
                     stroke='#A5ADBF'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
               </span>
@@ -278,7 +267,7 @@ const MyProjects = () => {
             </div>
           </div>
 
-          <div className='flex flex-col gap-4 font-redHatText w-[200px] cursor-pointer'>
+          <div className='flex flex-col gap-4 font-redHatText md:w-[20%] cursor-pointer'>
             <div className='w-full px-6 py-4 shadow-baseShadow rounded-full  flex justify-center'>
               <span className='flex gap-4 text-[#5326EC]  font-bold items-center'>
                 Search <IconSearch />

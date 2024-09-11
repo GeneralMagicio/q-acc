@@ -3,9 +3,9 @@ import React, { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
-import { IconABC } from '../Icons/IconABC';
 
 import { Button, ButtonColor } from '../Button';
+import { getIpfsAddress } from '@/helpers/image';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -78,10 +78,21 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </div>
 
             <div>
-              <div className='flex gap-2 items-center'>
-                {/* {project.abc?.icon} */}
-                <IconABC />
-                <p className='text-gray-800'>ABC current value</p>
+              <div className='flex gap-2 items-center pb-1'>
+                {/* {getIpfsAddress(project.abc?.icon!)} */}
+
+                <img
+                  className='w-6 h-6 rounded-full'
+                  src={getIpfsAddress(
+                    project.abc?.icon! ||
+                      'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                  )}
+                />
+
+                {/* <IconABC /> */}
+                <p className='text-gray-800'>
+                  {project?.abc?.tokenTicker} current value
+                </p>
               </div>
               <div className='mt-1 flex justify-between'>
                 <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md w-2/3'>

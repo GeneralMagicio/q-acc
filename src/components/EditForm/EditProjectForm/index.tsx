@@ -2,7 +2,7 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { type FC } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
@@ -14,15 +14,13 @@ import { SocialMediaInput } from '../../SocialMediaInput';
 import { validators } from '../../SocialMediaInput/vaildators';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
-import { useCreateContext } from '../CreateContext';
-import CreateNavbar from '../CreateNavbar';
 import { EProjectSocialMediaType } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
-import { TeamMember } from '../CreateTeamForm';
-import { HoldModal } from '@/components/Modals/HoldModal';
-import { ConnectModal } from '@/components/ConnectModal';
+import { TeamMember } from '@/components/Create/CreateTeamForm';
+import { useCreateContext } from '@/components/Create/CreateContext';
+import CreateNavbar from '@/components/Create/CreateNavbar';
+import { fetchProjectById } from '@/services/project.service';
 
 export interface ProjectFormData {
   projectName: string;
@@ -122,36 +120,139 @@ const socialMediaLinks = [
   },
 ];
 
-const CreateProjectForm: FC = () => {
+const EditProjectForm = ({ projectId }: { projectId: number }) => {
   const { address, isConnected } = useAccount();
   const { data: user } = useFetchUser();
   const { mutateAsync: createProject, isPending } = useCreateProject();
+
   const { formData, setFormData } = useCreateContext();
+  const [adminId, setAdminId] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState({
+    projectName: '',
+    projectTeaser: '',
+    projectDescription: '',
+    WEBSITE: '',
+    FACEBOOK: '',
+    TWITTER: '',
+    LINKEDIN: '',
+    DISCORD: '',
+    TELEGRAM: '',
+    INSTAGRAM: '',
+    REDDIT: '',
+    YOUTUBE: '',
+    FARCASTER: '',
+    LENS: '',
+    GITHUB: '',
+    projectAddress: '',
+    addressConfirmed: false,
+    logo: null,
+    banner: null,
+    team: [],
+  });
+
+  const router = useRouter();
   const methods = useForm<ProjectFormData>({
-    defaultValues: formData.project,
+    defaultValues: project,
     mode: 'onChange', // This enables validation on change
   });
-  const { data: isWhiteListed, isFetching } = useIsUserWhiteListed();
-  const router = useRouter();
+  const { handleSubmit, reset } = methods;
 
-  const { handleSubmit, setValue } = methods;
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await fetchProjectById(projectId);
+        console.log('admin', data);
+        setAdminId(data?.adminUserId);
+
+        setProject({
+          projectName: data?.title || '',
+          projectTeaser: data?.teaser || '',
+          projectDescription: data?.description || '',
+          WEBSITE:
+            data?.socialMedia?.find((sm: any) => sm.type === 'WEBSITE')?.link ||
+            '',
+          FACEBOOK:
+            data?.socialMedia?.find((sm: any) => sm.type === 'FACEBOOK')
+              ?.link || '',
+          TWITTER:
+            data?.socialMedia?.find((sm: any) => sm.type === 'TWITTER')?.link ||
+            '',
+          LINKEDIN:
+            data?.socialMedia?.find((sm: any) => sm.type === 'LINKEDIN')
+              ?.link || '',
+          DISCORD:
+            data?.socialMedia?.find((sm: any) => sm.type === 'DISCORD')?.link ||
+            '',
+          TELEGRAM:
+            data?.socialMedia?.find((sm: any) => sm.type === 'TELEGRAM')
+              ?.link || '',
+          INSTAGRAM:
+            data?.socialMedia?.find((sm: any) => sm.type === 'INSTAGRAM')
+              ?.link || '',
+          REDDIT:
+            data?.socialMedia?.find((sm: any) => sm.type === 'REDDIT')?.link ||
+            '',
+          YOUTUBE:
+            data?.socialMedia?.find((sm: any) => sm.type === 'YOUTUBE')?.link ||
+            '',
+          FARCASTER:
+            data?.socialMedia?.find((sm: any) => sm.type === 'FARCASTER')
+              ?.link || '',
+          LENS:
+            data?.socialMedia?.find((sm: any) => sm.type === 'LENS')?.link ||
+            '',
+          GITHUB:
+            data?.socialMedia?.find((sm: any) => sm.type === 'GITHUB')?.link ||
+            '',
+          projectAddress: data?.addresses[0]?.address || '',
+          addressConfirmed: data?.addresses[0]?.isRecipient || false,
+          logo: data?.icon || null,
+          banner: data?.image || null,
+          team:
+            data?.teamMembers?.map((member: any) => ({
+              name: member.name,
+              image: member.image || null,
+              twitter: member.twitter || '',
+              linkedin: member.linkedin || '',
+              farcaster: member.farcaster || '',
+            })) || [],
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching project:', error);
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, [reset]);
+
+  useEffect(() => {
+    reset(project);
+  }, [project]);
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
   const onSubmit = async (data: ProjectFormData) => {
     if (!user?.id || !address) return;
+    console.log('SUB', data);
     setFormData({ project: data });
-    router.push('/create/team');
+    router.push(`/edit/${projectId}/team`);
   };
 
-  return isFetching ? (
-    <div>Loading...</div>
-  ) : isWhiteListed ? (
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+  if (parseInt(user?.id!) !== adminId) {
+    return <h1> You are not the owner of this project </h1>;
+  }
+  return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className='container'>
         <CreateNavbar
-          title='Create your project'
-          nextLabel='Add your team'
+          title='Edit your project'
+          nextLabel='Edit your team'
           submitLabel='Save & continue'
           loading={isPending}
         />
@@ -187,6 +288,7 @@ const CreateProjectForm: FC = () => {
                 </span>
               </p>
             </div>
+
             <RichTextEditor
               name='projectDescription'
               rules={{
@@ -197,7 +299,7 @@ const CreateProjectForm: FC = () => {
                     'Project description must be at least 200 characters',
                 },
               }}
-              defaultValue={formData.project.projectDescription}
+              defaultValue={project?.projectDescription}
               maxLength={500}
             />
             {/* <Editor /> */}
@@ -283,16 +385,7 @@ const CreateProjectForm: FC = () => {
         </div>
       </form>
     </FormProvider>
-  ) : isConnected ? (
-    <HoldModal isOpen onClose={() => router.push('/')} />
-  ) : (
-    <ConnectModal
-      isOpen={true}
-      onClose={function (): void {
-        throw new Error('Function not implemented.');
-      }}
-    />
   );
 };
 
-export default CreateProjectForm;
+export default EditProjectForm;
