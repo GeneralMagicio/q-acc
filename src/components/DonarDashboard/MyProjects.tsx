@@ -300,7 +300,7 @@ const MyProjects = () => {
           </div>
         </div>
 
-        <ProjectSupportTable />
+        <ProjectSupportTable projectId={projectId ?? ''} />
       </div>
     </div>
   );

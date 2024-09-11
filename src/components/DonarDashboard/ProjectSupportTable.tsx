@@ -4,6 +4,7 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchTokenPrice } from '@/helpers/token';
 
 const itemPerPage = 5;
 
@@ -23,10 +24,11 @@ export interface IOrder {
   direction: EDirection;
 }
 
-const ProjectSupportTable = () => {
+const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData } = useProjectContext();
+  const [tokenPrice, setTokenPrice] = useState(1);
 
   const [order, setOrder] = useState<IOrder>({
     by: EOrderBy.CreationDate,
@@ -38,7 +40,7 @@ const ProjectSupportTable = () => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('46'),
+        parseInt('49'),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -69,6 +71,16 @@ const ProjectSupportTable = () => {
       });
     }
   };
+
+  // Set POL token price
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
 
   if (totalCount === 0) {
     return (
@@ -153,7 +165,7 @@ const ProjectSupportTable = () => {
                     </div>
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
-                      $ {donation.valueUsd}NV
+                      $ {Math.round(donation.amount * tokenPrice * 100) / 100}
                     </span>
                   </div>
                 </div>
