@@ -476,6 +476,17 @@ export const GET_PROJECT_BY_USER_ID = `
         name
         id
       }
+      abc {
+        tokenName
+        tokenTicker
+        issuanceTokenAddress
+        icon
+        orchestratorAddress
+        projectAddress
+        creatorAddress
+        nftContractAddress
+        chainId
+      }
       projectVerificationForm {
         id
         isTermAndConditionsAccepted

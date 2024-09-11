@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconABC } from '../Icons/IconABC';
-import { Button, ButtonColor } from '../Button';
+import { ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -22,6 +22,7 @@ import { ConnectModal } from '../ConnectModal';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear } from '@/helpers/date';
+import config from '@/config/configuration';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -140,13 +141,15 @@ const MyProjects = () => {
               {projectData?.teaser}
             </p>
 
-            <Button
+            <Link
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
               color={ButtonColor.Base}
-              className='flex justify-center border border-[#5326EC] font-bold font-redHatText '
+              className='px-6 py-4 rounded-full text-xs font-bold items-center flex gap-2 justify-center border border-[#5326EC] font-redHatText text-giv-500 bg-white'
+              target='_blank'
             >
               Project Contract address{' '}
               <IconViewTransaction size={20} color={'#5326EC'} />
-            </Button>
+            </Link>
           </div>
 
           {/* Project Stats */}
