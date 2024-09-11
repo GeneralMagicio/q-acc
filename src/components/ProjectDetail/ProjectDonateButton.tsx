@@ -2,18 +2,26 @@ import Link from 'next/link';
 import React from 'react';
 import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
-import { IconABC } from '../Icons/IconABC';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { getIpfsAddress } from '@/helpers/image';
 
 const ProjectDonateButton = () => {
   const { projectData } = useProjectContext();
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
-        <IconABC />
+        <img
+          className='w-6 h-6 rounded-full'
+          src={getIpfsAddress(
+            projectData.abc?.icon! ||
+              'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+          )}
+        />
         <div className='flex gap-2 items-center'>
-          <span className='text-[#4F576A] font-medium'>ABC current value</span>
+          <span className='text-[#4F576A] font-medium'>
+            {projectData?.abc?.tokenTicker} current value
+          </span>
           <div className='relative group'>
             <IconTokenSchedule />
             <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>

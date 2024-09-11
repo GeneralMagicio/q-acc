@@ -7,6 +7,10 @@ import {
 } from 'react';
 import { fetchProjectBySlug } from '@/services/project.service';
 import { fecthProjectDonationsById } from '@/services/donation.services';
+import {
+  calculateTotalDonations,
+  calculateUniqueDonors,
+} from '@/helpers/donation';
 
 const ProjectContext = createContext<any>({
   projectData: undefined,
@@ -25,6 +29,9 @@ export const ProjectProvider = ({
   const [projectData, setProjectData] = useState<any | null>(null);
   const [totalDonationsCount, setTotalDonationsCount] = useState(0);
   const [teamMembers, setTeamMembers] = useState<any>([]);
+  const [donations, setDonations] = useState<any[]>([]);
+  const [uniqueDonars, setUniqueDonars] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   useEffect(() => {
     if (slug) {
@@ -43,28 +50,33 @@ export const ProjectProvider = ({
   }, [slug]);
 
   useEffect(() => {
-    if (!projectData?.id) return;
-    const fetchProjectDonations = async () => {
-      const data = await fecthProjectDonationsById(
-        parseInt(projectData?.id),
-        1,
-        0,
-      );
+    if (projectData?.id) {
+      const fetchProjectDonations = async () => {
+        const data = await fecthProjectDonationsById(
+          parseInt(projectData?.id),
+          1000,
+          0,
+        );
 
-      if (data) {
-        const { donations, totalCount } = data;
-        setTotalDonationsCount(totalCount);
-      }
-    };
-
-    fetchProjectDonations();
-  });
+        if (data) {
+          const { donations, totalCount } = data;
+          setDonations(donations);
+          setTotalDonationsCount(totalCount);
+          setUniqueDonars(calculateUniqueDonors(donations));
+          setTotalAmount(calculateTotalDonations(donations));
+        }
+      };
+      fetchProjectDonations();
+    }
+  }, [slug, projectData]);
 
   return (
     <ProjectContext.Provider
       value={{
         projectData,
         totalDonationsCount,
+        uniqueDonars,
+        totalAmount,
       }}
     >
       {children}
