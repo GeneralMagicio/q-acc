@@ -32,7 +32,7 @@ export interface IOrder {
 const ProjectDonationTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const { projectData } = useProjectContext();
+  const { projectData, uniqueDonars, totalAmount } = useProjectContext();
   const [tokenPrice, setTokenPrice] = useState(1);
   // get project data from context
   const id = 19;
@@ -149,7 +149,7 @@ const ProjectDonationTable = () => {
                   >
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                       {donation.user.firstName
-                        ? donation.user.firstName
+                        ? donation.user.firstName + ' ' + donation.user.lastName
                         : 'Anoynomous'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
@@ -163,7 +163,9 @@ const ProjectDonationTable = () => {
                       )}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                      Early Bird
+                      {donation.earlyAccessRound
+                        ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                        : '---'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>
@@ -184,7 +186,11 @@ const ProjectDonationTable = () => {
                       </div>
                     </div>
                     <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                      600 ABC
+                      {donation.rewardTokenAmount
+                        ? donation.rewardTokenAmount
+                        : '---'}
+                      {'  '}
+                      {projectData?.abc?.tokenTicker}
                     </div>
                   </div>
                 ))}
@@ -211,9 +217,11 @@ const ProjectDonationTable = () => {
               </div>
 
               <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
-                1,880,451 POL
+                {totalAmount} POL
               </h1>
-              <h2 className='font-medium text-[#1D1E1F]'>~ $ 980,345</h2>
+              <h2 className='font-medium text-[#1D1E1F]'>
+                ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+              </h2>
             </div>
 
             <div className=' flex flex-col gap-4 font-redHatText'>
@@ -225,7 +233,7 @@ const ProjectDonationTable = () => {
                     Total supporters
                   </span>
                 </div>
-                <span className='font-semibold'>{totalCount}</span>
+                <span className='font-semibold'>{uniqueDonars}</span>
               </div>
 
               {/* Total Supply */}

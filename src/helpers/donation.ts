@@ -69,3 +69,9 @@ export const calculateClaimableRewardTokenAmount = (
   }
   return rewardTokenAmount - lockedRewardTokenAmount;
 };
+
+export const calculateTotalDonations = (donations: any[]) => {
+  return donations.reduce((total, donation) => {
+    return total + (donation.amount || 0);
+  }, 0);
+};
