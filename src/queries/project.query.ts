@@ -394,3 +394,26 @@ export const CHECK_USER_PRIVADO_VERIFIED_STATE = `
     checkUserPrivadoVerifiedState
   }
 `;
+
+export const GET_PROJECT_DONATIONS_USERS_BY_ID = `
+query (
+    $projectId: Int!
+  ) {
+    donationsByProjectId(
+      projectId: $projectId
+    ) {
+      donations {
+        id
+        user {
+          id
+          walletAddress
+          firstName
+          email
+        }
+        createdAt
+        amount
+      }
+      totalCount
+      totalUsdBalance
+    }
+  }`;
