@@ -44,6 +44,8 @@ const MyProjects = () => {
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [tokenPrice, setTokenPrice] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
 
   console.log({ projectData });
 
@@ -77,6 +79,26 @@ const MyProjects = () => {
 
     fetchPrice();
   }, []);
+
+  // Handler for input change to update searchTerm
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value === '') {
+      setSubmittedSearchTerm(searchTerm);
+    }
+  };
+
+  // Handler for search button click
+  const handleSearchClick = () => {
+    setSubmittedSearchTerm(searchTerm);
+  };
+
+  // Handler for detecting Enter key press
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
 
   if (!userWhiteListed) {
     return (
@@ -340,13 +362,19 @@ const MyProjects = () => {
               <input
                 type='text'
                 className='pl-10 p-2 border h-[56px]  border-gray-300 rounded-lg w-full shadow-tabShadow'
+                value={searchTerm}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 placeholder='Search for a wallet address or a donor name'
               />
             </div>
           </div>
 
           <div className='flex flex-col gap-4 font-redHatText md:w-[20%] cursor-pointer'>
-            <div className='w-full px-6 py-4 shadow-baseShadow rounded-full  flex justify-center'>
+            <div
+              onClick={handleSearchClick}
+              className='w-full px-6 py-4 shadow-baseShadow rounded-full  flex justify-center'
+            >
               <span className='flex gap-4 text-[#5326EC]  font-bold items-center'>
                 Search <IconSearch />
               </span>
@@ -354,7 +382,10 @@ const MyProjects = () => {
           </div>
         </div>
 
-        <ProjectSupportTable projectId={projectId ?? ''} />
+        <ProjectSupportTable
+          projectId={projectId ?? ''}
+          term={submittedSearchTerm}
+        />
       </div>
     </div>
   );
