@@ -5,6 +5,11 @@ import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchTokenPrice } from '@/helpers/token';
+import {
+  formatDateMonthDayYear,
+  getDifferenceFromPeriod,
+} from '@/helpers/date';
 
 const itemPerPage = 1;
 
@@ -28,6 +33,7 @@ const DonarSupportTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData } = useProjectContext();
+  const [tokenPrice, setTokenPrice] = useState(1);
 
   const [order, setOrder] = useState<IOrder>({
     by: EOrderBy.CreationDate,
@@ -71,6 +77,16 @@ const DonarSupportTable = () => {
       });
     }
   };
+
+  // Set POL token price
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
 
   if (totalCount === 0) {
     return (
@@ -154,7 +170,9 @@ const DonarSupportTable = () => {
                     })}
                   </div>
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                    Early window - Round 1
+                    {donation.earlyAccessRound
+                      ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                      : '---'}
                   </div>
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                     <div className='flex flex-col'>
@@ -164,24 +182,32 @@ const DonarSupportTable = () => {
                       </div>
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        $ 233
+                        $ {Math.round(donation.amount * tokenPrice * 100) / 100}
                       </span>
                     </div>
                   </div>
                   <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                    600 ABC
+                    {donation.rewardTokenAmount || '---'}
+                    {'  '}
+                    {projectData?.abc?.tokenTicker}
                   </div>
                   <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
-                    6 Months 14 Days
+                    {donation.earlyAccessRound
+                      ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
+                      : getDifferenceFromPeriod(donation.createdAt, 0.5)}
                   </div>
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                     <div className='flex flex-col'>
                       <div className='flex gap-1 items-center'>
-                        <span className='font-medium'>Feb 24, 2024 End</span>
+                        <span className='font-medium'>
+                          {formatDateMonthDayYear(donation.rewardStreamStart)}{' '}
+                          End
+                        </span>
                       </div>
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        Starts on Aug 30, 2024
+                        Starts on{' '}
+                        {formatDateMonthDayYear(donation.rewardStreamEnd)}
                       </span>
                     </div>
                   </div>

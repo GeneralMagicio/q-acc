@@ -217,6 +217,8 @@ query (
         valueUsd
         amount
         rewardTokenAmount
+        rewardStreamStart
+        rewardStreamEnd
         earlyAccessRound{
       id
       roundNumber

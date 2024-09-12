@@ -188,9 +188,7 @@ const ProjectDonationTable = () => {
                       </div>
                     </div>
                     <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                      {donation.rewardTokenAmount
-                        ? donation.rewardTokenAmount
-                        : '---'}
+                      {donation.rewardTokenAmount || '---'}
                       {'  '}
                       {projectData?.abc?.tokenTicker}
                     </div>
@@ -249,9 +247,7 @@ const ProjectDonationTable = () => {
                 </div>
 
                 <h3 className='font-medium text-[#1D1E1F]'>
-                  {projectData?.abc?.totalSupply
-                    ? projectData?.abc?.totalSupply
-                    : '---'}{' '}
+                  {projectData?.abc?.totalSupply || '---'}{' '}
                   {projectData?.abc?.tokenTicker}
                 </h3>
               </div>
