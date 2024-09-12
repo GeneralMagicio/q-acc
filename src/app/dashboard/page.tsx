@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
+import { useAccount } from 'wagmi';
 import DashboardIndex from '@/components/DonarDashboard/DashboardIndex';
 import { ConnectModal } from '@/components/ConnectModal';
-import { useAccount } from 'wagmi';
 
-const page = () => {
+const Dashboard = () => {
   const { address, isConnected } = useAccount();
   if (!isConnected) {
     return (
@@ -25,4 +25,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Dashboard;

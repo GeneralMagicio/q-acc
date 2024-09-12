@@ -1,11 +1,14 @@
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAccount } from 'wagmi';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
+import { checkUserOwnsNFT } from '@/helpers/token';
+import { NFTModal } from '../Modals/NFTModal';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -18,12 +21,31 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const { address } = useAccount();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  const handleSupport = async (e: any) => {
+    e.stopPropagation();
+    const res = await checkUserOwnsNFT(
+      project?.abc?.nftContractAddress || '',
+      address || '',
+    );
+    if (res) {
+      router.push(`/donate/${project.slug}`);
+    } else {
+      openModal();
+    }
+  };
 
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
   return (
     <div className={`${className} relative cursor-pointer`}>
+      <NFTModal isOpen={isModalOpen} onClose={closeModal} />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -111,10 +133,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           <Button
             color={ButtonColor.Pink}
             className='w-full justify-center mt-4 opacity-80 hover:opacity-100'
-            onClick={e => {
-              e.stopPropagation();
-              router.push(`/donate/${project.slug}`);
-            }}
+            onClick={handleSupport}
           >
             Support This Project
           </Button>
