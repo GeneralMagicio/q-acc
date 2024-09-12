@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IconABC } from '../Icons/IconABC';
 import { ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
