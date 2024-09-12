@@ -16,6 +16,23 @@ export function formatDateMonthDayYear(isoString: string) {
   return `${month} ${day}, ${year}`;
 }
 
+/**
+ * Calculates the time difference between the current date and a future date,
+ * which is determined by adding a given number of years (including fractional years)
+ * to a provided start date. The function returns the difference in a readable
+ * format, such as "X Years Y Months Z Days". It accounts for potential month
+ * and day overflows (e.g., adding months that lead to invalid dates).
+ *
+ * @param {string} startDateString - The starting date in string format (ISO or other formats parsable by Date).
+ * @param {number} yearsToAdd - The number of years to add to the starting date. Can be a fractional number (e.g., 1.5 for 1 year and 6 months).
+ *
+ * @returns {string} - A formatted string representing the time difference from now to the calculated end date, such as "X Years Y Months Z Days".
+ * If the end date is in the past, the function returns a message indicating that the period has ended.
+ *
+ * Example usage:
+ *   getDifferenceFromPeriod("2023-09-11T13:20:36.013Z", 1.5);
+ *   // Returns a string like "1 Year 6 Months 15 Days" depending on the current date.
+ */
 export function getDifferenceFromPeriod(
   startDateString: string,
   yearsToAdd: number,

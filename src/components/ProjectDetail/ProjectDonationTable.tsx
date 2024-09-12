@@ -10,6 +10,7 @@ import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 
 import { fetchTokenPrice } from '@/helpers/token';
+import { formatAmount } from '@/helpers/donation';
 
 const itemPerPage = 5;
 
@@ -172,7 +173,9 @@ const ProjectDonationTable = () => {
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>
                         <div className='flex gap-1 items-center'>
-                          <span className='font-medium'>{donation.amount}</span>
+                          <span className='font-medium'>
+                            {formatAmount(donation.amount)}
+                          </span>
                           <Link
                             target='_blank'
                             href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
@@ -183,7 +186,10 @@ const ProjectDonationTable = () => {
 
                         <span className='text-xs font-medium  text-[#A5ADBF]'>
                           ${' '}
-                          {Math.round(donation.amount * tokenPrice * 100) / 100}
+                          {formatAmount(
+                            Math.round(donation.amount * tokenPrice * 100) /
+                              100,
+                          )}
                         </span>
                       </div>
                     </div>
@@ -218,10 +224,11 @@ const ProjectDonationTable = () => {
               </div>
 
               <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
-                {totalAmount} POL
+                {formatAmount(totalAmount)} POL
               </h1>
               <h2 className='font-medium text-[#1D1E1F]'>
-                ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+                ~ ${' '}
+                {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
               </h2>
             </div>
 

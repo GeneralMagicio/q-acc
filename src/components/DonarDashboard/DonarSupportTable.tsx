@@ -10,6 +10,7 @@ import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
 } from '@/helpers/date';
+import { formatAmount } from '@/helpers/donation';
 
 const itemPerPage = 1;
 
@@ -177,7 +178,9 @@ const DonarSupportTable = () => {
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                     <div className='flex flex-col'>
                       <div className='flex gap-1 items-center'>
-                        <span className='font-medium'>{donation.amount}</span>
+                        <span className='font-medium'>
+                          {formatAmount(donation.amount)}
+                        </span>
                         <IconViewTransaction size={16} />
                       </div>
 

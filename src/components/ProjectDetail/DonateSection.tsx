@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
 import { fetchTokenPrice } from '@/helpers/token';
+import { formatAmount } from '@/helpers/donation';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -32,10 +33,13 @@ const DonateSection = () => {
           <div className='inline-block w-fit text-sm text-[#82899A] bg-[#F7F7F9] rounded-md px-1 py-1'>
             Total amount received
           </div>
-          <h3 className='text-[41px] font-bold'> {totalAmount} POL</h3>
+          <h3 className='text-[41px] font-bold'>
+            {' '}
+            {formatAmount(totalAmount)} POL
+          </h3>
           <h2 className='text-[#1D1E1F] font-bold font-redHatText'>
             {' '}
-            ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+            ~ $ {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
           </h2>
           <p className='text-gray-700'>
             Received from{' '}
