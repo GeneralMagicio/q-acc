@@ -16,7 +16,6 @@ export const Footer: React.FC = () => {
               <ul className='space-y-2'>
                 <li>
                   <Link
-                    target='_blank'
                     href={Routes.Home}
                     className='text-gray-700 hover:underline'
                   >
@@ -25,7 +24,6 @@ export const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
-                    target='_blank'
                     href={Routes.AllProjects}
                     className='text-gray-700 hover:underline'
                   >
