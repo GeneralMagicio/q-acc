@@ -495,6 +495,9 @@ export const GET_PROJECT_BY_USER_ID = `
         creatorAddress
         nftContractAddress
         chainId
+        totalSupply
+        tokenPrice
+        mintedAmount
       }
       projectVerificationForm {
         id
