@@ -32,8 +32,8 @@ const ProjectTabs = (props: IProjectTabs) => {
   ];
   return (
     <div>
-      <div className='w-full py-4 h-min mt-6 text-gray-800 bg-white overflow-x-auto shadow-[0_3px_20px_rgba(212,218,238,0.4)] relative'>
-        <div className='flex container  w-full  items-center gap-6 justify-start  px-0'>
+      <div className='w-full py-4 h-min mt-6 text-gray-800 bg-white overflow-x-auto shadow-[0_3px_20px_rgba(212,218,238,0.4)] relative '>
+        <div className='flex container  w-full  items-center gap-6 justify-start'>
           {tabsArray.map((i, index) => (
             <Link
               key={i.title}
