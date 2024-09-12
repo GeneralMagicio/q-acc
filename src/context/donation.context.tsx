@@ -7,7 +7,10 @@ import {
 } from 'react';
 import { fetchProjectBySlug } from '@/services/project.service';
 import { fecthProjectDonationsById } from '@/services/donation.services';
-import { calculateUniqueDonors } from '@/helpers/donation';
+import {
+  calculateTotalDonations,
+  calculateUniqueDonors,
+} from '@/helpers/donation';
 
 const DonateContext = createContext<any>({
   projectData: undefined,
@@ -27,6 +30,7 @@ export const DonateProvider = ({
   const [totalDonationsCount, setTotalDonationsCount] = useState(0);
   const [donations, setDonations] = useState<any[]>([]);
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   useEffect(() => {
     if (slug) {
@@ -59,6 +63,7 @@ export const DonateProvider = ({
           setDonations(donations);
           setTotalDonationsCount(totalCount);
           setUniqueDonars(calculateUniqueDonors(donations));
+          setTotalAmount(calculateTotalDonations(donations));
         }
       };
       fetchProjectDonations();
@@ -69,6 +74,9 @@ export const DonateProvider = ({
     <DonateContext.Provider
       value={{
         projectData,
+        uniqueDonars,
+        totalDonationsCount,
+        totalAmount,
       }}
     >
       {children}

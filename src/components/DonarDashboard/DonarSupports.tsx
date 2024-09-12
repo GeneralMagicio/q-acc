@@ -36,13 +36,18 @@ const DonarSupports = () => {
   const [POLPrice, setPOLPrice] = useState(1);
   const { data: user } = useFetchUser();
 
+  console.log('user', user);
+
   const userId = user?.id;
-  if (!userId) {
-    throw new Error('user not found!');
-  }
+  // if (!userId) {
+  //   throw new Error('user not found!');
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!userId) {
+        return;
+      }
       try {
         const res = await fetchUserDonations(parseInt(userId));
         if (res) {

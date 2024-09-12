@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import ProjectDetailBanner from './ProjectDetailBanner';
 
 import ProjectTabs from './ProjectTabs';
@@ -11,6 +12,8 @@ import ProjectSocials from './ProjectSocials';
 import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
+
+import config from '@/config/configuration';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -59,19 +62,16 @@ const ProjectDetail = () => {
           <RichTextViewer description={projectData?.description} />
 
           <div className='container'>
-            <div
-              onClick={() => {
-                window.open(
-                  `https://www.google.com/${projectData?.addresses[0].address}`,
-                );
-              }}
+            <Link
+              target='_blank'
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
               className='  w-fit px-6 py-[10px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
             >
               <span className='flex gap-4 text-[#5326EC]  font-bold font-redHatText'>
                 Project Contract Address
                 <IconViewTransaction color='#5326EC' />
               </span>
-            </div>
+            </Link>
           </div>
 
           <div className='flex flex-col container'>
