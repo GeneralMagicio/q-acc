@@ -79,19 +79,6 @@ const MyProjects = () => {
     fetchPrice();
   }, []);
 
-  if (!isConnected) {
-    return (
-      <>
-        <ConnectModal
-          isOpen={true}
-          onClose={function (): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
-      </>
-    );
-  }
-
   if (!userWhiteListed) {
     return (
       <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
