@@ -35,8 +35,17 @@ const DonarSupports = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [POLPrice, setPOLPrice] = useState(1);
-  const { data: user } = useFetchUser();
+  const [user, setUser] = useState<any>(null);
 
+  useEffect(() => {
+    const fetchUser = () => {
+      const { data: user } = useFetchUser();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
+  
   console.log('user', user);
 
   const userId = user?.id;
