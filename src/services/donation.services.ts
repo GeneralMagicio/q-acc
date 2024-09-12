@@ -11,6 +11,7 @@ export const fecthProjectDonationsById = async (
   take: number,
   skip: number,
   orderBy?: { field: any; direction: any },
+  term?: string,
 ) => {
   try {
     const res = await requestGraphQL<{ donationsByProjectId: any }>(
@@ -20,6 +21,7 @@ export const fecthProjectDonationsById = async (
         take,
         skip,
         orderBy,
+        term,
       },
       {
         auth: true,
