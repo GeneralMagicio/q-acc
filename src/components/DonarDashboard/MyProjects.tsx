@@ -230,9 +230,7 @@ const MyProjects = () => {
 
             <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
               <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                {projectData?.abc?.tokenPrice
-                  ? projectData?.abc?.tokenPrice
-                  : '---'}{' '}
+                {projectData?.abc?.tokenPrice ?? '---'}{' '}
                 <span className='text-[#4F576A] text-xs'>POL</span>
               </div>
               <div className='w-[20%] text-[#4F576A] text-right font-medium'>
@@ -251,9 +249,7 @@ const MyProjects = () => {
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.totalSupply
-                  ? projectData?.abc?.totalSupply
-                  : '---'}{' '}
+                {projectData?.abc?.totalSupply || '---'}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>
@@ -300,7 +296,7 @@ const MyProjects = () => {
                 </span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.mintedAmount ?? 0}{' '}
+                {projectData?.abc?.mintedAmount || 0}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>

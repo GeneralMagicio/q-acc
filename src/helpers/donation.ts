@@ -75,3 +75,14 @@ export const calculateTotalDonations = (donations: any[]) => {
     return total + (donation.amount || 0);
   }, 0);
 };
+
+/**
+ * Formats a number with commas as thousand separators.
+ * For example, 1000 becomes "1,000" and 1000000 becomes "1,000,000".
+ *
+ * @param {number} number - The number to be formatted.
+ * @returns {string} The formatted number as a string with commas separating thousands.
+ */
+export const formatAmount = (number: number) => {
+  return number.toLocaleString('en-US');
+};

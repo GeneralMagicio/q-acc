@@ -6,6 +6,10 @@ import { IconSort } from '../Icons/IconSort';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { fetchTokenPrice } from '@/helpers/token';
 import { useFetchProjectById } from '@/hooks/useFetchProjectById';
+import {
+  formatDateMonthDayYear,
+  getDifferenceFromPeriod,
+} from '@/helpers/date';
 
 const itemPerPage = 5;
 
@@ -41,7 +45,7 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
   useEffect(() => {
     const fetchProjectDonations = async () => {
       const data = await fecthProjectDonationsById(
-        parseInt('49'),
+        parseInt(projectId),
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
@@ -178,23 +182,26 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
                   </div>
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {donation.rewardTokenAmount
-                    ? donation.rewardTokenAmount
-                    : '---'}
+                  {donation.rewardTokenAmount || '---'}
                   {'  '}
                   {projectData?.abc?.tokenTicker}
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  6 Months 14 Days
+                  {donation.earlyAccessRound
+                    ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
+                    : getDifferenceFromPeriod(donation.createdAt, 0.5)}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
                     <div className='flex gap-1 items-center'>
-                      <span className='font-medium'>Feb 24, 2024 EndNV</span>
+                      <span className='font-medium'>
+                        {formatDateMonthDayYear(donation.rewardStreamStart)} End
+                      </span>
                     </div>
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
-                      Starts on Aug 30, 2024NV
+                      Starts on{' '}
+                      {formatDateMonthDayYear(donation.rewardStreamEnd)}
                     </span>
                   </div>
                 </div>
