@@ -29,7 +29,13 @@ export interface IOrder {
   direction: EDirection;
 }
 
-const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
+const ProjectSupportTable = ({
+  projectId,
+  term,
+}: {
+  projectId: string;
+  term?: string;
+}) => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { data: projectData } = useFetchProjectById(parseInt(projectId));
@@ -49,6 +55,7 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
         itemPerPage,
         page * itemPerPage,
         { field: order.by, direction: order.direction },
+        term && term.trim() !== '' ? term : '',
       );
 
       if (data) {
@@ -60,7 +67,7 @@ const ProjectSupportTable = ({ projectId }: { projectId: string }) => {
     };
 
     fetchProjectDonations();
-  }, [page, projectData, itemPerPage, totalCount, order]);
+  }, [page, projectData, itemPerPage, totalCount, order, term]);
 
   const orderChangeHandler = (orderBy: EOrderBy) => {
     if (orderBy === order.by) {
