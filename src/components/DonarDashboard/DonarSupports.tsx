@@ -21,6 +21,7 @@ import {
   calculateLockedRewardTokenAmount,
   calculateTotalContributions,
   calculateUniqueDonors,
+  formatAmount,
   groupDonationsByProject,
 } from '@/helpers/donation';
 
@@ -236,7 +237,7 @@ const DonarSupports = () => {
                           {totalContributions || 0} POL{' '}
                         </span>
                         <span className='font-medium text-[#82899A]'>
-                          ~ $ {project.totalDonations || 0}
+                          ~ $ {formatAmount(project.totalDonations) || 0}
                         </span>
                       </div>
                     </div>

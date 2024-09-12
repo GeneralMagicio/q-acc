@@ -20,6 +20,7 @@ import config from '@/config/configuration';
 import { saveDonations } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
+import { formatAmount } from '@/helpers/donation';
 
 interface ITokenSchedule {
   message: string;
@@ -447,7 +448,8 @@ const DonatePageBody = () => {
               </h2>
               <h1 className='text-4xl font-extrabold p-2'>{totalAmount} POL</h1>
               <h2 className='text-[#1D1E1F] font-medium'>
-                ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+                ~ ${' '}
+                {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
               </h2>
               <p className='text-[#82899A]'>
                 Received from{' '}
