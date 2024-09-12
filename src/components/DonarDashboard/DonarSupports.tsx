@@ -45,7 +45,7 @@ const DonarSupports = () => {
 
     fetchUser();
   }, []);
-  
+
   console.log('user', user);
 
   const userId = user?.id;
