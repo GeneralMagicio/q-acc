@@ -84,11 +84,21 @@ const MyProjects = () => {
   // Handler for input change to update searchTerm
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    if (event.target.value === '') {
+      setSubmittedSearchTerm(searchTerm);
+    }
   };
 
   // Handler for search button click
   const handleSearchClick = () => {
     setSubmittedSearchTerm(searchTerm);
+  };
+
+  // Handler for detecting Enter key press
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
   };
 
   if (!isConnected) {
@@ -368,6 +378,7 @@ const MyProjects = () => {
                 className='pl-10 p-2 border h-[56px]  border-gray-300 rounded-lg w-full shadow-tabShadow'
                 value={searchTerm}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 placeholder='Search for a wallet address or a donor name'
               />
             </div>

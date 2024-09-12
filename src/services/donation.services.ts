@@ -21,7 +21,7 @@ export const fecthProjectDonationsById = async (
         take,
         skip,
         orderBy,
-        term,
+        searchTerm: term,
       },
       {
         auth: true,
