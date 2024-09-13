@@ -119,7 +119,7 @@ const DonarSupports = () => {
 
   if (!showBreakDown) {
     return (
-      <div className='container flex flex-col gap-10'>
+      <div className='container flex flex-col gap-10 mb-10'>
         {Object.entries(donationsGroupedByProject).map(
           ([projectId, projectDonations]: [string, any]) => {
             const project = projectDonations[0].project;

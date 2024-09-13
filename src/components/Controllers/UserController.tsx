@@ -44,18 +44,13 @@ export const UserController = () => {
         };
 
         await updateUser(_user);
+        route.push(Routes.VerifyPrivado);
         console.log('saved');
       } else {
         console.log('No user in giveth data');
         setShowCompleteProfileModal(true);
       }
     }
-
-    // Check user profile completion
-    // if (!newUser?.email || !newUser?.fullName) {
-    //   setShowCompleteProfileModal(true);
-    //   return;
-    // }
 
     // Check if user is whitelisted
     const isUserWhiteListed = await checkUserIsWhiteListed(address);
