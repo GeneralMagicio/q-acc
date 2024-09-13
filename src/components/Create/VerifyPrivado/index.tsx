@@ -26,7 +26,10 @@ const VerifyPrivado = () => {
     router.push(Routes.Home);
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className=' mb-[60px] md:mb-[200px] mt-[60px]'
+    >
       <CreateNavbar
         title='Identity verification'
         onBack={e => {
@@ -37,7 +40,7 @@ const VerifyPrivado = () => {
         disabled={!verified.isVerified}
       />
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl mt-6'>
-        <div className='flex flex-col gap-8'>
+        <div className='flex flex-col gap-4'>
           <div className='font-redHatText'>
             <p className='text-[#1D1E1F] text-xl'>
               We use zero knowledge ID to maintain the integrity of quadratic
@@ -48,35 +51,39 @@ const VerifyPrivado = () => {
           {!verified.isVerified && !isLoading && (
             <>
               <div className='font-redHatText'>
-                <p className='text-gray-900 font-medium'>
+                <p className='text-gray-900 text-xl font-medium'>
                   Here is how it works:
                 </p>
               </div>
-              <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
+
+              <div className='bg-[#F7F7F9] flex flex-col p-6 rounded-2xl'>
                 <div className='flex flex-col gap-4'>
-                  <h6 className='text-gray-900 font-bold'>
+                  <h6 className='text-[#1D1E1F] font-bold text-lg'>
                     1. Click the button below to go to Privado.
                   </h6>
-                  <p className='text-gray-800 font-normal'>
+                  <p className='text-[#4F576A] text-xl font-normal'>
                     A new tab will open where you can complete the verification
                     steps.
                   </p>
                 </div>
               </div>
-              <div className='bg-[#F7F7F9] flex flex-col gap-6 p-6 rounded-2xl'>
+
+              <div className='bg-[#F7F7F9] flex flex-col  p-6 rounded-2xl'>
                 <div className='flex flex-col gap-4'>
-                  <h6 className='text-gray-900 font-bold'>
+                  <h6 className='text-[#1D1E1F] font-bold text-lg'>
                     2. Verification may take up to 24 hours.
                   </h6>
-                  <p className='text-gray-800 font-normal'>
+                  <p className='text-[#4F576A] text-xl font-normal'>
                     Once your credentials are validated, we will show the
                     success status on your q/acc profile page.
                   </p>
                 </div>
               </div>
+
+              <hr />
             </>
           )}
-          <div className='flex flex-col gap-10 lg:flex-row justify-between'>
+          <div className='flex flex-col gap-10 lg:flex-row justify-between mt-8'>
             {!isLoading ? (
               <div
                 className={`flex p-4 border  rounded-lg gap-4 ${

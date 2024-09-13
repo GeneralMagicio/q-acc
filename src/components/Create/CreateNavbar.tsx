@@ -23,7 +23,7 @@ const CreateNavbar = ({
         <div className='flex items-center gap-2 '>
           {onBack && (
             <Button
-              className='   text-sm text-black'
+              className='   text-sm text-black !px-0'
               color={ButtonColor.Base}
               onClick={onBack}
               type='button'
