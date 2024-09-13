@@ -25,13 +25,14 @@ export const UserController = () => {
   const { data: user, refetch } = useFetchUser();
 
   const onSign = async (newUser: IUser) => {
-    console.log('Signed');
+    console.log('Signed', newUser);
     setShowSignModal(false);
     if (!newUser?.isSignedIn) return;
 
     // Save user info to QAcc if user is Giveth user
     if (address && !newUser?.fullName && !newUser?.email) {
       const givethData = await fetchGivethUserInfo(address);
+      console.log('Giveth', givethData);
 
       if (givethData && (givethData.name || givethData.email)) {
         const _user = {
@@ -43,14 +44,18 @@ export const UserController = () => {
         };
 
         await updateUser(_user);
+        console.log('saved');
+      } else {
+        console.log('No user in giveth data');
+        setShowCompleteProfileModal(true);
       }
     }
 
     // Check user profile completion
-    if (!newUser?.email || !newUser?.fullName) {
-      setShowCompleteProfileModal(true);
-      return;
-    }
+    // if (!newUser?.email || !newUser?.fullName) {
+    //   setShowCompleteProfileModal(true);
+    //   return;
+    // }
 
     // Check if user is whitelisted
     const isUserWhiteListed = await checkUserIsWhiteListed(address);
