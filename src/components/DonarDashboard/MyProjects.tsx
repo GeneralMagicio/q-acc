@@ -17,7 +17,6 @@ import { IconSearch } from '../Icons/IconSearch';
 import { IconTributesReceived } from '../Icons/IconTributesReceived';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconDropDown } from '../Icons/IconDropDown';
-import { ConnectModal } from '../ConnectModal';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear } from '@/helpers/date';
@@ -100,19 +99,6 @@ const MyProjects = () => {
       handleSearchClick();
     }
   };
-
-  if (!isConnected) {
-    return (
-      <>
-        <ConnectModal
-          isOpen={true}
-          onClose={function (): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
-      </>
-    );
-  }
 
   if (!userWhiteListed) {
     return (

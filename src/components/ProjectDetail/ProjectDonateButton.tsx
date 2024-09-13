@@ -1,15 +1,25 @@
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { useRouter } from 'next/navigation';
 import { Button, ButtonColor } from '../Button';
 import { EDonationCardStates } from './DonateSection';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
-import { fetchTokenPrice } from '@/helpers/token';
+import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
+
+import { NFTModal } from '../Modals/NFTModal';
 
 const ProjectDonateButton = () => {
   const { projectData } = useProjectContext();
   const [tokenPrice, setTokenPrice] = useState(1);
+  const { address } = useAccount();
+  const router = useRouter();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   useEffect(() => {
     const fetchPrice = async () => {
       const price = await fetchTokenPrice('wmatic');
@@ -17,8 +27,22 @@ const ProjectDonateButton = () => {
     };
     fetchPrice();
   }, []);
+
+  const handleSupport = async (e: any) => {
+    e.stopPropagation();
+    const res = await checkUserOwnsNFT(
+      projectData?.abc?.nftContractAddress || '',
+      address || '',
+    );
+    if (!res) {
+      router.push(`/donate/${projectData.slug}`);
+    } else {
+      openModal();
+    }
+  };
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
+      <NFTModal isOpen={isModalOpen} onClose={closeModal} />
       <div className='flex justify-start items-center gap-2 '>
         <img
           className='w-6 h-6 rounded-full'
@@ -73,11 +97,15 @@ const ProjectDonateButton = () => {
           Starting Soon
         </Button>
       ) : (
-        <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
-          <Button color={ButtonColor.Pink} className='w-full justify-center'>
-            Support This Project
-          </Button>
-        </Link>
+        // <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
+        <Button
+          color={ButtonColor.Pink}
+          className='w-full justify-center'
+          onClick={handleSupport}
+        >
+          Support This Project
+        </Button>
+        // </Link>
       )}
     </div>
   );

@@ -144,10 +144,7 @@ const ProjectDonationTable = () => {
 
               <div className=' '>
                 {pageDonations?.map((donation: any) => (
-                  <div
-                    key={donation.transactionId}
-                    className=' flex justify-between '
-                  >
+                  <div key={donation.id} className=' flex justify-between '>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                       {!donation.anonymous
                         ? donation?.user?.firstName +

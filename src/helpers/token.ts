@@ -1,4 +1,5 @@
 import { writeContract } from '@wagmi/core';
+import { ethers } from 'ethers';
 import { erc20Abi, formatUnits, parseUnits } from 'viem';
 import { wagmiConfig } from '@/config/wagmi';
 
@@ -71,5 +72,34 @@ export const fetchTokenPrice = async (tokenId: string) => {
     return data[tokenId].usd;
   } catch (error) {
     console.error('Error fetching token price:', error);
+  }
+};
+
+export const checkUserOwnsNFT = async (
+  nftContractAddress: string,
+  userAddress: string,
+) => {
+  const url = 'https://sepolia.optimism.io';
+  const provider = new ethers.JsonRpcProvider(url);
+
+  const abi = [
+    {
+      inputs: [{ internalType: 'address', name: 'owner', type: 'address' }],
+      name: 'balanceOf',
+      outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ];
+
+  try {
+    const contract = new ethers.Contract(nftContractAddress, abi, provider);
+    const balance = await contract.balanceOf(userAddress);
+    console.log('BAL', balance);
+
+    return balance > 0;
+  } catch (e) {
+    console.log('User Own NFT Error', e);
+    return false;
   }
 };
