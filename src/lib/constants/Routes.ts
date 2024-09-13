@@ -4,6 +4,7 @@ const Routes = {
   CreateProfile: '/create/profile',
   CreateProject: '/create/project',
   CreateTeam: '/create/team',
+  VerifyPrivado: '/create/verify-privado',
   DashBoard: '/dashboard',
   AllProjects: '/projects',
   Projects: '/projects',
