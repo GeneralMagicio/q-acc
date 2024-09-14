@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+import { fetchUserDonationsCount } from '@/services/donation.services';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IDashboardTabs {
   activeTab: number;
@@ -13,10 +15,34 @@ export enum EDashboardPageTabs {
 }
 const DashboardTabs = (props: IDashboardTabs) => {
   const { data: userWhiteListed } = useIsUserWhiteListed();
+  const [donationCount, setDonationCount] = useState<number>(0);
   const { activeTab } = props;
   const badgeCount = (count?: number) => {
     return count || null;
   };
+  const { data: user } = useFetchUser();
+
+  console.log('user', user);
+
+  const userId = user?.id;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userId) {
+        return;
+      }
+      try {
+        const res = await fetchUserDonationsCount(parseInt(userId));
+        if (res) {
+          setDonationCount(res.totalCount);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  });
+
   const tabsArray = [
     {
       title: 'My Projects',
@@ -26,7 +52,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
 
     {
       title: 'My Contributions',
-      badge: 20,
+      badge: donationCount,
       query: EDashboardPageTabs.CONTRIBUTIONS,
     },
   ];

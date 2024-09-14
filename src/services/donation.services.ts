@@ -4,7 +4,10 @@ import {
   SAVE_DONATION,
   GET_PROJECT_DONATIONS_USERS_BY_ID,
 } from '@/queries/project.query';
-import { GET_USER_DONATIONS } from '@/queries/user.query';
+import {
+  GET_USER_DONATIONS,
+  GET_USER_DONATIONS_COUNT,
+} from '@/queries/user.query';
 
 export const fecthProjectDonationsById = async (
   projectId: number,
@@ -95,6 +98,23 @@ export const fetchProjectDonors = async (projectId: number) => {
     );
     console.log('result:', res);
     return res?.donationsByProjectId;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchUserDonationsCount = async (userId: number) => {
+  try {
+    const res = await requestGraphQL<{ donationsByUserId: any }>(
+      GET_USER_DONATIONS_COUNT,
+      {
+        userId,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.donationsByUserId;
   } catch (error) {
     console.error(error);
   }
