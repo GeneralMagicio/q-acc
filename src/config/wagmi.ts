@@ -20,6 +20,10 @@ export const wagmiConfig = defaultWagmiConfig({
   projectId,
   metadata,
   ssr: true,
+  auth: {
+    email: false,
+    socials: [],
+  },
   storage: createStorage({
     storage: cookieStorage,
   }),

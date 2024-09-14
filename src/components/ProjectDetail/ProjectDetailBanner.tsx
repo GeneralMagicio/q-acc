@@ -1,6 +1,5 @@
 import React from 'react';
 import { useProjectContext } from '@/context/project.context';
-import { getIpfsAddress } from '@/helpers/image';
 const ProjectDetailBanner = () => {
   const { projectData } = useProjectContext();
   console.log('data', projectData);
@@ -30,10 +29,7 @@ const ProjectDetailBanner = () => {
           <div
             className='w-[64px] h-[64px] bg-cover bg-center p-3 rounded-full'
             style={{
-              backgroundImage: `url(${getIpfsAddress(
-                projectData.abc?.icon! ||
-                  'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-              )})`,
+              backgroundImage: `url(${projectData?.icon})`,
             }}
           ></div>
         </div>
