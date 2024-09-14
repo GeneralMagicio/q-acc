@@ -34,7 +34,7 @@ const ProjectDonateButton = () => {
       projectData?.abc?.nftContractAddress || '',
       address || '',
     );
-    if (!res) {
+    if (res) {
       router.push(`/donate/${projectData.slug}`);
     } else {
       openModal();

@@ -33,12 +33,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       project?.abc?.nftContractAddress || '',
       address || '',
     );
-    if (!res) {
+    if (res) {
       router.push(`/donate/${project.slug}`);
     } else {
       openModal();
     }
   };
+  console.log(
+    project?.title + ' NFT address' + project?.abc?.nftContractAddress,
+  );
 
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
