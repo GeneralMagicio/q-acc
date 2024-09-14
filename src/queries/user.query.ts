@@ -99,3 +99,17 @@ export const GET_USER_DONATIONS = `
     }
   }
 `;
+
+export const GET_USER_DONATIONS_COUNT = `
+  query (
+    $status: String
+    $userId: Int!
+  ) {
+    donationsByUserId(
+      userId: $userId
+      status: $status
+    ) {
+      totalCount
+    }
+  }
+`;
