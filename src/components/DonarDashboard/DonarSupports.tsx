@@ -375,8 +375,11 @@ const DonarSupports = () => {
   } else {
     return (
       <>
-        <div className='bg-white container p-6 rounded-2xl flex items-center gap-3'>
-          <button onClick={() => setShowBreakDown(false)}>
+        <button
+          onClick={() => setShowBreakDown(false)}
+          className='bg-white container p-6 rounded-2xl flex items-center gap-3'
+        >
+          <div className='flex gap-3'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='32'
@@ -392,10 +395,10 @@ const DonarSupports = () => {
                 strokeLinejoin='round'
               />
             </svg>
-          </button>
 
-          <h1 className='text-[#1D1E1F] text-lg font-bold'>Go Back</h1>
-        </div>
+            <h1 className='text-[#1D1E1F] text-lg font-bold'>Go Back</h1>
+          </div>
+        </button>
         <RewardsBreakDown />
       </>
     );
