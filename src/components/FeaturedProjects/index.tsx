@@ -48,7 +48,7 @@ export const FeaturedProjects = () => {
         <div className='shadow-xl rounded-r-xl py-10 px-6 flex flex-col justify-center items-center gap-12'>
           <h2 className='text-6xl font-bold'>This Season&apos;s Projects</h2>
           <Link href={Routes.Projects}>
-            <div className='flex gap-1 text-giv-500 items-center'>
+            <div className='flex gap-1 text-giv-500 items-center hover:border-b-2 border-giv-500 px-0'>
               <p className='font-bold'>Explore </p>
               <IconChevronRight size={32} />
             </div>
