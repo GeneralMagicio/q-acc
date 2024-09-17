@@ -83,7 +83,7 @@ const verifyAccount = () => {
     zkQueries: [
       {
         circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
-        id: 22,
+        id: config.privadoConfig.requestId,
         query: {
           allowedIssuers: [
             'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
@@ -98,7 +98,7 @@ const verifyAccount = () => {
           },
         },
         params: {
-          nullifierSessionId: '22',
+          nullifierSessionId: config.privadoConfig.requestId,
         },
       },
     ],
