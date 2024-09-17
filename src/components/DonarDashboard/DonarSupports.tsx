@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -81,7 +81,9 @@ const DonarSupports = () => {
     fetchPrice();
   }, []);
 
-  const donationsGroupedByProject = groupDonationsByProject(donations);
+  const donationsGroupedByProject = useMemo(() => {
+    return groupDonationsByProject(donations);
+  }, [donations]);
 
   // Fetch project donations for all grouped projects
   useEffect(() => {
@@ -118,7 +120,7 @@ const DonarSupports = () => {
     if (donations.length > 0) {
       fetchProjectDonations();
     }
-  }, [donationsGroupedByProject]);
+  }, [donations.length, donationsGroupedByProject]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

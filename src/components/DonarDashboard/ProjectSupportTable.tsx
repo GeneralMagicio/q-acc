@@ -50,19 +50,21 @@ const ProjectSupportTable = ({
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
-      const data = await fecthProjectDonationsById(
-        parseInt(projectId),
-        itemPerPage,
-        page * itemPerPage,
-        { field: order.by, direction: order.direction },
-        term && term.trim() !== '' ? term : '',
-      );
+      if (projectId) {
+        const data = await fecthProjectDonationsById(
+          parseInt(projectId),
+          itemPerPage,
+          page * itemPerPage,
+          { field: order.by, direction: order.direction },
+          term && term.trim() !== '' ? term : '',
+        );
 
-      if (data) {
-        const { donations, totalCount } = data;
-        console.log(donations);
-        setTotalCount(totalCount);
-        setPageDonations(donations);
+        if (data) {
+          const { donations, totalCount } = data;
+          console.log(donations);
+          setTotalCount(totalCount);
+          setPageDonations(donations);
+        }
       }
     };
 

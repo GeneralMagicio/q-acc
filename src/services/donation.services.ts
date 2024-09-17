@@ -96,7 +96,6 @@ export const fetchProjectDonors = async (projectId: number) => {
         auth: true,
       },
     );
-    console.log('result:', res);
     return res?.donationsByProjectId;
   } catch (error) {
     console.error(error);
