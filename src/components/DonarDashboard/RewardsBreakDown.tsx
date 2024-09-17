@@ -1,16 +1,20 @@
 import React from 'react';
-import ProjectSupportTable from './ProjectSupportTable'; // Import the ProjectSupportTable component
+import ProjectUserDonationTable from './ProjectUserDonationTable'; // Import the ProjectUserDonationTable component
 import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
-import DonarSupportTable from './DonarSupportTable';
 import { Button, ButtonColor } from '../Button';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconMinted } from '../Icons/IconMinted';
-import { formatAmount, calculateLockedRewardTokenAmount, calculateClaimableRewardTokenAmount } from '@/helpers/donation';
+import {
+  formatAmount,
+  calculateLockedRewardTokenAmount,
+  calculateClaimableRewardTokenAmount,
+} from '@/helpers/donation';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
@@ -21,9 +25,11 @@ interface RewardsBreakDownProps {
 }
 
 const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
-                                                             projectDonations,
-                                                             projectDonorData,
-                                                           }) => {
+  projectDonations,
+  projectDonorData,
+}) => {
+  const { data: user } = useFetchUser();
+  const userId = user?.id;
   const project = projectDonations[0]?.project;
   const totalSupply = project?.abc?.totalSupply || '---';
   const projectData = projectDonorData[project.id] || {
@@ -42,7 +48,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
   let lockedTokens = 0;
   let availableToClaim = 0;
 
-  projectDonations.forEach((donation) => {
+  projectDonations.forEach(donation => {
     const lockedRewardTokenAmount = calculateLockedRewardTokenAmount(
       donation.rewardTokenAmount,
       donation.rewardStreamStart,
@@ -60,7 +66,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
 
   return (
     <>
-      <div className='container flex flex-col gap-8 my-8 '>
+      <div className='container flex flex-col gap-8 my-8'>
         {/* Project Information and Overview */}
         <div className='p-6 flex lg:flex-row flex-col bg-white rounded-lg gap-14'>
           {/* Project Banner */}
@@ -137,9 +143,12 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
         <div className='bg-white rounded-xl flex flex-col gap-8 md:p-6'>
           {/* Donation List Section */}
           <div className='flex flex-col gap-4 w-full p-8 border rounded-xl'>
-            <h2 className='text-2xl font-bold'>Donations</h2>
-            {/* Include ProjectSupportTable */}
-            <ProjectSupportTable projectId={project.id} />
+            <h2 className='text-2xl font-bold'>Your Donations</h2>
+            {/* Include ProjectUserDonationTable */}
+            <ProjectUserDonationTable
+              userId={parseInt(userId as string)}
+              projectId={project.id}
+            />
           </div>
 
           {/* Project Claim Rewards */}
