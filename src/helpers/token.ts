@@ -70,9 +70,10 @@ export const fetchTokenPrice = async (tokenId: string) => {
       `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
     );
     const data = await res.json();
-    return parseFloat(data[coingeckoId].usd);
+    return parseFloat(data[coingeckoId].usd) || 1;
   } catch (error) {
     console.error('Error fetching token price:', error);
+    return 1;
   }
 };
 
