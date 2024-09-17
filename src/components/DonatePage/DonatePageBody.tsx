@@ -115,7 +115,7 @@ const DonatePageBody = () => {
 
   useEffect(() => {
     if (isConfirmed && !hasSavedDonation) {
-      const token = 'POL';
+      const token = 'SPC';
 
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
@@ -126,7 +126,7 @@ const DonatePageBody = () => {
         tokenAddress,
       });
 
-      setHasSavedDonation(true); // Mark the donation as saved
+      setHasSavedDonation(true);
     }
   }, [isConfirmed, hasSavedDonation]);
 
