@@ -2,7 +2,7 @@ import { baseSepolia, polygonZkEvmCardona } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygonZkEvmCardona, baseSepolia] as const,
+  SUPPORTED_CHAINS: [baseSepolia] as const,
   ERC_TOKEN_ADDRESS: '0x9Cc1c42e4525ba4116d7948741ccA9C7446596b2',
   SCAN_URL: 'https://sepolia.basescan.org',
   GRAPHQL_ENDPOINT:
