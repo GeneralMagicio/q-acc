@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
@@ -9,6 +10,7 @@ import {
   getDifferenceFromPeriod,
 } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
+import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
 interface ProjectUserDonationTableProps {
   userId: number;
@@ -22,6 +24,7 @@ interface Donation {
   rewardTokenAmount: number;
   rewardStreamStart: string;
   rewardStreamEnd: string;
+  transactionId: string;
   earlyAccessRound?: {
     roundNumber: number;
   };
@@ -144,7 +147,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
 
   if (totalCount === 0) {
     return (
-      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
+      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px] font-bold text-[#82899A] rounded-2xl'>
         You haven’t made any contributions to this project yet.
       </div>
     );
@@ -173,31 +176,31 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
       <div className='flex gap-10 lg:flex-row flex-col '>
         <div className='flex flex-col w-full font-redHatText overflow-x-auto'>
           <div className='flex justify-between px-10'>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Date
               <button onClick={() => handleSort(EOrderBy.Date)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Round
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Amount [POL]
               <button onClick={() => handleSort(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Tokens
               <button onClick={() => handleSort(EOrderBy.Tokens)}>
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Unlock Remaining
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Stream Details
             </div>
           </div>
@@ -215,9 +218,15 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
-                    <span className='font-medium'>
-                      {formatAmount(donation.amount)} POL
-                    </span>
+                    <div className='flex gap-1 items-center'>
+                      <span className='font-medium'>{donation.amount}</span>
+                      <Link
+                        target='_blank'
+                        href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
+                      >
+                        <IconViewTransaction size={16} />
+                      </Link>
+                    </div>
                     <span className='text-xs font-medium text-[#A5ADBF]'>
                       $ {formatAmount(donation.amount * tokenPrice)}
                     </span>
