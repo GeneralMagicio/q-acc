@@ -21,6 +21,8 @@ import { saveDonations } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
 import { formatAmount } from '@/helpers/donation';
+import { usePrivado } from '@/hooks/usePrivado';
+import FlashMessage from '../FlashMessage';
 
 interface ITokenSchedule {
   message: string;
@@ -58,6 +60,10 @@ const DonatePageBody = () => {
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
+  const [donateDisabled, setDonateDisabled] = useState(true);
+  const [flashMessage, setFlashMessage] = useState('');
+  let { isVerified, isLoading, verifyAccount } = usePrivado();
+  isVerified = true;
 
   const [selectedPercentage, setSelectedPercentage] = useState(0);
 
@@ -94,6 +100,19 @@ const DonatePageBody = () => {
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
+
+  useEffect(() => {
+    // Update donateDisabled based on conditions
+    if (
+      !terms ||
+      !isConnected ||
+      !(parseFloat(inputAmount) >= 5 && parseFloat(inputAmount) <= totalSupply)
+    ) {
+      setDonateDisabled(true);
+    } else {
+      setDonateDisabled(false);
+    }
+  }, [terms, isConnected, inputAmount, totalSupply]);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -172,6 +191,28 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       console.log(ContractFunctionExecutionError);
     }
+  };
+
+  const handleDonateClick = () => {
+    console.log(parseFloat(inputAmount));
+    if (!isVerified) {
+      setFlashMessage('User is not verified with Privado');
+      return;
+    }
+
+    if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
+      setFlashMessage('The minimum donation amount is 5.');
+      return;
+    }
+    if (parseFloat(inputAmount) > totalSupply) {
+      setFlashMessage('The donation amount exceeds the cap limit.');
+      return;
+    }
+    if (!terms) {
+      setFlashMessage('Please accept the terms and conditions.');
+      return;
+    }
+    handleDonate();
   };
 
   const handleRefetch = () => {
@@ -310,25 +351,25 @@ const DonatePageBody = () => {
 
           {/* Donate Button */}
 
-          <Button
-            onClick={handleDonate}
-            disabled={
-              !terms ||
-              !isConnected ||
-              !(
-                parseFloat(inputAmount) >= 5 &&
-                parseFloat(inputAmount) <= totalSupply
-              )
-            }
-            loading={isConfirming}
-            color={ButtonColor.Giv}
-            className={`text-white justify-center ${
-              isConnected ? 'opacity-100' : 'opacity-50 cursor-not-allowed'
-            }`}
-          >
-            Support This Project
-          </Button>
-
+          <div className='flex flex-col'>
+            <Button
+              onClick={handleDonateClick}
+              disabled={!isConnected}
+              loading={isConfirming}
+              color={ButtonColor.Giv}
+              className={`text-white justify-center ${
+                !donateDisabled
+                  ? 'opacity-100'
+                  : 'opacity-50 cursor-not-allowed'
+              }`}
+            >
+              {isConnected ? 'Support This Project' : 'Connect Wallet'}
+            </Button>
+            <FlashMessage
+              message={flashMessage}
+              onClose={() => setFlashMessage('')}
+            />
+          </div>
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
             <div
