@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { fetchUserDonations } from '@/services/donation.services';
-import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import Pagination from '../Pagination';
-import { formatDateMonthDayYear } from '@/helpers/date';
+import { IconSort } from '../Icons/IconSort';
+import { IconTotalDonations } from '../Icons/IconTotalDonations';
+import { fetchUserDonations } from '@/services/donation.services';
+import { fetchTokenPrice } from '@/helpers/token';
+import {
+  formatDateMonthDayYear,
+  getDifferenceFromPeriod,
+} from '@/helpers/date';
+import { formatAmount } from '@/helpers/donation';
 
 interface ProjectUserDonationTableProps {
   userId: number;
@@ -13,13 +19,34 @@ interface Donation {
   id: number;
   amount: number;
   createdAt: string;
-  transactionId: string;
+  rewardTokenAmount: number;
+  rewardStreamStart: string;
+  rewardStreamEnd: string;
+  earlyAccessRound?: {
+    roundNumber: number;
+  };
   project: {
     id: number;
+    abc: {
+      tokenTicker: string;
+      tokenPrice: number;
+    };
   };
 }
 
 const itemPerPage = 5;
+
+enum EOrderBy {
+  Date = 'Date',
+  Round = 'Round',
+  Amount = 'Amount',
+  Tokens = 'Tokens',
+}
+
+enum EDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 
 const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
   userId,
@@ -28,6 +55,11 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [pageDonations, setPageDonations] = useState<Donation[]>([]);
+  const [tokenPrice, setTokenPrice] = useState(1);
+  const [order, setOrder] = useState<{ by: EOrderBy; direction: EDirection }>({
+    by: EOrderBy.Date,
+    direction: EDirection.DESC,
+  });
 
   useEffect(() => {
     const fetchUserDonationData = async () => {
@@ -40,57 +72,174 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
           (donation: Donation) => donation.project.id === projectId,
         );
 
-        setTotalCount(filteredDonations.length);
+        // Sort the donations based on the order state
+        const sortedDonations = filteredDonations.sort(
+          (
+            a: {
+              createdAt: string | number | Date;
+              amount: number;
+              rewardTokenAmount: number;
+            },
+            b: {
+              createdAt: string | number | Date;
+              amount: number;
+              rewardTokenAmount: number;
+            },
+          ) => {
+            if (order.by === EOrderBy.Date) {
+              return order.direction === EDirection.ASC
+                ? new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime()
+                : new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime();
+            } else if (order.by === EOrderBy.Amount) {
+              return order.direction === EDirection.ASC
+                ? a.amount - b.amount
+                : b.amount - a.amount;
+            } else if (order.by === EOrderBy.Tokens) {
+              return order.direction === EDirection.ASC
+                ? a.rewardTokenAmount - b.rewardTokenAmount
+                : b.rewardTokenAmount - a.rewardTokenAmount;
+            }
+            return 0;
+          },
+        );
+
+        setTotalCount(sortedDonations.length);
         setPageDonations(
-          filteredDonations.slice(page * itemPerPage, (page + 1) * itemPerPage),
+          sortedDonations.slice(page * itemPerPage, (page + 1) * itemPerPage),
         );
       }
     };
 
     fetchUserDonationData();
-  }, [userId, projectId, page]);
+  }, [userId, projectId, page, order]);
+
+  // Fetch token price
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchTokenPrice('wmatic');
+      setTokenPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
+
+  // Function to handle sorting
+  const handleSort = (sortBy: EOrderBy) => {
+    setOrder(prevOrder => ({
+      by: sortBy,
+      direction:
+        prevOrder.by === sortBy && prevOrder.direction === EDirection.ASC
+          ? EDirection.DESC
+          : EDirection.ASC,
+    }));
+  };
+
+  // Calculate total contributions and tokens
+  const totalContributions = pageDonations.reduce(
+    (sum, donation) => sum + donation.amount,
+    0,
+  );
 
   if (totalCount === 0) {
     return (
-      <div className='bg-white w-full h-[500px] flex items-center justify-center font-bold text-[25px] text-[#82899A]'>
-        You didn’t make any contributions to this project yet.
+      <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
+        You haven’t made any contributions to this project yet.
       </div>
     );
   }
 
   return (
-    <div className='container flex flex-col py-1 md:px-6 gap-10'>
+    <div className='container flex flex-col py-10 md:px-6 gap-10'>
+      {/* Summary Section */}
+      <div className='flex justify-between p-4 bg-[#F7F7F9] items-center rounded-xl'>
+        <div className='flex gap-2'>
+          <IconTotalDonations size={32} />
+          <h1 className='text-[#1D1E1F] md:text-[25px] font-bold '>
+            All your contributions
+          </h1>
+        </div>
+        <div className='flex gap-2 text-[#1D1E1F] '>
+          <h1 className='md:text-[25px] font-bold '>
+            {formatAmount(totalContributions)} POL
+          </h1>
+          <span className='font-medium'>
+            ~ ${formatAmount(totalContributions * tokenPrice)}
+          </span>
+        </div>
+      </div>
+
       <div className='flex gap-10 lg:flex-row flex-col '>
         <div className='flex flex-col w-full font-redHatText overflow-x-auto'>
-          <div className='flex justify-between'>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+          <div className='flex justify-between px-10'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Date
+              <button onClick={() => handleSort(EOrderBy.Date)}>
+                <IconSort size={16} />
+              </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+              Round
+            </div>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Amount [POL]
+              <button onClick={() => handleSort(EOrderBy.Amount)}>
+                <IconSort size={16} />
+              </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-              Transaction
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+              Tokens
+              <button onClick={() => handleSort(EOrderBy.Tokens)}>
+                <IconSort size={16} />
+              </button>
+            </div>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+              Unlock Remaining
+            </div>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+              Stream Details
             </div>
           </div>
 
-          <div className=''>
+          <div className='px-10'>
             {pageDonations.map(donation => (
               <div key={donation.id} className='flex justify-between'>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
                   {formatDateMonthDayYear(donation.createdAt)}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {donation.amount} POL
+                  {donation.earlyAccessRound
+                    ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                    : 'q/acc round'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  <a
-                    href={`https://explorer.com/tx/${donation.transactionId}`}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <IconViewTransaction size={16} />
-                  </a>
+                  <div className='flex flex-col'>
+                    <span className='font-medium'>
+                      {formatAmount(donation.amount)} POL
+                    </span>
+                    <span className='text-xs font-medium text-[#A5ADBF]'>
+                      $ {formatAmount(donation.amount * tokenPrice)}
+                    </span>
+                  </div>
+                </div>
+                <div className='p-[18px_4px] text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  {donation.rewardTokenAmount}{' '}
+                  {donation.project.abc.tokenTicker}
+                </div>
+                <div className='p-[18px_4px] text-[#1D1E1F] flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  {getDifferenceFromPeriod(donation.rewardStreamStart, 1)}
+                </div>
+                <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
+                  <div className='flex flex-col'>
+                    <span className='font-medium'>
+                      {formatDateMonthDayYear(donation.rewardStreamEnd)} End
+                    </span>
+                    <span className='text-xs font-medium text-[#A5ADBF]'>
+                      Starts on{' '}
+                      {formatDateMonthDayYear(donation.rewardStreamStart)}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

@@ -143,7 +143,9 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
         <div className='bg-white rounded-xl flex flex-col gap-8 md:p-6'>
           {/* Donation List Section */}
           <div className='flex flex-col gap-4 w-full p-8 border rounded-xl'>
-            <h2 className='text-2xl font-bold'>Your Donations</h2>
+            <h2 className='text-2xl font-bold'>
+              Your tokens & contributions breakdown
+            </h2>
             {/* Include ProjectUserDonationTable */}
             <ProjectUserDonationTable
               userId={parseInt(userId as string)}
