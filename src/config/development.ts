@@ -16,7 +16,7 @@ const config: EnvConfig = {
   privadoConfig: {
     chain: polygonZkEvmCardona,
     contractAddress: '0xdE9eBC446d69EF9a876a377e3E3cEe91d08fE2A0',
-    requestId: 30,
+    requestId: 33,
   },
 };
 
