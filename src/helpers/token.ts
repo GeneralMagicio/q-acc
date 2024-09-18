@@ -65,14 +65,16 @@ export const handleErc20Transfer = async ({
 };
 
 export const fetchTokenPrice = async (tokenId: string) => {
+  const coingeckoId = 'polygon-ecosystem-token';
   try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=usd`,
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
     );
-    const data = await response.json();
-    return data[tokenId].usd;
+    const data = await res.json();
+    return parseFloat(data[coingeckoId].usd) || 1;
   } catch (error) {
     console.error('Error fetching token price:', error);
+    return 1;
   }
 };
 
