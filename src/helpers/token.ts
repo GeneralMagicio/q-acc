@@ -2,6 +2,7 @@ import { writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { erc20Abi, formatUnits, parseUnits } from 'viem';
 import { wagmiConfig } from '@/config/wagmi';
+import config from '@/config/configuration';
 
 export const fetchTokenDetails = async ({
   tokenAddress,
@@ -81,7 +82,7 @@ export const checkUserOwnsNFT = async (
   nftContractAddress: string,
   userAddress: string,
 ) => {
-  const url = 'https://sepolia.optimism.io';
+  const url = config.NETWORK_RPC_ADDRESS;
   const provider = new ethers.JsonRpcProvider(url);
 
   const abi = [
