@@ -74,7 +74,9 @@ export const useTriggerUserPrivadoStatusCheck = ({
 const verifyAccount = () => {
   // Define the verification request
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES);
+  const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES).sort(
+    (a, b) => a - b,
+  );
   const verificationRequest = {
     backUrl: `${baseUrl}/create/verify-privado`,
     finishUrl: `${baseUrl}/create/verify-privado`,
