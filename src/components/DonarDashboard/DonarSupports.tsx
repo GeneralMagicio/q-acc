@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -36,6 +36,12 @@ const DonarSupports = () => {
   const [error, setError] = useState<string | null>(null);
   const [POLPrice, setPOLPrice] = useState(1);
   const { data: user } = useFetchUser();
+  const [projectDonorDataForBreakDown, setProjectDonorDataForBreakDown] =
+    useState<
+      Record<number, { uniqueDonors: number; totalContributions: number }>
+    >({});
+  const [projectDonationsForBreakDown, setProjectDonationsForBreakDown] =
+    useState<any[]>([]);
 
   console.log('user', user);
 
@@ -75,7 +81,9 @@ const DonarSupports = () => {
     fetchPrice();
   }, []);
 
-  const donationsGroupedByProject = groupDonationsByProject(donations);
+  const donationsGroupedByProject = useMemo(() => {
+    return groupDonationsByProject(donations);
+  }, [donations]);
 
   // Fetch project donations for all grouped projects
   useEffect(() => {
@@ -112,7 +120,7 @@ const DonarSupports = () => {
     if (donations.length > 0) {
       fetchProjectDonations();
     }
-  }, [donationsGroupedByProject]);
+  }, [donations.length, donationsGroupedByProject]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -208,7 +216,7 @@ const DonarSupports = () => {
                         </span>
                       </div>
                       <span className='font-medium text-[#1D1E1F]'>
-                        {project.abc.totalSupply || '-'}{' '}
+                        {project.abc.totalSupply || '---'}{' '}
                         {project.abc.tokenTicker}
                       </span>
                     </div>
@@ -267,11 +275,11 @@ const DonarSupports = () => {
                   </div>
                   <div className='flex justify-between text-[#1D1E1F] font-medium'>
                     <h2 className='flex gap-1 items-center'>
-                      {project.abc.tokenPrice / POLPrice || '-'}{' '}
+                      {project.abc.tokenPrice / POLPrice || '---'}{' '}
                       <span className='text-[#4F576A] text-xs pb-1'>POL</span>
                     </h2>
                     <h2 className='text-[#4F576A]'>
-                      $ {project.abc.tokenPrice || '-'}
+                      $ {project.abc.tokenPrice || '--'}
                     </h2>
                   </div>
                   <hr />
@@ -312,10 +320,10 @@ const DonarSupports = () => {
                     </div>
                     <div className='flex gap-1'>
                       <span className='font-medium text-[#1D1E1F]'>
-                        {totalRewardTokens || '-'} {project.abc.tokenTicker}
+                        {totalRewardTokens || '---'} {project.abc.tokenTicker}
                       </span>
                       <span className='font-medium text-[#82899A]'>
-                        ~ ${totalRewardTokens * project.abc.tokenPrice || '-'}
+                        ~ ${totalRewardTokens * project.abc.tokenPrice || '---'}
                       </span>
                     </div>
                   </div>
@@ -330,8 +338,8 @@ const DonarSupports = () => {
                     <div className='flex gap-1 font-medium text-[#1D1E1F]'>
                       <span>
                         {totalClaimableRewardTokens !== null
-                          ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc.tokenTicker}`
-                          : '-'}
+                          ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc?.tokenTicker || ''}`
+                          : '---'}
                       </span>
                       <span>
                         ~ $
@@ -342,7 +350,7 @@ const DonarSupports = () => {
                                 project.abc.tokenPrice
                               ).toFixed(2),
                             ).toString()
-                          : '-'}
+                          : '---'}
                       </span>
                     </div>
                   </div>
@@ -361,7 +369,11 @@ const DonarSupports = () => {
                   <Button
                     color={ButtonColor.Base}
                     className='flex justify-center shadow-lg '
-                    onClick={() => setShowBreakDown(true)}
+                    onClick={() => {
+                      setShowBreakDown(true);
+                      setProjectDonorDataForBreakDown(projectDonorData);
+                      setProjectDonationsForBreakDown(projectDonations);
+                    }}
                   >
                     Tokens & Contributions Breakdown <IconBreakdownArrow />
                   </Button>
@@ -399,7 +411,10 @@ const DonarSupports = () => {
             <h1 className='text-[#1D1E1F] text-lg font-bold'>Go Back</h1>
           </div>
         </button>
-        <RewardsBreakDown />
+        <RewardsBreakDown
+          projectDonations={projectDonationsForBreakDown}
+          projectDonorData={projectDonorDataForBreakDown}
+        />
       </>
     );
   }

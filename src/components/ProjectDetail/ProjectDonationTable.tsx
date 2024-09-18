@@ -11,6 +11,7 @@ import { fecthProjectDonationsById } from '@/services/donation.services';
 
 import { fetchTokenPrice } from '@/helpers/token';
 import { formatAmount } from '@/helpers/donation';
+import config from '@/config/configuration';
 
 const itemPerPage = 5;
 
@@ -175,7 +176,7 @@ const ProjectDonationTable = () => {
                           </span>
                           <Link
                             target='_blank'
-                            href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
+                            href={`${config.SCAN_URL}/tx/${donation.transactionId}`}
                           >
                             <IconViewTransaction size={16} color='#4F576A' />
                           </Link>

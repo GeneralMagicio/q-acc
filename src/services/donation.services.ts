@@ -46,7 +46,6 @@ export const saveDonations = async (
   anonymous: boolean,
 ) => {
   try {
-    console.log('Inde 2');
     const res = await requestGraphQL<{ createDonation: number }>(
       SAVE_DONATION,
       {
@@ -96,7 +95,6 @@ export const fetchProjectDonors = async (projectId: number) => {
         auth: true,
       },
     );
-    console.log('result:', res);
     return res?.donationsByProjectId;
   } catch (error) {
     console.error(error);

@@ -79,8 +79,9 @@ const DonatePageBody = () => {
       hash,
     });
 
-  const tokenAddress = '0x58a9BB66e2A57aF82e6621F1e2D1483286956683'; //POL token address
+  // const tokenAddress = '0x58a9BB66e2A57aF82e6621F1e2D1483286956683'; //POL token address
   const WMATIC = '0x97986A7526C6B7706C5e48bB8bE3644ab9f4747C';
+  const tokenAddress = config.ERC_TOKEN_ADDRESS; //SPC token
 
   const totalTokenSupply = '57000000';
   const totalSupply = 0.02 * parseFloat(totalTokenSupply) * 0.125;
@@ -114,7 +115,7 @@ const DonatePageBody = () => {
 
   useEffect(() => {
     if (isConfirmed && !hasSavedDonation) {
-      const token = 'POL';
+      const token = 'SPC';
 
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
@@ -125,7 +126,7 @@ const DonatePageBody = () => {
         tokenAddress,
       });
 
-      setHasSavedDonation(true); // Mark the donation as saved
+      setHasSavedDonation(true);
     }
   }, [isConfirmed, hasSavedDonation]);
 
@@ -136,6 +137,7 @@ const DonatePageBody = () => {
       address,
       client,
     });
+    console.log('Data', data, chain);
     setTokenDetails(data);
   };
 
