@@ -48,15 +48,17 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     router.push(`/project/${project.slug}`);
   };
 
-  let progress = 37;
+  let progress = 67;
   return (
-    <div className={`${className} relative cursor-pointer`}>
+    <div
+      className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
+    >
       <NFTModal isOpen={isModalOpen} onClose={closeModal} />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full  h-[430px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
+        className={`relative  w-full  h-[470px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
         <div className='relative h-[350px] font-redHatText '>
@@ -105,13 +107,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </div>
 
             {/* Percentage Bar */}
-            <div className='flex flex-col gap-1'>
-              <div className='px-2 py-[2px] rounded-md bg-[#F7F7F9] w-fit'>
-                <span className='text-[#1D1E1F] font-redHatText text-xs font-medium'>
-                  {progress === 0
-                    ? 'Getting started'
-                    : progress + '% collected'}
-                </span>
+            <div className='flex flex-col gap-2'>
+              <div
+                className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+              >
+                {progress === 0
+                  ? 'Getting started !'
+                  : progress !== 100
+                    ? progress + '% collected'
+                    : 'Maxed out this round!'}
               </div>
               <ProgressBar progress={progress} isStarted={false} />
             </div>
@@ -135,12 +139,12 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </div>
               <div className='mt-1 flex justify-between'>
                 <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                  <p className='font-bold text-gray-800'>1.70</p>
+                  <p className='font-bold text-gray-800'>0.191 - 1.172</p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>
                 <div className='flex gap-1 items-center'>
-                  <p className='text-base text-[#4F576A] font-medium'>
-                    ~ $1.47
+                  <p className='text-sm text-[#4F576A] font-medium'>
+                    ~$ 0.174 - 1.068
                   </p>
                 </div>
               </div>
