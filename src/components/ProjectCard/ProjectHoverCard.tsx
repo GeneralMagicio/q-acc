@@ -9,6 +9,7 @@ import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
+import ProgressBar from '../ProgressBar';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -46,14 +47,18 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
+
+  let progress = 67;
   return (
-    <div className={`${className} relative cursor-pointer`}>
+    <div
+      className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
+    >
       <NFTModal isOpen={isModalOpen} onClose={closeModal} />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full  h-[430px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
+        className={`relative  w-full  h-[470px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
         <div className='relative h-[350px] font-redHatText '>
@@ -92,14 +97,27 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col'>
-              <p className='text-pink-500'>{project.abc?.tokenName}</p>
               <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
-            <div className='min-h-[100px] text-ellipsis border-b pb-3  '>
+            <div className='min-h-[100px] text-ellipsis  pb-3  '>
               <p className='text-gray-500  overflow-hidden    font-redHatText  line-clamp-4 leading-6'>
                 {project.descriptionSummary}
                 {/* {project.teaser ? project.teaser : '\u00A0'} */}
               </p>
+            </div>
+
+            {/* Percentage Bar */}
+            <div className='flex flex-col gap-2'>
+              <div
+                className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+              >
+                {progress === 0
+                  ? 'Getting started !'
+                  : progress !== 100
+                    ? progress + '% collected'
+                    : 'Maxed out this round!'}
+              </div>
+              <ProgressBar progress={progress} isStarted={false} />
             </div>
 
             <div>
@@ -115,18 +133,18 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 />
 
                 {/* <IconABC /> */}
-                <p className='text-gray-800'>
-                  {project?.abc?.tokenTicker} current value
+                <p className='text-gray-800 font-medium'>
+                  {project?.abc?.tokenTicker} range
                 </p>
               </div>
               <div className='mt-1 flex justify-between'>
                 <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                  <p className='font-bold text-gray-800'>1.70</p>
+                  <p className='font-bold text-gray-800'>0.191 - 1.172</p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>
                 <div className='flex gap-1 items-center'>
-                  <p className='text-base text-[#4F576A] font-medium'>
-                    ~ $1.47
+                  <p className='text-sm text-[#4F576A] font-medium'>
+                    ~$ 0.174 - 1.068
                   </p>
                 </div>
               </div>
