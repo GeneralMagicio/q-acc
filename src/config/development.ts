@@ -3,7 +3,8 @@ import { EnvConfig } from '@/types/config.type';
 
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [baseSepolia] as const,
-  ERC_TOKEN_ADDRESS: '0x9Cc1c42e4525ba4116d7948741ccA9C7446596b2',
+  ERC_TOKEN_ADDRESS: '0x065775C7aB4E60ad1776A30DCfB15325d231Ce4F',
+  ERC_TOKEN_SYMBOL: 'iUSD',
   SCAN_URL: 'https://sepolia.basescan.org',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
