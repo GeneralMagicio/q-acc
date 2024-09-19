@@ -134,7 +134,7 @@ const DonatePageBody = () => {
 
   useEffect(() => {
     if (isConfirmed && !hasSavedDonation) {
-      const token = 'SPC';
+      const token = config.ERC_TOKEN_SYMBOL;
 
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
@@ -288,9 +288,7 @@ const DonatePageBody = () => {
             <div className='border rounded-lg flex relative '>
               <div className='md:w-40 flex gap-4 p-4 border '>
                 <IconMatic size={24} />
-                <h1 className=' font-medium'>
-                  {tokenDetails?.symbol || 'POL'}
-                </h1>
+                <h1 className=' font-medium'>POL</h1>
               </div>
               <input
                 onChange={e => setInputAmount(e.target.value)}
