@@ -9,6 +9,7 @@ import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
+import ProgressBar from '../ProgressBar';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -46,6 +47,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
+
+  let progress = 37;
   return (
     <div className={`${className} relative cursor-pointer`}>
       <NFTModal isOpen={isModalOpen} onClose={closeModal} />
@@ -92,14 +95,25 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col'>
-              <p className='text-pink-500'>{project.abc?.tokenName}</p>
               <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
-            <div className='min-h-[100px] text-ellipsis border-b pb-3  '>
+            <div className='min-h-[100px] text-ellipsis  pb-3  '>
               <p className='text-gray-500  overflow-hidden    font-redHatText  line-clamp-4 leading-6'>
                 {project.descriptionSummary}
                 {/* {project.teaser ? project.teaser : '\u00A0'} */}
               </p>
+            </div>
+
+            {/* Percentage Bar */}
+            <div className='flex flex-col gap-1'>
+              <div className='px-2 py-[2px] rounded-md bg-[#F7F7F9] w-fit'>
+                <span className='text-[#1D1E1F] font-redHatText text-xs font-medium'>
+                  {progress === 0
+                    ? 'Getting started'
+                    : progress + '% collected'}
+                </span>
+              </div>
+              <ProgressBar progress={progress} isStarted={false} />
             </div>
 
             <div>
@@ -115,8 +129,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 />
 
                 {/* <IconABC /> */}
-                <p className='text-gray-800'>
-                  {project?.abc?.tokenTicker} current value
+                <p className='text-gray-800 font-medium'>
+                  {project?.abc?.tokenTicker} range
                 </p>
               </div>
               <div className='mt-1 flex justify-between'>
