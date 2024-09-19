@@ -177,6 +177,7 @@ export const GET_PROJECT_BY_ID = `
       abc {
         tokenName
         tokenTicker
+        totalSupply
         issuanceTokenAddress
         icon
         orchestratorAddress
@@ -323,6 +324,7 @@ export const GET_PROJECT_BY_SLUG = `
       abc {
       tokenName
       tokenTicker
+      totalSupply
       issuanceTokenAddress
       icon
       orchestratorAddress
