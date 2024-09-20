@@ -14,6 +14,7 @@ import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
 import config from '@/config/configuration';
+import RoundCountBanner from '../RoundCountBanner';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -52,6 +53,9 @@ const ProjectDetail = () => {
           <ProjectDetailBanner />
 
           <DonateSection />
+        </div>
+        <div className='my-6'>
+          <RoundCountBanner />
         </div>
       </div>
 

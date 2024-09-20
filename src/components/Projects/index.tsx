@@ -13,7 +13,10 @@ export const ProjectsView = () => {
     <>
       <ProjectsBanner />
       <div className='container mx-auto'>
-        <RoundCountBanner />
+        <div className='my-[60px]'>
+          <RoundCountBanner />
+        </div>
+
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10'>
           {isLoading ? (
             <h1>Loading Projects...</h1>

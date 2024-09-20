@@ -1,5 +1,5 @@
-import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 import React, { useEffect, useState } from 'react';
+import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 
 const RoundCountBanner = () => {
   const { data: roundDetails, isLoading } = useFetchRoundDetails();
@@ -24,7 +24,7 @@ const RoundCountBanner = () => {
     }
   }, [roundDetails]);
   return (
-    <div className='my-[60px] px-10 py-6  bg-white rounded-2xl shadow-baseShadow font-redHatText'>
+    <div className='px-10 py-6  bg-white rounded-2xl shadow-baseShadow font-redHatText'>
       <div className='flex md:flex-row flex-col gap-6 md:justify-between items-center'>
         <span className='text-[#1D1E1F] font-medium text-lg'>
           Early access - Round {roundDetails?.roundNumber} of 4
