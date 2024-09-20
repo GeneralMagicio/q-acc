@@ -48,7 +48,16 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     router.push(`/project/${project.slug}`);
   };
 
+  console.log(project, 'data');
+
   let progress = 67;
+  if (project?.id === '53') {
+    progress = 100;
+  }
+  if (project?.id === '55') {
+    progress = 0;
+  }
+
   return (
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
