@@ -603,3 +603,13 @@ query (
       totalUsdBalance
     }
   }`;
+
+export const GET_ACTIVE_EARLY_ROUND_DETAILS = `query {
+    activeEarlyAccessRound {
+      roundNumber
+      startDate
+      endDate
+      createdAt
+      updatedAt
+    }
+  }`;
