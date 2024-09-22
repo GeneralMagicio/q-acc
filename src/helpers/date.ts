@@ -104,3 +104,29 @@ export function getDifferenceFromPeriod(
 
   return result.trim(); // Trim any extra spaces
 }
+
+export function calculateRemainingTime(endDate: Date): string {
+  const now = new Date().getTime(); // Current time in milliseconds
+  const end = endDate.getTime(); // End time in milliseconds
+  const difference = end - now; // Time difference in milliseconds
+
+  if (difference <= 0) {
+    return 'Time is up!';
+  }
+
+  const seconds = Math.floor((difference / 1000) % 60);
+  const minutes = Math.floor((difference / (1000 * 60)) % 60);
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+  // Store each non-zero unit in an array
+  const timeParts: string[] = [];
+
+  if (days > 0) timeParts.push(`${days} day${days > 1 ? 's' : ''}`);
+  if (hours > 0) timeParts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+  if (minutes > 0) timeParts.push(`${minutes} min${minutes > 1 ? 's' : ''}`);
+  if (seconds > 0) timeParts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+
+  // Limit to the three biggest units
+  return timeParts.slice(0, 3).join(', ');
+}

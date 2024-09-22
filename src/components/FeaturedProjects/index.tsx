@@ -11,7 +11,7 @@ import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
 
 const projectCardStyle = 'w-80 md:w-96';
-const swiperSlideStyle = '!w-auto px-2 py-2';
+const swiperSlideStyle = '!w-auto px-2 py-6';
 const navigationStyle =
   'cursor-pointer rounded-full px-3 py-2 h-10 w-12 mx-2 select-none shadow-[0_3px_20px_0_rgba(83,38,236,0.13)]';
 
