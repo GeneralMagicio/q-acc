@@ -99,9 +99,7 @@ export default function Home() {
                   {roundsData.map((row, index) => (
                     <tr
                       key={index}
-                      className={`${index % 2 === 0 ? 'bg-white' : ''} ${
-                        index === 3 ? 'rounded-b-lg' : ''
-                      }`}
+                      className={`${index % 2 === 0 ? 'bg-white' : ''}`}
                     >
                       <td className='px-4 py-2 rounded-tl-lg rounded-bl-lg'>
                         {row.round}
