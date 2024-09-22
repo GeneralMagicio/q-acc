@@ -1,6 +1,9 @@
 import React from 'react';
+import Link from 'next/link';
 import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 import { RemainingTime } from './RemainingTime';
+import { Button, ButtonColor, ButtonStyle } from '../Button';
+import Routes from '@/lib/constants/Routes';
 
 export const RoundInfoSupporter = () => {
   const { data: roundDetails, isLoading } = useFetchRoundDetails();
@@ -12,6 +15,11 @@ export const RoundInfoSupporter = () => {
         <div className='text-2xl'>Round {roundDetails?.roundNumber} of 4</div>
       </div>
       <RemainingTime endDate={roundDetails?.endDate} />
+      <Link href={Routes.Projects}>
+        <Button styleType={ButtonStyle.Solid} color={ButtonColor.Pink}>
+          Support q/acc Projects
+        </Button>
+      </Link>
     </div>
   );
 };
