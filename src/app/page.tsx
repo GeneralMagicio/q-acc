@@ -37,7 +37,7 @@ export default function Home() {
         <Image
           src='/images/bg/round1.png'
           alt='round'
-          width={300}
+          width={500}
           height={500}
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
