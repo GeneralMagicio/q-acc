@@ -178,6 +178,7 @@ export const GET_PROJECT_BY_ID = `
         tokenName
         tokenTicker
         totalSupply
+        tokenPrice
         issuanceTokenAddress
         icon
         orchestratorAddress
@@ -324,6 +325,7 @@ export const GET_PROJECT_BY_SLUG = `
       abc {
       tokenName
       tokenTicker
+      tokenPrice
       totalSupply
       issuanceTokenAddress
       icon
@@ -601,5 +603,15 @@ query (
       }
       totalCount
       totalUsdBalance
+    }
+  }`;
+
+export const GET_ACTIVE_EARLY_ROUND_DETAILS = `query {
+    activeEarlyAccessRound {
+      roundNumber
+      startDate
+      endDate
+      createdAt
+      updatedAt
     }
   }`;

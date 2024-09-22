@@ -4,6 +4,7 @@ import config from '@/config/configuration';
 import { IProject, IProjectCreation } from '@/types/project.type';
 import {
   CREATE_PROJECT,
+  GET_ACTIVE_EARLY_ROUND_DETAILS,
   GET_ALL_PROJECTS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
@@ -121,6 +122,17 @@ export const fetchProjectByUserId = async (userId: number) => {
       },
     );
     return res?.projectsByUserId.projects[0];
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchEarlyRoundDetails = async () => {
+  try {
+    const res = await requestGraphQL<{
+      activeEarlyAccessRound: any;
+    }>(GET_ACTIVE_EARLY_ROUND_DETAILS, {});
+    return res?.activeEarlyAccessRound;
   } catch (error) {
     console.error(error);
   }
