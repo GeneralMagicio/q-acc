@@ -34,6 +34,9 @@ export default function Home() {
       <div className='bg-white'>
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
           <div>
+            <h1 className='text-5xl text-gray-900 font-bold mb-6'>
+              Welcome to q/acc Season 1
+            </h1>
             <p>
               The q/acc protocol provides a community-first, fair launch for
               projects ready to tokenize and share their value creation with
