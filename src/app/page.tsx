@@ -4,6 +4,7 @@ import { Banner } from '@/components/Banner';
 import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
 import About from '@/components/About';
+import { RoundInfoSupporter } from '@/components/RoundInfoSupporter';
 
 const roundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -41,6 +42,7 @@ export default function Home() {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
+          <RoundInfoSupporter />
           <div>
             <h1 className='text-5xl text-gray-900 font-bold mb-6'>
               Welcome to q/acc Season 1
