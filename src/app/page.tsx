@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { Banner } from '@/components/Banner';
 import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
@@ -31,7 +32,14 @@ export default function Home() {
         title2='tokenization'
         subTitle='q/acc = QF*ABC'
       />
-      <div className='bg-white'>
+      <div className='bg-white relative overflow-hidden'>
+        <Image
+          src='/images/bg/round1.png'
+          alt='round'
+          width={300}
+          height={500}
+          style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
+        />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
           <div>
             <h1 className='text-5xl text-gray-900 font-bold mb-6'>
