@@ -4,6 +4,25 @@ import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
 import About from '@/components/About';
 
+const roundsData = [
+  { round: 1, cap: '$5K', limit: '$100K' },
+  {
+    round: 2,
+    cap: '$10K minus [funds sent in previous round]',
+    limit: '$200K minus [funds collected in previous rounds]',
+  },
+  {
+    round: 3,
+    cap: '$15K minus [funds sent in previous round]',
+    limit: '$300K minus [funds collected in previous rounds]',
+  },
+  {
+    round: 4,
+    cap: '$25K minus [funds sent in previous round]',
+    limit: '$500K minus [funds collected in previous rounds]',
+  },
+];
+
 export default function Home() {
   return (
     <main className='flex flex-col gap-4'>
@@ -67,6 +86,35 @@ export default function Home() {
               the round based on what the following USD-equiv of POL is at that
               time:
             </p>
+            <div className='overflow-x-auto'>
+              <table className='min-w-full table-auto'>
+                <thead className=''>
+                  <tr className='rounded-t-lg'>
+                    <th className='px-4 py-2 text-left '>Round</th>
+                    <th className='px-4 py-2 text-left'>Per-person cap</th>
+                    <th className='px-4 py-2 text-left '>Per-round limit</th>
+                  </tr>
+                </thead>
+                <tbody className='text-left'>
+                  {roundsData.map((row, index) => (
+                    <tr
+                      key={index}
+                      className={`${index % 2 === 0 ? 'bg-white' : ''} ${
+                        index === 3 ? 'rounded-b-lg' : ''
+                      }`}
+                    >
+                      <td className='px-4 py-2 rounded-tl-lg rounded-bl-lg'>
+                        {row.round}
+                      </td>
+                      <td className='px-4 py-2'>{row.cap}</td>
+                      <td className='px-4 py-2  rounded-tr-lg rounded-br-lg'>
+                        {row.limit}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
@@ -89,7 +137,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
       <About />
       <FeaturedProjects />
       <Collaborator />
