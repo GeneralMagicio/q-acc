@@ -7,6 +7,8 @@ import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
+import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
+import useRemainingTime from '@/hooks/useRemainingTime';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -15,6 +17,8 @@ const ProjectDonateButton = () => {
   const router = useRouter();
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
+  const { data: roundDetails, isLoading } = useFetchRoundDetails();
+  const remainingTime = useRemainingTime(roundDetails?.endDate);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -107,7 +111,11 @@ const ProjectDonateButton = () => {
             color={ButtonColor.Pink}
             className='w-full justify-center'
             onClick={handleSupport}
-            disabled={!ownsNFT || totalPOLDonated === maxPOLAmount}
+            disabled={
+              !ownsNFT ||
+              totalPOLDonated === maxPOLAmount ||
+              remainingTime === 'Time is up!'
+            }
             loading={loadingNFTCheck}
           >
             {totalPOLDonated === maxPOLAmount

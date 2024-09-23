@@ -10,6 +10,8 @@ import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
+import useRemainingTime from '@/hooks/useRemainingTime';
+import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -24,6 +26,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
+  const { data: roundDetails, isLoading } = useFetchRoundDetails();
+  const remainingTime = useRemainingTime(roundDetails?.endDate);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -162,8 +166,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
           <Button
             color={ButtonColor.Pink}
-            className='w-full justify-center mt-4 opacity-80 hover:opacity-100'
+            className={`w-full justify-center mt-4 opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
             onClick={handleSupport}
+            disabled={remainingTime === 'Time is up!'}
           >
             Support This Project
           </Button>
