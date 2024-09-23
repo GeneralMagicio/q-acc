@@ -23,6 +23,8 @@ import { getIpfsAddress } from '@/helpers/image';
 import { formatAmount } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import FlashMessage from '../FlashMessage';
+import ProgressBar from '../ProgressBar';
+import { IconTotalSupply } from '../Icons/IconTotalSupply';
 
 interface ITokenSchedule {
   message: string;
@@ -64,6 +66,14 @@ const DonatePageBody = () => {
   const [flashMessage, setFlashMessage] = useState('');
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
+  const {
+    projectData,
+    totalAmount: totalPOLDonated,
+    uniqueDonars,
+  } = useDonateContext();
+
+  let maxPOLAmount = 100000 / tokenPrice;
+  let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
 
   const [selectedPercentage, setSelectedPercentage] = useState(0);
 
@@ -73,8 +83,6 @@ const DonatePageBody = () => {
     toolTip:
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
-
-  const { projectData, totalAmount, uniqueDonars } = useDonateContext();
 
   const client = createPublicClient({
     chain: chain,
@@ -243,32 +251,31 @@ const DonatePageBody = () => {
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <div className='flex p-4 rounded-lg border-[1px] border-[#8668FC] bg-[#F6F3FF] gap-2 font-redHatText text-[#8668FC] flex-col'>
-            <h1 className='font-medium'>There is a 2% cap!</h1>
-            <p className='border-b pb-2 border-[#8668FC]'>
-              To maintain a fair launch one address cannot hold more than 2% of
-              the total supply.
-            </p>
-            <p>
-              {' '}
-              Current total supply{' '}
-              <span className='font-medium'>57,000,000 XYZ</span>
+            <h1 className='font-medium'>Caps enable a fair launch!</h1>
+            <p className='pb-2 '>
+              Individual caps allow more people to participate in the important
+              early stage of this project’s token economy. Everyone has the same
+              cap for each round. The cap per round is subject to change.
             </p>
           </div>
 
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
-            <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F]'>
+            <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
-                Your 2% cap limit is
-                <div className='relative group'>
-                  <IconTokenSchedule />
-                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                    The maximum amount of POL you can send is calculated by
-                    multiplying the maximum number of tokens you can acquire by
-                    the current mint price.
-                  </div>
-                </div>
+                Your remaining cap
+                <span className='font-medium text-[#4F576A]'>
+                  {formatAmount(totalSupply)} POL
+                </span>
               </span>
-              <span className='font-medium'>{totalSupply} POL</span>
+
+              <div className='relative group'>
+                <IconTokenSchedule />
+                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                  This is the amount of POL that you have remaining from the
+                  individual cap for this round. It takes into account any
+                  funding that you have previously sent in this round.
+                </div>
+              </div>
             </div>
 
             <div className='flex gap-2 items-center'>
@@ -440,9 +447,63 @@ const DonatePageBody = () => {
             </div>
           </div>
 
+          {/* Percentage Bar */}
+
+          <div className='flex flex-col gap-2 '>
+            <div
+              className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+            >
+              {progress === 0
+                ? 'Getting started !'
+                : progress !== 100
+                  ? progress + '% collected'
+                  : 'Maxed out this round!'}
+
+              <div className='relative group'>
+                <IconTokenSchedule />
+                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                  <h3 className='font-bold'>ABC Current Value</h3>
+                  Bonding curves have a mint price and a burn price. This shows
+                  the mint price.
+                </div>
+              </div>
+            </div>
+            <ProgressBar progress={progress} isStarted={false} />
+            <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
+              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#1D1E1F]'>
+                {formatAmount(maxPOLAmount)} POL
+              </span>
+            </div>
+          </div>
+
           {/* Project Details */}
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-6'>
+            <div className='flex flex-col font-redHatText'>
+              <h2 className='text-sm text-[#82899A] bg-[#F7F7F9] rounded-md p-1 w-fit'>
+                Total amount received
+              </h2>
+              <div className='flex gap-2 items-center'>
+                <h1 className='text-4xl font-extrabold p-2'>
+                  {totalPOLDonated} POL
+                </h1>
+                <h2 className='text-[#1D1E1F] font-medium'>
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(totalPOLDonated * tokenPrice * 100) / 100,
+                  )}
+                </h2>
+              </div>
+
+              <p className='text-[#82899A]'>
+                From{' '}
+                <span className='font-medium text-[#1D1E1F]'>
+                  {uniqueDonars}
+                </span>{' '}
+                supporters
+              </p>
+            </div>
+            <div className='flex justify-between gap-1'>
               <div className='flex gap-1 items-center'>
                 <img
                   className='w-6 h-6 rounded-full'
@@ -451,7 +512,8 @@ const DonatePageBody = () => {
                       'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
                   )}
                 />
-                <span>{projectData?.abc?.tokenTicker} current value</span>
+
+                <span>{projectData?.abc?.tokenTicker} range</span>
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -462,10 +524,10 @@ const DonatePageBody = () => {
                 </div>
               </div>
               <div className='flex gap-8 font-redHatText'>
-                <h2 className='w-1/2 flex gap-1 items-center'>
+                <h2 className=' flex gap-1 items-center'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    {projectData?.abc?.tokenPrices
-                      ? projectData?.abc?.tokenPrices
+                    {projectData?.abc?.tokenPrice
+                      ? projectData?.abc?.tokenPrice
                       : '---'}
                   </span>
                   <span className='text-xs text-[#82899A]'>POL</span>
@@ -483,22 +545,17 @@ const DonatePageBody = () => {
               </div>
             </div>
 
-            <div className='flex flex-col font-redHatText'>
-              <h2 className='text-sm text-[#82899A] bg-[#F7F7F9] rounded-md p-1 w-fit'>
-                Total amount received
-              </h2>
-              <h1 className='text-4xl font-extrabold p-2'>{totalAmount} POL</h1>
-              <h2 className='text-[#1D1E1F] font-medium'>
-                ~ ${' '}
-                {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
-              </h2>
-              <p className='text-[#82899A]'>
-                Received from{' '}
-                <span className='font-medium text-[#1D1E1F]'>
-                  {uniqueDonars}
-                </span>{' '}
-                supporters
-              </p>
+            {/* Total Supply */}
+            <div className='flex  flex-wrap  gap-2 justify-between'>
+              <div className='flex gap-2'>
+                <IconTotalSupply />
+                <span className='font-medium text-[#4F576A]'>Total Supply</span>
+              </div>
+
+              <h3 className='font-medium text-[#1D1E1F]'>
+                {projectData?.abc?.totalSupply || '---'}{' '}
+                {projectData?.abc?.tokenTicker}
+              </h3>
             </div>
           </div>
         </div>
