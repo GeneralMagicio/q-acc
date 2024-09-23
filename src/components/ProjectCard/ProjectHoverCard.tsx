@@ -7,11 +7,12 @@ import ProjectCardImage from './ProjectCardImage';
 
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
-import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
+import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -27,18 +28,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const [tokenPrice, setTokenPrice] = useState(1);
-
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
 
-    fetchPrice();
-  }, []);
+  const { data: tokenPrice, isLoading, error } = useFetchTokenPrice();
+
   useEffect(() => {
     if (project?.id) {
       const fetchProjectDonations = async () => {

@@ -64,7 +64,7 @@ export const handleErc20Transfer = async ({
   return hash;
 };
 
-export const fetchTokenPrice = async (tokenId: string) => {
+export const fetchTokenPrice = async (tokenId?: string) => {
   const coingeckoId = 'polygon-ecosystem-token';
   try {
     const res = await fetch(
