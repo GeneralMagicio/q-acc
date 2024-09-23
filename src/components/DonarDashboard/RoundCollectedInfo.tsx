@@ -11,7 +11,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
 }) => {
   return (
     <div
-      className={`bg-gray-100 rounded-lg py-6 px-4 flex items-stretch justify-between ${currentRound && 'border-giv-500 border'}`}
+      className={`bg-gray-100 rounded-lg py-6 px-4 flex flex-wrap gap-4 items-stretch justify-between ${currentRound && 'border-giv-500 border'}`}
     >
       <div className='flex flex-col justify-between'>
         <h3 className='text-base font-semibold text-gray-800'>
@@ -24,7 +24,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
           <p className='text-gray-800 text-sm'>20th August 2021</p>
         </div>
       </div>
-      <div className='flex flex-col justify-between gap-2'>
+      <div className='flex flex-col justify-between gap-2 w-full lg:w-80 '>
         <div className='flex text-xs font-medium items-center justify-between'>
           <div>37% Collected</div>
           <div className='flex gap-2 items-center'>
@@ -32,7 +32,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
             <span className='text-base'>4,652,192 POL</span>
           </div>
         </div>
-        <div className='w-80 h-2 bg-gray-200 rounded-lg overflow-hidden'>
+        <div className='h-2 bg-gray-200 rounded-lg overflow-hidden'>
           <div
             className={`h-full ${currentRound ? 'bg-giv-500' : 'bg-gray-500'}`}
             style={{ width: '37%' }}

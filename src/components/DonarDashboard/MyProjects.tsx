@@ -318,7 +318,7 @@ const MyProjects = () => {
 
       {/* List of Supports */}
 
-      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl   my-8'>
+      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl my-8'>
         <div className='border-b pb-4'>
           <h1 className='text-[#1D1E1F] font-bold text-2xl'>
             Contributions summary
