@@ -3,6 +3,8 @@ import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
 import { fetchTokenPrice } from '@/helpers/token';
 import { formatAmount } from '@/helpers/donation';
+import ProgressBar from '../ProgressBar';
+import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -15,7 +17,11 @@ const DonateSection = () => {
   let totalDonations = 10;
   let currentState = 'early';
   const [tokenPrice, setTokenPrice] = useState(1);
-  const { projectData, uniqueDonars, totalAmount } = useProjectContext();
+  const {
+    projectData,
+    uniqueDonars,
+    totalAmount: totalPOLDonated,
+  } = useProjectContext();
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -26,6 +32,9 @@ const DonateSection = () => {
     fetchPrice();
   }, []);
 
+  let maxPOLAmount = 100000 / tokenPrice;
+  let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
+
   const renderContent = () => {
     const renderDonationInfo = () => {
       return totalDonations && totalDonations !== 0 ? (
@@ -35,17 +44,48 @@ const DonateSection = () => {
           </div>
           <h3 className='text-[41px] font-bold'>
             {' '}
-            {formatAmount(totalAmount)} POL
+            {formatAmount(totalPOLDonated)} POL
           </h3>
           <h2 className='text-[#1D1E1F] font-bold font-redHatText'>
             {' '}
-            ~ $ {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
+            ~ ${' '}
+            {formatAmount(Math.round(totalPOLDonated * tokenPrice * 100) / 100)}
           </h2>
           <p className='text-gray-700'>
-            Received from{' '}
+            From{' '}
             <span className='font-bold text-[#1D1E1F]'>{uniqueDonars}</span>{' '}
             supporters
           </p>
+
+          {/* Percentage Bar */}
+
+          <div className='flex flex-col gap-2 mt-12'>
+            <div
+              className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+            >
+              {progress === 0
+                ? 'Getting started !'
+                : progress !== 100
+                  ? progress + '% collected'
+                  : 'Maxed out this round!'}
+
+              <div className='relative group'>
+                <IconTokenSchedule />
+                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                  <h3 className='font-bold'>ABC Current Value</h3>
+                  Bonding curves have a mint price and a burn price. This shows
+                  the mint price.
+                </div>
+              </div>
+            </div>
+            <ProgressBar progress={progress} isStarted={false} />
+            <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
+              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#1D1E1F]'>
+                {formatAmount(maxPOLAmount)} POL
+              </span>
+            </div>
+          </div>
         </div>
       ) : (
         <div className='mb-4'>
@@ -90,17 +130,7 @@ const DonateSection = () => {
         );
 
       case EDonationCardStates.earlyAccess:
-        return (
-          <>
-            {renderDonationInfo()}
-            <div className='mt-4 '>
-              <span className='text-[#2EA096] p-1 rounded-lg bg-[#D2FFFB] text-xs px-2'>
-                You are on the early access list
-              </span>
-            </div>
-            {renderMintInfo()}
-          </>
-        );
+        return <>{renderDonationInfo()}</>;
 
       case EDonationCardStates.betweenRounds:
         return (

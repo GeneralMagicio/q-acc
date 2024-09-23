@@ -45,6 +45,7 @@ const config: Config = {
         tabShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.40)',
         walletShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.70)',
         cardShadow: '0px 3px 20px 0px rgba(49, 11, 181, 0.45)',
+        GIV400: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
       },
     },
   },

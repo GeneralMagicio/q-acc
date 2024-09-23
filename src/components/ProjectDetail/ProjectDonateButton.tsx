@@ -8,17 +8,13 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
 
-import { NFTModal } from '../Modals/NFTModal';
-
 const ProjectDonateButton = () => {
-  const { projectData } = useProjectContext();
+  const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
   const [tokenPrice, setTokenPrice] = useState(1);
   const { address } = useAccount();
   const router = useRouter();
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const [ownsNFT, setOwnsNFT] = useState(false);
+  const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -28,21 +24,30 @@ const ProjectDonateButton = () => {
     fetchPrice();
   }, []);
 
-  const handleSupport = async (e: any) => {
+  useEffect(() => {
+    const checkNFT = async () => {
+      if (projectData?.abc?.nftContractAddress && address) {
+        const res = await checkUserOwnsNFT(
+          projectData.abc.nftContractAddress,
+          address,
+        );
+        setOwnsNFT(res);
+      }
+      setLoadingNFTCheck(false);
+    };
+    checkNFT();
+  }, [projectData?.abc?.nftContractAddress, address]);
+
+  const handleSupport = (e: any) => {
     e.stopPropagation();
-    const res = await checkUserOwnsNFT(
-      projectData?.abc?.nftContractAddress || '',
-      address || '',
-    );
-    if (res) {
+    if (ownsNFT) {
       router.push(`/donate/${projectData.slug}`);
-    } else {
-      openModal();
     }
   };
+
+  let maxPOLAmount = totalPOLDonated - 1;
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
-      <NFTModal isOpen={isModalOpen} onClose={closeModal} />
       <div className='flex justify-start items-center gap-2 '>
         <img
           className='w-6 h-6 rounded-full'
@@ -53,7 +58,7 @@ const ProjectDonateButton = () => {
         />
         <div className='flex gap-2 items-center'>
           <span className='text-[#4F576A] font-medium'>
-            {projectData?.abc?.tokenTicker} current value
+            {projectData?.abc?.tokenTicker} range
           </span>
           <div className='relative group'>
             <IconTokenSchedule />
@@ -70,8 +75,8 @@ const ProjectDonateButton = () => {
       <div className='flex items-center  text-sm  gap-2 text-[#82899A] '>
         <h1 className=' w-[200px] p-2 bg-[#F7F7F9] rounded-lg'>
           <span className='text-[#1D1E1F] font-medium'>
-            {projectData?.abc?.tokenPrices
-              ? projectData?.abc?.tokenPrices
+            {projectData?.abc?.tokenPrice
+              ? projectData?.abc?.tokenPrice
               : '---'}
           </span>
           <span className='text-[#4F576A] text-xs '> POL</span>
@@ -97,15 +102,29 @@ const ProjectDonateButton = () => {
           Starting Soon
         </Button>
       ) : (
-        // <Link id='Donate_Project' href={`/donate/${projectData.slug}`}>
-        <Button
-          color={ButtonColor.Pink}
-          className='w-full justify-center'
-          onClick={handleSupport}
-        >
-          Support This Project
-        </Button>
-        // </Link>
+        <>
+          <Button
+            color={ButtonColor.Pink}
+            className='w-full justify-center'
+            onClick={handleSupport}
+            disabled={!ownsNFT || totalPOLDonated === maxPOLAmount}
+            loading={loadingNFTCheck}
+          >
+            {totalPOLDonated === maxPOLAmount
+              ? 'Project Maxed Out'
+              : 'Support This Project'}
+          </Button>
+
+          {!ownsNFT ? (
+            <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
+              Missing early access NFT
+            </span>
+          ) : (
+            <span className='text-[#2EA096] p-1 rounded-full bg-[#D2FFFB] text-xs px-2 text-center font-medium'>
+              You are on the early access list
+            </span>
+          )}
+        </>
       )}
     </div>
   );

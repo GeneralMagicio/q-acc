@@ -28,6 +28,9 @@ import {
 } from '@/helpers/donation';
 import { fetchTokenPrice } from '@/helpers/token';
 import { getIpfsAddress } from '@/helpers/image';
+import { RoundCollectedInfo } from './RoundCollectedInfo';
+import { IconChevronDown } from '../Icons/IconChevronDown';
+import { IconChevronUp } from '../Icons/IconChevronUp';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -46,6 +49,7 @@ const MyProjects = () => {
   const [tokenPrice, setTokenPrice] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const [showRoundCollected, setShowRoundCollected] = useState(false);
 
   console.log({ projectData });
 
@@ -314,11 +318,33 @@ const MyProjects = () => {
 
       {/* List of Supports */}
 
-      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl   my-8'>
+      <div className='bg-white flex p-6 flex-col gap-8 rounded-xl my-8'>
         <div className='border-b pb-4'>
           <h1 className='text-[#1D1E1F] font-bold text-2xl'>
             Contributions summary
           </h1>
+        </div>
+
+        <div className='flex flex-col gap-4'>
+          <RoundCollectedInfo info={projectData} currentRound={true} />
+          {showRoundCollected && (
+            <>
+              <RoundCollectedInfo info={projectData} />
+              <RoundCollectedInfo info={projectData} />
+              <RoundCollectedInfo info={projectData} />
+            </>
+          )}
+          <div
+            className='bg-gray-100 w-fit mx-auto py-3 px-4 rounded-lg flex gap-1 cursor-pointer select-none'
+            onClick={() => setShowRoundCollected(!showRoundCollected)}
+          >
+            View {showRoundCollected ? 'less' : 'all previous rounds info'}
+            {showRoundCollected ? (
+              <IconChevronUp size={24} />
+            ) : (
+              <IconChevronDown size={24} />
+            )}
+          </div>
         </div>
 
         <div className='flex  flex-col md:flex-row justify-between p-4 bg-[#EBECF2] md:items-center rounded-xl'>
