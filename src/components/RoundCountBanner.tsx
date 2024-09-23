@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 
