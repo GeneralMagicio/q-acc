@@ -2,7 +2,7 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import type { FC } from 'react';
 
 interface IRenamingTimeProps {
-  endDate: string;
+  endDate?: string;
 }
 
 export const RemainingTime: FC<IRenamingTimeProps> = ({ endDate }) => {
