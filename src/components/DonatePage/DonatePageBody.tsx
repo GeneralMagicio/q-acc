@@ -25,6 +25,7 @@ import { usePrivado } from '@/hooks/usePrivado';
 import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
+import Link from 'next/link';
 
 interface ITokenSchedule {
   message: string;
@@ -391,9 +392,13 @@ const DonatePageBody = () => {
               <div className='flex flex-col text-[#1D1E1F] '>
                 <h2 className='text-base'>
                   I have read and agree to the{' '}
-                  <span className='text-[#E1458D] font-semibold'>
+                  <Link
+                    href='https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5'
+                    className='text-[#E1458D] font-semibold'
+                    target='_blank'
+                  >
                     Terms of Service.
-                  </span>
+                  </Link>
                 </h2>
               </div>
             </div>
