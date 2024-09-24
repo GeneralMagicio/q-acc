@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
+import Link from 'next/link';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -25,7 +26,6 @@ import { usePrivado } from '@/hooks/usePrivado';
 import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
-import Link from 'next/link';
 
 interface ITokenSchedule {
   message: string;
