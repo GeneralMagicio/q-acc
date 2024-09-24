@@ -467,9 +467,12 @@ const DonatePageBody = () => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  <h3 className='font-bold'>ABC Current Value</h3>
-                  Bonding curves have a mint price and a burn price. This shows
-                  the mint price.
+                  <h3 className='font-bold'>
+                    {projectData?.abc?.tokenTicker} Current Value
+                  </h3>
+                  Every round has a round limit. This is the % of the current
+                  round limit that has been collected. Once it reaches 100%, the
+                  round will close.
                 </div>
               </div>
             </div>
@@ -522,9 +525,9 @@ const DonatePageBody = () => {
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                    <h3 className='font-bold'>ABC Current Value</h3>
-                    Bonding curves have a mint price and a burn price. This
-                    shows the mint price.
+                    The mint value of the {projectData?.abc?.tokenTicker} token
+                    will be within this range, based on the amount of POL this
+                    project receives.
                   </div>
                 </div>
               </div>
@@ -558,7 +561,7 @@ const DonatePageBody = () => {
               </div>
 
               <h3 className='font-medium text-[#1D1E1F]'>
-                {projectData?.abc?.totalSupply || '---'}{' '}
+                {formatAmount(projectData?.abc?.totalSupply) || '---'}{' '}
                 {projectData?.abc?.tokenTicker}
               </h3>
             </div>
