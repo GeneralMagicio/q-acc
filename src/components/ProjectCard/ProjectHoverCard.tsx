@@ -11,10 +11,10 @@ import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -29,7 +29,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
-  const { data: roundDetails } = useFetchRoundDetails();
+  const { data: roundDetails } = useFetchActiveRoundDetails();
   const remainingTime = useRemainingTime(roundDetails?.endDate);
 
   const [totalAmount, setTotalAmount] = useState<number>(0);
