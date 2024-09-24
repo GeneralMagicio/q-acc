@@ -10,6 +10,8 @@ import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
+import useRemainingTime from '@/hooks/useRemainingTime';
+import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -27,11 +29,14 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
+  const { data: roundDetails } = useFetchRoundDetails();
+  const remainingTime = useRemainingTime(roundDetails?.endDate);
+
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const { data: tokenPrice, isLoading, error } = useFetchTokenPrice();
+  const { data: tokenPrice } = useFetchTokenPrice();
 
   useEffect(() => {
     if (project?.id) {
@@ -182,8 +187,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
           <Button
             color={ButtonColor.Pink}
-            className='w-full justify-center mt-4 opacity-80 hover:opacity-100'
+            className={`w-full justify-center mt-4 opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
             onClick={handleSupport}
+            disabled={remainingTime === 'Time is up!'}
           >
             Support This Project
           </Button>
