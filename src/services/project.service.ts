@@ -11,6 +11,7 @@ import {
   UPDATE_PROJECT_BY_ID,
 } from '@/queries/project.query';
 import { GET_ACTIVE_ROUND } from '@/queries/round.query';
+import { IEarlyAccessRound } from '@/types/round.type';
 import type { IGivethUser } from '@/types/user.type';
 
 export const createProject = async (project: IProjectCreation) => {
@@ -130,7 +131,9 @@ export const fetchProjectByUserId = async (userId: number) => {
 export const fetchActiveRoundDetails = async () => {
   try {
     const res = await requestGraphQL<{
-      activeRound: any;
+      activeRound: {
+        activeRound: IEarlyAccessRound;
+      };
     }>(GET_ACTIVE_ROUND, {});
     return res?.activeRound.activeRound;
   } catch (error) {
