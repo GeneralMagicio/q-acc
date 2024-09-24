@@ -242,11 +242,20 @@ const MyProjects = () => {
 
             <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
               <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                {projectData?.abc?.tokenPrice ?? '---'}{' '}
-                <span className='text-[#4F576A] text-xs'>POL</span>
+                {projectData?.abc?.tokenPrice ?? '---'}
+                &nbsp;-&nbsp;
+                {projectData?.abc?.tokenPrice ?? '---'}
+                &nbsp;
+                <span className='text-gray-400 text-xs'>POL</span>
               </div>
-              <div className='w-[20%] text-[#4F576A] text-right font-medium'>
-                ~ ${' '}
+              <div className='w-[20%] text-gray-400 text-right font-medium'>
+                ~ $&nbsp;
+                {projectData?.abc?.tokenPrice
+                  ? Math.round(
+                      projectData?.abc?.tokenPrice * tokenPrice * 100,
+                    ) / 100
+                  : '---'}
+                &nbsp;-&nbsp;
                 {projectData?.abc?.tokenPrice
                   ? Math.round(
                       projectData?.abc?.tokenPrice * tokenPrice * 100,
