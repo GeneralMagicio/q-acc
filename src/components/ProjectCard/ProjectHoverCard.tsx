@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { IProject } from '@/types/project.type';
@@ -12,6 +12,9 @@ import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { fecthProjectDonationsById } from '@/services/donation.services';
+import { calculateTotalDonations } from '@/helpers/donation';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -26,11 +29,33 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
-  const { data: roundDetails, isLoading } = useFetchRoundDetails();
+  const { data: roundDetails } = useFetchRoundDetails();
   const remainingTime = useRemainingTime(roundDetails?.endDate);
 
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+  const { data: tokenPrice } = useFetchTokenPrice();
+
+  useEffect(() => {
+    if (project?.id) {
+      const fetchProjectDonations = async () => {
+        const data = await fecthProjectDonationsById(
+          parseInt(project?.id),
+          1000,
+          0,
+        );
+
+        if (data) {
+          const { donations, totalCount } = data;
+
+          setTotalAmount(calculateTotalDonations(donations));
+        }
+      };
+      fetchProjectDonations();
+    }
+  }, [project]);
 
   const handleSupport = async (e: any) => {
     e.stopPropagation();
@@ -52,15 +77,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     router.push(`/project/${project.slug}`);
   };
 
-  console.log(project, 'data');
+  console.log(project, 'data', totalAmount);
+  const maxedAmount = 100000; //100k dollars later from backend
 
-  let progress = 67;
-  if (project?.id === '53') {
-    progress = 100;
-  }
-  if (project?.id === '55') {
-    progress = 0;
-  }
+  let progress =
+    Math.round(((totalAmount * tokenPrice) / maxedAmount) * 100 * 100) / 100;
 
   return (
     <div
