@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 
 interface RoundCountBannerProps {
@@ -8,7 +8,7 @@ interface RoundCountBannerProps {
 const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
   projectMaxedOut = false,
 }) => {
-  const { data: roundDetails, isLoading } = useFetchRoundDetails();
+  const { data: roundDetails, isLoading } = useFetchActiveRoundDetails();
   const remainingTime = useRemainingTime(roundDetails?.endDate);
 
   return (

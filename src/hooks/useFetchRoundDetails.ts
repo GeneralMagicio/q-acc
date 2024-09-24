@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchEarlyRoundDetails } from '@/services/project.service';
+import { fetchActiveRoundDetails } from '@/services/project.service';
 
-export const useFetchRoundDetails = () => {
+export const useFetchActiveRoundDetails = () => {
   return useQuery({
     queryKey: ['roundDetails'],
     queryFn: async () => {
-      return await fetchEarlyRoundDetails();
+      return await fetchActiveRoundDetails();
     },
     staleTime: Infinity,
     gcTime: Infinity,
