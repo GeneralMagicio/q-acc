@@ -4,13 +4,14 @@ import config from '@/config/configuration';
 import { IProject, IProjectCreation } from '@/types/project.type';
 import {
   CREATE_PROJECT,
-  GET_ACTIVE_EARLY_ROUND_DETAILS,
   GET_ALL_PROJECTS,
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
   GET_PROJECT_BY_USER_ID,
   UPDATE_PROJECT_BY_ID,
 } from '@/queries/project.query';
+import { GET_ACTIVE_ROUND } from '@/queries/round.query';
+import { IEarlyAccessRound } from '@/types/round.type';
 import type { IGivethUser } from '@/types/user.type';
 
 export const createProject = async (project: IProjectCreation) => {
@@ -127,12 +128,14 @@ export const fetchProjectByUserId = async (userId: number) => {
   }
 };
 
-export const fetchEarlyRoundDetails = async () => {
+export const fetchActiveRoundDetails = async () => {
   try {
     const res = await requestGraphQL<{
-      activeEarlyAccessRound: any;
-    }>(GET_ACTIVE_EARLY_ROUND_DETAILS, {});
-    return res?.activeEarlyAccessRound;
+      activeRound: {
+        activeRound: IEarlyAccessRound;
+      };
+    }>(GET_ACTIVE_ROUND, {});
+    return res?.activeRound.activeRound;
   } catch (error) {
     console.error(error);
   }

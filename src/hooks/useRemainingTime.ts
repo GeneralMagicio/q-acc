@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import { calculateRemainingTime } from '@/helpers/date';
 
-function useRemainingTime(endDate: string) {
+function useRemainingTime(endDate?: string) {
   const [remainingTime, setRemainingTime] = useState<string>('');
 
   useEffect(() => {
+    if (!endDate) return;
     const _endDate = new Date(endDate);
     // Set initial remaining time
     setRemainingTime(calculateRemainingTime(_endDate));
@@ -19,7 +20,7 @@ function useRemainingTime(endDate: string) {
     return () => clearInterval(interval);
   }, [endDate]);
 
-  return remainingTime;
+  return endDate ? remainingTime : '--:--:--';
 }
 
 export default useRemainingTime;

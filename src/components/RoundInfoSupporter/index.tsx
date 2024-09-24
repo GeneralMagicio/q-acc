@@ -1,12 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import { useFetchRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
 import { RemainingTime } from './RemainingTime';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Routes from '@/lib/constants/Routes';
 
 export const RoundInfoSupporter = () => {
-  const { data: roundDetails, isLoading } = useFetchRoundDetails();
+  const { data: roundDetails } = useFetchActiveRoundDetails();
 
   return (
     <div className='py-6 px-8 rounded-2xl shadow-GIV400 flex items-center justify-between bg-white z-1 relative'>
