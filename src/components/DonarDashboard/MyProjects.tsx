@@ -230,7 +230,7 @@ const MyProjects = () => {
                     'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
                 )}
               />
-              {projectData?.abc?.tokenTicker} current value
+              {projectData?.abc?.tokenTicker} range
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
