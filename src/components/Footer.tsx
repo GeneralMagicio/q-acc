@@ -66,7 +66,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     target='_blank'
-                    href={Routes.AboutUs}
+                    href={'https://qacc.giveth.io/privacy-policy'}
                     className='text-gray-700 hover:underline'
                   >
                     Privacy Policy
@@ -75,7 +75,9 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     target='_blank'
-                    href={Routes.Terms}
+                    href={
+                      'https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5'
+                    }
                     className='text-gray-700 hover:underline'
                   >
                     Terms and Conditions

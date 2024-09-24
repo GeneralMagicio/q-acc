@@ -263,23 +263,28 @@ const DonarSupports = () => {
                       )}
                     />
                     <span className='text-[#4F576A] font-medium'>
-                      {project.abc.tokenTicker} current value
+                      {project.abc.tokenTicker} range
                     </span>
                     <div className='relative group'>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                        Bonding curves have a mint price and a burn price. This
-                        shows the mint price.
+                        The mint value of the ABC token will be within this
+                        range, based on the amount of POL this project receives.
                       </div>
                     </div>
                   </div>
                   <div className='flex justify-between text-[#1D1E1F] font-medium'>
                     <h2 className='flex gap-1 items-center'>
-                      {project.abc.tokenPrice / POLPrice || '---'}{' '}
+                      {project.abc.tokenPrice / POLPrice || '---'}
+                      &nbsp;-&nbsp;
+                      {project.abc.tokenPrice / POLPrice || '---'}
+                      &nbsp;
                       <span className='text-[#4F576A] text-xs pb-1'>POL</span>
                     </h2>
                     <h2 className='text-[#4F576A]'>
-                      $ {project.abc.tokenPrice || '--'}
+                      ~ $ {project.abc.tokenPrice || '--'}
+                      &nbsp;-&nbsp;
+                      {project.abc.tokenPrice || '--'}
                     </h2>
                   </div>
                   <hr />

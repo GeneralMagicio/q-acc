@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
+import Link from 'next/link';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -391,9 +392,13 @@ const DonatePageBody = () => {
               <div className='flex flex-col text-[#1D1E1F] '>
                 <h2 className='text-base'>
                   I have read and agree to the{' '}
-                  <span className='text-[#E1458D] font-semibold'>
+                  <Link
+                    href='https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5'
+                    className='text-[#E1458D] font-semibold'
+                    target='_blank'
+                  >
                     Terms of Service.
-                  </span>
+                  </Link>
                 </h2>
               </div>
             </div>
