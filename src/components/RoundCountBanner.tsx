@@ -1,6 +1,6 @@
 import React from 'react';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 interface RoundCountBannerProps {
   projectMaxedOut?: boolean;

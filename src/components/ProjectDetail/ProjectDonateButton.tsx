@@ -7,7 +7,7 @@ import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 
 const ProjectDonateButton = () => {

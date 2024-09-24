@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchActiveRoundDetails } from '@/services/project.service';
+import { fetchActiveRoundDetails } from '@/services/round.services';
 
 export const useFetchActiveRoundDetails = () => {
   return useQuery({

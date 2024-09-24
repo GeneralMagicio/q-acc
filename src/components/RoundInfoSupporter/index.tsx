@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { RemainingTime } from './RemainingTime';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Routes from '@/lib/constants/Routes';
