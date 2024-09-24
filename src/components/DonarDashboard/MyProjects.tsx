@@ -234,8 +234,8 @@ const MyProjects = () => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  Bonding curves have a mint price and a burn price. This shows
-                  the mint price.
+                  The mint value of the ABC token will be within this range,
+                  based on the amount of POL this project receives.
                 </div>
               </div>
             </div>
