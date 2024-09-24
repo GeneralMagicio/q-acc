@@ -17,8 +17,8 @@ const ProjectDonateButton = () => {
   const router = useRouter();
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
-  const { data: roundDetails, isLoading } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
   useEffect(() => {
     const fetchPrice = async () => {

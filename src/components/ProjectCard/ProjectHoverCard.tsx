@@ -29,8 +29,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
-  const { data: roundDetails } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const openModal = () => setModalOpen(true);
