@@ -19,7 +19,7 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconDropDown } from '../Icons/IconDropDown';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
-import { formatDateMonthDayYear } from '@/helpers/date';
+import { formatDateMonthDayYear, isMiddleOfThePeriod } from '@/helpers/date';
 import config from '@/config/configuration';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import {
@@ -31,6 +31,8 @@ import { getIpfsAddress } from '@/helpers/image';
 import { RoundCollectedInfo } from './RoundCollectedInfo';
 import { IconChevronDown } from '../Icons/IconChevronDown';
 import { IconChevronUp } from '../Icons/IconChevronUp';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -50,8 +52,35 @@ const MyProjects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
+  const [filteredRoundData, setFilteredRoundData] = useState<{
+    activeRound: IEarlyAccessRound;
+    notActiveRounds: (IEarlyAccessRound | IQfRound)[];
+  }>({
+    activeRound: {} as IEarlyAccessRound,
+    notActiveRounds: [],
+  });
+  const { data: allRoundData } = useFetchAllRound();
 
   console.log({ projectData });
+
+  useEffect(() => {
+    if (!allRoundData) return;
+    let activeRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
+    let notActiveRounds: (IEarlyAccessRound | IQfRound)[] = [];
+    allRoundData.forEach(round => {
+      if (
+        (round.__typename === 'EarlyAccessRound' &&
+          isMiddleOfThePeriod(round.startDate, round.endDate)) ||
+        (round.__typename === 'QfRound' &&
+          isMiddleOfThePeriod(round.beginDate, round.endDate))
+      ) {
+        activeRound = round;
+      } else {
+        notActiveRounds.push(round);
+      }
+    });
+    setFilteredRoundData({ activeRound, notActiveRounds });
+  }, [allRoundData]);
 
   useEffect(() => {
     if (projectData?.id) {
@@ -335,14 +364,17 @@ const MyProjects = () => {
         </div>
 
         <div className='flex flex-col gap-4'>
-          <RoundCollectedInfo info={projectData} currentRound={true} />
-          {showRoundCollected && (
-            <>
-              <RoundCollectedInfo info={projectData} />
-              <RoundCollectedInfo info={projectData} />
-              <RoundCollectedInfo info={projectData} />
-            </>
+          {filteredRoundData.activeRound && (
+            <RoundCollectedInfo
+              info={filteredRoundData.activeRound}
+              currentRound={true}
+            />
           )}
+          {showRoundCollected && filteredRoundData.notActiveRounds
+            ? filteredRoundData.notActiveRounds.map((round, id) => (
+                <RoundCollectedInfo key={id} info={round} />
+              ))
+            : null}
           <div
             className='bg-gray-100 w-fit mx-auto py-3 px-4 rounded-lg flex gap-1 cursor-pointer select-none'
             onClick={() => setShowRoundCollected(!showRoundCollected)}

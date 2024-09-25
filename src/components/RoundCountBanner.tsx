@@ -1,6 +1,6 @@
 import React from 'react';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 interface RoundCountBannerProps {
   projectMaxedOut?: boolean;
@@ -8,14 +8,14 @@ interface RoundCountBannerProps {
 const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
   projectMaxedOut = false,
 }) => {
-  const { data: roundDetails, isLoading } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
   return (
     <div className='px-10 py-6  bg-white rounded-2xl shadow-baseShadow font-redHatText'>
       <div className='flex md:flex-row flex-col gap-6 md:justify-between items-center'>
         <span className='text-[#1D1E1F] font-medium text-lg'>
-          Early access - Round {roundDetails?.roundNumber} of 4
+          Early access - Round {activeRoundDetails?.roundNumber} of 4
         </span>
         <div className='flex flex-col md:flex-row items-center md:gap-6'>
           {projectMaxedOut ? (

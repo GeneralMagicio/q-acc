@@ -14,7 +14,7 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -29,8 +29,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
-  const { data: roundDetails } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
