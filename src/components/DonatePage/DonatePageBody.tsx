@@ -468,7 +468,7 @@ const DonatePageBody = () => {
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                   <h3 className='font-bold'>
-                    {projectData?.abc?.tokenTicker} Current Value
+                    {projectData?.abc?.tokenTicker} range
                   </h3>
                   Every round has a round limit. This is the % of the current
                   round limit that has been collected. Once it reaches 100%, the
