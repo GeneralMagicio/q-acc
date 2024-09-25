@@ -32,11 +32,25 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const { data: roundDetails } = useFetchActiveRoundDetails();
   const remainingTime = useRemainingTime(roundDetails?.endDate);
 
-  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const { data: tokenPrice } = useFetchTokenPrice();
+  const { data: tokenPrice, isLoading } = useFetchTokenPrice();
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    console.log(
+      project?.title + ' NFT address' + project?.abc?.nftContractAddress,
+    );
+    if (tokenPrice) {
+      let maxPOLAmount = 100000 / tokenPrice;
+      let tempprogress =
+        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
+      setProgress(tempprogress);
+    }
+  }, [totalPOLDonated]);
 
   useEffect(() => {
     if (project?.id) {
@@ -50,7 +64,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         if (data) {
           const { donations, totalCount } = data;
 
-          setTotalAmount(calculateTotalDonations(donations));
+          setTotalPOLDonated(calculateTotalDonations(donations));
         }
       };
       fetchProjectDonations();
@@ -69,19 +83,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       openModal();
     }
   };
-  console.log(
-    project?.title + ' NFT address' + project?.abc?.nftContractAddress,
-  );
 
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
-
-  console.log(project, 'data', totalAmount);
-  const maxedAmount = 100000; //100k dollars later from backend
-
-  let progress =
-    Math.round(((totalAmount * tokenPrice) / maxedAmount) * 100 * 100) / 100;
 
   return (
     <div
