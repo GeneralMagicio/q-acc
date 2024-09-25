@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', port: '', hostname: 'ipfs.io' },
+      { protocol: 'https', port: '', hostname: 'gateway.pinata.cloud' },
       {
         protocol: 'https',
         hostname: 'giveth.mypinata.cloud',
