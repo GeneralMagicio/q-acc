@@ -166,11 +166,6 @@ const DonatePageBody = () => {
       });
 
       setHasSavedDonation(true);
-
-      // Save that user accepted terms and conditions
-      if (terms && !user?.acceptedToS) {
-        updateAcceptedTerms(true);
-      }
     }
   }, [isConfirmed, hasSavedDonation]);
 
@@ -257,6 +252,15 @@ const DonatePageBody = () => {
         return percentage;
       }
     });
+  };
+
+  const handleAcceptTerms = () => {
+    if (!user?.acceptedToS) {
+      setTerms(true);
+
+      // Save that user accepted terms and conditions
+      updateAcceptedTerms(true);
+    }
   };
 
   if (isConfirmed) {
@@ -396,13 +400,13 @@ const DonatePageBody = () => {
             {/* Terms of Service */}
             <div
               className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'
-              onClick={() => user?.acceptedToS || setTerms(!terms)}
+              onClick={() => user?.acceptedToS || handleAcceptTerms()}
             >
               <div>
                 <input
                   type='checkbox'
                   checked={terms}
-                  onChange={() => user?.acceptedToS || setTerms(!terms)}
+                  onChange={() => user?.acceptedToS || handleAcceptTerms()}
                   disabled={user?.acceptedToS}
                 />
               </div>
