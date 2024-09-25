@@ -7,9 +7,6 @@ export const useFetchTokenPrice = () => {
     queryFn: async () => {
       return await fetchTokenPrice();
     },
-    enabled: true,
     staleTime: Infinity,
-    gcTime: Infinity,
-    initialData: 1,
   });
 };
