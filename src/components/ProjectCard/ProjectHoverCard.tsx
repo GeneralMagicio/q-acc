@@ -92,7 +92,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
   const tokenPriceRange = useTokenPriceRange({
-    amount: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxContributionPOLAmountInCurrentRound,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
@@ -197,7 +197,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <div className='mt-1 flex justify-between'>
                 <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
                   <p className='font-bold text-gray-800'>
-                    {tokenPriceRange.min} - {tokenPriceRange.max}
+                    {tokenPriceRange.min.toFixed(3)} -{' '}
+                    {tokenPriceRange.max.toFixed(3)}
                   </p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>

@@ -22,10 +22,17 @@ const abi = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [],
+    name: 'getVirtualCollateralSupply',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ];
 
 interface UseTokenPriceRangeProps {
-  amount: BigNumberish;
+  contributionLimit: number;
   contractAddress?: string;
 }
 
@@ -35,7 +42,7 @@ interface TokenPriceRangeResult {
 }
 
 export const useTokenPriceRange = ({
-  amount,
+  contributionLimit, // Contribution limit up to the current batch
   contractAddress, // fundingManagerAddress
 }: UseTokenPriceRangeProps): TokenPriceRangeResult => {
   const contract = useMemo(() => {
@@ -43,17 +50,43 @@ export const useTokenPriceRange = ({
     return new Contract(contractAddress, abi, provider);
   }, [contractAddress]);
 
-  const calculatePurchaseReturn = useQuery<BigNumberish, Error>({
-    queryKey: ['calculatePurchaseReturn', amount.toString(), contractAddress],
+  // Fetch `getVirtualCollateralSupply` (total contributed so far)
+  const virtualCollateralSupply = useQuery<BigNumberish, Error>({
+    queryKey: ['getVirtualCollateralSupply', contractAddress],
     queryFn: async () => {
       if (!contract) throw new Error('Contract not loaded');
-      const result: BigNumberish =
-        await contract.calculatePurchaseReturn(amount);
+      const result: BigNumberish = await contract.getVirtualCollateralSupply();
       return result;
     },
-    enabled: !!contract && !!amount,
-    select: data => formatUnits(data, 18),
+    enabled: !!contract,
+    select: data => Number(formatUnits(data, 18)),
   });
+
+  // Calculate the upper limit (X)
+  const X = useMemo(() => {
+    const contributedSoFar = parseFloat(
+      (virtualCollateralSupply.data || '0').toString(),
+    );
+    return contributionLimit - contributedSoFar;
+  }, [contributionLimit, virtualCollateralSupply.data]);
+
+  // Fetch `calculatePurchaseReturn` using X
+  const calculatePurchaseReturn = useQuery<BigNumberish, Error>({
+    queryKey: ['calculatePurchaseReturn', X.toString(), contractAddress],
+    queryFn: async () => {
+      if (!contract) throw new Error('Contract not loaded');
+      const result: BigNumberish = await contract.calculatePurchaseReturn(X);
+      return result;
+    },
+    enabled: !!contract && !!X,
+    select: data => Number(data), // Convert BigNumber to number
+  });
+
+  // Calculate the max token price (P = X / Y)
+  const maxPrice = useMemo(() => {
+    const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
+    return X / Y;
+  }, [X, calculatePurchaseReturn.data]);
 
   const staticPriceForBuying = useQuery<BigNumberish, Error>({
     queryKey: ['getStaticPriceForBuying', contractAddress],
@@ -63,13 +96,11 @@ export const useTokenPriceRange = ({
       return result;
     },
     enabled: !!contract,
-    select: data => formatUnits(data, 18),
+    select: data => Number(data), // Convert BigNumber to number
   });
 
-  const min = parseFloat((staticPriceForBuying.data || '0').toString());
+  const minPrice =
+    parseFloat((staticPriceForBuying.data || '0').toString()) / 1_000_000; // convert PPM to price in POL
 
-  const max =
-    min + parseFloat((calculatePurchaseReturn.data || '0').toString());
-
-  return { min, max };
+  return { min: minPrice, max: maxPrice };
 };
