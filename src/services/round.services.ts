@@ -1,6 +1,6 @@
 import { requestGraphQL } from '@/helpers/request';
 import { GET_ACTIVE_ROUND, GET_ALL_ROUNDS } from '@/queries/round.query';
-import { IEarlyAccessRound } from '@/types/round.type';
+import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 
 export const fetchActiveRoundDetails = async () => {
   try {
@@ -18,7 +18,7 @@ export const fetchActiveRoundDetails = async () => {
 export const fetchAllRoundDetails = async () => {
   try {
     const res = await requestGraphQL<{
-      allRounds: any;
+      allRounds: (IEarlyAccessRound | IQfRound)[];
     }>(GET_ALL_ROUNDS, {});
     return res?.allRounds;
   } catch (error) {
