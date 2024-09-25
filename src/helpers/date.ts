@@ -130,3 +130,11 @@ export function calculateRemainingTime(endDate: Date): string {
   // Limit to the three biggest units
   return timeParts.slice(0, 3).join(', ');
 }
+
+export const isMiddleOfThePeriod = (startDate: string, endDate: string) => {
+  const now = new Date();
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  return now >= start && now <= end;
+};
