@@ -138,3 +138,13 @@ export const isMiddleOfThePeriod = (startDate: string, endDate: string) => {
 
   return now >= start && now <= end;
 };
+
+export const formatDate = (date: string) => {
+  const d = new Date(date);
+
+  return d.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
