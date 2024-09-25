@@ -14,7 +14,7 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,14 +30,28 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
-  const { data: roundDetails } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
-  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const { data: tokenPrice } = useFetchTokenPrice();
+  const { data: tokenPrice, isLoading } = useFetchTokenPrice();
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    console.log(
+      project?.title + ' NFT address' + project?.abc?.nftContractAddress,
+    );
+    if (tokenPrice) {
+      let maxPOLAmount = 100000 / tokenPrice;
+      let tempprogress =
+        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
+      setProgress(tempprogress);
+    }
+  }, [totalPOLDonated]);
 
   useEffect(() => {
     if (project?.id) {
@@ -51,7 +65,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         if (data) {
           const { donations, totalCount } = data;
 
-          setTotalAmount(calculateTotalDonations(donations));
+          setTotalPOLDonated(calculateTotalDonations(donations));
         }
       };
       fetchProjectDonations();
@@ -70,15 +84,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       openModal();
     }
   };
-  console.log(
-    project?.title + ' NFT address' + project?.abc?.nftContractAddress,
-  );
 
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
-
-  console.log(project, 'data', totalAmount);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -96,11 +105,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     };
     fetchPOLPrice();
   }, []);
-
-  // Progress and donation logic
-  const maxedAmount = 100000; // 100k dollars, fetched later from backend
-  let progress =
-    Math.round(((totalAmount * tokenPrice) / maxedAmount) * 100 * 100) / 100;
 
   return (
     <div
@@ -173,7 +177,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <ProgressBar progress={progress} isStarted={false} />
             </div>
 
-            {/* POL Price Range and USD Conversion */}
             <div>
               <div className='flex gap-2 items-center pb-1'>
                 {/* {getIpfsAddress(project.abc?.icon!)} */}

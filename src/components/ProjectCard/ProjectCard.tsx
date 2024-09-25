@@ -48,7 +48,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         <div>
           <div className='flex gap-2 items-center'>
             <IconABC />
-            <p className='text-gray-800'>ABC current value</p>
+            <p className='text-gray-800'>ABC range</p>
           </div>
           <div className='mt-1 grid grid-cols-2'>
             <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md'>

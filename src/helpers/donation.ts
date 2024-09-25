@@ -84,5 +84,8 @@ export const calculateTotalDonations = (donations: any[]) => {
  * @returns {string} The formatted number as a string with commas separating thousands.
  */
 export const formatAmount = (number: number) => {
+  if (typeof number !== 'number') {
+    return '---';
+  }
   return number.toLocaleString('en-US');
 };

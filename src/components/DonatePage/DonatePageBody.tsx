@@ -23,9 +23,11 @@ import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
 import { formatAmount } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
+import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
+import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 
 interface ITokenSchedule {
   message: string;
@@ -56,6 +58,7 @@ const PercentageButton = ({
 const DonatePageBody = () => {
   const { address, isConnected } = useAccount();
   const { chain } = useAccount();
+  const { data: user } = useFetchUser();
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
   const [tokenPrice, setTokenPrice] = useState(1);
@@ -72,6 +75,7 @@ const DonatePageBody = () => {
     totalAmount: totalPOLDonated,
     uniqueDonars,
   } = useDonateContext();
+  const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
   let maxPOLAmount = 100000 / tokenPrice;
   let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
@@ -109,6 +113,13 @@ const DonatePageBody = () => {
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
+
+  // if user allready accepted terms and conditions set it to true
+  useEffect(() => {
+    if (user && user.acceptedToS) {
+      setTerms(true);
+    }
+  }, [user]);
 
   useEffect(() => {
     // Update donateDisabled based on conditions
@@ -155,6 +166,11 @@ const DonatePageBody = () => {
       });
 
       setHasSavedDonation(true);
+
+      // Save that user accepted terms and conditions
+      if (terms && !user?.acceptedToS) {
+        updateAcceptedTerms(true);
+      }
     }
   }, [isConfirmed, hasSavedDonation]);
 
@@ -380,13 +396,14 @@ const DonatePageBody = () => {
             {/* Terms of Service */}
             <div
               className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'
-              onClick={() => setTerms(!terms)}
+              onClick={() => user?.acceptedToS || setTerms(!terms)}
             >
               <div>
                 <input
                   type='checkbox'
                   checked={terms}
-                  onChange={() => setTerms(!terms)}
+                  onChange={() => user?.acceptedToS || setTerms(!terms)}
+                  disabled={user?.acceptedToS}
                 />
               </div>
               <div className='flex flex-col text-[#1D1E1F] '>
@@ -468,7 +485,7 @@ const DonatePageBody = () => {
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                   <h3 className='font-bold'>
-                    {projectData?.abc?.tokenTicker} Current Value
+                    {projectData?.abc?.tokenTicker} range
                   </h3>
                   Every round has a round limit. This is the % of the current
                   round limit that has been collected. Once it reaches 100%, the

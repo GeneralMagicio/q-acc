@@ -12,6 +12,7 @@ export interface IUser {
   avatar: string;
   isSignedIn: boolean;
   privadoVerified: boolean;
+  acceptedToS: boolean;
 }
 
 export interface IGivethUser {

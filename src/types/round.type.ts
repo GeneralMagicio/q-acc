@@ -1,4 +1,5 @@
 export interface IEarlyAccessRound {
+  __typename: 'EarlyAccessRound';
   roundNumber: number;
   startDate: string;
   endDate: string;
@@ -7,6 +8,7 @@ export interface IEarlyAccessRound {
 }
 
 export interface IQfRound {
+  __typename: 'QfRound';
   name: string;
   slug: string;
   allocatedFund: string;
