@@ -7,7 +7,7 @@ import ProjectCardImage from './ProjectCardImage';
 
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
-import { checkUserOwnsNFT } from '@/helpers/token';
+import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
@@ -15,6 +15,7 @@ import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useTokenPriceRange } from '@/services/tokenPrice.service';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -78,8 +79,26 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   };
 
   console.log(project, 'data', totalAmount);
-  const maxedAmount = 100000; //100k dollars later from backend
 
+  // New token price logic
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const tokenPriceRange = useTokenPriceRange({
+    amount: maxContributionPOLAmountInCurrentRound,
+    contractAddress: project.abc?.fundingManagerAddress || '',
+  });
+
+  const [POLPrice, setPOLPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchPOLPrice = async () => {
+      const price = await fetchTokenPrice(); // Fetch token price in USD
+      setPOLPrice(price);
+    };
+    fetchPOLPrice();
+  }, []);
+
+  // Progress and donation logic
+  const maxedAmount = 100000; // 100k dollars, fetched later from backend
   let progress =
     Math.round(((totalAmount * tokenPrice) / maxedAmount) * 100 * 100) / 100;
 
@@ -154,6 +173,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <ProgressBar progress={progress} isStarted={false} />
             </div>
 
+            {/* POL Price Range and USD Conversion */}
             <div>
               <div className='flex gap-2 items-center pb-1'>
                 {/* {getIpfsAddress(project.abc?.icon!)} */}
@@ -172,13 +192,16 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 </p>
               </div>
               <div className='mt-1 flex justify-between'>
-                <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                  <p className='font-bold text-gray-800'>0.191 - 1.172</p>
+                <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                  <p className='font-bold text-gray-800'>
+                    {tokenPriceRange.min} - {tokenPriceRange.max}
+                  </p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>
                 <div className='flex gap-1 items-center'>
                   <p className='text-sm text-[#4F576A] font-medium'>
-                    ~$ 0.174 - 1.068
+                    ~$ {POLPrice && (POLPrice * tokenPriceRange.min).toFixed(3)}{' '}
+                    $ {POLPrice && (POLPrice * tokenPriceRange.max).toFixed(3)}
                   </p>
                 </div>
               </div>
