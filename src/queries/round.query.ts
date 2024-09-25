@@ -2,6 +2,7 @@ export const GET_ALL_ROUNDS = `
   query {
     allRounds {
       ... on EarlyAccessRound {
+      __typename
         roundNumber
         startDate
         endDate
@@ -9,6 +10,7 @@ export const GET_ALL_ROUNDS = `
         updatedAt
       }
       ... on QfRound {
+      __typename
         name
         slug
         allocatedFund

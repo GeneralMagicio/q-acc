@@ -7,7 +7,7 @@ import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
 import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchRoundDetails';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 
 const ProjectDonateButton = () => {
@@ -17,8 +17,8 @@ const ProjectDonateButton = () => {
   const router = useRouter();
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
-  const { data: roundDetails, isLoading } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(roundDetails?.endDate);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
 
   useEffect(() => {
     const fetchPrice = async () => {
