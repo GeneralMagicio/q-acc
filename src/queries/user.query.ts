@@ -8,6 +8,7 @@ export const GET_USER_BY_ADDRESS = `
 			email
 			isSignedIn
 			privadoVerified
+      acceptedToS
 		}
 	}
 `;
@@ -111,5 +112,11 @@ export const GET_USER_DONATIONS_COUNT = `
     ) {
       totalCount
     }
+  }
+`;
+
+export const USER_ACCEPT_TERMS_MUTATION = `
+  mutation AcceptTermsOfService {
+    acceptedTermsOfService
   }
 `;
