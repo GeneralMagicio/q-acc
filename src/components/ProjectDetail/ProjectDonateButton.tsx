@@ -6,27 +6,21 @@ import { EDonationCardStates } from './DonateSection';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
-import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
+import { checkUserOwnsNFT } from '@/helpers/token';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   const { address } = useAccount();
   const router = useRouter();
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-    fetchPrice();
-  }, []);
 
   useEffect(() => {
     const checkNFT = async () => {
@@ -87,7 +81,9 @@ const ProjectDonateButton = () => {
         <span className='text-[#4F576A] font-medium'>
           ${' '}
           {projectData?.abc?.tokenPrice
-            ? Math.round(projectData?.abc?.tokenPrice * tokenPrice * 100) / 100
+            ? Math.round(
+                projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
+              ) / 100
             : '---'}
         </span>
       </div>

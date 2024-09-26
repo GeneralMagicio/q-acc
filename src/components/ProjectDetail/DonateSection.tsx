@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
-import { fetchTokenPrice } from '@/helpers/token';
 import { formatAmount } from '@/helpers/donation';
 import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -16,23 +16,15 @@ export enum EDonationCardStates {
 const DonateSection = () => {
   let totalDonations = 10;
   let currentState = 'early';
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   const {
     projectData,
     uniqueDonars,
     totalAmount: totalPOLDonated,
   } = useProjectContext();
 
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
-
-  let maxPOLAmount = 100000 / tokenPrice;
+  let maxPOLAmount = 100000 / Number(POLPrice);
   let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
 
   const renderContent = () => {
@@ -49,7 +41,9 @@ const DonateSection = () => {
           <h2 className='text-[#1D1E1F] font-bold font-redHatText'>
             {' '}
             ~ ${' '}
-            {formatAmount(Math.round(totalPOLDonated * tokenPrice * 100) / 100)}
+            {formatAmount(
+              Math.round(totalPOLDonated * Number(POLPrice) * 100) / 100,
+            )}
           </h2>
           <p className='text-gray-700'>
             From{' '}

@@ -4,13 +4,13 @@ import Pagination from '../Pagination';
 import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { fetchUserDonations } from '@/services/donation.services';
-import { fetchTokenPrice } from '@/helpers/token';
 import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
 } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface ProjectUserDonationTableProps {
   userId: number;
@@ -58,7 +58,8 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [pageDonations, setPageDonations] = useState<Donation[]>([]);
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   const [order, setOrder] = useState<{ by: EOrderBy; direction: EDirection }>({
     by: EOrderBy.Date,
     direction: EDirection.DESC,
@@ -118,16 +119,6 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     fetchUserDonationData();
   }, [userId, projectId, page, order]);
 
-  // Fetch token price
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
-
   // Function to handle sorting
   const handleSort = (sortBy: EOrderBy) => {
     setOrder(prevOrder => ({
@@ -168,7 +159,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
             {formatAmount(totalContributions)} POL
           </h1>
           <span className='font-medium'>
-            ~ ${formatAmount(totalContributions * tokenPrice)}
+            ~ ${formatAmount(totalContributions * Number(POLPrice))}
           </span>
         </div>
       </div>
@@ -228,7 +219,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                       </Link>
                     </div>
                     <span className='text-xs font-medium text-[#A5ADBF]'>
-                      $ {formatAmount(donation.amount * tokenPrice)}
+                      $ {formatAmount(donation.amount * Number(POLPrice))}
                     </span>
                   </div>
                 </div>
