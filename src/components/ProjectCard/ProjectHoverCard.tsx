@@ -12,7 +12,7 @@ import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { fecthProjectDonationsById } from '@/services/donation.services';
-import { calculateTotalDonations } from '@/helpers/donation';
+import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
@@ -20,12 +20,6 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
 }
-
-const formatNumber = (number?: number) => {
-  return parseFloat(String(number || 0)).toLocaleString('en-US', {
-    maximumFractionDigits: 3,
-  });
-};
 
 export const ProjectHoverCard: FC<ProjectCardProps> = ({
   className,

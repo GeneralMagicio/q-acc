@@ -89,3 +89,9 @@ export const formatAmount = (number: number) => {
   }
   return number.toLocaleString('en-US');
 };
+
+export const formatNumber = (number?: number) => {
+  return parseFloat(String(number || 0)).toLocaleString('en-US', {
+    maximumFractionDigits: 2,
+  });
+};
