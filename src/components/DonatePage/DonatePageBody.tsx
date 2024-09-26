@@ -12,11 +12,7 @@ import { IconShare } from '../Icons/IconShare';
 import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
 
-import {
-  fetchTokenDetails,
-  fetchTokenPrice,
-  handleErc20Transfer,
-} from '@/helpers/token';
+import { fetchTokenDetails, handleErc20Transfer } from '@/helpers/token';
 import config from '@/config/configuration';
 import { saveDonations } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
@@ -28,6 +24,7 @@ import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface ITokenSchedule {
   message: string;
@@ -61,7 +58,8 @@ const DonatePageBody = () => {
   const { data: user } = useFetchUser();
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
@@ -77,7 +75,7 @@ const DonatePageBody = () => {
   } = useDonateContext();
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
-  let maxPOLAmount = 100000 / tokenPrice;
+  let maxPOLAmount = 100000 / Number(POLPrice);
   let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
 
   const [selectedPercentage, setSelectedPercentage] = useState(0);
@@ -135,11 +133,6 @@ const DonatePageBody = () => {
   }, [terms, isConnected, inputAmount, totalSupply]);
 
   useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
     if (round === 'early') {
       const message =
         'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
@@ -148,8 +141,6 @@ const DonatePageBody = () => {
 
       setTokenSchedule({ message, toolTip });
     }
-
-    fetchPrice();
   }, []);
 
   useEffect(() => {
@@ -333,8 +324,9 @@ const DonatePageBody = () => {
                 ~ ${' '}
                 {inputAmount === ''
                   ? 0
-                  : Math.floor(parseFloat(inputAmount) * tokenPrice * 100) /
-                    100}
+                  : Math.floor(
+                      parseFloat(inputAmount) * Number(POLPrice) * 100,
+                    ) / 100}
               </span>
             </div>
             {/* Avaliable token */}
@@ -515,7 +507,7 @@ const DonatePageBody = () => {
                 <h2 className='text-[#1D1E1F] font-medium'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(totalPOLDonated * tokenPrice * 100) / 100,
+                    Math.round(totalPOLDonated * Number(POLPrice) * 100) / 100,
                   )}
                 </h2>
               </div>
@@ -562,7 +554,7 @@ const DonatePageBody = () => {
                     ~ ${' '}
                     {projectData?.abc?.tokenPrice
                       ? Math.round(
-                          projectData?.abc?.tokenPrice * tokenPrice * 100,
+                          projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
                         ) / 100
                       : '---'}
                   </span>

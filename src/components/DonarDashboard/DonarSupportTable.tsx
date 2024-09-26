@@ -5,12 +5,12 @@ import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
-import { fetchTokenPrice } from '@/helpers/token';
 import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
 } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 const itemPerPage = 1;
 
@@ -34,7 +34,8 @@ const DonarSupportTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData } = useProjectContext();
-  const [tokenPrice, setTokenPrice] = useState(1);
+
+  const { data: POLPrice } = useFetchTokenPrice();
 
   const [order, setOrder] = useState<IOrder>({
     by: EOrderBy.CreationDate,
@@ -78,16 +79,6 @@ const DonarSupportTable = () => {
       });
     }
   };
-
-  // Set POL token price
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
 
   if (totalCount === 0) {
     return (
@@ -185,7 +176,9 @@ const DonarSupportTable = () => {
                       </div>
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
-                        $ {Math.round(donation.amount * tokenPrice * 100) / 100}
+                        ${' '}
+                        {Math.round(donation.amount * Number(POLPrice) * 100) /
+                          100}
                       </span>
                     </div>
                   </div>

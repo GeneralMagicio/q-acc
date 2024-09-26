@@ -9,9 +9,9 @@ import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
 import { fecthProjectDonationsById } from '@/services/donation.services';
 
-import { fetchTokenPrice } from '@/helpers/token';
 import { formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 const itemPerPage = 5;
 
@@ -35,7 +35,8 @@ const ProjectDonationTable = () => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData, uniqueDonars, totalAmount } = useProjectContext();
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   // get project data from context
   const id = 19;
   const [order, setOrder] = useState<IOrder>({
@@ -44,15 +45,6 @@ const ProjectDonationTable = () => {
   });
 
   const [pageDonations, setPageDonations] = useState<any>();
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
@@ -185,8 +177,9 @@ const ProjectDonationTable = () => {
                         <span className='text-xs font-medium  text-[#A5ADBF]'>
                           ${' '}
                           {formatAmount(
-                            Math.round(donation.amount * tokenPrice * 100) /
-                              100,
+                            Math.round(
+                              donation.amount * Number(POLPrice) * 100,
+                            ) / 100,
                           )}
                         </span>
                       </div>
@@ -226,7 +219,9 @@ const ProjectDonationTable = () => {
               </h1>
               <h2 className='font-medium text-[#1D1E1F]'>
                 ~ ${' '}
-                {formatAmount(Math.round(totalAmount * tokenPrice * 100) / 100)}
+                {formatAmount(
+                  Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                )}
               </h2>
             </div>
 

@@ -43,7 +43,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const { data: tokenPrice, isLoading } = useFetchTokenPrice();
+  const { data: POLPrice } = useFetchTokenPrice();
 
   const [progress, setProgress] = useState(0);
 
@@ -51,8 +51,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     console.log(
       project?.title + ' NFT address' + project?.abc?.nftContractAddress,
     );
-    if (tokenPrice) {
-      let maxPOLAmount = 100000 / tokenPrice;
+    if (POLPrice) {
+      let maxPOLAmount = 100000 / POLPrice;
       let tempprogress =
         Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
       setProgress(tempprogress);
@@ -101,8 +101,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contributionLimit: maxContributionPOLAmountInCurrentRound,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
-
-  const POLPrice = useFetchTokenPrice();
 
   return (
     <div
@@ -205,7 +203,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     ~${' '}
                     {Number(POLPrice) &&
                       formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                    ${' '}
+                    -
                     {Number(POLPrice) &&
                       formatNumber(Number(POLPrice) * tokenPriceRange.max)}
                   </p>

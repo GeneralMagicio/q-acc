@@ -10,7 +10,6 @@ import {
   fetchUserDonations,
 } from '@/services/donation.services';
 import { getIpfsAddress } from '@/helpers/image';
-import { fetchTokenPrice } from '@/helpers/token';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { IconTokenSchedule } from '@/components/Icons/IconTokenSchedule';
 import { IconMinted } from '@/components/Icons/IconMinted';
@@ -24,6 +23,7 @@ import {
   formatAmount,
   groupDonationsByProject,
 } from '@/helpers/donation';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
@@ -34,7 +34,8 @@ const DonarSupports = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [POLPrice, setPOLPrice] = useState(1);
+
+  const { data: POLPrice } = useFetchTokenPrice();
   const { data: user } = useFetchUser();
   const [projectDonorDataForBreakDown, setProjectDonorDataForBreakDown] =
     useState<
@@ -71,15 +72,6 @@ const DonarSupports = () => {
 
     fetchData();
   }, [userId]);
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setPOLPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
 
   const donationsGroupedByProject = useMemo(() => {
     return groupDonationsByProject(donations);
@@ -275,9 +267,9 @@ const DonarSupports = () => {
                   </div>
                   <div className='flex justify-between text-[#1D1E1F] font-medium'>
                     <h2 className='flex gap-1 items-center'>
-                      {project.abc.tokenPrice / POLPrice || '---'}
+                      {project.abc.tokenPrice / Number(POLPrice) || '---'}
                       &nbsp;-&nbsp;
-                      {project.abc.tokenPrice / POLPrice || '---'}
+                      {project.abc.tokenPrice / Number(POLPrice) || '---'}
                       &nbsp;
                       <span className='text-[#4F576A] text-xs pb-1'>POL</span>
                     </h2>
