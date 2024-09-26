@@ -62,13 +62,11 @@ export const useTokenPriceRange = ({
     select: data => Number(formatUnits(data, 18)),
   });
 
+  const contributedSoFar = parseFloat(
+    (virtualCollateralSupply.data || '0').toString(),
+  );
   // Calculate the upper limit (X)
-  const X = useMemo(() => {
-    const contributedSoFar = parseFloat(
-      (virtualCollateralSupply.data || '0').toString(),
-    );
-    return contributionLimit - contributedSoFar;
-  }, [contributionLimit, virtualCollateralSupply.data]);
+  const X = contributionLimit - contributedSoFar;
 
   // Fetch `calculatePurchaseReturn` using X
   const calculatePurchaseReturn = useQuery<BigNumberish, Error>({
@@ -82,11 +80,9 @@ export const useTokenPriceRange = ({
     select: data => Number(data), // Convert BigNumber to number
   });
 
+  const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
   // Calculate the max token price (P = X / Y)
-  const maxPrice = useMemo(() => {
-    const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
-    return X / Y;
-  }, [X, calculatePurchaseReturn.data]);
+  const maxPrice = X / Y;
 
   const staticPriceForBuying = useQuery<BigNumberish, Error>({
     queryKey: ['getStaticPriceForBuying', contractAddress],
