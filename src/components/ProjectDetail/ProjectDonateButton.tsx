@@ -10,6 +10,8 @@ import { checkUserOwnsNFT } from '@/helpers/token';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { formatNumber } from '@/helpers/donation';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -43,6 +45,13 @@ const ProjectDonateButton = () => {
     }
   };
 
+  // New token price logic
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const tokenPriceRange = useTokenPriceRange({
+    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contractAddress: projectData.abc?.fundingManagerAddress || '',
+  });
+
   let maxPOLAmount = totalPOLDonated - 1;
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
@@ -69,22 +78,20 @@ const ProjectDonateButton = () => {
 
         {/* <IconInfo /> */}
       </div>
-      <div className='flex items-center  text-sm  gap-2 text-[#82899A] '>
-        <h1 className=' w-[200px] p-2 bg-[#F7F7F9] rounded-lg'>
+      <div className='flex items-center  text-sm  gap-2 text-[#82899A] flex-wrap  justify-between'>
+        <h1 className='  p-2 bg-[#F7F7F9] rounded-lg pr-10'>
           <span className='text-[#1D1E1F] font-medium'>
-            {projectData?.abc?.tokenPrice
-              ? projectData?.abc?.tokenPrice
-              : '---'}
+            {tokenPriceRange.min.toFixed(3)} - {tokenPriceRange.max.toFixed(3)}
           </span>
           <span className='text-[#4F576A] text-xs '> POL</span>
         </h1>
         <span className='text-[#4F576A] font-medium'>
-          ${' '}
-          {projectData?.abc?.tokenPrice
-            ? Math.round(
-                projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
-              ) / 100
-            : '---'}
+          ~${' '}
+          {Number(POLPrice) &&
+            formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+          -
+          {Number(POLPrice) &&
+            formatNumber(Number(POLPrice) * tokenPriceRange.max)}
         </span>
       </div>
     </div>

@@ -20,7 +20,7 @@ import {
 } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
-import { formatAmount } from '@/helpers/donation';
+import { formatAmount, formatNumber } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
@@ -28,6 +28,7 @@ import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { useTokenPriceRange } from '@/services/tokenPrice.service';
 
 interface ITokenSchedule {
   message: string;
@@ -76,10 +77,18 @@ const DonatePageBody = () => {
     totalAmount: totalPOLDonated,
     uniqueDonars,
   } = useDonateContext();
+
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
   let maxPOLAmount = 100000 / Number(POLPrice);
   let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
+
+  // New token price logic
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const tokenPriceRange = useTokenPriceRange({
+    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contractAddress: projectData?.abc?.fundingManagerAddress || '',
+  });
 
   const [selectedPercentage, setSelectedPercentage] = useState(0);
 
@@ -554,20 +563,19 @@ const DonatePageBody = () => {
               <div className='flex gap-8 font-redHatText'>
                 <h2 className=' flex gap-1 items-center'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    {projectData?.abc?.tokenPrice
-                      ? projectData?.abc?.tokenPrice
-                      : '---'}
+                    {tokenPriceRange.min.toFixed(3)} -{' '}
+                    {tokenPriceRange.max.toFixed(3)}
                   </span>
                   <span className='text-xs text-[#82899A]'>POL</span>
                 </h2>
                 <h2 className=''>
                   <span>
-                    ~ ${' '}
-                    {projectData?.abc?.tokenPrice
-                      ? Math.round(
-                          projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
-                        ) / 100
-                      : '---'}
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                    -
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
                   </span>
                 </h2>
               </div>
