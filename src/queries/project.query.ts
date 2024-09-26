@@ -183,6 +183,7 @@ export const GET_PROJECT_BY_ID = `
         icon
         orchestratorAddress
         projectAddress
+        fundingManagerAddress
       }
     }
   }`;
@@ -334,6 +335,7 @@ export const GET_PROJECT_BY_SLUG = `
       creatorAddress
       nftContractAddress
       chainId
+      fundingManagerAddress
     }
 			campaigns {
 				id
@@ -480,6 +482,7 @@ export const GET_ALL_PROJECTS = `
       creatorAddress
       nftContractAddress
       chainId
+      fundingManagerAddress
     }
   }
     totalCount
@@ -528,6 +531,7 @@ export const GET_PROJECT_BY_USER_ID = `
         totalSupply
         tokenPrice
         mintedAmount
+        fundingManagerAddress
       }
       projectVerificationForm {
         id

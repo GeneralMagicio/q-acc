@@ -26,13 +26,13 @@ import {
   calculateTotalDonations,
   calculateUniqueDonors,
 } from '@/helpers/donation';
-import { fetchTokenPrice } from '@/helpers/token';
 import { getIpfsAddress } from '@/helpers/image';
 import { RoundCollectedInfo } from './RoundCollectedInfo';
 import { IconChevronDown } from '../Icons/IconChevronDown';
 import { IconChevronUp } from '../Icons/IconChevronUp';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -48,7 +48,8 @@ const MyProjects = () => {
   const [totalDonationsCount, setTotalDonationsCount] = useState(0);
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const [tokenPrice, setTokenPrice] = useState(1);
+  const { data: POLPrice } = useFetchTokenPrice();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
@@ -102,16 +103,6 @@ const MyProjects = () => {
       fetchProjectDonations();
     }
   }, [projectData]);
-
-  // Set POL token price
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchTokenPrice('wmatic');
-      setTokenPrice(price);
-    };
-
-    fetchPrice();
-  }, []);
 
   // Handler for input change to update searchTerm
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -281,13 +272,13 @@ const MyProjects = () => {
                 ~ $&nbsp;
                 {projectData?.abc?.tokenPrice
                   ? Math.round(
-                      projectData?.abc?.tokenPrice * tokenPrice * 100,
+                      projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
                     ) / 100
                   : '---'}
                 &nbsp;-&nbsp;
                 {projectData?.abc?.tokenPrice
                   ? Math.round(
-                      projectData?.abc?.tokenPrice * tokenPrice * 100,
+                      projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
                     ) / 100
                   : '---'}
               </div>
@@ -323,7 +314,7 @@ const MyProjects = () => {
                   {totalAmount} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+                  ~ $ {Math.round(totalAmount * Number(POLPrice) * 100) / 100}
                 </span>
               </div>
             </div>
@@ -401,7 +392,7 @@ const MyProjects = () => {
               {totalAmount} POL
             </span>
             <span className='text-[#1D1E1F]  font-medium'>
-              ~ $ {Math.round(totalAmount * tokenPrice * 100) / 100}
+              ~ $ {Math.round(totalAmount * Number(POLPrice) * 100) / 100}
             </span>
           </div>
         </div>
