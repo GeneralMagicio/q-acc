@@ -62,7 +62,7 @@ const DonatePageBody = () => {
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
   const [tokenPrice, setTokenPrice] = useState(1);
-  const [terms, setTerms] = useState<boolean>(false);
+  const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
@@ -166,11 +166,6 @@ const DonatePageBody = () => {
       });
 
       setHasSavedDonation(true);
-
-      // Save that user accepted terms and conditions
-      if (terms && !user?.acceptedToS) {
-        updateAcceptedTerms(true);
-      }
     }
   }, [isConfirmed, hasSavedDonation]);
 
@@ -257,6 +252,18 @@ const DonatePageBody = () => {
         return percentage;
       }
     });
+  };
+
+  // Handle Terms checkbox change event
+  const handleAcceptTerms = (_event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = _event.target.checked;
+
+    // Save that user accepted terms and conditions - ONLY ONCE
+    if (!user?.acceptedToS && isChecked) {
+      updateAcceptedTerms(true);
+    }
+
+    setTerms(isChecked);
   };
 
   if (isConfirmed) {
@@ -394,16 +401,12 @@ const DonatePageBody = () => {
           </div>
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
-            <div
-              className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'
-              onClick={() => user?.acceptedToS || setTerms(!terms)}
-            >
+            <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
               <div>
                 <input
                   type='checkbox'
                   checked={terms}
-                  onChange={() => user?.acceptedToS || setTerms(!terms)}
-                  disabled={user?.acceptedToS}
+                  onChange={event => handleAcceptTerms(event)}
                 />
               </div>
               <div className='flex flex-col text-[#1D1E1F] '>
@@ -418,7 +421,7 @@ const DonatePageBody = () => {
                   </Link>
                 </h2>
               </div>
-            </div>
+            </label>
 
             {/* Make it Anoynmous */}
             <div

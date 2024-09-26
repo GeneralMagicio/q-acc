@@ -9,6 +9,10 @@ const nextConfig = {
         hostname: 'giveth.mypinata.cloud',
       },
       {
+        protocol: 'https',
+        hostname: 'gateway.pinata.cloud',
+      },
+      {
         hostname: 'example.com',
       },
     ],
