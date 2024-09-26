@@ -207,7 +207,7 @@ const DonatePageBody = () => {
 
   const handleDonate = async () => {
     try {
-      const draftDonation = await createDraftDonation(
+      await createDraftDonation(
         parseInt(projectData?.id),
         chain?.id!,
         parseInt(inputAmount),
@@ -215,18 +215,16 @@ const DonatePageBody = () => {
         projectData?.addresses[0].address,
         tokenAddress,
       );
-      if (draftDonation) {
-        const hash = await handleErc20Transfer({
-          inputAmount,
-          tokenAddress,
-          projectAddress: projectData?.addresses[0].address,
-        });
 
-        setHash(hash);
-      } else {
-        setFlashMessage('Error creating draft donation');
-      }
+      const hash = await handleErc20Transfer({
+        inputAmount,
+        tokenAddress,
+        projectAddress: projectData?.addresses[0].address,
+      });
+
+      setHash(hash);
     } catch (ContractFunctionExecutionError) {
+      setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
     }
   };
