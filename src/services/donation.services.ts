@@ -3,6 +3,7 @@ import {
   GET_PROJECT_DONATIONS_BY_ID,
   SAVE_DONATION,
   GET_PROJECT_DONATIONS_USERS_BY_ID,
+  CREATE_DRAFT_DONATION,
 } from '@/queries/project.query';
 import {
   GET_USER_DONATIONS,
@@ -31,6 +32,35 @@ export const fecthProjectDonationsById = async (
       },
     );
     return res?.donationsByProjectId;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createDraftDonation = async (
+  projectId: number,
+  networkId: number,
+  amount: number,
+  token: string,
+  toAddress: string,
+  tokenAddress: String,
+) => {
+  try {
+    const res = await requestGraphQL<{ createDraftDonation: number }>(
+      CREATE_DRAFT_DONATION,
+      {
+        projectId,
+        networkId,
+        amount,
+        token,
+        toAddress,
+        tokenAddress,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.createDraftDonation;
   } catch (error) {
     console.error(error);
   }

@@ -14,7 +14,10 @@ import { Button, ButtonColor } from '../Button';
 
 import { fetchTokenDetails, handleErc20Transfer } from '@/helpers/token';
 import config from '@/config/configuration';
-import { saveDonations } from '@/services/donation.services';
+import {
+  createDraftDonation,
+  saveDonations,
+} from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
 import { formatAmount, formatNumber } from '@/helpers/donation';
@@ -105,9 +108,7 @@ const DonatePageBody = () => {
       hash,
     });
 
-  // const tokenAddress = '0x58a9BB66e2A57aF82e6621F1e2D1483286956683'; //POL token address
-  const WMATIC = '0x97986A7526C6B7706C5e48bB8bE3644ab9f4747C';
-  const tokenAddress = config.ERC_TOKEN_ADDRESS; //SPC token
+  const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
   const totalTokenSupply = '57000000';
   const totalSupply = 0.02 * parseFloat(totalTokenSupply) * 0.125;
@@ -201,6 +202,15 @@ const DonatePageBody = () => {
 
   const handleDonate = async () => {
     try {
+      await createDraftDonation(
+        parseInt(projectData?.id),
+        chain?.id!,
+        parseInt(inputAmount),
+        config.ERC_TOKEN_SYMBOL,
+        projectData?.addresses[0].address,
+        tokenAddress,
+      );
+
       const hash = await handleErc20Transfer({
         inputAmount,
         tokenAddress,
@@ -209,6 +219,7 @@ const DonatePageBody = () => {
 
       setHash(hash);
     } catch (ContractFunctionExecutionError) {
+      setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
     }
   };

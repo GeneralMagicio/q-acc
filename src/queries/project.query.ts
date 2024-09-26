@@ -371,6 +371,30 @@ export const SAVE_DONATION = `mutation (
   )
 }`;
 
+export const CREATE_DRAFT_DONATION = `mutation (
+    $networkId: Float!
+    $amount: Float!
+    $token: String!
+    $projectId: Float!
+    $tokenAddress: String
+    $toAddress: String
+    $anonymous: Boolean
+    $referrerId: String
+    $safeTransactionId: String
+  ) {
+    createDraftDonation(
+      networkId: $networkId
+      amount: $amount
+      token: $token
+      projectId: $projectId
+      tokenAddress: $tokenAddress
+      toAddress: $toAddress
+      anonymous: $anonymous
+      referrerId: $referrerId
+      safeTransactionId: $safeTransactionId
+    )
+  }`;
+
 export const GET_ALL_PROJECTS = `
 {
   allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest) {
