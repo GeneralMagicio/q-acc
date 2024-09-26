@@ -21,6 +21,12 @@ interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
 }
 
+const formatNumber = (number?: number) => {
+  return parseFloat(String(number || 0)).toLocaleString('en-US', {
+    maximumFractionDigits: 3,
+  });
+};
+
 export const ProjectHoverCard: FC<ProjectCardProps> = ({
   className,
   project,
@@ -198,10 +204,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   <p className='text-sm text-[#4F576A] font-medium'>
                     ~${' '}
                     {Number(POLPrice) &&
-                      (Number(POLPrice) * tokenPriceRange.min).toFixed(3)}{' '}
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
                     ${' '}
                     {Number(POLPrice) &&
-                      (Number(POLPrice) * tokenPriceRange.max).toFixed(3)}
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
                   </p>
                 </div>
               </div>
