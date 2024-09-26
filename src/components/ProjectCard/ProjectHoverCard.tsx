@@ -7,7 +7,7 @@ import ProjectCardImage from './ProjectCardImage';
 
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
-import { checkUserOwnsNFT, fetchTokenPrice } from '@/helpers/token';
+import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
