@@ -96,15 +96,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
-  const [POLPrice, setPOLPrice] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchPOLPrice = async () => {
-      const price = await fetchTokenPrice(); // Fetch token price in USD
-      setPOLPrice(price);
-    };
-    fetchPOLPrice();
-  }, []);
+  const POLPrice = useFetchTokenPrice();
 
   return (
     <div
@@ -204,8 +196,12 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 </div>
                 <div className='flex gap-1 items-center'>
                   <p className='text-sm text-[#4F576A] font-medium'>
-                    ~$ {POLPrice && (POLPrice * tokenPriceRange.min).toFixed(3)}{' '}
-                    $ {POLPrice && (POLPrice * tokenPriceRange.max).toFixed(3)}
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      (Number(POLPrice) * tokenPriceRange.min).toFixed(3)}{' '}
+                    ${' '}
+                    {Number(POLPrice) &&
+                      (Number(POLPrice) * tokenPriceRange.max).toFixed(3)}
                   </p>
                 </div>
               </div>
