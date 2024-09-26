@@ -102,6 +102,7 @@ export interface IProject {
     totalSupply?: number;
     tokenPrice?: number;
     mintedAmount?: number;
+    fundingManagerAddress?: string;
   };
   status?: {
     id: string;

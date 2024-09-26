@@ -15,10 +15,17 @@ import { fecthProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { useTokenPriceRange } from '@/services/tokenPrice.service';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
 }
+
+const formatNumber = (number?: number) => {
+  return parseFloat(String(number || 0)).toLocaleString('en-US', {
+    maximumFractionDigits: 3,
+  });
+};
 
 export const ProjectHoverCard: FC<ProjectCardProps> = ({
   className,
@@ -87,6 +94,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
+
+  // New token price logic
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const tokenPriceRange = useTokenPriceRange({
+    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contractAddress: project.abc?.fundingManagerAddress || '',
+  });
+
+  const POLPrice = useFetchTokenPrice();
 
   return (
     <div
@@ -177,13 +193,21 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 </p>
               </div>
               <div className='mt-1 flex justify-between'>
-                <div className='flex gap-1 items-center  p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                  <p className='font-bold text-gray-800'>0.191 - 1.172</p>
+                <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                  <p className='font-bold text-gray-800'>
+                    {tokenPriceRange.min.toFixed(3)} -{' '}
+                    {tokenPriceRange.max.toFixed(3)}
+                  </p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>
                 <div className='flex gap-1 items-center'>
                   <p className='text-sm text-[#4F576A] font-medium'>
-                    ~$ 0.174 - 1.068
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                    ${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
                   </p>
                 </div>
               </div>
