@@ -65,7 +65,7 @@ const DonatePageBody = () => {
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
   const [tokenPrice, setTokenPrice] = useState(1);
-  const [terms, setTerms] = useState<boolean>(false);
+  const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
@@ -167,11 +167,6 @@ const DonatePageBody = () => {
       });
 
       setHasSavedDonation(true);
-
-      // Save that user accepted terms and conditions
-      if (terms && !user?.acceptedToS) {
-        updateAcceptedTerms(true);
-      }
     }
   }, [isConfirmed, hasSavedDonation]);
 
@@ -270,6 +265,18 @@ const DonatePageBody = () => {
     });
   };
 
+  // Handle Terms checkbox change event
+  const handleAcceptTerms = (_event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = _event.target.checked;
+
+    // Save that user accepted terms and conditions - ONLY ONCE
+    if (!user?.acceptedToS && isChecked) {
+      updateAcceptedTerms(true);
+    }
+
+    setTerms(isChecked);
+  };
+
   if (isConfirmed) {
     return <DonateSuccessPage transactionHash={hash} round={round} />;
   }
@@ -351,7 +358,7 @@ const DonatePageBody = () => {
                 Available in your wallet:{' '}
                 {!tokenDetails
                   ? 'Loading...'
-                  : `${Math.floor(tokenDetails?.formattedBalance * 100) / 100} ${tokenDetails?.symbol}`}
+                  : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
               </div>
 
               <button onClick={handleRefetch}>
@@ -405,16 +412,12 @@ const DonatePageBody = () => {
           </div>
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
-            <div
-              className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'
-              onClick={() => user?.acceptedToS || setTerms(!terms)}
-            >
+            <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
               <div>
                 <input
                   type='checkbox'
                   checked={terms}
-                  onChange={() => user?.acceptedToS || setTerms(!terms)}
-                  disabled={user?.acceptedToS}
+                  onChange={event => handleAcceptTerms(event)}
                 />
               </div>
               <div className='flex flex-col text-[#1D1E1F] '>
@@ -429,7 +432,7 @@ const DonatePageBody = () => {
                   </Link>
                 </h2>
               </div>
-            </div>
+            </label>
 
             {/* Make it Anoynmous */}
             <div
@@ -495,9 +498,6 @@ const DonatePageBody = () => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  <h3 className='font-bold'>
-                    {projectData?.abc?.tokenTicker} range
-                  </h3>
                   Every round has a round limit. This is the % of the current
                   round limit that has been collected. Once it reaches 100%, the
                   round will close.
@@ -521,7 +521,7 @@ const DonatePageBody = () => {
               </h2>
               <div className='flex gap-2 items-center'>
                 <h1 className='text-4xl font-extrabold p-2'>
-                  {totalPOLDonated} POL
+                  {formatAmount(totalPOLDonated)} POL
                 </h1>
                 <h2 className='text-[#1D1E1F] font-medium'>
                   ~ ${' '}
