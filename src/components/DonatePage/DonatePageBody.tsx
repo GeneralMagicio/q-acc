@@ -340,7 +340,7 @@ const DonatePageBody = () => {
                 Available in your wallet:{' '}
                 {!tokenDetails
                   ? 'Loading...'
-                  : `${Math.floor(tokenDetails?.formattedBalance * 100) / 100} ${tokenDetails?.symbol}`}
+                  : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
               </div>
 
               <button onClick={handleRefetch}>
@@ -484,9 +484,6 @@ const DonatePageBody = () => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  <h3 className='font-bold'>
-                    {projectData?.abc?.tokenTicker} range
-                  </h3>
                   Every round has a round limit. This is the % of the current
                   round limit that has been collected. Once it reaches 100%, the
                   round will close.
@@ -510,7 +507,7 @@ const DonatePageBody = () => {
               </h2>
               <div className='flex gap-2 items-center'>
                 <h1 className='text-4xl font-extrabold p-2'>
-                  {totalPOLDonated} POL
+                  {formatAmount(totalPOLDonated)} POL
                 </h1>
                 <h2 className='text-[#1D1E1F] font-medium'>
                   ~ ${' '}
