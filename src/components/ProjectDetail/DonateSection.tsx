@@ -72,7 +72,6 @@ const DonateSection = () => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  <h3 className='font-bold'>ABC range</h3>
                   Bonding curves have a mint price and a burn price. This shows
                   the mint price.
                 </div>
