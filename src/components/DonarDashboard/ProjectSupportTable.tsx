@@ -10,6 +10,7 @@ import {
   getDifferenceFromPeriod,
 } from '@/helpers/date';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import config from '@/config/configuration';
 
 const itemPerPage = 5;
 
@@ -171,7 +172,7 @@ const ProjectSupportTable = ({
                       <span className='font-medium'>{donation.amount}</span>
                       <Link
                         target='_blank'
-                        href={`https://cardona-zkevm.polygonscan.com/tx/${donation.transactionId}`}
+                        href={`${config.SCAN_URL}/tx/${donation.transactionId}`}
                       >
                         <IconViewTransaction size={16} />
                       </Link>

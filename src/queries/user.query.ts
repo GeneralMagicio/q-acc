@@ -81,11 +81,19 @@ export const GET_USER_DONATIONS = `
           title
           image
           abc {
-            totalSupply
             tokenName
-            projectAddress
-            tokenPrice
+            tokenTicker
+            issuanceTokenAddress
             icon
+            orchestratorAddress
+            projectAddress
+            creatorAddress
+            nftContractAddress
+            chainId
+            totalSupply
+            tokenPrice
+            mintedAmount
+            fundingManagerAddress
           }
           totalDonations
         }
