@@ -24,6 +24,8 @@ import {
   groupDonationsByProject,
 } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import Link from 'next/link';
+import config from '@/config/configuration';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
@@ -193,12 +195,17 @@ const DonarSupports = () => {
                   </div>
 
                   <div className='flex flex-col gap-4 font-redHatText'>
-                    <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
-                      <span className='flex gap-4 text-[#5326EC] font-bold'>
-                        Project Contract Address{' '}
-                        <IconViewTransaction color='#5326EC' />
-                      </span>
-                    </div>
+                    <Link
+                      target='_blank'
+                      href={`${config.SCAN_URL}/address/${project?.abc?.projectAddress}`}
+                    >
+                      <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
+                        <span className='flex gap-4 text-[#5326EC] font-bold'>
+                          Project Contract Address
+                          <IconViewTransaction color='#5326EC' />
+                        </span>
+                      </div>{' '}
+                    </Link>
 
                     <div className='flex justify-between p-2'>
                       <div className='flex gap-2'>
