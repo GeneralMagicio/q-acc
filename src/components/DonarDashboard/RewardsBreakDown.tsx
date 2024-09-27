@@ -217,7 +217,11 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
             </div>
 
-            <Button color={ButtonColor.Giv} className='flex justify-center'>
+            <Button
+              color={ButtonColor.Giv}
+              className='flex justify-center'
+              disabled={availableToClaim <= 0} // Disable if 0 or null
+            >
               Claim Tokens
             </Button>
           </div>
