@@ -94,17 +94,19 @@ export default function Home() {
               closed.
             </p>
             <p>
-              The per-person cap and per-round limit for each of the early
-              access mint rounds are in POL. They are calculated at the start of
-              the round based on what the following USD-equiv of POL is at that
-              time:
+              The per person, per project cap and per-round limit for each of
+              the early access mint rounds are in POL. They are calculated at
+              the start of the round based on what the following USD-equiv of
+              POL is at that time:
             </p>
             <div className='overflow-x-auto'>
               <table className='min-w-full table-auto'>
                 <thead className=''>
                   <tr className='rounded-t-lg'>
                     <th className='px-4 py-2 text-left '>Round</th>
-                    <th className='px-4 py-2 text-left'>Per-person cap</th>
+                    <th className='px-4 py-2 text-left'>
+                      Per person, per project cap
+                    </th>
                     <th className='px-4 py-2 text-left '>Per-round limit</th>
                   </tr>
                 </thead>
