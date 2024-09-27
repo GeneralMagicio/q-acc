@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import ProjectUserDonationTable from './ProjectUserDonationTable'; // Import the ProjectUserDonationTable component
 import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
@@ -15,6 +16,8 @@ import {
   calculateClaimableRewardTokenAmount,
 } from '@/helpers/donation';
 import { useFetchUser } from '@/hooks/useFetchUser';
+
+import config from '@/config/configuration';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
@@ -132,11 +135,17 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
             </div>
 
-            <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
-              <span className='flex gap-4 text-[#5326EC] font-bold'>
-                Project Contract address <IconViewTransaction color='#5326EC' />
-              </span>
-            </div>
+            <Link
+              target='_blank'
+              href={`${config.SCAN_URL}/address/${project?.abc?.projectAddress}`}
+            >
+              <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
+                <span className='flex gap-4 text-[#5326EC] font-bold'>
+                  Project Contract Address{' '}
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </div>{' '}
+            </Link>
           </div>
         </div>
 
