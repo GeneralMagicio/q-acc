@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ButtonColor } from '../Button';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -216,13 +215,15 @@ const MyProjects = () => {
             </p>
 
             <Link
-              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
-              color={ButtonColor.Base}
-              className='px-6 py-4 rounded-full text-xs font-bold items-center flex gap-2 justify-center border border-[#5326EC] font-redHatText text-giv-500 bg-white'
               target='_blank'
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
             >
-              Project Contract address{' '}
-              <IconViewTransaction size={20} color={'#5326EC'} />
+              <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center font-redHatText'>
+                <span className='flex gap-4 text-[#5326EC] font-bold'>
+                  Project Contract Address
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </div>{' '}
             </Link>
           </div>
 
