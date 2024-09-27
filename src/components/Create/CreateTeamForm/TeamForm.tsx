@@ -8,6 +8,7 @@ import { validators } from '@/components/SocialMediaInput/vaildators';
 interface TeamFormProps {
   index: number;
   removeMember: () => void;
+  isEdit?: boolean;
 }
 
 const socialMediaLinks = [
@@ -31,7 +32,11 @@ const socialMediaLinks = [
   },
 ];
 
-export const TeamForm: React.FC<TeamFormProps> = ({ index, removeMember }) => {
+export const TeamForm: React.FC<TeamFormProps> = ({
+  index,
+  removeMember,
+  isEdit = false,
+}) => {
   const { setValue } = useFormContext(); // Access setValue from form context
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {
@@ -43,7 +48,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({ index, removeMember }) => {
   return (
     <section className='bg-white p-8 flex flex-col gap-8 rounded-2xl mt-6'>
       <div className='flex justify-between items-center'>
-        <h1 className='text-2xl mb-8'>Add Your Team</h1>
+        <h1 className='text-2xl mb-8'>{isEdit ? 'Edit' : 'Add'} Your Team</h1>
         <div
           onClick={removeMember}
           className='border p-3 rounded-full min-w-[150px] text-center bg-giv-500 text-white font-bold cursor-pointer'
