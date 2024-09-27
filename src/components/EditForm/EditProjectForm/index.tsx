@@ -256,7 +256,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
         />
         <div className='bg-white flex flex-col gap-16 pt-20 w-full mt-10 rounded-2xl p-8'>
           <h1 className='text-2xl font-bold text-gray-800 mb-7'>
-            Create Your Project
+            Edit Your Project
           </h1>
           <Input
             name='projectName'
