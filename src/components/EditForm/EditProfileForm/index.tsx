@@ -2,7 +2,6 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { type FC, useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/Input';
 import { Dropzone } from '@/components/DropZone';
@@ -101,15 +100,6 @@ const EditProjectForm: FC = () => {
             <div className='border-b-2 text-[18px] font-bold text-[#4F576A]'>
               Profile Photo
             </div>
-            {user?.avatar && (
-              <Image
-                src={user.avatar}
-                width={200}
-                height={200}
-                alt='Profile Photo'
-                className='w-20 h-20 rounded-full mb-4'
-              />
-            )}
             <div className='w-full md:w-1/3'>
               <Dropzone name='profilePhoto' onDrop={handleDrop} />
             </div>
