@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import ProjectUserDonationTable from './ProjectUserDonationTable'; // Import the ProjectUserDonationTable component
 import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
@@ -15,7 +16,7 @@ import {
   calculateClaimableRewardTokenAmount,
 } from '@/helpers/donation';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import Link from 'next/link';
+
 import config from '@/config/configuration';
 
 interface RewardsBreakDownProps {
