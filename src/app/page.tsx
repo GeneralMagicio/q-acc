@@ -107,7 +107,9 @@ export default function Home() {
                     <th className='px-4 py-2 text-left'>
                       Per person, per project cap
                     </th>
-                    <th className='px-4 py-2 text-left '>Per-round limit</th>
+                    <th className='px-4 py-2 text-left '>
+                      Per-round, per project cap
+                    </th>
                   </tr>
                 </thead>
                 <tbody className='text-left'>
