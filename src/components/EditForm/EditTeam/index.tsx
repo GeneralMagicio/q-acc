@@ -145,6 +145,7 @@ const EditTeamForm = ({ projectId }: { projectId: number }) => {
             <TeamForm
               index={index}
               removeMember={() => removeTeamMember(index)}
+              isEdit={true}
             />
           </div>
         ))}
