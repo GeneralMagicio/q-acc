@@ -148,7 +148,6 @@ const CreateProjectForm: FC = () => {
 
   const handlePreview = () => {
     const formData = getValues();
-    console.log(formData);
     sessionStorage.setItem('previewData', JSON.stringify(formData));
     window.open(Routes.Preview, '_blank');
   };

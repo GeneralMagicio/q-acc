@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { ProjectFormData } from '../Create/CreateProjectForm';
 import { fetchAbcToken } from '@/app/actions/fetch-abc-token';
@@ -11,15 +11,15 @@ const ProjectDetailPreviewBanner = ({
   projectData,
 }: ProjectDetailPreviewBannerProps) => {
   const { address } = useAccount();
-  const projectTokenData = address
-    ? fetchAbcToken({ userAddress: address })
-    : null;
-  // const { data: projectTokenData } = useFetchProjectByUserId(
-  //   parseInt(userData?.id ?? ''),
-  // );
+  const [projectTokenData, setProjectTokenData] = useState<any>(null);
 
-  // console.log({ userData });
-  console.log({ projectTokenData });
+  useEffect(() => {
+    if (address) {
+      fetchAbcToken({ userAddress: address }).then(data => {
+        setProjectTokenData(data);
+      });
+    }
+  }, [address]);
 
   const bgSrc = projectData?.banner
     ? projectData.banner
@@ -28,6 +28,7 @@ const ProjectDetailPreviewBanner = ({
   const logoSrc = projectData?.logo
     ? projectData.logo
     : '/images/project-card/logo.svg';
+
   return (
     <div
       className='w-full h-[440px] lg:h-[546px] lg:w-[80%]  bg-cover bg-center rounded-3xl relative'
@@ -46,7 +47,7 @@ const ProjectDetailPreviewBanner = ({
         </div>
         <div className='flex flex-col text-white gap-2'>
           <h1 className='font-normal font-redHatText'>
-            {projectData?.abc?.tokenTicker}
+            {projectTokenData?.tokenTicker || 'ABC'}
           </h1>
           <h1 className='text-4xl md:text-[41px]  font-bold leading-10'>
             {projectData?.projectName}

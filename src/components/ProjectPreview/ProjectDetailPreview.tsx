@@ -48,8 +48,6 @@ const ProjectDetailPreview = () => {
     }
   }, [searchParams.get('tab')]);
 
-  console.log(projectData);
-
   if (!projectData) {
     return <>Loading</>;
   }
@@ -59,7 +57,7 @@ const ProjectDetailPreview = () => {
       <div className='container'>
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailPreviewBanner projectData={projectData} />
-          <ProjectDetailPreviewDonationSection projectData={projectData} />
+          <ProjectDetailPreviewDonationSection />
         </div>
         <div className='my-6'>{<RoundCountBanner />}</div>
       </div>

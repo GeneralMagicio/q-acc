@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { formatAmount, formatNumber } from '@/helpers/donation';
 import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -6,6 +7,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { ProjectFormData } from '../Create/CreateProjectForm';
 import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
+import { fetchAbcToken } from '@/app/actions/fetch-abc-token';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -18,9 +20,18 @@ interface ProjectDetailPreviewBannerProps {
   projectData: ProjectFormData;
 }
 
-const ProjectDetailPreviewDonationSection = ({
-  projectData,
-}: ProjectDetailPreviewBannerProps) => {
+const ProjectDetailPreviewDonationSection = () => {
+  const { address } = useAccount();
+  const [projectTokenData, setProjectTokenData] = useState<any>(null);
+
+  useEffect(() => {
+    if (address) {
+      fetchAbcToken({ userAddress: address }).then(data => {
+        setProjectTokenData(data);
+      });
+    }
+  }, [address]);
+
   let totalDonations = 10;
   let currentState = 'early';
   const { data: POLPrice } = useFetchTokenPrice();
@@ -157,13 +168,13 @@ const ProjectDetailPreviewDonationSection = ({
         <img
           className='w-6 h-6 rounded-full'
           src={getIpfsAddress(
-            projectData.abc?.icon! ||
+            projectTokenData?.iconHash! ||
               'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
           )}
         />
         <div className='flex gap-2 items-center'>
           <span className='text-[#4F576A] font-medium'>
-            {projectData?.abc?.tokenTicker} range
+            {projectTokenData?.tokenTicker} range
           </span>
           <div className='relative group'>
             <IconTokenSchedule />
