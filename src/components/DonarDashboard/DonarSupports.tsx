@@ -105,6 +105,16 @@ const DonarSupports = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
+  if (!totalCount) {
+    return (
+      <div className='container'>
+        <div className='bg-white rounded-xl py-40 text-center text-gray-400 text-2xl'>
+          You didn’t support any project.
+        </div>
+      </div>
+    );
+  }
+
   if (!showBreakDown) {
     return (
       <div className='container flex flex-col gap-10 mb-10'>
