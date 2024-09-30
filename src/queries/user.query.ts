@@ -128,3 +128,9 @@ export const USER_ACCEPT_TERMS_MUTATION = `
     acceptedTermsOfService
   }
 `;
+
+export const PROJECT_USER_DONATION_CAP = `
+  query ProjectUserDonationCap($projectId: Int!) {
+    projectUserDonationCap(projectId: $projectId)   
+  }
+`;
