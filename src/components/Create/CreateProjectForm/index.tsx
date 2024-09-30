@@ -23,6 +23,8 @@ import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { TeamMember } from '../CreateTeamForm';
 import { HoldModal } from '@/components/Modals/HoldModal';
 import { ConnectModal } from '@/components/ConnectModal';
+import { IconExternalLink } from '@/components/Icons/IconExternalLink';
+import Routes from '@/lib/constants/Routes';
 
 export interface ProjectFormData {
   projectName: string;
@@ -129,12 +131,12 @@ const CreateProjectForm: FC = () => {
   const { formData, setFormData } = useCreateContext();
   const methods = useForm<ProjectFormData>({
     defaultValues: formData.project,
-    mode: 'onChange', // This enables validation on change
+    mode: 'onChange',
   });
   const { data: isWhiteListed, isFetching } = useIsUserWhiteListed();
   const router = useRouter();
 
-  const { handleSubmit, setValue } = methods;
+  const { handleSubmit, getValues } = methods;
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
@@ -142,6 +144,13 @@ const CreateProjectForm: FC = () => {
     if (!user?.id || !address) return;
     setFormData({ project: data });
     router.push('/create/team');
+  };
+
+  const handlePreview = () => {
+    const formData = getValues();
+    console.log(formData);
+    sessionStorage.setItem('previewData', JSON.stringify(formData));
+    window.open(Routes.Preview, '_blank');
   };
 
   return isFetching ? (
@@ -280,6 +289,19 @@ const CreateProjectForm: FC = () => {
             <p>Displayed in the header of the project page.</p>
             <Dropzone name='banner' onDrop={handleDrop} />
           </section>
+        </div>
+        <div className='bg-white flex flex-row flex-wrap justify-between items-center gap-16 w-full mt-10 mb-10 rounded-2xl p-8'>
+          <h3 className='text-lg line leading-7 text-[#1D1E1F] font-bold font-redHatText'>
+            Preview your project
+          </h3>
+          <button
+            onClick={handlePreview}
+            type='button'
+            className='px-6 py-4 font-bold items-center justify-center flex gap-2 text-pink-500 bg-white border-pink-400 border-2 p-4 rounded-full text-xs md:text-md min-w-[150px]'
+          >
+            PREVIEW
+            <IconExternalLink color='#FD67AC' />
+          </button>
         </div>
       </form>
     </FormProvider>
