@@ -1,6 +1,7 @@
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { ProjectFormData } from '../Create/CreateProjectForm';
-import { useFetchUser } from '@/hooks/useFetchUser';
+import { fetchAbcToken } from '@/app/actions/fetch-abc-token';
 
 interface ProjectDetailPreviewBannerProps {
   projectData: ProjectFormData;
@@ -9,9 +10,16 @@ interface ProjectDetailPreviewBannerProps {
 const ProjectDetailPreviewBanner = ({
   projectData,
 }: ProjectDetailPreviewBannerProps) => {
-  const { data: user } = useFetchUser();
+  const { address } = useAccount();
+  const projectTokenData = address
+    ? fetchAbcToken({ userAddress: address })
+    : null;
+  // const { data: projectTokenData } = useFetchProjectByUserId(
+  //   parseInt(userData?.id ?? ''),
+  // );
 
-  console.log(user);
+  // console.log({ userData });
+  console.log({ projectTokenData });
 
   const bgSrc = projectData?.banner
     ? projectData.banner
