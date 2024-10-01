@@ -424,7 +424,7 @@ const MyProjects = () => {
                 value={searchTerm}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                placeholder='Search for a wallet address or a donor name'
+                placeholder='Search for a supporter wallet address or a supporter name'
               />
             </div>
           </div>
