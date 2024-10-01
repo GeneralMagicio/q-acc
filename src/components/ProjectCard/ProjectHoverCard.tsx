@@ -16,6 +16,7 @@ import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { calculateCapAmount } from '@/helpers/round';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -32,7 +33,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const [isModalOpen, setModalOpen] = useState(false);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
-
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -41,21 +42,25 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    console.log(
-      project?.title + ' NFT address' + project?.abc?.nftContractAddress,
-    );
-    if (POLPrice && activeRoundDetails) {
-      let maxPOLAmount =
-        activeRoundDetails?.cumulativeCapPerProject /
-        activeRoundDetails?.tokenPrice;
-      let tempprogress =
-        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
-      setProgress(tempprogress);
-    }
-  }, [totalPOLDonated, activeRoundDetails]);
+  // useEffect(() => {
+  //   console.log(
+  //     project?.title + ' NFT address' + project?.abc?.nftContractAddress,
+  //   );
+  //   if (POLPrice && activeRoundDetails) {
+  //     let maxPOLAmount =
+  //       activeRoundDetails?.cumulativeCapPerProject /
+  //       activeRoundDetails?.tokenPrice;
+  //     let tempprogress =
+  //       Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
+  //     setProgress(tempprogress);
+  //   }
+  // }, [totalPOLDonated, activeRoundDetails]);
 
   useEffect(() => {
+    console.log(
+      project?.title,
+      project?.id + ' NFT address ' + project?.abc?.nftContractAddress,
+    );
     if (project?.id) {
       const fetchProjectDonations = async () => {
         const data = await fecthProjectDonationsById(
@@ -73,6 +78,24 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       fetchProjectDonations();
     }
   }, [project]);
+
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(project.id));
+
+        setMaxPOLCap(capAmount - totalPOLDonated);
+
+        let tempprogress =
+          Math.round((totalDonationAmountInRound / maxPOLCap) * 100 * 100) /
+          100;
+        setProgress(tempprogress);
+      }
+    };
+
+    updatePOLCap();
+  }, [totalPOLDonated, activeRoundDetails, project, maxPOLCap]);
 
   const handleSupport = async (e: any) => {
     e.stopPropagation();
@@ -92,7 +115,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   };
 
   // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const maxContributionPOLAmountInCurrentRound = maxPOLCap * (10 ^ 18);
+
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxContributionPOLAmountInCurrentRound,
     contractAddress: project.abc?.fundingManagerAddress || '',
@@ -189,8 +213,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <div className='mt-1 flex justify-between'>
                 <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
                   <p className='font-bold text-gray-800'>
-                    {tokenPriceRange.min.toFixed(3)} -{' '}
-                    {tokenPriceRange.max.toFixed(3)}
+                    {tokenPriceRange.min.toFixed(2)} -{' '}
+                    {tokenPriceRange.max.toFixed(2)}
                   </p>
                   <p className='text-xs text-gray-400'> POL</p>
                 </div>
