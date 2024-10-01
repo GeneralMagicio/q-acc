@@ -29,6 +29,7 @@ import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
 
 interface ITokenSchedule {
@@ -80,6 +81,11 @@ const DonatePageBody = () => {
     uniqueDonars,
   } = useDonateContext();
 
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+
+  const [progress, setProgress] = useState(0);
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
+
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
   useEffect(() => {
@@ -93,10 +99,17 @@ const DonatePageBody = () => {
     if (projectData) {
       getDonationCap();
     }
-  }, [projectData]);
 
-  let maxPOLAmount = 100000 / Number(POLPrice);
-  let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
+    if (activeRoundDetails) {
+      let maxPOLAmount =
+        activeRoundDetails?.cumulativeCapPerProject /
+        activeRoundDetails?.tokenPrice;
+      setMaxPOLCap(maxPOLAmount);
+      let tempprogress =
+        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
+      setProgress(tempprogress);
+    }
+  }, [projectData, activeRoundDetails, totalPOLDonated]);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -524,7 +537,7 @@ const DonatePageBody = () => {
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
               <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
               <span className='text-[#1D1E1F]'>
-                {formatAmount(maxPOLAmount)} POL
+                {formatAmount(maxPOLCap)} POL
               </span>
             </div>
           </div>

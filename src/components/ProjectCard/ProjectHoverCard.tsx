@@ -45,13 +45,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     console.log(
       project?.title + ' NFT address' + project?.abc?.nftContractAddress,
     );
-    if (POLPrice) {
-      let maxPOLAmount = 100000 / POLPrice;
+    if (POLPrice && activeRoundDetails) {
+      let maxPOLAmount =
+        activeRoundDetails?.cumulativeCapPerProject /
+        activeRoundDetails?.tokenPrice;
       let tempprogress =
         Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
       setProgress(tempprogress);
     }
-  }, [totalPOLDonated]);
+  }, [totalPOLDonated, activeRoundDetails]);
 
   useEffect(() => {
     if (project?.id) {

@@ -5,6 +5,11 @@ export interface IEarlyAccessRound {
   endDate: string;
   createdAt: string;
   updatedAt: string;
+  roundUSDCapPerProject: number;
+  roundUSDCapPerUserPerProject: number;
+  tokenPrice: number;
+  cumulativeCapPerProject: number;
+  cumulativeCapPerUserPerProject: number;
 }
 
 export interface IQfRound {
@@ -14,4 +19,9 @@ export interface IQfRound {
   allocatedFund: string;
   beginDate: string;
   endDate: string;
+  roundUSDCapPerProject: number;
+  roundUSDCapPerUserPerProject: number;
+  tokenPrice: number;
+  cumulativeCapPerProject: number;
+  cumulativeCapPerUserPerProject: number;
 }
