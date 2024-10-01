@@ -16,6 +16,7 @@ import config from '@/config/configuration';
 interface ProjectUserDonationTableProps {
   userId: number;
   projectId: number;
+  totalContributions: number;
 }
 
 interface Donation {
@@ -55,6 +56,7 @@ enum EDirection {
 const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
   userId,
   projectId,
+  totalContributions,
 }) => {
   const [page, setPage] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -130,12 +132,6 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
           : EDirection.ASC,
     }));
   };
-
-  // Calculate total contributions and tokens
-  const totalContributions = pageDonations.reduce(
-    (sum, donation) => sum + donation.amount,
-    0,
-  );
 
   if (totalCount === 0) {
     return (

@@ -22,8 +22,6 @@ const DashboardTabs = (props: IDashboardTabs) => {
   };
   const { data: user } = useFetchUser();
 
-  console.log('user', user);
-
   const userId = user?.id;
   useEffect(() => {
     const fetchData = async () => {
