@@ -1,23 +1,42 @@
+import { useEffect, useState, type FC } from 'react';
 import { formatDate } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
+import { fetchProjectRoundRecords } from '@/services/round.services';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
-import type { FC } from 'react';
 
 interface IRoundCollectedInfoProps {
   info: IEarlyAccessRound | IQfRound;
   currentRound?: boolean;
+  projectId: string | undefined;
 }
 
 export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
   info,
   currentRound,
+  projectId,
 }) => {
+  const [totalCollected, setTotalCollected] = useState(0);
+  useEffect(() => {
+    console.log(projectId);
+    const fetchRoundRecords = async () => {
+      if (info.__typename === 'EarlyAccessRound') {
+        const data = await fetchProjectRoundRecords(
+          Number(projectId),
+          undefined,
+          info.roundNumber + 1,
+        );
+        setTotalCollected(data[0]?.totalDonationAmount || 0);
+      }
+    };
+    fetchRoundRecords();
+  }, [projectId]);
   const startData =
     info.__typename === 'EarlyAccessRound' ? info.startDate : info.beginDate;
   const endData =
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
-  const totalCollected = 4652192;
-  const roundCap = 9999999;
+
+  // const totalCollected = 15210;
+  const roundCap = info.roundUSDCapPerProject / info.tokenPrice;
   const percentage = ((totalCollected / roundCap) * 100).toFixed(2);
   const title =
     info.__typename === 'EarlyAccessRound'
@@ -56,7 +75,9 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         <div className='flex gap-2 items-center self-end'>
           <div className='text-xs text-gray-500'>Round Cap</div>
           <span className='text-base'>{formatAmount(roundCap)} POL</span>
-          <div className='text-xs text-gray-500'>$ 526</div>
+          <div className='text-xs text-gray-500'>
+            ~$ {formatAmount(roundCap * info.tokenPrice)}
+          </div>
         </div>
       </div>
     </div>

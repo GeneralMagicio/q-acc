@@ -367,11 +367,16 @@ const MyProjects = () => {
             <RoundCollectedInfo
               info={filteredRoundData.activeRound}
               currentRound={true}
+              projectId={projectId}
             />
           )}
           {showRoundCollected && filteredRoundData.notActiveRounds
             ? filteredRoundData.notActiveRounds.map((round, id) => (
-                <RoundCollectedInfo key={id} info={round} />
+                <RoundCollectedInfo
+                  key={id}
+                  info={round}
+                  projectId={projectId}
+                />
               ))
             : null}
           <div
