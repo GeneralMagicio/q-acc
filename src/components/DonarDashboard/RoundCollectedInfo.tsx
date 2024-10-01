@@ -1,9 +1,8 @@
+import { useEffect, useState, type FC } from 'react';
 import { formatDate } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { fetchProjectRoundRecords } from '@/services/round.services';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
-import { useEffect, useState, type FC } from 'react';
 
 interface IRoundCollectedInfoProps {
   info: IEarlyAccessRound | IQfRound;
