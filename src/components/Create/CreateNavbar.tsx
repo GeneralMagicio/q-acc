@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, ButtonColor } from '@/components/Button';
+import { IconArrowRight } from '../Icons/IconArrowRight';
 
 interface CreateNavbarProps {
   title: string;
@@ -57,6 +58,9 @@ const CreateNavbar = ({
             loading={loading}
           >
             {submitLabel}
+            {submitLabel == 'Save & continue' && (
+              <IconArrowRight color='#FFFFFF' />
+            )}
           </Button>
         </div>
       </div>
