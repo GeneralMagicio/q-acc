@@ -64,8 +64,6 @@ const ProjectPreviewSocials = ({
       link: typeof value === 'string' ? value : '',
     }));
 
-  console.log(socialMedia);
-
   return (
     <div>
       <h1 className='text-2xl font-redHatText text-[#82899A]'>

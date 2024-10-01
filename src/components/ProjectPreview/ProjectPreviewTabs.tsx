@@ -13,7 +13,6 @@ export enum EProjectPageTabs {
 const ProjectPreviewTabs = (props: IProjectTabs) => {
   const { activeTab } = props;
   const { totalDonationsCount } = useProjectContext();
-  console.log('total', totalDonationsCount);
   const badgeCount = (count?: number) => {
     return count || null;
   };
