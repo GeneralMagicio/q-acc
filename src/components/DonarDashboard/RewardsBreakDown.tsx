@@ -31,6 +31,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
   projectDonations,
   projectDonorData,
 }) => {
+  console.log('DONAR', projectDonorData);
   const { data: user } = useFetchUser();
   const userId = user?.id;
   const project = projectDonations[0]?.project;
@@ -99,7 +100,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='font-medium text-[#1D1E1F]'>
-                {totalSupply} {project?.abc?.tokenTicker}
+                {formatAmount(totalSupply)} {project?.abc?.tokenTicker}
               </span>
             </div>
 

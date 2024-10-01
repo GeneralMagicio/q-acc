@@ -1,5 +1,9 @@
 import { requestGraphQL } from '@/helpers/request';
-import { GET_ACTIVE_ROUND, GET_ALL_ROUNDS } from '@/queries/round.query';
+import {
+  GET_ACTIVE_ROUND,
+  GET_ALL_ROUNDS,
+  GET_PROJECT_ROUND_RECORDS,
+} from '@/queries/round.query';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 
 export const fetchActiveRoundDetails = async () => {
@@ -21,6 +25,25 @@ export const fetchAllRoundDetails = async () => {
       allRounds: (IEarlyAccessRound | IQfRound)[];
     }>(GET_ALL_ROUNDS, {});
     return res?.allRounds;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProjectRoundRecords = async (
+  projectId: number,
+  qfRound?: number,
+  earlyAccessRoundId?: number,
+) => {
+  try {
+    const res = await requestGraphQL<{
+      getProjectRoundRecords: any;
+    }>(GET_PROJECT_ROUND_RECORDS, {
+      projectId,
+      qfRound,
+      earlyAccessRoundId,
+    });
+    return res?.getProjectRoundRecords;
   } catch (error) {
     console.error(error);
   }
