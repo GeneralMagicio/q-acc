@@ -25,6 +25,7 @@ import {
   calculateTotalDonations,
   calculateUniqueDonors,
   formatAmount,
+  formatNumber,
 } from '@/helpers/donation';
 import { getIpfsAddress } from '@/helpers/image';
 import { RoundCollectedInfo } from './RoundCollectedInfo';
@@ -33,6 +34,7 @@ import { IconChevronUp } from '../Icons/IconChevronUp';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { useTokenPriceRange } from '@/services/tokenPrice.service';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -63,6 +65,13 @@ const MyProjects = () => {
   const { data: allRoundData } = useFetchAllRound();
 
   console.log({ projectData });
+
+  // New token price logic
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const tokenPriceRange = useTokenPriceRange({
+    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contractAddress: projectData?.abc?.fundingManagerAddress || '',
+  });
 
   useEffect(() => {
     if (!allRoundData) return;
@@ -264,25 +273,17 @@ const MyProjects = () => {
 
             <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
               <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                {projectData?.abc?.tokenPrice ?? '---'}
-                &nbsp;-&nbsp;
-                {projectData?.abc?.tokenPrice ?? '---'}
-                &nbsp;
+                {tokenPriceRange.min.toFixed(2)} -{' '}
+                {tokenPriceRange.max.toFixed(2)}
                 <span className='text-gray-400 text-xs'>POL</span>
               </div>
               <div className='w-[20%] text-gray-400 text-right font-medium'>
-                ~ $&nbsp;
-                {projectData?.abc?.tokenPrice
-                  ? Math.round(
-                      projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
-                    ) / 100
-                  : '---'}
-                &nbsp;-&nbsp;
-                {projectData?.abc?.tokenPrice
-                  ? Math.round(
-                      projectData?.abc?.tokenPrice * Number(POLPrice) * 100,
-                    ) / 100
-                  : '---'}
+                ~${' '}
+                {Number(POLPrice) &&
+                  formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                -{' '}
+                {Number(POLPrice) &&
+                  formatNumber(Number(POLPrice) * tokenPriceRange.max)}
               </div>
             </div>
 

@@ -194,6 +194,7 @@ const ProjectSupportTable = ({
                   {donation.earlyAccessRound
                     ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
                     : getDifferenceFromPeriod(donation.createdAt, 0.5)}
+                  sfdf
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>

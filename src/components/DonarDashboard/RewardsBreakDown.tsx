@@ -18,35 +18,29 @@ import {
 import { useFetchUser } from '@/hooks/useFetchUser';
 
 import config from '@/config/configuration';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
-  projectDonorData: Record<
-    number,
-    { uniqueDonors: number; totalContributions: number }
-  >;
+  projectDonorData: { uniqueDonors: number; totalContributions: number };
 }
 
 const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
   projectDonations,
   projectDonorData,
 }) => {
-  console.log('DONAR', projectDonorData);
   const { data: user } = useFetchUser();
   const userId = user?.id;
   const project = projectDonations[0]?.project;
   const totalSupply = project?.abc?.totalSupply || '---';
-  const projectData = projectDonorData[project.id] || {
-    uniqueDonors: 0,
-    totalContributions: 0,
-  };
 
-  const totalSupporters = projectData.uniqueDonors;
-  const totalContributions = projectData.totalContributions;
+  const totalSupporters = projectDonorData.uniqueDonors;
+  const totalContributions = projectDonorData.totalContributions;
   const totalTokensReceived = projectDonations.reduce(
     (sum, donation) => sum + (donation.rewardTokenAmount || 0),
     0,
   );
+  const { data: POLPrice } = useFetchTokenPrice();
 
   // Calculate locked tokens and available to claim tokens
   let lockedTokens = 0;
@@ -128,10 +122,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                   {formatAmount(totalContributions)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ ${' '}
-                  {formatAmount(
-                    totalContributions * project?.abc?.tokenPrice,
-                  ) || 0}
+                  ~ $ {formatAmount(totalContributions * Number(POLPrice)) || 0}
                 </span>
               </div>
             </div>
@@ -160,6 +151,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
             <ProjectUserDonationTable
               userId={parseInt(userId as string)}
               projectId={project.id}
+              totalContributions={totalContributions}
             />
           </div>
 

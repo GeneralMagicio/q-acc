@@ -25,19 +25,16 @@ const DonarSupports = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { data: user } = useFetchUser();
+
   const [projectDonorDataForBreakDown, setProjectDonorDataForBreakDown] =
-    useState<
-      Record<number, { uniqueDonors: number; totalContributions: number }>
-    >({});
+    useState<{ uniqueDonors: number; totalContributions: number }>({
+      uniqueDonors: 0,
+      totalContributions: 0,
+    });
   const [projectDonationsForBreakDown, setProjectDonationsForBreakDown] =
     useState<any[]>([]);
 
-  console.log('user', user);
-
   const userId = user?.id;
-  // if (!userId) {
-  //   throw new Error('user not found!');
-  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,7 +168,10 @@ const DonarSupports = () => {
                   totalRewardTokens={totalRewardTokens}
                   onClickBreakdown={() => {
                     setShowBreakDown(true);
-                    setProjectDonorDataForBreakDown(project);
+                    setProjectDonorDataForBreakDown({
+                      uniqueDonors,
+                      totalContributions,
+                    });
                     setProjectDonationsForBreakDown(projectDonations);
                   }}
                 />
