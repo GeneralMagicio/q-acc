@@ -1,4 +1,5 @@
 import { formatDate } from '@/helpers/date';
+import { formatAmount } from '@/helpers/donation';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import type { FC } from 'react';
 
@@ -41,7 +42,9 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
           <div>{percentage}% Collected</div>
           <div className='flex gap-2 items-center'>
             <span className='text-gray-400'>Total</span>
-            <span className='text-base'>{totalCollected} POL</span>
+            <span className='text-base'>
+              {formatAmount(totalCollected)} POL
+            </span>
           </div>
         </div>
         <div className='h-2 bg-gray-200 rounded-lg overflow-hidden'>
@@ -52,7 +55,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         </div>
         <div className='flex gap-2 items-center self-end'>
           <div className='text-xs text-gray-500'>Round Cap</div>
-          <span className='text-base'>{roundCap.toLocaleString()} POL</span>
+          <span className='text-base'>{formatAmount(roundCap)} POL</span>
           <div className='text-xs text-gray-500'>$ 526</div>
         </div>
       </div>

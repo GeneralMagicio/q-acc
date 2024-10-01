@@ -85,7 +85,8 @@ const DonarSuppotedProjects = ({
               </span>
             </div>
             <span className='font-medium text-[#1D1E1F]'>
-              {project.abc.totalSupply || '---'} {project.abc.tokenTicker}
+              {formatAmount(project.abc.totalSupply) || '---'}{' '}
+              {project.abc.tokenTicker}
             </span>
           </div>
 
@@ -108,7 +109,7 @@ const DonarSuppotedProjects = ({
             </div>
             <div className='flex gap-1'>
               <span className='font-medium text-[#1D1E1F]'>
-                {totalContributions || 0} POL{' '}
+                {formatAmount(totalContributions) || 0} POL{' '}
               </span>
               <span className='font-medium text-[#82899A]'>
                 ~ $ {formatAmount(project.totalDonations) || 0}

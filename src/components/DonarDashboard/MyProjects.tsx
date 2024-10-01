@@ -24,6 +24,7 @@ import { fecthProjectDonationsById } from '@/services/donation.services';
 import {
   calculateTotalDonations,
   calculateUniqueDonors,
+  formatAmount,
 } from '@/helpers/donation';
 import { getIpfsAddress } from '@/helpers/image';
 import { RoundCollectedInfo } from './RoundCollectedInfo';
@@ -291,7 +292,9 @@ const MyProjects = () => {
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.totalSupply || '---'}{' '}
+                {projectData?.abc?.totalSupply
+                  ? formatAmount(projectData?.abc?.totalSupply)
+                  : '---'}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>
@@ -312,10 +315,13 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {totalAmount} POL
+                  {formatAmount(totalAmount)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ $ {Math.round(totalAmount * Number(POLPrice) * 100) / 100}
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                  )}
                 </span>
               </div>
             </div>
@@ -390,10 +396,13 @@ const MyProjects = () => {
 
           <div className='flex items-center gap-4'>
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
-              {totalAmount} POL
+              {formatAmount(totalAmount)} POL
             </span>
             <span className='text-[#1D1E1F]  font-medium'>
-              ~ $ {Math.round(totalAmount * Number(POLPrice) * 100) / 100}
+              ~ ${' '}
+              {formatAmount(
+                Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+              )}
             </span>
           </div>
         </div>

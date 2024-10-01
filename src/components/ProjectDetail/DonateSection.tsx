@@ -6,6 +6,7 @@ import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { calculateCapAmount } from '@/helpers/round';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -29,17 +30,55 @@ const DonateSection = () => {
     totalAmount: totalPOLDonated,
   } = useProjectContext();
 
+  // useEffect(() => {
+  //   const updatePOLCap = async () => {
+  //     if (activeRoundDetails) {
+  //       console.log(activeRoundDetails, projectData.id);
+  //       let maxPOLAmount =
+  //         activeRoundDetails?.cumulativeCapPerProject /
+  //         activeRoundDetails?.tokenPrice;
+  //       const roundRecords = await fetchProjectRoundRecords(
+  //         Number(projectData.id),
+  //         undefined,
+  //         activeRoundDetails.roundNumber + 1,
+  //       );
+  //       console.log(roundRecords, 'records');
+  //       if (roundRecords.cumulativePastRoundsDonationAmounts) {
+  //         setMaxPOLCap(
+  //           maxPOLAmount - roundRecords[0].cumulativePastRoundsDonationAmounts,
+  //         );
+  //       } else {
+  //         console.log('inside');
+  //         setMaxPOLCap(maxPOLAmount);
+  //       }
+  //       console.log(roundRecords[0].totalDonationAmount, 'tot');
+  //       let tempprogress =
+  //         Math.round(
+  //           (roundRecords[0].totalDonationAmount / maxPOLCap) * 100 * 100,
+  //         ) / 100;
+  //       setProgress(tempprogress);
+  //     }
+  //   };
+  //   updatePOLCap();
+  // }, [totalPOLDonated, activeRoundDetails, projectData]);
+
   useEffect(() => {
-    if (activeRoundDetails) {
-      let maxPOLAmount =
-        activeRoundDetails?.cumulativeCapPerProject /
-        activeRoundDetails?.tokenPrice;
-      setMaxPOLCap(maxPOLAmount);
-      let tempprogress =
-        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
-      setProgress(tempprogress);
-    }
-  }, [totalPOLDonated, activeRoundDetails]);
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+
+        setMaxPOLCap(capAmount);
+
+        let tempprogress =
+          Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+          100;
+        setProgress(tempprogress);
+      }
+    };
+
+    updatePOLCap();
+  }, [totalPOLDonated, activeRoundDetails, projectData]);
 
   const renderContent = () => {
     const renderDonationInfo = () => {

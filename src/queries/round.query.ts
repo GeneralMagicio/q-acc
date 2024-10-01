@@ -63,3 +63,29 @@ export const GET_ACTIVE_ROUND = `
     }
   }
 `;
+
+export const GET_PROJECT_ROUND_RECORDS = `
+query(
+  $projectId: Int!
+  $qfRoundId: Int
+  $earlyAccessRoundId: Int
+) {
+  getProjectRoundRecords(
+    projectId: $projectId
+    qfRoundId: $qfRoundId
+    earlyAccessRoundId: $earlyAccessRoundId
+  ) {
+    projectId
+    cumulativePastRoundsDonationAmounts
+    totalDonationAmount
+    totalDonationUsdAmount
+    qfRound {
+      id
+    }
+    earlyAccessRound {
+      id
+      roundNumber
+    }
+  }
+}
+`;

@@ -2,7 +2,6 @@ import React from 'react';
 import { useProjectContext } from '@/context/project.context';
 const ProjectDetailBanner = () => {
   const { projectData } = useProjectContext();
-  console.log('data', projectData);
 
   const bgSrc =
     projectData?.image !== 'https://example.com/image.jpg'

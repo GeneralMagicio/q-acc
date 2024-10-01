@@ -247,7 +247,7 @@ const ProjectDonationTable = () => {
                 </div>
 
                 <h3 className='font-medium text-[#1D1E1F]'>
-                  {projectData?.abc?.totalSupply || '---'}{' '}
+                  {formatAmount(projectData?.abc?.totalSupply) || '---'}{' '}
                   {projectData?.abc?.tokenTicker}
                 </h3>
               </div>
