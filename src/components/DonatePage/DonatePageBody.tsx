@@ -30,6 +30,7 @@ import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { fetchProjectUserDonationCap } from '@/services/user.service';
 
 interface ITokenSchedule {
   message: string;
@@ -71,6 +72,7 @@ const DonatePageBody = () => {
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
+  const [userDonationCap, setUserDonationCap] = useState<number>(0);
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -87,6 +89,17 @@ const DonatePageBody = () => {
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
   useEffect(() => {
+    const getDonationCap: any = async () => {
+      if (projectData?.id) {
+        const cap = await fetchProjectUserDonationCap(Number(projectData?.id));
+        setUserDonationCap(Number(cap) || 0);
+      }
+    };
+
+    if (projectData) {
+      getDonationCap();
+    }
+
     if (activeRoundDetails) {
       let maxPOLAmount =
         activeRoundDetails?.cumulativeCapPerProject /
@@ -96,7 +109,7 @@ const DonatePageBody = () => {
         Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
       setProgress(tempprogress);
     }
-  }, [totalPOLDonated, activeRoundDetails]);
+  }, [projectData, activeRoundDetails, totalPOLDonated]);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -125,9 +138,6 @@ const DonatePageBody = () => {
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
-  const totalTokenSupply = '57000000';
-  const totalSupply = 0.02 * parseFloat(totalTokenSupply) * 0.125;
-
   // const totalSupply = totalPol * 0.125;
   let round = 'early';
 
@@ -149,13 +159,16 @@ const DonatePageBody = () => {
     if (
       !terms ||
       !isConnected ||
-      !(parseFloat(inputAmount) >= 5 && parseFloat(inputAmount) <= totalSupply)
+      !(
+        parseFloat(inputAmount) >= 5 &&
+        parseFloat(inputAmount) <= userDonationCap
+      )
     ) {
       setDonateDisabled(true);
     } else {
       setDonateDisabled(false);
     }
-  }, [terms, isConnected, inputAmount, totalSupply]);
+  }, [terms, isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
     if (round === 'early') {
@@ -250,7 +263,7 @@ const DonatePageBody = () => {
       setFlashMessage('The minimum donation amount is 5.');
       return;
     }
-    if (parseFloat(inputAmount) > totalSupply) {
+    if (parseFloat(inputAmount) > userDonationCap) {
       setFlashMessage('The donation amount exceeds the cap limit.');
       return;
     }
@@ -273,7 +286,7 @@ const DonatePageBody = () => {
         return null;
       } else {
         // Set the new selected percentage and calculate the amount
-        const amount = (totalSupply * percentage) / 100;
+        const amount = (userDonationCap * percentage) / 100;
         setInputAmount(amount.toString());
         return percentage;
       }
@@ -314,7 +327,7 @@ const DonatePageBody = () => {
               <span className='flex gap-2 items-center  '>
                 Your remaining cap
                 <span className='font-medium text-[#4F576A]'>
-                  {formatAmount(totalSupply)} POL
+                  {userDonationCap ? formatAmount(userDonationCap) : '---'} POL
                 </span>
               </span>
 
