@@ -68,17 +68,17 @@ const DonateSection = () => {
         const { capAmount, totalDonationAmountInRound }: any =
           await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
-        setMaxPOLCap(capAmount);
+        setMaxPOLCap(capAmount - totalPOLDonated);
 
         let tempprogress =
-          Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+          Math.round((totalDonationAmountInRound / maxPOLCap) * 100 * 100) /
           100;
         setProgress(tempprogress);
       }
     };
 
     updatePOLCap();
-  }, [totalPOLDonated, activeRoundDetails, projectData]);
+  }, [totalPOLDonated, activeRoundDetails, projectData, maxPOLCap]);
 
   const renderContent = () => {
     const renderDonationInfo = () => {
