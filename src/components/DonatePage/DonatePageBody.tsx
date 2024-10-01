@@ -31,6 +31,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
+import { calculateCapAmount } from '@/helpers/round';
 
 interface ITokenSchedule {
   message: string;
@@ -96,20 +97,25 @@ const DonatePageBody = () => {
       }
     };
 
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+
+        setMaxPOLCap(capAmount - totalPOLDonated);
+
+        let tempprogress =
+          Math.round((totalDonationAmountInRound / maxPOLCap) * 100 * 100) /
+          100;
+        setProgress(tempprogress);
+      }
+    };
+
     if (projectData) {
       getDonationCap();
+      updatePOLCap();
     }
-
-    if (activeRoundDetails) {
-      let maxPOLAmount =
-        activeRoundDetails?.cumulativeCapPerProject /
-        activeRoundDetails?.tokenPrice;
-      setMaxPOLCap(maxPOLAmount);
-      let tempprogress =
-        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
-      setProgress(tempprogress);
-    }
-  }, [projectData, activeRoundDetails, totalPOLDonated]);
+  }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
