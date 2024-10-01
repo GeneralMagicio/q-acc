@@ -8,6 +8,11 @@ export const GET_ALL_ROUNDS = `
         endDate
         createdAt
         updatedAt
+        roundUSDCapPerProject
+        roundUSDCapPerUserPerProject
+        tokenPrice
+        cumulativeCapPerProject
+        cumulativeCapPerUserPerProject
       }
       ... on QfRound {
       __typename
@@ -16,6 +21,11 @@ export const GET_ALL_ROUNDS = `
         allocatedFund
         beginDate
         endDate
+        roundUSDCapPerProject
+        roundUSDCapPerUserPerProject
+        tokenPrice
+        cumulativeCapPerProject
+        cumulativeCapPerUserPerProject
       }
     }
   }
@@ -31,6 +41,11 @@ export const GET_ACTIVE_ROUND = `
           endDate
           createdAt
           updatedAt
+          roundUSDCapPerProject
+          roundUSDCapPerUserPerProject
+          tokenPrice
+          cumulativeCapPerProject
+          cumulativeCapPerUserPerProject
         }
         ... on QfRound {
           name
@@ -38,6 +53,11 @@ export const GET_ACTIVE_ROUND = `
           allocatedFund
           beginDate
           endDate
+          roundUSDCapPerProject
+          roundUSDCapPerUserPerProject
+          tokenPrice
+          cumulativeCapPerProject
+          cumulativeCapPerUserPerProject
         }
       }
     }

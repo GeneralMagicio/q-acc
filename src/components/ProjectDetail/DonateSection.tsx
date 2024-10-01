@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
 import { formatAmount } from '@/helpers/donation';
 import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -17,6 +18,10 @@ const DonateSection = () => {
   let totalDonations = 10;
   let currentState = 'early';
   const { data: POLPrice } = useFetchTokenPrice();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+
+  const [progress, setProgress] = useState(0);
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
 
   const {
     projectData,
@@ -24,8 +29,17 @@ const DonateSection = () => {
     totalAmount: totalPOLDonated,
   } = useProjectContext();
 
-  let maxPOLAmount = 100000 / Number(POLPrice);
-  let progress = Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100; // calculate and round the progress to 2 decimal places
+  useEffect(() => {
+    if (activeRoundDetails) {
+      let maxPOLAmount =
+        activeRoundDetails?.cumulativeCapPerProject /
+        activeRoundDetails?.tokenPrice;
+      setMaxPOLCap(maxPOLAmount);
+      let tempprogress =
+        Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
+      setProgress(tempprogress);
+    }
+  }, [totalPOLDonated, activeRoundDetails]);
 
   const renderContent = () => {
     const renderDonationInfo = () => {
@@ -75,7 +89,7 @@ const DonateSection = () => {
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
               <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
               <span className='text-[#1D1E1F]'>
-                {formatAmount(maxPOLAmount)} POL
+                {formatAmount(maxPOLCap)} POL
               </span>
             </div>
           </div>
