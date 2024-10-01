@@ -26,5 +26,6 @@ const Routes = {
   Onboarding: '/onboarding',
   OnboardingProjects: '/onboarding/projects',
   OnboardingDonors: '/onboarding/donors',
+  Preview: '/preview',
 };
 export default Routes;
