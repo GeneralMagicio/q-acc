@@ -8,7 +8,7 @@ import { IconMirror } from './Icons/IconMirror';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className='bg-gray-100 py-8'>
+    <footer className='bg-gray-100 pt-20 pb-6 mt-8'>
       <div className=' container'>
         <div className='flex  flex-col lg:flex-row justify-between items-center'>
           <div className='flex flex-row  w-full'>
