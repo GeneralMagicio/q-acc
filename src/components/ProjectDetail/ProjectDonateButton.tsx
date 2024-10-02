@@ -81,7 +81,7 @@ const ProjectDonateButton = () => {
       <div className='flex items-center  text-sm  gap-2 text-[#82899A] flex-wrap  justify-between'>
         <h1 className='  p-2 bg-[#F7F7F9] rounded-lg pr-10'>
           <span className='text-[#1D1E1F] font-medium'>
-            {tokenPriceRange.min.toFixed(3)} - {tokenPriceRange.max.toFixed(3)}
+            {tokenPriceRange.min.toFixed(2)} - {tokenPriceRange.max.toFixed(2)}
           </span>
           <span className='text-[#4F576A] text-xs '> POL</span>
         </h1>

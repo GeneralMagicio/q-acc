@@ -600,8 +600,8 @@ const DonatePageBody = () => {
               <div className='flex gap-8 font-redHatText'>
                 <h2 className=' flex gap-1 items-center'>
                   <span className='text-base font-medium text-[#4F576A] '>
-                    {tokenPriceRange.min.toFixed(3)} -{' '}
-                    {tokenPriceRange.max.toFixed(3)}
+                    {tokenPriceRange.min.toFixed(2)} -{' '}
+                    {tokenPriceRange.max.toFixed(2)}
                   </span>
                   <span className='text-xs text-[#82899A]'>POL</span>
                 </h2>
