@@ -54,7 +54,7 @@ export const FeaturedProjects = () => {
             </div>
           </Link>
         </div>
-        <div className='w-full'>
+        <div className=' overflow-x-auto'>
           <Swiper
             onSwiper={setSwiperInstance}
             modules={[Navigation, Pagination]}
