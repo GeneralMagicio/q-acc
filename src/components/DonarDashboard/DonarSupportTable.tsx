@@ -177,13 +177,15 @@ const DonarSupportTable = () => {
 
                       <span className='text-xs font-medium  text-[#A5ADBF]'>
                         ${' '}
-                        {Math.round(donation.amount * Number(POLPrice) * 100) /
-                          100}
+                        {formatAmount(
+                          Math.round(donation.amount * Number(POLPrice) * 100) /
+                            100,
+                        )}
                       </span>
                     </div>
                   </div>
                   <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                    {donation.rewardTokenAmount || '---'}
+                    {formatAmount(donation.rewardTokenAmount) || '---'}
                     {'  '}
                     {projectData?.abc?.tokenTicker}
                   </div>
