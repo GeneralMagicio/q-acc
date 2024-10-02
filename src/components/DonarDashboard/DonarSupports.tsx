@@ -27,9 +27,9 @@ const DonarSupports = () => {
   const { data: user } = useFetchUser();
 
   const [projectDonorDataForBreakDown, setProjectDonorDataForBreakDown] =
-    useState<{ uniqueDonors: number; totalContributions: number }>({
+    useState<{ uniqueDonors: number; donarContributions: number }>({
       uniqueDonors: 0,
-      totalContributions: 0,
+      donarContributions: 0,
     });
   const [projectDonationsForBreakDown, setProjectDonationsForBreakDown] =
     useState<any[]>([]);
@@ -170,7 +170,7 @@ const DonarSupports = () => {
                     setShowBreakDown(true);
                     setProjectDonorDataForBreakDown({
                       uniqueDonors,
-                      totalContributions,
+                      donarContributions: totalContribution,
                     });
                     setProjectDonationsForBreakDown(projectDonations);
                   }}

@@ -22,7 +22,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
-  projectDonorData: { uniqueDonors: number; totalContributions: number };
+  projectDonorData: { uniqueDonors: number; donarContributions: number };
 }
 
 const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
@@ -35,7 +35,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
   const totalSupply = project?.abc?.totalSupply || '---';
 
   const totalSupporters = projectDonorData.uniqueDonors;
-  const totalContributions = projectDonorData.totalContributions;
+  const totalContributions = projectDonorData.donarContributions;
   const totalTokensReceived = projectDonations.reduce(
     (sum, donation) => sum + (donation.rewardTokenAmount || 0),
     0,
