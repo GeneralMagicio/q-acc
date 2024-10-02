@@ -67,13 +67,14 @@ export const GET_ACTIVE_ROUND = `
 export const GET_PROJECT_ROUND_RECORDS = `
 query(
   $projectId: Int!
-  $qfRoundId: Int
-  $earlyAccessRoundId: Int
+  $qfRoundNumber: Int
+  $earlyAccessRoundNumber: Int
 ) {
   getProjectRoundRecords(
     projectId: $projectId
-    qfRoundId: $qfRoundId
-    earlyAccessRoundId: $earlyAccessRoundId
+    earlyAccessRoundNumber:$earlyAccessRoundNumber
+    qfRoundNumber:$qfRoundNumber
+    
   ) {
     projectId
     cumulativePastRoundsDonationAmounts

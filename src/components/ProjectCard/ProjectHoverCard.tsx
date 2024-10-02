@@ -42,20 +42,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
   const [progress, setProgress] = useState(0);
 
-  // useEffect(() => {
-  //   console.log(
-  //     project?.title + ' NFT address' + project?.abc?.nftContractAddress,
-  //   );
-  //   if (POLPrice && activeRoundDetails) {
-  //     let maxPOLAmount =
-  //       activeRoundDetails?.cumulativeCapPerProject /
-  //       activeRoundDetails?.tokenPrice;
-  //     let tempprogress =
-  //       Math.round((totalPOLDonated / maxPOLAmount) * 100 * 100) / 100;
-  //     setProgress(tempprogress);
-  //   }
-  // }, [totalPOLDonated, activeRoundDetails]);
-
   useEffect(() => {
     console.log(
       project?.title,
@@ -118,7 +104,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   };
 
   // New token price logic
-  const maxContributionPOLAmountInCurrentRound = maxPOLCap * (10 ^ 18);
+  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18);
 
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxContributionPOLAmountInCurrentRound,

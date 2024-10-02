@@ -32,16 +32,16 @@ export const fetchAllRoundDetails = async () => {
 
 export const fetchProjectRoundRecords = async (
   projectId: number,
-  qfRound?: number,
-  earlyAccessRoundId?: number,
+  qfRoundNumber?: number,
+  earlyAccessRoundNumber?: number,
 ) => {
   try {
     const res = await requestGraphQL<{
       getProjectRoundRecords: any;
     }>(GET_PROJECT_ROUND_RECORDS, {
       projectId,
-      qfRound,
-      earlyAccessRoundId,
+      qfRoundNumber,
+      earlyAccessRoundNumber,
     });
     return res?.getProjectRoundRecords;
   } catch (error) {

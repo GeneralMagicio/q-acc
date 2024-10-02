@@ -13,7 +13,7 @@ export const calculateCapAmount = async (
   const roundRecords = await fetchProjectRoundRecords(
     projectId,
     undefined,
-    activeRoundDetails.roundNumber + 1,
+    activeRoundDetails.roundNumber,
   );
 
   if (roundRecords?.length > 0) {
