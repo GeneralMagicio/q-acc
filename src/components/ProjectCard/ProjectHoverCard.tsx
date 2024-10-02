@@ -40,6 +40,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+  const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
   const { data: POLPrice } = useFetchTokenPrice();
 
@@ -75,12 +76,12 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           await calculateCapAmount(activeRoundDetails, Number(project.id));
 
         setMaxPOLCap(capAmount);
+        setAmountDonatedInRound(totalDonationAmountInRound);
 
         let tempprogress = 0;
         if (maxPOLCap > 0) {
           tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
+            Math.round((amountDonatedInRound / capAmount) * 100 * 100) / 100;
           setProgress(tempprogress);
         }
       }
@@ -229,7 +230,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             className={`w-full justify-center mt-4 opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
             onClick={handleSupport}
             disabled={
-              remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+              remainingTime === 'Time is up!' ||
+              remainingTime === '--:--:--' ||
+              maxPOLCap === amountDonatedInRound
             }
           >
             Support This Project
