@@ -97,6 +97,11 @@ export const GET_USER_DONATIONS = `
           }
           totalDonations
         }
+        earlyAccessRound{
+          roundNumber
+          startDate
+          endDate
+        }
        qfRound {
           id
           name
