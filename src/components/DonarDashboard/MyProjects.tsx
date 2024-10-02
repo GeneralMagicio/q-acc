@@ -82,7 +82,7 @@ const MyProjects = () => {
         (round.__typename === 'EarlyAccessRound' &&
           isMiddleOfThePeriod(round.startDate, round.endDate)) ||
         (round.__typename === 'QfRound' &&
-          isMiddleOfThePeriod(round.beginDate, round.endDate))
+          isMiddleOfThePeriod(round.startDate, round.endDate))
       ) {
         activeRound = round;
       } else {

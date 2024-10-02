@@ -9,13 +9,22 @@ const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
   projectMaxedOut = false,
 }) => {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
+  const remainingTime = useRemainingTime(
+    activeRoundDetails?.startDate,
+    activeRoundDetails?.endDate,
+  );
 
   return (
     <div className='px-10 py-6  bg-white rounded-2xl shadow-baseShadow font-redHatText'>
       <div className='flex md:flex-row flex-col gap-6 md:justify-between items-center'>
         <span className='text-[#1D1E1F] font-medium text-lg'>
-          Early access - Round {activeRoundDetails?.roundNumber} of 4
+          {activeRoundDetails?.__typename === 'EarlyAccessRound'
+            ? 'Early access - Round ' +
+              activeRoundDetails?.roundNumber +
+              ' of 4'
+            : activeRoundDetails?.__typename === 'QfRound'
+              ? 'QF Round'
+              : 'No Active Round'}
         </span>
         <div className='flex flex-col md:flex-row items-center md:gap-6'>
           {projectMaxedOut ? (

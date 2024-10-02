@@ -31,7 +31,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
     fetchRoundRecords();
   }, [projectId]);
   const startData =
-    info.__typename === 'EarlyAccessRound' ? info.startDate : info.beginDate;
+    info.__typename === 'EarlyAccessRound' ? info.startDate : info.startDate;
   const endData =
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
 

@@ -10,13 +10,17 @@ export const RoundInfoSupporter = () => {
 
   return (
     <div className='py-6 px-8 rounded-2xl shadow-GIV400 flex items-center justify-between bg-white z-1 relative'>
-      <div className='text-gray-900 font-medium'>
-        <div className='text-lg'>Early access</div>
-        <div className='text-2xl'>
-          Round {activeRoundDetails?.roundNumber} of 4
-        </div>
-      </div>
-      <RemainingTime endDate={activeRoundDetails?.endDate} />
+      <span className='text-[#1D1E1F] font-medium text-lg font-redHatText'>
+        {activeRoundDetails?.__typename === 'EarlyAccessRound'
+          ? 'Early access - Round ' + activeRoundDetails?.roundNumber + ' of 4'
+          : activeRoundDetails?.__typename === 'QfRound'
+            ? 'QF Round'
+            : 'No Active Round'}
+      </span>
+      <RemainingTime
+        startDate={activeRoundDetails?.startDate}
+        endDate={activeRoundDetails?.endDate}
+      />
       <Link href={Routes.Projects}>
         <Button styleType={ButtonStyle.Solid} color={ButtonColor.Pink}>
           Support q/acc Projects

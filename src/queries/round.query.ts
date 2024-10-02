@@ -19,7 +19,7 @@ export const GET_ALL_ROUNDS = `
         name
         slug
         allocatedFund
-        beginDate
+        startDate:beginDate
         endDate
         roundUSDCapPerProject
         roundUSDCapPerUserPerProject
@@ -36,6 +36,7 @@ export const GET_ACTIVE_ROUND = `
     activeRound {
       activeRound {
         ... on EarlyAccessRound {
+          __typename
           roundNumber
           startDate
           endDate
@@ -48,10 +49,11 @@ export const GET_ACTIVE_ROUND = `
           cumulativeCapPerUserPerProject
         }
         ... on QfRound {
+          __typename
           name
           slug
           allocatedFund
-          beginDate
+          startDate:beginDate
           endDate
           roundUSDCapPerProject
           roundUSDCapPerUserPerProject
