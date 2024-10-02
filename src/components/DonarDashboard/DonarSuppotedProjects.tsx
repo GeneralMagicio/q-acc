@@ -142,7 +142,7 @@ const DonarSuppotedProjects = ({
         </div>
         <div className='flex justify-between text-[#1D1E1F] font-medium'>
           <h2 className='flex gap-1 items-center'>
-            {tokenPriceRange.min.toFixed(3)} - {tokenPriceRange.max.toFixed(3)}
+            {tokenPriceRange.min.toFixed(2)} - {tokenPriceRange.max.toFixed(2)}
             <span className='text-[#4F576A] text-xs pb-1'>POL</span>
           </h2>
           <h2 className='text-[#4F576A]'>
