@@ -27,6 +27,14 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         );
         setTotalCollected(data[0]?.totalDonationAmount || 0);
       }
+      if (info.__typename === 'QfRound') {
+        const data = await fetchProjectRoundRecords(
+          Number(projectId),
+          1,
+          undefined,
+        );
+        setTotalCollected(data[0]?.totalDonationAmount || 0);
+      }
     };
     fetchRoundRecords();
   }, [projectId]);

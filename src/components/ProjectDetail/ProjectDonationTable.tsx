@@ -158,7 +158,9 @@ const ProjectDonationTable = () => {
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       {donation.earlyAccessRound
                         ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
-                        : '---'}
+                        : donation.qfRound
+                          ? 'QfRound'
+                          : '---'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>
