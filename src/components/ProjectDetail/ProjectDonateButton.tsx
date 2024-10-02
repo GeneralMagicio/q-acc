@@ -12,6 +12,7 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { formatNumber } from '@/helpers/donation';
+import { calculateCapAmount } from '@/helpers/round';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -22,11 +23,27 @@ const ProjectDonateButton = () => {
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
     activeRoundDetails?.endDate,
   );
+
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+
+        setMaxPOLCap(capAmount);
+        setAmountDonatedInRound(totalDonationAmountInRound);
+      }
+    };
+
+    updatePOLCap();
+  }, [totalPOLDonated, activeRoundDetails, projectData, maxPOLCap]);
 
   useEffect(() => {
     const checkNFT = async () => {
@@ -56,7 +73,6 @@ const ProjectDonateButton = () => {
     contractAddress: projectData.abc?.fundingManagerAddress || '',
   });
 
-  let maxPOLAmount = totalPOLDonated - 1;
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
@@ -119,12 +135,13 @@ const ProjectDonateButton = () => {
             onClick={handleSupport}
             disabled={
               !ownsNFT ||
-              totalPOLDonated === maxPOLAmount ||
-              remainingTime === 'Time is up!'
+              amountDonatedInRound === maxPOLCap ||
+              remainingTime === 'Time is up!' ||
+              remainingTime === '--:--:--'
             }
             loading={loadingNFTCheck}
           >
-            {totalPOLDonated === maxPOLAmount
+            {amountDonatedInRound === maxPOLCap
               ? 'Project Maxed Out'
               : 'Support This Project'}
           </Button>
