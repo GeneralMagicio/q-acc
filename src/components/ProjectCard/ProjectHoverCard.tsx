@@ -32,7 +32,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
+  const remainingTime = useRemainingTime(
+    activeRoundDetails?.startDate,
+    activeRoundDetails?.endDate,
+  );
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const openModal = () => setModalOpen(true);
@@ -225,7 +228,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             color={ButtonColor.Pink}
             className={`w-full justify-center mt-4 opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
             onClick={handleSupport}
-            disabled={remainingTime === 'Time is up!'}
+            disabled={
+              remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+            }
           >
             Support This Project
           </Button>

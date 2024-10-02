@@ -17,7 +17,7 @@ export interface IQfRound {
   name: string;
   slug: string;
   allocatedFund: string;
-  beginDate: string;
+  startDate: string;
   endDate: string;
   roundUSDCapPerProject: number;
   roundUSDCapPerUserPerProject: number;

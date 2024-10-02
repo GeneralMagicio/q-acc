@@ -10,7 +10,7 @@ export const fetchActiveRoundDetails = async () => {
   try {
     const res = await requestGraphQL<{
       activeRound: {
-        activeRound: IEarlyAccessRound;
+        activeRound: IEarlyAccessRound | IQfRound;
       };
     }>(GET_ACTIVE_ROUND, {});
     return res?.activeRound.activeRound;

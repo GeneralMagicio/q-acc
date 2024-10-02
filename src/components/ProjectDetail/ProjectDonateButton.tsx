@@ -22,7 +22,11 @@ const ProjectDonateButton = () => {
   const [ownsNFT, setOwnsNFT] = useState(false);
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-  const remainingTime = useRemainingTime(activeRoundDetails?.endDate);
+
+  const remainingTime = useRemainingTime(
+    activeRoundDetails?.startDate,
+    activeRoundDetails?.endDate,
+  );
 
   useEffect(() => {
     const checkNFT = async () => {
