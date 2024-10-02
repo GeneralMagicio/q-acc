@@ -23,7 +23,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         const data = await fetchProjectRoundRecords(
           Number(projectId),
           undefined,
-          info.roundNumber + 1,
+          info.roundNumber,
         );
         setTotalCollected(data[0]?.totalDonationAmount || 0);
       }
