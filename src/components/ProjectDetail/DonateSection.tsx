@@ -30,38 +30,6 @@ const DonateSection = () => {
     totalAmount: totalPOLDonated,
   } = useProjectContext();
 
-  // useEffect(() => {
-  //   const updatePOLCap = async () => {
-  //     if (activeRoundDetails) {
-  //       console.log(activeRoundDetails, projectData.id);
-  //       let maxPOLAmount =
-  //         activeRoundDetails?.cumulativeCapPerProject /
-  //         activeRoundDetails?.tokenPrice;
-  //       const roundRecords = await fetchProjectRoundRecords(
-  //         Number(projectData.id),
-  //         undefined,
-  //         activeRoundDetails.roundNumber + 1,
-  //       );
-  //       console.log(roundRecords, 'records');
-  //       if (roundRecords.cumulativePastRoundsDonationAmounts) {
-  //         setMaxPOLCap(
-  //           maxPOLAmount - roundRecords[0].cumulativePastRoundsDonationAmounts,
-  //         );
-  //       } else {
-  //         console.log('inside');
-  //         setMaxPOLCap(maxPOLAmount);
-  //       }
-  //       console.log(roundRecords[0].totalDonationAmount, 'tot');
-  //       let tempprogress =
-  //         Math.round(
-  //           (roundRecords[0].totalDonationAmount / maxPOLCap) * 100 * 100,
-  //         ) / 100;
-  //       setProgress(tempprogress);
-  //     }
-  //   };
-  //   updatePOLCap();
-  // }, [totalPOLDonated, activeRoundDetails, projectData]);
-
   useEffect(() => {
     const updatePOLCap = async () => {
       if (activeRoundDetails) {

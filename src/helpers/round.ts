@@ -12,8 +12,10 @@ export const calculateCapAmount = async (
 
   const roundRecords = await fetchProjectRoundRecords(
     projectId,
-    undefined,
-    activeRoundDetails.roundNumber,
+    activeRoundDetails?.__typename === 'QfRound' ? 1 : undefined,
+    activeRoundDetails?.__typename === 'EarlyAccessRound'
+      ? activeRoundDetails.roundNumber
+      : undefined,
   );
 
   if (roundRecords?.length > 0) {
