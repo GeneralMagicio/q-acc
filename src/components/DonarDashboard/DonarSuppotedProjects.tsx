@@ -179,7 +179,7 @@ const DonarSuppotedProjects = ({
             </span>
           </div>
           <span className='font-medium text-[#1D1E1F]'>
-            {totalContribution} POL
+            {formatAmount(totalContribution)} POL
           </span>
         </div>
 
