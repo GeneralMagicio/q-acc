@@ -1,8 +1,8 @@
 import { useEffect, useState, type FC } from 'react';
 import { formatDate } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
-import { fetchProjectRoundRecords } from '@/services/round.services';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
+import { calculateCapAmount } from '@/helpers/round';
 
 interface IRoundCollectedInfoProps {
   info: IEarlyAccessRound | IQfRound;
@@ -15,37 +15,28 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
   currentRound,
   projectId,
 }) => {
-  const [totalCollected, setTotalCollected] = useState(0);
+  const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
+
   useEffect(() => {
-    console.log(projectId);
-    const fetchRoundRecords = async () => {
-      if (info.__typename === 'EarlyAccessRound') {
-        const data = await fetchProjectRoundRecords(
-          Number(projectId),
-          undefined,
-          info.roundNumber,
-        );
-        setTotalCollected(data[0]?.totalDonationAmount || 0);
-      }
-      if (info.__typename === 'QfRound') {
-        const data = await fetchProjectRoundRecords(
-          Number(projectId),
-          1,
-          undefined,
-        );
-        setTotalCollected(data[0]?.totalDonationAmount || 0);
+    const updatePOLCap = async () => {
+      if (info) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(info, Number(projectId));
+        setMaxPOLCap(capAmount);
+        setAmountDonatedInRound(totalDonationAmountInRound);
       }
     };
-    fetchRoundRecords();
-  }, [projectId]);
+
+    updatePOLCap();
+  }, [amountDonatedInRound, info, projectId, maxPOLCap]);
+
   const startData =
     info.__typename === 'EarlyAccessRound' ? info.startDate : info.startDate;
   const endData =
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
 
-  // const totalCollected = 15210;
-  const roundCap = info.roundUSDCapPerProject / info.tokenPrice;
-  const percentage = ((totalCollected / roundCap) * 100).toFixed(2);
+  const percentage = ((amountDonatedInRound / maxPOLCap) * 100).toFixed(2);
   const title =
     info.__typename === 'EarlyAccessRound'
       ? `Early Access - Round ${info.roundNumber}`
@@ -70,7 +61,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
           <div className='flex gap-2 items-center'>
             <span className='text-gray-400'>Total</span>
             <span className='text-base'>
-              {formatAmount(totalCollected)} POL
+              {formatAmount(amountDonatedInRound)} POL
             </span>
           </div>
         </div>
@@ -82,9 +73,9 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         </div>
         <div className='flex gap-2 items-center self-end'>
           <div className='text-xs text-gray-500'>Round Cap</div>
-          <span className='text-base'>{formatAmount(roundCap)} POL</span>
+          <span className='text-base'>{formatAmount(maxPOLCap)} POL</span>
           <div className='text-xs text-gray-500'>
-            ~$ {formatAmount(roundCap * info.tokenPrice)}
+            ~$ {formatAmount(maxPOLCap * info.tokenPrice)}
           </div>
         </div>
       </div>
