@@ -509,7 +509,7 @@ const DonatePageBody = () => {
                 )} */}
 
                 <h2
-                  className={`font-redHatText text-[#E6492D] flex gap-1 items-center ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                  className={`font-redHatText  flex gap-1 items-center ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                 >
                   {inputErrorMessage && <IconAlertTriangle />}
                   Minimum contribution:{' '}
