@@ -36,6 +36,8 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
+import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
+import { IconArrowRight } from '../Icons/IconArrowRight';
 
 interface ITokenSchedule {
   message: string;
@@ -83,6 +85,10 @@ const DonatePageBody = () => {
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
   const [donationStatus, setDonationStatus] = useState<string>('');
+  const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
+    null,
+  );
+
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -285,26 +291,27 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
+      setDonationStatus('');
     }
   };
 
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     if (!isVerified) {
-      setFlashMessage('User is not verified with Privado');
+      console.log('User is not verified with Privado');
       return;
     }
 
     if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
-      setFlashMessage('The minimum donation amount is 5.');
+      console.log('The minimum donation amount is 5.');
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
-      setFlashMessage('The donation amount exceeds the cap limit.');
+      console.log('The donation amount exceeds the cap limit.');
       return;
     }
     if (!terms) {
-      setFlashMessage('Please accept the terms and conditions.');
+      console.log('Please accept the terms and conditions.');
       return;
     }
     handleDonate();
@@ -322,7 +329,9 @@ const DonatePageBody = () => {
         return null;
       } else {
         // Set the new selected percentage and calculate the amount
-        const amount = (userDonationCap * percentage) / 100;
+        const amount =
+          Math.floor(((userDonationCap * percentage) / 100) * 100) / 100;
+
         setInputAmount(amount.toString());
         return percentage;
       }
@@ -331,11 +340,20 @@ const DonatePageBody = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Regex to allow numbers with up to 2 decimal places
+
     const regex = /^\d*\.?\d{0,2}$/;
 
     if (regex.test(value)) {
       setInputAmount(value);
+      const inputAmount = parseFloat(value);
+
+      if (inputAmount < 5) {
+        setInputErrorMessage('Minimum contribution: 5 POL');
+      } else if (inputAmount > userDonationCap) {
+        setInputErrorMessage('Amount should be less than the remaining cap');
+      } else {
+        setInputErrorMessage(null);
+      }
     }
   };
 
@@ -429,21 +447,53 @@ const DonatePageBody = () => {
               </span>
             </div>
             {/* Avaliable token */}
-            <div className='flex gap-1'>
-              {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
-              <div
-                onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
-                className='cursor-pointer hover:underline'
-              >
-                Available in your wallet:{' '}
-                {!tokenDetails
-                  ? 'Loading...'
-                  : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+            <div className='flex md:flex-row flex-col justify-between'>
+              <div className='flex gap-1'>
+                {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
+                <div
+                  onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
+                  className='cursor-pointer hover:underline'
+                >
+                  Available in your wallet:{' '}
+                  {!tokenDetails
+                    ? 'Loading...'
+                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+                </div>
+
+                <button onClick={handleRefetch}>
+                  <IconRefresh size={16} />
+                </button>
               </div>
 
-              <button onClick={handleRefetch}>
-                <IconRefresh size={16} />
-              </button>
+              <div>
+                {inputErrorMessage && (
+                  <span className='font-redHatText text-[#E6492D] flex gap-1 items-center'>
+                    <IconAlertTriangle />
+                    {inputErrorMessage}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* LIFI */}
+
+          <div className='px-4 py-2 bg-[#F7F7F9] rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
+            <div>
+              <span className='text-[#4F576A] font-medium'>
+                Need POL or ETH (for gas) ?
+              </span>
+            </div>
+
+            <div className='flex gap-2 font-medium items-center'>
+              <div className='px-4 py-1 bg-white rounded-lg'>
+                <span className='text-[#5326EC]'>Use Li.FI</span>
+              </div>
+
+              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center'>
+                <span className='text-[#5326EC]'>Need help!</span>
+                <IconArrowRight color='#5326EC' />
+              </div>
             </div>
           </div>
 
