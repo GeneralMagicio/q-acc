@@ -20,7 +20,11 @@ import {
 } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
-import { formatAmount, formatNumber } from '@/helpers/donation';
+import {
+  fetchDonationStatus,
+  formatAmount,
+  formatNumber,
+} from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
@@ -38,6 +42,10 @@ interface ITokenSchedule {
   toolTip: string;
 }
 
+export enum DonationStatus {
+  Verified = 'verified',
+  Pending = 'pending',
+}
 const PercentageButton = ({
   percentage,
   selectedPercentage,
@@ -74,6 +82,7 @@ const DonatePageBody = () => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
+  const [donationStatus, setDonationStatus] = useState<string>('');
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -150,8 +159,6 @@ const DonatePageBody = () => {
   // const totalSupply = totalPol * 0.125;
   let round = 'early';
 
-  console.log(projectData?.addresses[0].address, projectData?.id);
-
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
@@ -207,6 +214,25 @@ const DonatePageBody = () => {
     }
   }, [isConfirmed, hasSavedDonation]);
 
+  useEffect(() => {
+    if (isConfirmed && hash) {
+      const checkDonationStatus = async () => {
+        const donation = await fetchDonationStatus(Number(user?.id), hash);
+        if (donation?.status === 'verified') {
+          setDonationStatus(DonationStatus.Verified);
+          clearInterval(interval);
+          // Stop the polling when verified
+        } else {
+          setDonationStatus(donation?.status || DonationStatus.Pending);
+        }
+        console.log('Current donation', donation);
+      };
+
+      const interval = setInterval(checkDonationStatus, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isConfirmed, hash]);
+
   const getTokenDetails = async () => {
     if (!address) return;
     const data = await fetchTokenDetails({
@@ -238,6 +264,7 @@ const DonatePageBody = () => {
   };
 
   const handleDonate = async () => {
+    setDonationStatus(DonationStatus.Pending);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -314,7 +341,7 @@ const DonatePageBody = () => {
     setTerms(isChecked);
   };
 
-  if (isConfirmed) {
+  if (donationStatus === DonationStatus.Verified) {
     return <DonateSuccessPage transactionHash={hash} round={round} />;
   }
   const percentages = [25, 50, 100];
@@ -373,7 +400,9 @@ const DonatePageBody = () => {
                 onChange={e => setInputAmount(e.target.value)}
                 value={inputAmount}
                 type='number'
-                disabled={isConfirming}
+                disabled={
+                  isConfirming || donationStatus === DonationStatus.Pending
+                }
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
               />
 
@@ -433,7 +462,9 @@ const DonatePageBody = () => {
             <Button
               onClick={handleDonateClick}
               disabled={!isConnected}
-              loading={isConfirming}
+              loading={
+                isConfirming || donationStatus === DonationStatus.Pending
+              }
               color={ButtonColor.Giv}
               className={`text-white justify-center ${
                 !donateDisabled
