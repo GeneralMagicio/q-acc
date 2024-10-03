@@ -1,3 +1,5 @@
+import { fetchUserDonations } from '@/services/donation.services';
+
 // Helper to group donations by project
 export const groupDonationsByProject = (donations: any[]) => {
   return donations.reduce(
@@ -94,4 +96,23 @@ export const formatNumber = (number?: number) => {
   return parseFloat(String(number || 0)).toLocaleString('en-US', {
     maximumFractionDigits: 2,
   });
+};
+
+export const fetchDonationStatus = async (
+  userId: number,
+  transactionHash: string,
+) => {
+  try {
+    // Assuming your API endpoint to get user donations is /api/donations/user/:userId
+    const response = await fetchUserDonations(userId);
+
+    // Find the donation with the matching transactionHash
+    const donation = response?.donations?.find(
+      (donation: any) => donation.transactionId === transactionHash,
+    );
+    return donation || null; // Return the donation if found, otherwise return null
+  } catch (error) {
+    console.error('Error fetching donation status:', error);
+    return null;
+  }
 };
