@@ -11,6 +11,7 @@ import {
 } from '@/helpers/date';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import config from '@/config/configuration';
+import { formatAmount } from '@/helpers/donation';
 
 const itemPerPage = 5;
 
@@ -169,7 +170,9 @@ const ProjectSupportTable = ({
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
                     <div className='flex gap-1 items-center'>
-                      <span className='font-medium'>{donation.amount}</span>
+                      <span className='font-medium'>
+                        {formatAmount(donation.amount)}
+                      </span>
                       <Link
                         target='_blank'
                         href={`${config.SCAN_URL}/tx/${donation.transactionId}`}
@@ -180,13 +183,15 @@ const ProjectSupportTable = ({
 
                     <span className='text-xs font-medium  text-[#A5ADBF]'>
                       ${' '}
-                      {Math.round(donation.amount * Number(POLPrice) * 100) /
-                        100}
+                      {formatAmount(
+                        Math.round(donation.amount * Number(POLPrice) * 100) /
+                          100,
+                      )}
                     </span>
                   </div>
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {donation.rewardTokenAmount || '---'}
+                  {formatAmount(donation.rewardTokenAmount) || '---'}
                   {'  '}
                   {projectData?.abc?.tokenTicker}
                 </div>

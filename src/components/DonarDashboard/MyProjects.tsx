@@ -351,7 +351,7 @@ const MyProjects = () => {
                 </span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.mintedAmount || 0}{' '}
+                {formatAmount(projectData?.abc?.mintedAmount || 0)}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>
