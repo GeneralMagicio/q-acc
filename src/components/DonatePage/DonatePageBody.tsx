@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
@@ -38,6 +38,7 @@ import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
+import { Widget } from '../LIFI/Widget';
 
 interface ITokenSchedule {
   message: string;
@@ -89,6 +90,9 @@ const DonatePageBody = () => {
     null,
   );
 
+  const [showWidget, setShowWidget] = useState(false);
+  const widgetRef = useRef<HTMLDivElement | null>(null); // Explicitly typing the ref
+
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -134,6 +138,34 @@ const DonatePageBody = () => {
       updatePOLCap();
     }
   }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
+
+  // LIFI LOGIC
+
+  const handleLifiClick = () => {
+    setShowWidget(true); // Show the widget when "Use Li.FI" is clicked
+  };
+
+  const handleClickOutside = (event: any) => {
+    // Check if the click is outside the widget area
+    console.log('CLICLED OUTSIDE');
+    if (widgetRef.current && !widgetRef.current.contains(event.target)) {
+      setShowWidget(false); // Hide the widget if the click is outside
+    }
+  };
+
+  useEffect(() => {
+    // Add a click event listener to the document
+    if (showWidget) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup the event listener on component unmount or when the widget is hidden
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showWidget]);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -478,7 +510,9 @@ const DonatePageBody = () => {
 
           {/* LIFI */}
 
-          <div className='px-4 py-2 bg-[#F7F7F9] rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
+          {/* <LIFIWidgetModal isOpen={true} onClose={() => false} /> */}
+
+          <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
             <div>
               <span className='text-[#4F576A] font-medium'>
                 Need POL or ETH (for gas) ?
@@ -486,8 +520,35 @@ const DonatePageBody = () => {
             </div>
 
             <div className='flex gap-2 font-medium items-center'>
-              <div className='px-4 py-1 bg-white rounded-lg'>
+              <div
+                className='px-4 py-1 bg-white rounded-lg cursor-pointer '
+                onClick={handleLifiClick}
+              >
                 <span className='text-[#5326EC]'>Use Li.FI</span>
+
+                {/* Render the Widget if showWidget is true */}
+                {showWidget && (
+                  <>
+                    {/* Backdrop */}
+                    <div
+                      className='absolute z-30 backdrop-blur inset-0'
+                      onClick={() => setShowWidget(false)}
+                    ></div>
+
+                    {/* Widget */}
+                    <div
+                      ref={widgetRef}
+                      className='absolute z-40' // Position the widget above the backdrop
+                      style={{
+                        top: '40%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                      }} // Center the widget
+                    >
+                      <Widget />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center'>
