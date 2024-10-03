@@ -157,9 +157,9 @@ const ProjectDonationTable = () => {
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       {donation.earlyAccessRound
-                        ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                        ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
                         : donation.qfRound
-                          ? 'QfRound'
+                          ? 'q/acc round'
                           : '---'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>

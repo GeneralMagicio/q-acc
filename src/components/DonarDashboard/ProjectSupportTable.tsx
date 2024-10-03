@@ -122,7 +122,7 @@ const ProjectSupportTable = ({
               </button>
             </div>
             <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-              Amount [MATIC]
+              Amount [POL]
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
@@ -164,7 +164,7 @@ const ProjectSupportTable = ({
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[180px]'>
                   {donation.earlyAccessRound
-                    ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
+                    ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
                     : 'q/acc round'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
