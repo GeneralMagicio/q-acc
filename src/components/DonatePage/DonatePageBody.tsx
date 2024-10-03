@@ -381,9 +381,11 @@ const DonatePageBody = () => {
 
       if (inputAmount < 5) {
         setInputErrorMessage('Minimum contribution: 5 POL');
-      } else if (inputAmount > userDonationCap) {
-        setInputErrorMessage('Amount should be less than the remaining cap');
-      } else {
+      }
+      // else if (inputAmount > userDonationCap) {
+      //   setInputErrorMessage('Amount should be less than the remaining cap');
+      // }
+      else {
         setInputErrorMessage(null);
       }
     }
@@ -498,12 +500,25 @@ const DonatePageBody = () => {
               </div>
 
               <div>
-                {inputErrorMessage && (
+                {/* {inputErrorMessage && (
                   <span className='font-redHatText text-[#E6492D] flex gap-1 items-center'>
                     <IconAlertTriangle />
                     {inputErrorMessage}
+                    Minimum contribution: 5 POL
                   </span>
-                )}
+                )} */}
+
+                <h2
+                  className={`font-redHatText text-[#E6492D] flex gap-1 items-center ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                >
+                  {inputErrorMessage && <IconAlertTriangle />}
+                  Minimum contribution:{' '}
+                  <span
+                    className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                  >
+                    5 POL
+                  </span>
+                </h2>
               </div>
             </div>
           </div>
