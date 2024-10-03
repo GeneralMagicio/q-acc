@@ -57,10 +57,10 @@ const MyProjects = () => {
   const [showRoundCollected, setShowRoundCollected] = useState(false);
   const [filteredRoundData, setFilteredRoundData] = useState<{
     activeRound: IEarlyAccessRound;
-    notActiveRounds: (IEarlyAccessRound | IQfRound)[];
+    pastRounds: (IEarlyAccessRound | IQfRound)[];
   }>({
     activeRound: {} as IEarlyAccessRound,
-    notActiveRounds: [],
+    pastRounds: [],
   });
   const { data: allRoundData } = useFetchAllRound();
 
@@ -77,6 +77,7 @@ const MyProjects = () => {
     if (!allRoundData) return;
     let activeRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
     let notActiveRounds: (IEarlyAccessRound | IQfRound)[] = [];
+    let pastRounds: (IEarlyAccessRound | IQfRound)[] = [];
     allRoundData.forEach(round => {
       if (
         (round.__typename === 'EarlyAccessRound' &&
@@ -85,11 +86,16 @@ const MyProjects = () => {
           isMiddleOfThePeriod(round.startDate, round.endDate))
       ) {
         activeRound = round;
-      } else {
-        notActiveRounds.push(round);
+      } else if (new Date(round.endDate) < new Date()) {
+        // Push only rounds that have ended
+        pastRounds.push(round);
       }
+      pastRounds.sort(
+        (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+      );
+      console.log('PAST', pastRounds);
     });
-    setFilteredRoundData({ activeRound, notActiveRounds });
+    setFilteredRoundData({ activeRound, pastRounds });
   }, [allRoundData]);
 
   useEffect(() => {
@@ -370,8 +376,8 @@ const MyProjects = () => {
               projectId={projectId}
             />
           )}
-          {showRoundCollected && filteredRoundData.notActiveRounds
-            ? filteredRoundData.notActiveRounds.map((round, id) => (
+          {showRoundCollected && filteredRoundData.pastRounds
+            ? filteredRoundData.pastRounds.map((round, id) => (
                 <RoundCollectedInfo
                   key={id}
                   info={round}
