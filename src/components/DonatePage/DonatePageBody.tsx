@@ -329,6 +329,16 @@ const DonatePageBody = () => {
     });
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Regex to allow numbers with up to 2 decimal places
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (regex.test(value)) {
+      setInputAmount(value);
+    }
+  };
+
   // Handle Terms checkbox change event
   const handleAcceptTerms = (_event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = _event.target.checked;
@@ -363,7 +373,10 @@ const DonatePageBody = () => {
               <span className='flex gap-2 items-center  '>
                 Your remaining cap
                 <span className='font-medium text-[#4F576A]'>
-                  {userDonationCap ? formatAmount(userDonationCap) : '---'} POL
+                  {userDonationCap
+                    ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                    : '---'}{' '}
+                  POL
                 </span>
               </span>
 
@@ -397,7 +410,7 @@ const DonatePageBody = () => {
                 <h1 className=' font-medium'>POL</h1>
               </div>
               <input
-                onChange={e => setInputAmount(e.target.value)}
+                onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
                 disabled={
