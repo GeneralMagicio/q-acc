@@ -42,7 +42,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
   const title =
     info.__typename === 'EarlyAccessRound'
       ? `Early Access - Round ${info.roundNumber}`
-      : info.name;
+      : `q/acc Round`;
 
   return (
     <div

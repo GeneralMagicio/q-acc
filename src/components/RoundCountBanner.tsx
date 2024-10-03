@@ -23,7 +23,7 @@ const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
               activeRoundDetails?.roundNumber +
               ' of 4'
             : activeRoundDetails?.__typename === 'QfRound'
-              ? 'QF Round'
+              ? 'q/acc Round'
               : 'No Active Round'}
         </span>
         <div className='flex flex-col md:flex-row items-center md:gap-6'>

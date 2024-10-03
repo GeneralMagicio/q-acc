@@ -162,10 +162,10 @@ const ProjectSupportTable = ({
                     month: 'short',
                   })}
                 </div>
-                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
+                <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[180px]'>
                   {donation.earlyAccessRound
                     ? `Early window - Round ${donation.earlyAccessRound.roundNumber}`
-                    : '---'}
+                    : 'q/acc round'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
