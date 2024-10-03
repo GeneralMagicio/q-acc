@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
+import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -38,7 +39,6 @@ import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
-import { Widget } from '../LIFI/Widget';
 
 interface ITokenSchedule {
   message: string;
@@ -90,8 +90,7 @@ const DonatePageBody = () => {
     null,
   );
 
-  const [showWidget, setShowWidget] = useState(false);
-  const widgetRef = useRef<HTMLDivElement | null>(null); // Explicitly typing the ref
+  const drawerRef = useRef<WidgetDrawer>(null);
 
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
@@ -140,32 +139,9 @@ const DonatePageBody = () => {
   }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
 
   // LIFI LOGIC
-
-  const handleLifiClick = () => {
-    setShowWidget(true); // Show the widget when "Use Li.FI" is clicked
+  const toggleWidget = () => {
+    drawerRef.current?.toggleDrawer();
   };
-
-  const handleClickOutside = (event: any) => {
-    // Check if the click is outside the widget area
-    console.log('CLICLED OUTSIDE');
-    if (widgetRef.current && !widgetRef.current.contains(event.target)) {
-      setShowWidget(false); // Hide the widget if the click is outside
-    }
-  };
-
-  useEffect(() => {
-    // Add a click event listener to the document
-    if (showWidget) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    // Cleanup the event listener on component unmount or when the widget is hidden
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showWidget]);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -525,8 +501,6 @@ const DonatePageBody = () => {
 
           {/* LIFI */}
 
-          {/* <LIFIWidgetModal isOpen={true} onClose={() => false} /> */}
-
           <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
             <div>
               <span className='text-[#4F576A] font-medium'>
@@ -535,38 +509,25 @@ const DonatePageBody = () => {
             </div>
 
             <div className='flex gap-2 font-medium items-center'>
-              <div
-                className='px-4 py-1 bg-white rounded-lg cursor-pointer '
-                onClick={handleLifiClick}
+              <button
+                className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
+                onClick={toggleWidget}
               >
                 <span className='text-[#5326EC]'>Use Li.FI</span>
+              </button>
+              <LiFiWidget
+                ref={drawerRef}
+                config={{
+                  variant: 'drawer',
+                  fromChain: 137,
+                  fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
+                  toChain: 1101,
+                  toToken: '0xa2036f0538221a77A3937F1379699f44945018d0', //Matic token address in zkevm
+                }}
+                integrator='drawer'
+              />
 
-                {/* Render the Widget if showWidget is true */}
-                {showWidget && (
-                  <>
-                    {/* Backdrop */}
-                    <div
-                      className='absolute z-30 backdrop-blur inset-0'
-                      onClick={() => setShowWidget(false)}
-                    ></div>
-
-                    {/* Widget */}
-                    <div
-                      ref={widgetRef}
-                      className='absolute z-40' // Position the widget above the backdrop
-                      style={{
-                        top: '40%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                      }} // Center the widget
-                    >
-                      <Widget />
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center'>
+              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
                 <span className='text-[#5326EC]'>Need help!</span>
                 <IconArrowRight color='#5326EC' />
               </div>
