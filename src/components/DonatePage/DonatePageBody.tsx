@@ -1,9 +1,10 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
+import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -89,6 +90,8 @@ const DonatePageBody = () => {
     null,
   );
 
+  const drawerRef = useRef<WidgetDrawer>(null);
+
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -134,6 +137,11 @@ const DonatePageBody = () => {
       updatePOLCap();
     }
   }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
+
+  // LIFI LOGIC
+  const toggleWidget = () => {
+    drawerRef.current?.toggleDrawer();
+  };
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -349,9 +357,11 @@ const DonatePageBody = () => {
 
       if (inputAmount < 5) {
         setInputErrorMessage('Minimum contribution: 5 POL');
-      } else if (inputAmount > userDonationCap) {
-        setInputErrorMessage('Amount should be less than the remaining cap');
-      } else {
+      }
+      // else if (inputAmount > userDonationCap) {
+      //   setInputErrorMessage('Amount should be less than the remaining cap');
+      // }
+      else {
         setInputErrorMessage(null);
       }
     }
@@ -466,19 +476,32 @@ const DonatePageBody = () => {
               </div>
 
               <div>
-                {inputErrorMessage && (
+                {/* {inputErrorMessage && (
                   <span className='font-redHatText text-[#E6492D] flex gap-1 items-center'>
                     <IconAlertTriangle />
                     {inputErrorMessage}
+                    Minimum contribution: 5 POL
                   </span>
-                )}
+                )} */}
+
+                <h2
+                  className={`font-redHatText  flex gap-1 items-center ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                >
+                  {inputErrorMessage && <IconAlertTriangle />}
+                  Minimum contribution:{' '}
+                  <span
+                    className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                  >
+                    5 POL
+                  </span>
+                </h2>
               </div>
             </div>
           </div>
 
           {/* LIFI */}
 
-          <div className='px-4 py-2 bg-[#F7F7F9] rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
+          <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
             <div>
               <span className='text-[#4F576A] font-medium'>
                 Need POL or ETH (for gas) ?
@@ -486,11 +509,25 @@ const DonatePageBody = () => {
             </div>
 
             <div className='flex gap-2 font-medium items-center'>
-              <div className='px-4 py-1 bg-white rounded-lg'>
+              <button
+                className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
+                onClick={toggleWidget}
+              >
                 <span className='text-[#5326EC]'>Use Li.FI</span>
-              </div>
+              </button>
+              <LiFiWidget
+                ref={drawerRef}
+                config={{
+                  variant: 'drawer',
+                  fromChain: 137,
+                  fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
+                  toChain: 1101,
+                  toToken: '0xa2036f0538221a77A3937F1379699f44945018d0', //Matic token address in zkevm
+                }}
+                integrator='drawer'
+              />
 
-              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center'>
+              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
                 <span className='text-[#5326EC]'>Need help!</span>
                 <IconArrowRight color='#5326EC' />
               </div>
