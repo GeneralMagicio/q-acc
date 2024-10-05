@@ -62,7 +62,7 @@ const ProjectDonateButton = () => {
   const handleSupport = (e: any) => {
     e.stopPropagation();
     if (ownsNFT) {
-      router.push(`/donate/${projectData.slug}`);
+      router.push(`/support/${projectData.slug}`);
     }
   };
 
