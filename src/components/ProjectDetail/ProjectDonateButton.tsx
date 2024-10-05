@@ -141,9 +141,11 @@ const ProjectDonateButton = () => {
             }
             loading={loadingNFTCheck}
           >
-            {amountDonatedInRound === maxPOLCap
-              ? 'Project Maxed Out'
-              : 'Support This Project'}
+            {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+              ? 'Support This Project'
+              : amountDonatedInRound === maxPOLCap
+                ? 'Project Maxed Out'
+                : 'Support This Project'}
           </Button>
 
           {!ownsNFT ? (
