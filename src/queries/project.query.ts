@@ -614,9 +614,11 @@ export const GET_PROJECT_BY_USER_ID = `
 export const GET_PROJECT_DONATIONS_USERS_BY_ID = `
 query (
     $projectId: Int!
+    $take:Int
   ) {
     donationsByProjectId(
       projectId: $projectId
+      take:$take
     ) {
       donations {
         id

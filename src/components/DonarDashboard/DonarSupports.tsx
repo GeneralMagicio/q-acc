@@ -74,7 +74,11 @@ const DonarSupports = () => {
 
       for (const projectId of projectIds) {
         try {
-          const donationsByProjectId = await fetchProjectDonors(projectId);
+          const donationsByProjectId = await fetchProjectDonors(
+            projectId,
+            1000,
+          );
+          console.log(donationsByProjectId, '==================');
           if (donationsByProjectId?.donations) {
             donorData[projectId] = {
               uniqueDonors: calculateUniqueDonors(
