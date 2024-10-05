@@ -522,7 +522,7 @@ const DonatePageBody = () => {
                   fromChain: 137,
                   fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
                   toChain: 1101,
-                  toToken: '0xa2036f0538221a77A3937F1379699f44945018d0', //Matic token address in zkevm
+                  toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
                 }}
                 integrator='drawer'
               />

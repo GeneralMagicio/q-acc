@@ -103,6 +103,7 @@ export const fetchUserDonations = async (userId: number) => {
       GET_USER_DONATIONS,
       {
         userId,
+        take: 50,
       },
       {
         auth: true,
@@ -114,12 +115,13 @@ export const fetchUserDonations = async (userId: number) => {
   }
 };
 
-export const fetchProjectDonors = async (projectId: number) => {
+export const fetchProjectDonors = async (projectId: number, take?: number) => {
   try {
     const res = await requestGraphQL<{ donationsByProjectId: any }>(
       GET_PROJECT_DONATIONS_USERS_BY_ID,
       {
         projectId,
+        take,
       },
       {
         auth: true,
