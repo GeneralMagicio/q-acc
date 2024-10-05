@@ -35,6 +35,7 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { RoundCollectHeader } from './RoundCollectHeader';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -58,13 +59,17 @@ const MyProjects = () => {
   const [filteredRoundData, setFilteredRoundData] = useState<{
     activeRound: IEarlyAccessRound;
     pastRounds: (IEarlyAccessRound | IQfRound)[];
+    roundType: string;
+    lastRound: IEarlyAccessRound;
+    qfRoundEnded: boolean;
   }>({
     activeRound: {} as IEarlyAccessRound,
     pastRounds: [],
+    roundType: '',
+    lastRound: {} as IEarlyAccessRound,
+    qfRoundEnded: false,
   });
   const { data: allRoundData } = useFetchAllRound();
-
-  console.log({ projectData });
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -75,27 +80,56 @@ const MyProjects = () => {
 
   useEffect(() => {
     if (!allRoundData) return;
+
     let activeRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
-    let notActiveRounds: (IEarlyAccessRound | IQfRound)[] = [];
     let pastRounds: (IEarlyAccessRound | IQfRound)[] = [];
+    let roundType = 'ea';
+    let qfRoundEnded = false;
+    let lastRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
     allRoundData.forEach(round => {
+      const { __typename, startDate, endDate } = round;
+
+      // Update last round if it's an EarlyAccessRound
+      if (__typename === 'EarlyAccessRound') {
+        lastRound = round;
+      }
+
+      // Check if the round is active
+      let isActive = isMiddleOfThePeriod(startDate, endDate);
       if (
-        (round.__typename === 'EarlyAccessRound' &&
-          isMiddleOfThePeriod(round.startDate, round.endDate)) ||
-        (round.__typename === 'QfRound' &&
-          isMiddleOfThePeriod(round.startDate, round.endDate))
+        (__typename === 'EarlyAccessRound' && isActive) ||
+        (__typename === 'QfRound' && isActive)
       ) {
         activeRound = round;
-      } else if (new Date(round.endDate) < new Date()) {
-        // Push only rounds that have ended
+        roundType = __typename;
+        console.log('active', activeRound);
+      }
+
+      // Push past EarlyAccessRounds to pastRounds
+      const hasEnded = new Date(endDate) < new Date();
+      if (__typename === 'EarlyAccessRound' && (hasEnded || isActive)) {
         pastRounds.push(round);
       }
-      pastRounds.sort(
-        (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-      );
-      console.log('PAST', pastRounds);
+
+      // Check if a QfRound has ended
+      if (__typename === 'QfRound' && hasEnded) {
+        activeRound = round;
+        qfRoundEnded = true;
+      }
     });
-    setFilteredRoundData({ activeRound, pastRounds });
+
+    // Sort past rounds by endDate in descending order
+    pastRounds.sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+    );
+
+    setFilteredRoundData({
+      activeRound,
+      pastRounds,
+      roundType,
+      lastRound,
+      qfRoundEnded,
+    });
   }, [allRoundData]);
 
   useEffect(() => {
@@ -369,32 +403,43 @@ const MyProjects = () => {
         </div>
 
         <div className='flex flex-col gap-4'>
-          {filteredRoundData.activeRound && (
-            <RoundCollectedInfo
+          {(filteredRoundData.roundType === 'QfRound' ||
+            filteredRoundData.qfRoundEnded) && (
+            <RoundCollectHeader
+              type={'qacc'}
               info={filteredRoundData.activeRound}
-              currentRound={true}
               projectId={projectId}
-            />
+            ></RoundCollectHeader>
           )}
-          {showRoundCollected && filteredRoundData.pastRounds
-            ? filteredRoundData.pastRounds.map((round, id) => (
-                <RoundCollectedInfo
-                  key={id}
-                  info={round}
-                  projectId={projectId}
-                />
-              ))
-            : null}
-          <div
-            className='bg-gray-100 w-fit mx-auto py-3 px-4 rounded-lg flex gap-1 cursor-pointer select-none'
-            onClick={() => setShowRoundCollected(!showRoundCollected)}
-          >
-            View {showRoundCollected ? 'less' : 'all previous rounds info'}
-            {showRoundCollected ? (
-              <IconChevronUp size={24} />
-            ) : (
-              <IconChevronDown size={24} />
-            )}
+
+          <div className='flex flex-col'>
+            <RoundCollectHeader
+              type={'ea'}
+              info={filteredRoundData.lastRound}
+              projectId={projectId}
+            ></RoundCollectHeader>
+
+            {showRoundCollected && filteredRoundData.pastRounds
+              ? filteredRoundData.pastRounds.map((round, id) => (
+                  <RoundCollectedInfo
+                    key={id}
+                    info={round}
+                    projectId={projectId}
+                    currentRound={filteredRoundData.activeRound === round}
+                  />
+                ))
+              : null}
+            <div
+              className='bg-[#D7DDEA] w-full  justify-center mx-auto py-1 px-4 rounded-b-lg flex gap-1 cursor-pointer select-none'
+              onClick={() => setShowRoundCollected(!showRoundCollected)}
+            >
+              {showRoundCollected ? 'Hide breakdown' : 'Early access breakdown'}
+              {showRoundCollected ? (
+                <IconChevronUp size={24} />
+              ) : (
+                <IconChevronDown size={24} />
+              )}
+            </div>
           </div>
         </div>
 
