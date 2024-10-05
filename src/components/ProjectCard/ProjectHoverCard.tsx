@@ -97,7 +97,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       address || '',
     );
     if (res) {
-      router.push(`/donate/${project.slug}`);
+      router.push(`/support/${project.slug}`);
     } else {
       openModal();
     }
