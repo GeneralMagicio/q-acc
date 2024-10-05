@@ -16,6 +16,7 @@ export interface IQfRound {
   __typename: 'QfRound';
   name: string;
   slug: string;
+  roundNumber: string;
   allocatedFund: string;
   startDate: string;
   endDate: string;
