@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Banner } from '@/components/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
+import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
+import { IconArrowRight } from '@/components/Icons/IconArrowRight';
 
 const KycLanding = () => {
   return (
@@ -61,6 +63,18 @@ const KycLanding = () => {
                 </p>
               </li>
             </ol>
+          </div>
+          <div>
+            <Button
+              styleType={ButtonStyle.Solid}
+              color={ButtonColor.Pink}
+              className={'mx-auto'}
+            >
+              <div className='flex gap-2'>
+                <span>Get started</span>
+                <IconArrowRight />
+              </div>
+            </Button>
           </div>
         </div>
       </div>
