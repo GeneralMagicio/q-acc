@@ -4,7 +4,6 @@ import { formatAmount } from '@/helpers/donation';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { calculateCapAmount } from '@/helpers/round';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 interface IRoundCollectedInfoProps {
   info: IEarlyAccessRound | IQfRound;
