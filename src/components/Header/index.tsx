@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ConnectButton } from '../ConnectButton/ConnectButton';
 import { IconX } from '../Icons/IconX';
 import Routes from '@/lib/constants/Routes';
@@ -17,7 +18,12 @@ const HEADER_ITEMS = [
   },
 ];
 
+const Hide_Header_Items_Routes = [Routes.KycLanding];
+
 export const Header = () => {
+  const pathName = usePathname();
+  const shouldHideHeaderItems = Hide_Header_Items_Routes.includes(pathName);
+
   return (
     <>
       <nav className='bg-white flex items-center px-6 py-4 z-50 relative flex-wrap justify-between md:flex-nowrap gap-4 shadow-md'>
@@ -39,9 +45,10 @@ export const Header = () => {
           </div>
         </Link>
         <div className='flex order-3 flex-1 sm:justify-between md:order-2 md:flex-grow-0 font-semibold font-redHatText'>
-          {HEADER_ITEMS.map((item, index) => (
-            <HeaderItem key={index} label={item.label} route={item.route} />
-          ))}
+          {!shouldHideHeaderItems &&
+            HEADER_ITEMS.map((item, index) => (
+              <HeaderItem key={index} label={item.label} route={item.route} />
+            ))}
         </div>
         <div className='flex-1 order-2 md:order-3'></div>
         <ConnectButton className='order-2 md:order-3' />
