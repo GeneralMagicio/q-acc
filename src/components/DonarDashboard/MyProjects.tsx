@@ -36,6 +36,7 @@ import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
+import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -172,6 +173,10 @@ const MyProjects = () => {
       handleSearchClick();
     }
   };
+
+  const tributeReceived = useProjectCollateralFeeCollected({
+    contractAddress: projectData?.abc?.fundingManagerAddress,
+  }).collectedFees;
 
   if (!userWhiteListed) {
     return (
@@ -356,12 +361,12 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(totalAmount)} POL
+                  {formatAmount(tributeReceived)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                    Math.round(tributeReceived * Number(POLPrice) * 100) / 100,
                   )}
                 </span>
               </div>
