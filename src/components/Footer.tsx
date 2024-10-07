@@ -55,8 +55,9 @@ export const Footer: React.FC = () => {
   const displayedItems = allItems.filter(item => item.shouldDisplay);
 
   // Split the displayed items into two columns, 4 items each (or adjusted depending on how many there are)
-  const column1 = displayedItems.slice(0, 4);
-  const column2 = displayedItems.slice(4);
+  const halfItems = Math.ceil(displayedItems.length / 2);
+  const column1 = displayedItems.slice(0, halfItems);
+  const column2 = displayedItems.slice(halfItems);
 
   return (
     <footer className='bg-gray-100 pt-20 pb-6 mt-8'>
