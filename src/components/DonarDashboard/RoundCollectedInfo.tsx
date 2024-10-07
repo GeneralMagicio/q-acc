@@ -82,14 +82,6 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         <div className='flex gap-2 text-xs font-medium items-center justify-between  md:w-[400px]'>
           <div className='bg-white p-[2px] rounded-md flex gap-1'>
             {percentage}% Collected
-            <div className='relative group'>
-              <IconTokenSchedule />
-              <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                Every round has a round limit. This is the % of the current
-                round limit that has been collected. Once it reaches 100%, the
-                round will close
-              </div>
-            </div>
           </div>
 
           <div className='flex gap-2 items-center'>
@@ -115,7 +107,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
             {formatAmount(Math.floor(maxPOLCap * 100) / 100)} POL
           </span>
           <div className='text-xs text-gray-500'>
-            ~${' '}
+            ${' '}
             {formatAmount(Math.floor(maxPOLCap * info.tokenPrice * 100) / 100)}
           </div>
         </div>

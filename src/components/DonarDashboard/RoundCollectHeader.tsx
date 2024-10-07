@@ -117,7 +117,9 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
             </div>
           </div>
           <div className='flex gap-2 items-center'>
-            <span className='text-gray-400'>Total</span>
+            <span className='text-gray-400'>
+              {type === 'qacc' ? 'Cumulative this round' : 'Total'}
+            </span>
             <span className='text-base'>
               {formatAmount(amountDonatedInRound)} POL
             </span>
