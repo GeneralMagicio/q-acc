@@ -104,6 +104,7 @@ const DonatePageBody = () => {
 
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [remainingDonationAmount, setRemainingDonationAmount] = useState(0);
 
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
@@ -121,7 +122,8 @@ const DonatePageBody = () => {
           await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
         setMaxPOLCap(capAmount);
-
+        setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
+        console.log('Remaining Donation Limit', remainingDonationAmount);
         let tempprogress = 0;
         if (maxPOLCap > 0) {
           tempprogress =
@@ -192,7 +194,8 @@ const DonatePageBody = () => {
       !(
         parseFloat(inputAmount) >= 5 &&
         parseFloat(inputAmount) <= userDonationCap
-      )
+      ) ||
+      parseFloat(inputAmount) > remainingDonationAmount
     ) {
       setDonateDisabled(true);
     } else {
@@ -320,6 +323,10 @@ const DonatePageBody = () => {
     }
     if (!terms) {
       console.log('Please accept the terms and conditions.');
+      return;
+    }
+    if (parseFloat(inputAmount) > remainingDonationAmount) {
+      console.log('Input amount will exceed the round cap');
       return;
     }
     handleDonate();

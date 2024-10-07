@@ -88,18 +88,23 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     };
 
     updatePOLCap();
-  }, [totalPOLDonated, activeRoundDetails, project, maxPOLCap]);
+  }, [totalPOLDonated, activeRoundDetails, project]);
 
   const handleSupport = async (e: any) => {
     e.stopPropagation();
-    const res = await checkUserOwnsNFT(
-      project?.abc?.nftContractAddress || '',
-      address || '',
-    );
-    if (res) {
-      router.push(`/support/${project.slug}`);
+    if (activeRoundDetails?.__typename !== 'QfRound') {
+      console.log(activeRoundDetails);
+      const res = await checkUserOwnsNFT(
+        project?.abc?.nftContractAddress || '',
+        address || '',
+      );
+      if (res) {
+        router.push(`/support/${project.slug}`);
+      } else {
+        openModal();
+      }
     } else {
-      openModal();
+      router.push(`/support/${project.slug}`);
     }
   };
 

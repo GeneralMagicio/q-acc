@@ -61,7 +61,9 @@ const ProjectDonateButton = () => {
 
   const handleSupport = (e: any) => {
     e.stopPropagation();
-    if (ownsNFT) {
+    if (activeRoundDetails?.__typename === 'QfRound') {
+      router.push(`/support/${projectData.slug}`);
+    } else if (ownsNFT) {
       router.push(`/support/${projectData.slug}`);
     }
   };
@@ -134,7 +136,8 @@ const ProjectDonateButton = () => {
             className='w-full justify-center'
             onClick={handleSupport}
             disabled={
-              !ownsNFT ||
+              (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
+                !ownsNFT) ||
               amountDonatedInRound === maxPOLCap ||
               remainingTime === 'Time is up!' ||
               remainingTime === '--:--:--'
@@ -148,7 +151,9 @@ const ProjectDonateButton = () => {
                 : 'Support This Project'}
           </Button>
 
-          {!ownsNFT ? (
+          {activeRoundDetails?.__typename === 'QfRound' ? (
+            ''
+          ) : !ownsNFT ? (
             <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
               Missing early access NFT
             </span>
