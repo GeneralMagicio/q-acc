@@ -10,7 +10,7 @@ import { fetchGivethUserInfo } from '@/services/user.service';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import Routes from '@/lib/constants/Routes';
 
-export const KYCLandingButton = () => {
+export const KycLandingButton = () => {
   const { address } = useAccount();
   const { mutateAsync: updateUser } = useUpdateUser();
   const route = useRouter();

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Banner } from '@/components/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
-import { KYCLandingButton } from '@/components/KycLandingButton';
+import { KycLandingButton } from '@/components/KycLandingButton';
 
 const KycLanding = () => {
   return (
@@ -47,7 +47,7 @@ const KycLanding = () => {
             </p>
             <ol className='list-decimal pl-6'>
               <li className='mb-8'>
-                Click the “Get started” button 
+                Click the <strong>“Get started”</strong> button 
                 <p>
                   A new tab will open where you can complete the verification
                   steps.
@@ -64,7 +64,7 @@ const KycLanding = () => {
             </ol>
           </div>
           <div>
-            <KYCLandingButton />
+            <KycLandingButton />
           </div>
         </div>
       </div>
