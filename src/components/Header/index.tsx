@@ -27,7 +27,7 @@ export const Header = () => {
   return (
     <>
       <nav className='bg-white flex items-center px-6 py-4 z-50 relative flex-wrap justify-between md:flex-nowrap gap-4 shadow-md'>
-        <Link href={Routes.Home}>
+        <Link href={shouldHideHeaderItems ? '' : Routes.Home}>
           <div className='flex gap-4 items-center order-1'>
             <Image
               src='/images/icons/logomark-dark.svg'
