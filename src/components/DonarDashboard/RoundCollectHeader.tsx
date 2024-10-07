@@ -135,7 +135,10 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           </div>
           <span className='text-base'>{formatAmount(maxPOLCap)} POL</span>
           <div className='text-xs text-gray-500'>
-            ~$ {formatAmount(maxPOLCap * (POLPrice || 1))}
+            ${' '}
+            {formatAmount(
+              maxPOLCap * (activeRoundDetails?.tokenPrice || POLPrice || 1),
+            )}
           </div>
         </div>
       </div>
