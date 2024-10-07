@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAccount } from 'wagmi';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Button, ButtonStyle, ButtonColor } from './Button';
 import { IconArrowRight } from './Icons/IconArrowRight';
