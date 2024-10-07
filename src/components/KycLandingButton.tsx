@@ -7,12 +7,10 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Button, ButtonStyle, ButtonColor } from './Button';
 import { IconArrowRight } from './Icons/IconArrowRight';
 import { fetchGivethUserInfo } from '@/services/user.service';
-import { useFetchUser } from '@/hooks/useFetchUser';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import Routes from '@/lib/constants/Routes';
 
 export const KYCLandingButton = () => {
-  const { data: user, refetch } = useFetchUser();
   const { address } = useAccount();
   const { mutateAsync: updateUser } = useUpdateUser();
   const route = useRouter();
