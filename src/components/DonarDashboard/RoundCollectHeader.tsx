@@ -5,12 +5,14 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import { fetchProjectRoundRecords } from '@/services/round.services';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 interface IRoundCollectHeaderProps {
   type: string;
   info: IEarlyAccessRound | IQfRound;
   currentRound?: boolean;
   projectId: string | undefined;
+  pastRoundNumber?: number;
 }
 
 export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
@@ -18,11 +20,13 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
   info,
   currentRound,
   projectId,
+  pastRoundNumber,
 }) => {
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const remainingTime = useRemainingTime(' ', info?.endDate);
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+  const { data: POLPrice } = useFetchTokenPrice();
 
   currentRound =
     remainingTime !== 'Time is up!' && remainingTime !== '--:--:--';
@@ -33,7 +37,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
         Number(projectId),
         type === 'qacc' ? 1 : undefined,
         type === 'ea'
-          ? Number(activeRoundDetails?.roundNumber) || 4
+          ? Number(activeRoundDetails?.roundNumber) || pastRoundNumber
           : undefined,
       );
       if (roundRecords?.length > 0) {
@@ -44,7 +48,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
         const totalCollectedAmount =
           cumulativeAmount + totalDonationAmountInRound;
 
-        setMaxPOLCap(info.cumulativeCapPerProject / info.tokenPrice);
+        setMaxPOLCap(info.cumulativeCapPerProject / roundRecords?.tokenPrice);
 
         if (type === 'qacc') {
           setAmountDonatedInRound(totalCollectedAmount);
@@ -126,7 +130,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           </div>
           <span className='text-base'>{formatAmount(maxPOLCap)} POL</span>
           <div className='text-xs text-gray-500'>
-            ~$ {formatAmount(maxPOLCap * info.tokenPrice)}
+            ~$ {formatAmount(maxPOLCap * (POLPrice || 1))}
           </div>
         </div>
       </div>

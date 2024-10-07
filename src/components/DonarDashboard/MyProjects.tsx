@@ -62,12 +62,14 @@ const MyProjects = () => {
     roundType: string;
     lastRound: IEarlyAccessRound;
     qfRoundEnded: boolean;
+    pastRoundNumber: number;
   }>({
     activeRound: {} as IEarlyAccessRound,
     pastRounds: [],
     roundType: '',
     lastRound: {} as IEarlyAccessRound,
     qfRoundEnded: false,
+    pastRoundNumber: 1,
   });
   const { data: allRoundData } = useFetchAllRound();
 
@@ -86,6 +88,7 @@ const MyProjects = () => {
     let roundType = 'ea';
     let qfRoundEnded = false;
     let lastRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
+    let pastRoundNumber = 1;
     allRoundData.forEach(round => {
       const { __typename, startDate, endDate } = round;
 
@@ -109,6 +112,7 @@ const MyProjects = () => {
       const hasEnded = new Date(endDate) < new Date();
       if (__typename === 'EarlyAccessRound' && (hasEnded || isActive)) {
         pastRounds.push(round);
+        pastRoundNumber = round.roundNumber;
       }
 
       // Check if a QfRound has ended
@@ -129,6 +133,7 @@ const MyProjects = () => {
       roundType,
       lastRound,
       qfRoundEnded,
+      pastRoundNumber,
     });
   }, [allRoundData]);
 
@@ -417,6 +422,7 @@ const MyProjects = () => {
               type={'ea'}
               info={filteredRoundData.lastRound}
               projectId={projectId}
+              pastRoundNumber={filteredRoundData.pastRoundNumber}
             ></RoundCollectHeader>
 
             {showRoundCollected && filteredRoundData.pastRounds
