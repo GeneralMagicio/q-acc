@@ -48,7 +48,12 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
         const totalCollectedAmount =
           cumulativeAmount + totalDonationAmountInRound;
 
-        setMaxPOLCap(info.cumulativeCapPerProject / roundRecords?.tokenPrice);
+        if (POLPrice) {
+          setMaxPOLCap(
+            info.cumulativeCapPerProject /
+              (activeRoundDetails?.tokenPrice || POLPrice),
+          );
+        }
 
         if (type === 'qacc') {
           setAmountDonatedInRound(totalCollectedAmount);
