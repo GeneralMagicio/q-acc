@@ -172,9 +172,6 @@ const DonatePageBody = () => {
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
-  // const totalSupply = totalPol * 0.125;
-  let round = 'early';
-
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
@@ -204,7 +201,7 @@ const DonatePageBody = () => {
   }, [terms, isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
-    if (round === 'early') {
+    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
       const message =
         'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
       const toolTip =
@@ -387,7 +384,12 @@ const DonatePageBody = () => {
   };
 
   if (donationStatus === DonationStatus.Verified) {
-    return <DonateSuccessPage transactionHash={hash} round={round} />;
+    return (
+      <DonateSuccessPage
+        transactionHash={hash}
+        round={activeRoundDetails?.__typename}
+      />
+    );
   }
   const percentages = [25, 50, 100];
   return (
@@ -772,7 +774,7 @@ const DonatePageBody = () => {
         </div>
       </div>
 
-      {round === 'early' ? (
+      {activeRoundDetails?.__typename === 'EarlyAccessRound' ? (
         ''
       ) : (
         <div className='flex flex-col items-center  gap-6 mt-20 p-5 font-redHatText'>
