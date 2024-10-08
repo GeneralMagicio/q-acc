@@ -24,7 +24,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
     const updatePOLCap = async () => {
       if (info) {
         const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(info, Number(projectId));
+          await calculateCapAmount(info, Number(projectId), true);
         setMaxPOLCap(capAmount);
         setAmountDonatedInRound(totalDonationAmountInRound);
       }
@@ -38,7 +38,8 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
   const endData =
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
 
-  const percentage = ((amountDonatedInRound / maxPOLCap) * 100).toFixed(2);
+  const percentage = (amountDonatedInRound / maxPOLCap) * 100;
+  const truncatedProgress = Math.floor(percentage * 100) / 100;
   const title =
     info.__typename === 'EarlyAccessRound'
       ? `Early Access - Round ${info.roundNumber}`
@@ -80,7 +81,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
       <div className='flex flex-col justify-between gap-2  font-redHatText  w-full md:w-fit '>
         <div className='flex gap-2 text-xs font-medium items-center justify-between  md:w-[400px]'>
           <div className='bg-white p-[2px] rounded-md flex gap-1'>
-            {percentage}% Collected
+            {truncatedProgress}% Collected
           </div>
 
           <div className='flex gap-2 items-center'>
@@ -94,7 +95,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         <div className='h-2 bg-gray-200 rounded-lg overflow-hidden'>
           <div
             className={`h-full ${currentRound ? 'bg-giv-500' : 'bg-gray-500'}`}
-            style={{ width: `${percentage}%` }}
+            style={{ width: `${truncatedProgress}%` }}
           ></div>
         </div>
 
