@@ -78,21 +78,24 @@ const DonateSection = () => {
 
           <div className='flex flex-col gap-2 mt-12'>
             <div
-              className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+              className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress >= 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
             >
-              {progress === 0
-                ? 'Getting started !'
-                : progress !== 100
-                  ? progress + '% collected'
-                  : 'Maxed out this round!'}
-
-              <div className='relative group'>
-                <IconTokenSchedule />
-                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  Bonding curves have a mint price and a burn price. This shows
-                  the mint price.
+              {progress === 0 ? (
+                'Getting started !'
+              ) : progress >= 100 ? (
+                'Maxed out this round!'
+              ) : (
+                <div className='flex gap-1'>
+                  {progress} % collected
+                  <div className='relative group'>
+                    <IconTokenSchedule />
+                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                      Bonding curves have a mint price and a burn price. This
+                      shows the mint price.
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <ProgressBar progress={progress} isStarted={false} />
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
