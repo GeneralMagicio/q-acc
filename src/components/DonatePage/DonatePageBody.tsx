@@ -221,7 +221,7 @@ const DonatePageBody = () => {
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
         transactionNetworkId: chain?.id,
-        amount: parseInt(inputAmount),
+        amount: parseFloat(inputAmount),
         token,
         transactionId: hash,
         tokenAddress,
@@ -286,7 +286,7 @@ const DonatePageBody = () => {
       await createDraftDonation(
         parseInt(projectData?.id),
         chain?.id!,
-        parseInt(inputAmount),
+        parseFloat(inputAmount),
         config.ERC_TOKEN_SYMBOL,
         projectData?.addresses[0].address,
         tokenAddress,

@@ -57,7 +57,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
 
       if (POLPrice) {
         setMaxPOLCap(
-          info.cumulativeCapPerProject /
+          info.cumulativeUSDCapPerProject /
             (activeRoundDetails?.tokenPrice || POLPrice),
         );
       }
