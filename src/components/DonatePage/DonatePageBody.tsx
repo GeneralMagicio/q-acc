@@ -458,8 +458,10 @@ const DonatePageBody = () => {
                 ~ ${' '}
                 {inputAmount === ''
                   ? 0
-                  : Math.floor(
-                      parseFloat(inputAmount) * Number(POLPrice) * 100,
+                  : Math.round(
+                      parseFloat(inputAmount) *
+                        Number(activeRoundDetails?.tokenPrice) *
+                        100,
                     ) / 100}
               </span>
             </div>
