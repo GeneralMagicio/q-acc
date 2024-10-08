@@ -138,7 +138,7 @@ const ProjectDonateButton = () => {
             disabled={
               (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
                 !ownsNFT) ||
-              amountDonatedInRound === maxPOLCap ||
+              amountDonatedInRound >= maxPOLCap ||
               remainingTime === 'Time is up!' ||
               remainingTime === '--:--:--'
             }
@@ -146,7 +146,7 @@ const ProjectDonateButton = () => {
           >
             {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
               ? 'Support This Project'
-              : amountDonatedInRound === maxPOLCap
+              : amountDonatedInRound >= maxPOLCap
                 ? 'Project Maxed Out'
                 : 'Support This Project'}
           </Button>
