@@ -58,17 +58,17 @@ const MyProjects = () => {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
   const [filteredRoundData, setFilteredRoundData] = useState<{
-    activeRound: IEarlyAccessRound;
+    activeRound: IEarlyAccessRound | IQfRound;
     pastRounds: (IEarlyAccessRound | IQfRound)[];
     roundType: string;
-    lastRound: IEarlyAccessRound;
+    lastRound: IEarlyAccessRound | IQfRound;
     qfRoundEnded: boolean;
     pastRoundNumber: number;
   }>({
-    activeRound: {} as IEarlyAccessRound,
+    activeRound: {} as IEarlyAccessRound | IQfRound,
     pastRounds: [],
     roundType: '',
-    lastRound: {} as IEarlyAccessRound,
+    lastRound: {} as IEarlyAccessRound | IQfRound,
     qfRoundEnded: false,
     pastRoundNumber: 1,
   });
@@ -84,11 +84,15 @@ const MyProjects = () => {
   useEffect(() => {
     if (!allRoundData) return;
 
-    let activeRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
+    let activeRound: IEarlyAccessRound | IQfRound = {} as
+      | IEarlyAccessRound
+      | IQfRound;
     let pastRounds: (IEarlyAccessRound | IQfRound)[] = [];
     let roundType = 'ea';
     let qfRoundEnded = false;
-    let lastRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
+    let lastRound: IEarlyAccessRound | IQfRound = {} as
+      | IEarlyAccessRound
+      | IQfRound;
     let pastRoundNumber = 1;
     allRoundData.forEach(round => {
       const { __typename, startDate, endDate } = round;

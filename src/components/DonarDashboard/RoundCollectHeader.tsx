@@ -25,7 +25,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const remainingTime = useRemainingTime(' ', info?.endDate);
-  const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+  let { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   const { data: POLPrice } = useFetchTokenPrice();
 
   currentRound =
@@ -48,19 +48,33 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
         const totalCollectedAmount =
           cumulativeAmount + totalDonationAmountInRound;
 
-        if (type === 'qacc') {
-          setAmountDonatedInRound(totalCollectedAmount);
+        if (info.__typename === 'QfRound' && POLPrice) {
+          setMaxPOLCap(
+            info.roundUSDCloseCapPerProject /
+              (activeRoundDetails?.tokenPrice || POLPrice) -
+              cumulativeAmount,
+          );
+          setAmountDonatedInRound(totalDonationAmountInRound);
         } else {
+          setMaxPOLCap(
+            info.cumulativeUSDCapPerProject /
+              (activeRoundDetails?.tokenPrice || POLPrice!),
+          );
           setAmountDonatedInRound(totalCollectedAmount);
         }
       }
 
-      if (POLPrice) {
-        setMaxPOLCap(
-          info.cumulativeUSDCapPerProject /
-            (activeRoundDetails?.tokenPrice || POLPrice),
-        );
-      }
+      // if (POLPrice) {
+      //   if (info.__typename === 'QfRound') {
+      //     setMaxPOLCap(
+      //       info.roundUSDCloseCapPerProject /
+      //         (activeRoundDetails?.tokenPrice || POLPrice) -
+      //         30000,
+      //     );
+      //   } else {
+
+      //   }
+      // }
     };
 
     if (projectId) {
@@ -118,7 +132,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           </div>
           <div className='flex gap-2 items-center'>
             <span className='text-gray-400'>
-              {type === 'qacc' ? 'Cumulative this round' : 'Total'}
+              {type === 'qacc' ? 'Collected this round' : 'Total'}
             </span>
             <span className='text-base'>
               {formatAmount(amountDonatedInRound)} POL
@@ -138,9 +152,15 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           <span className='text-base'>{formatAmount(maxPOLCap)} POL</span>
           <div className='text-xs text-gray-500'>
             ${' '}
-            {formatAmount(
-              maxPOLCap * (activeRoundDetails?.tokenPrice || POLPrice || 1),
-            )}
+            {POLPrice
+              ? formatAmount(
+                  Math.floor(
+                    maxPOLCap *
+                      (activeRoundDetails?.tokenPrice || POLPrice) *
+                      100,
+                  ) / 100,
+                )
+              : '---'}
           </div>
         </div>
       </div>
