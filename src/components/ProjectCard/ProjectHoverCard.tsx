@@ -80,9 +80,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
         let tempprogress = 0;
         if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((amountDonatedInRound / capAmount) * 100 * 100) / 100;
-          setProgress(tempprogress);
+          tempprogress = tempprogress =
+            (totalDonationAmountInRound / maxPOLCap) * 100;
+          const truncatedProgress = Math.floor(tempprogress * 100) / 100;
+          setProgress(truncatedProgress);
         }
       }
     };

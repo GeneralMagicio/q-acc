@@ -37,14 +37,12 @@ const DonateSection = () => {
           await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
         setMaxPOLCap(capAmount);
-        console.log(totalDonationAmountInRound, '----------------------');
 
         let tempprogress = 0;
         if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
+          tempprogress = (totalDonationAmountInRound / maxPOLCap) * 100;
+          const truncatedProgress = Math.floor(tempprogress * 100) / 100;
+          setProgress(truncatedProgress);
         }
       }
     };
