@@ -26,6 +26,7 @@ export const GET_ALL_ROUNDS = `
         tokenPrice
         cumulativeUSDCapPerProject
         cumulativeUSDCapPerUserPerProject
+        roundUSDCloseCapPerProject
       }
     }
   }
@@ -60,6 +61,7 @@ export const GET_ACTIVE_ROUND = `
           tokenPrice
           cumulativeUSDCapPerProject
           cumulativeUSDCapPerUserPerProject
+          roundUSDCloseCapPerProject
         }
       }
     }
