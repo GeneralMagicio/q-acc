@@ -9,6 +9,7 @@ import Routes from '@/lib/constants/Routes';
 import { IconChevronRight } from '../Icons/IconChevronRight';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 const projectCardStyle = 'w-80 md:w-96';
 const swiperSlideStyle = '!w-auto px-2 py-6';
@@ -16,7 +17,10 @@ const navigationStyle =
   'cursor-pointer rounded-full px-3 py-2 h-10 w-12 mx-2 select-none shadow-[0_3px_20px_0_rgba(83,38,236,0.13)]';
 
 export const FeaturedProjects = () => {
-  const { data: allProjects, isLoading } = useFetchAllProjects();
+  const { data: allProjects, isLoading: isLoadingProjects } =
+    useFetchAllProjects();
+  const { data: activeRoundDetails, isLoading: isLoadingActiveRound } =
+    useFetchActiveRoundDetails();
 
   const pagElRef = useRef<HTMLDivElement>(null);
   const nextElRef = useRef<HTMLDivElement>(null);
@@ -25,12 +29,18 @@ export const FeaturedProjects = () => {
   //Please don't remove this
   const [_, setSwiperInstance] = useState<SwiperClass>();
 
+  const title = isLoadingActiveRound
+    ? 'Welcome'
+    : activeRoundDetails?.__typename === 'QfRound'
+      ? 'Welcome to q/acc round'
+      : 'Welcome to early access';
+
+  console.log('activeRoundDetails', activeRoundDetails);
+
   return (
     <div className='bg-white py-10'>
       <div className='container flex flex-col md:flex-row justify-between items-center mb-10'>
-        <h3 className='text-3xl text-gray-400 font-bold'>
-          Welcome to Early Access
-        </h3>
+        <h3 className='text-3xl text-gray-400 font-bold'>{title}</h3>
         <div className='flex gap-2 items-center justify-center'>
           <div ref={prevElRef} className={navigationStyle}>
             <IconPointerLeft size={24} />
@@ -75,7 +85,7 @@ export const FeaturedProjects = () => {
             slidesPerView={'auto'}
             spaceBetween={4}
           >
-            {isLoading ? (
+            {isLoadingProjects ? (
               <h1>Loading Projects...</h1>
             ) : (
               allProjects?.projects.map(project => (
