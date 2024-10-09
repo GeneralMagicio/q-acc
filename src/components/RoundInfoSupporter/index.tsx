@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { RemainingTime } from './RemainingTime';
