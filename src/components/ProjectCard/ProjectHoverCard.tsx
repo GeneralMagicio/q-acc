@@ -11,7 +11,7 @@ import { checkUserOwnsNFT } from '@/helpers/token';
 import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
@@ -53,7 +53,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     );
     if (project?.id) {
       const fetchProjectDonations = async () => {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(project?.id),
           1000,
           0,

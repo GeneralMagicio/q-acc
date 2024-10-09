@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import { useFetchProjectById } from '@/hooks/useFetchProjectById';
 import {
   formatDateMonthDayYear,
@@ -53,7 +53,7 @@ const ProjectSupportTable = ({
   useEffect(() => {
     const fetchProjectDonations = async () => {
       if (projectId) {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(projectId),
           itemPerPage,
           page * itemPerPage,
