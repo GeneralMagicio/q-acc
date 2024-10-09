@@ -99,7 +99,10 @@ const DonateSection = () => {
             </div>
             <ProgressBar progress={progress} isStarted={false} />
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
-              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#A5ADBF] text-xs'>
+                {' '}
+                Cumulative Round Cap
+              </span>
               <span className='text-[#1D1E1F]'>
                 {formatAmount(maxPOLCap)} POL
               </span>

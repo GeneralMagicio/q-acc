@@ -665,7 +665,7 @@ const DonatePageBody = () => {
 
           {/* Percentage Bar */}
 
-          <div className='flex flex-col gap-2 '>
+          <div className='flex flex-col gap-2  px-4 py-4 bg-[#F7F7F9] rounded-lg'>
             <div
               className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
             >
@@ -686,7 +686,10 @@ const DonatePageBody = () => {
             </div>
             <ProgressBar progress={progress} isStarted={false} />
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
-              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#A5ADBF] text-xs'>
+                {' '}
+                Cumulative Round Cap
+              </span>
               <span className='text-[#1D1E1F]'>
                 {formatAmount(maxPOLCap)} POL
               </span>
