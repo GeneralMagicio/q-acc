@@ -33,8 +33,15 @@ export const calculateCapAmount = async (
         ? maxPOLAmount - cumulativeAmount
         : maxPOLAmount;
 
-    return { capAmount, totalDonationAmountInRound };
+    const flooredCapAmount = Math.floor(capAmount * 100) / 100;
+    const flooredTotalDonation =
+      Math.floor(totalDonationAmountInRound * 100) / 100;
+    return {
+      capAmount: flooredCapAmount,
+      totalDonationAmountInRound: flooredTotalDonation,
+    };
   }
+  const flooredMaxPOLAmount = Math.floor(maxPOLAmount * 100) / 100;
 
-  return { capAmount: maxPOLAmount, totalDonationAmountInRound: 0 };
+  return { capAmount: flooredMaxPOLAmount, totalDonationAmountInRound: 0 };
 };

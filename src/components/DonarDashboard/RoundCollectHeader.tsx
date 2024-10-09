@@ -49,17 +49,18 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           cumulativeAmount + totalDonationAmountInRound;
 
         if (info.__typename === 'QfRound' && POLPrice) {
-          setMaxPOLCap(
+          const capAmount =
             info.roundUSDCloseCapPerProject /
               (activeRoundDetails?.tokenPrice || POLPrice) -
-              cumulativeAmount,
-          );
+            cumulativeAmount;
+
+          setMaxPOLCap(Math.floor(capAmount * 100) / 100);
           setAmountDonatedInRound(totalDonationAmountInRound);
         } else {
-          setMaxPOLCap(
+          const capAmount =
             info.cumulativeUSDCapPerProject /
-              (activeRoundDetails?.tokenPrice || POLPrice!),
-          );
+            (activeRoundDetails?.tokenPrice || POLPrice!);
+          setMaxPOLCap(Math.floor(capAmount * 100) / 100);
           setAmountDonatedInRound(totalCollectedAmount);
         }
       }
@@ -154,7 +155,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
             ${' '}
             {POLPrice
               ? formatAmount(
-                  Math.floor(
+                  Math.round(
                     maxPOLCap *
                       (activeRoundDetails?.tokenPrice || POLPrice) *
                       100,

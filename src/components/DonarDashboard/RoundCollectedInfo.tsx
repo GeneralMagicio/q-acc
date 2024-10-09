@@ -108,7 +108,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
           </span>
           <div className='text-xs text-gray-500'>
             ${' '}
-            {formatAmount(Math.floor(maxPOLCap * info.tokenPrice * 100) / 100)}
+            {formatAmount(Math.round(maxPOLCap * info.tokenPrice * 100) / 100)}
           </div>
         </div>
       </div>
