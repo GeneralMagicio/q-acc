@@ -121,6 +121,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
+  const polPriceNumber = Number(POLPrice);
+
   return (
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
@@ -221,14 +223,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </div>
                     <div className='flex gap-1 items-center'>
                       <p className='text-sm text-[#4F576A] font-medium'>
-                        ~${' '}
-                        {Number(POLPrice) &&
-                          formatNumber(
-                            Number(POLPrice) * tokenPriceRange.min,
-                          )}{' '}
-                        -
-                        {Number(POLPrice) &&
-                          formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                        ~$
+                        {polPriceNumber
+                          ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                          : ''}
                       </p>
                     </div>
                   </div>
