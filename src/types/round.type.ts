@@ -25,4 +25,5 @@ export interface IQfRound {
   tokenPrice: number;
   cumulativeUSDCapPerProject: number;
   cumulativeUSDCapPerUserPerProject: number;
+  roundUSDCloseCapPerProject: number;
 }
