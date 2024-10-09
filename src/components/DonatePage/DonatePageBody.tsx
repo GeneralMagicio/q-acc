@@ -120,11 +120,11 @@ const DonatePageBody = () => {
         setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
         console.log('Remaining Donation Limit', remainingDonationAmount);
         let tempprogress = 0;
+        console.log(maxPOLCap, totalDonationAmountInRound, '============');
         if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
+          tempprogress = (totalDonationAmountInRound / maxPOLCap) * 100;
+          const truncatedProgress = Math.floor(tempprogress * 100) / 100;
+          setProgress(truncatedProgress);
         }
       }
     };
