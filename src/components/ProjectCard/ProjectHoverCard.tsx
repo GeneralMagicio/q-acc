@@ -143,7 +143,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : 'bottom-[-80px] '}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
           <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
@@ -178,71 +178,77 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {/* Percentage Bar */}
-            <div className='flex flex-col gap-2'>
-              <div
-                className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
-              >
-                {progress === 0
-                  ? 'Getting started !'
-                  : progress !== 100
-                    ? progress + '% collected'
-                    : 'Maxed out this round!'}
-              </div>
-              <ProgressBar progress={progress} isStarted={false} />
-            </div>
-
-            <div>
-              <div className='flex gap-2 items-center pb-1'>
-                {/* {getIpfsAddress(project.abc?.icon!)} */}
-
-                <img
-                  className='w-6 h-6 rounded-full'
-                  src={getIpfsAddress(
-                    project.abc?.icon! ||
-                      'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                  )}
-                />
-
-                {/* <IconABC /> */}
-                <p className='text-gray-800 font-medium'>
-                  {project?.abc?.tokenTicker} range
-                </p>
-              </div>
-              <div className='mt-1 flex justify-between'>
-                <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                  <p className='font-bold text-gray-800'>
-                    {tokenPriceRange.min.toFixed(2)} -{' '}
-                    {tokenPriceRange.max.toFixed(2)}
-                  </p>
-                  <p className='text-xs text-gray-400'> POL</p>
+            {activeRoundDetails && (
+              <>
+                {/* Percentage Bar */}
+                <div className='flex flex-col gap-2'>
+                  <div
+                    className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+                  >
+                    {progress === 0
+                      ? 'Getting started !'
+                      : progress !== 100
+                        ? progress + '% collected'
+                        : 'Maxed out this round!'}
+                  </div>
+                  <ProgressBar progress={progress} isStarted={false} />
                 </div>
-                <div className='flex gap-1 items-center'>
-                  <p className='text-sm text-[#4F576A] font-medium'>
-                    ~${' '}
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                    -
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-                  </p>
+
+                <div>
+                  <div className='flex gap-2 items-center pb-1'>
+                    {/* {getIpfsAddress(project.abc?.icon!)} */}
+
+                    <img
+                      className='w-6 h-6 rounded-full'
+                      src={getIpfsAddress(
+                        project.abc?.icon! ||
+                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                      )}
+                    />
+
+                    {/* <IconABC /> */}
+                    <p className='text-gray-800 font-medium'>
+                      {project?.abc?.tokenTicker} range
+                    </p>
+                  </div>
+                  <div className='mt-1 flex justify-between'>
+                    <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                      <p className='font-bold text-gray-800'>
+                        {tokenPriceRange.min.toFixed(2)} -{' '}
+                        {tokenPriceRange.max.toFixed(2)}
+                      </p>
+                      <p className='text-xs text-gray-400'> POL</p>
+                    </div>
+                    <div className='flex gap-1 items-center'>
+                      <p className='text-sm text-[#4F576A] font-medium'>
+                        ~${' '}
+                        {Number(POLPrice) &&
+                          formatNumber(
+                            Number(POLPrice) * tokenPriceRange.min,
+                          )}{' '}
+                        -
+                        {Number(POLPrice) &&
+                          formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                <Button
+                  color={ButtonColor.Pink}
+                  className={`w-full justify-center opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
+                  onClick={handleSupport}
+                  disabled={
+                    remainingTime === 'Time is up!' ||
+                    remainingTime === '--:--:--' ||
+                    maxPOLCap === amountDonatedInRound
+                  }
+                >
+                  Support This Project
+                </Button>
+              </>
+            )}
           </div>
-
-          <Button
-            color={ButtonColor.Pink}
-            className={`w-full justify-center mt-4 opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
-            onClick={handleSupport}
-            disabled={
-              remainingTime === 'Time is up!' ||
-              remainingTime === '--:--:--' ||
-              maxPOLCap === amountDonatedInRound
-            }
-          >
-            Support This Project
-          </Button>
         </div>
       </div>
     </div>
