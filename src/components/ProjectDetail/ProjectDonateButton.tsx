@@ -121,7 +121,7 @@ const ProjectDonateButton = () => {
   let currentState = 'early';
   return (
     <div className='flex flex-col gap-4'>
-      {PriceInfo()}
+      {activeRoundDetails && PriceInfo()}
       {currentState === EDonationCardStates.beforeFirstRound ? (
         <Button
           color={ButtonColor.Pink}
