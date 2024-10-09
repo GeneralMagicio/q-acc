@@ -49,32 +49,20 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
           cumulativeAmount + totalDonationAmountInRound;
 
         if (info.__typename === 'QfRound' && POLPrice) {
-          setMaxPOLCap(
+          const capAmount =
             info.roundUSDCloseCapPerProject /
               (activeRoundDetails?.tokenPrice || POLPrice) -
-              cumulativeAmount,
-          );
+            cumulativeAmount;
+          setMaxPOLCap(Math.trunc(capAmount * 100) / 100);
           setAmountDonatedInRound(totalDonationAmountInRound);
         } else {
-          setMaxPOLCap(
+          const capAmount =
             info.cumulativeUSDCapPerProject /
-              (activeRoundDetails?.tokenPrice || POLPrice!),
-          );
+            (activeRoundDetails?.tokenPrice || POLPrice!);
+          setMaxPOLCap(Math.trunc(capAmount * 100) / 100);
           setAmountDonatedInRound(totalCollectedAmount);
         }
       }
-
-      // if (POLPrice) {
-      //   if (info.__typename === 'QfRound') {
-      //     setMaxPOLCap(
-      //       info.roundUSDCloseCapPerProject /
-      //         (activeRoundDetails?.tokenPrice || POLPrice) -
-      //         30000,
-      //     );
-      //   } else {
-
-      //   }
-      // }
     };
 
     if (projectId) {
@@ -82,7 +70,8 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
     }
   }, [amountDonatedInRound, info, projectId, maxPOLCap]);
 
-  const percentage = ((amountDonatedInRound / maxPOLCap) * 100).toFixed(2);
+  const percentage = (amountDonatedInRound / maxPOLCap) * 100;
+  const truncatedProgress = Math.round(percentage * 100) / 100;
   const title = type === 'ea' ? `Early Access Window` : `q/acc round`;
 
   return (
@@ -120,7 +109,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
       <div className='flex flex-col justify-between gap-2  font-redHatText w-full md:w-fit'>
         <div className='flex text-xs font-medium items-center justify-between md:w-[400px]'>
           <div className='p-[2px] rounded-md flex gap-1'>
-            {percentage}% Collected
+            {truncatedProgress}% Collected
             <div className='relative group'>
               <IconTokenSchedule />
               <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -154,7 +143,7 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
             ${' '}
             {POLPrice
               ? formatAmount(
-                  Math.floor(
+                  Math.round(
                     maxPOLCap *
                       (activeRoundDetails?.tokenPrice || POLPrice) *
                       100,
