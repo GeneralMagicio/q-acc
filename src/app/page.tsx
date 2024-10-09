@@ -1,11 +1,14 @@
 'use client';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import { Banner } from '@/components/Banner';
 import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
 import About from '@/components/About';
 import { RoundInfoSupporter } from '@/components/RoundInfoSupporter';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { isProductReleased } from '@/config/configuration';
+import Routes from '@/lib/constants/Routes';
 
 const roundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -31,7 +34,8 @@ export default function Home() {
     useFetchActiveRoundDetails();
 
   const isEarlyAccess = activeRoundDetails?.__typename === 'EarlyAccessRound';
-  return (
+
+  return isProductReleased ? (
     <main className='flex flex-col gap-4'>
       <Banner
         title1='the future of'
@@ -191,5 +195,7 @@ export default function Home() {
       <FeaturedProjects />
       <Collaborator />
     </main>
+  ) : (
+    redirect(Routes.KycLanding)
   );
 }

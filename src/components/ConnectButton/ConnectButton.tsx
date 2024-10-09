@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useState, type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { isProductReleased } from '@/config/configuration';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -105,12 +106,14 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             <span className='text-[#E1458D] '>Change Wallet</span>
           </div>
           <div className='flex flex-col gap-4'>
-            <Link
-              href={'/dashboard'}
-              className='p-2 hover:bg-[#F7F7F9] rounded-lg'
-            >
-              My Account
-            </Link>
+            {isProductReleased && (
+              <Link
+                href={'/dashboard'}
+                className='p-2 hover:bg-[#F7F7F9] rounded-lg'
+              >
+                My Account
+              </Link>
+            )}
             <Link
               href={'mailto:qacc@giveth.io'}
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
