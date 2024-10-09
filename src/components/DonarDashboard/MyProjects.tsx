@@ -20,7 +20,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear, isMiddleOfThePeriod } from '@/helpers/date';
 import config from '@/config/configuration';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import {
   calculateTotalDonations,
   calculateUniqueDonors,
@@ -37,6 +37,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -73,6 +74,7 @@ const MyProjects = () => {
     pastRoundNumber: 1,
   });
   const { data: allRoundData } = useFetchAllRound();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -145,7 +147,7 @@ const MyProjects = () => {
   useEffect(() => {
     if (projectData?.id) {
       const fetchProjectDonations = async () => {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(projectData?.id),
           1000,
           0,
@@ -306,41 +308,42 @@ const MyProjects = () => {
                 </span>
               </div>
             </div>
-
-            <div className='flex gap-1 items-center'>
-              <img
-                className='w-6 h-6 rounded-full'
-                src={getIpfsAddress(
-                  projectData?.abc?.icon! ||
-                    'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                )}
-              />
-              {projectData?.abc?.tokenTicker} range
-              <div className='relative group'>
-                <IconTokenSchedule />
-                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  The mint value of the ABC token will be within this range,
-                  based on the amount of POL this project receives.
+            {activeRoundDetails && (
+              <>
+                <div className='flex gap-1 items-center'>
+                  <img
+                    className='w-6 h-6 rounded-full'
+                    src={getIpfsAddress(
+                      projectData?.abc?.icon! ||
+                        'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                    )}
+                  />
+                  {projectData?.abc?.tokenTicker} range
+                  <div className='relative group'>
+                    <IconTokenSchedule />
+                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                      The mint value of the ABC token will be within this range,
+                      based on the amount of POL this project receives.
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
-              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                {tokenPriceRange.min.toFixed(2)} -{' '}
-                {tokenPriceRange.max.toFixed(2)}
-                <span className='text-gray-400 text-xs'>POL</span>
-              </div>
-              <div className='w-[20%] text-gray-400 text-right font-medium'>
-                ~${' '}
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                -{' '}
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-              </div>
-            </div>
-
+                <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
+                  <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
+                    {tokenPriceRange.min.toFixed(2)} -{' '}
+                    {tokenPriceRange.max.toFixed(2)}
+                    <span className='text-gray-400 text-xs'>POL</span>
+                  </div>
+                  <div className='w-[20%] text-gray-400 text-right font-medium'>
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                    -{' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                  </div>
+                </div>
+              </>
+            )}
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b'>
               <div className='flex gap-2'>
                 <IconTotalSupply />
