@@ -5,6 +5,9 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 export const isProductReleased =
   process.env.NEXT_PUBLIC_IS_PRODUCT_RELEASE === 'true';
 
+console.log('isProductReleased', isProductReleased);
+console.log('isProduction', isProduction);
+
 const envConfig = isProduction ? production : development;
 const config = {
   ...envConfig,
