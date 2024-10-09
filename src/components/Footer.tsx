@@ -6,6 +6,7 @@ import { IconXSocial } from './Icons/IconXSocial';
 import { IconFarcaster } from './Icons/IconFarcaster';
 import Routes from '@/lib/constants/Routes';
 import { IconMirror } from './Icons/IconMirror';
+import { isProductReleased } from '@/config/configuration';
 
 const Hide_Footer_Items_Routes = [Routes.KycLanding];
 
@@ -17,12 +18,12 @@ export const Footer: React.FC = () => {
     {
       label: 'Home',
       href: Routes.Home,
-      shouldDisplay: !shouldHideFooterItems,
+      shouldDisplay: !shouldHideFooterItems && isProductReleased,
     },
     {
       label: 'Projects',
       href: Routes.AllProjects,
-      shouldDisplay: !shouldHideFooterItems,
+      shouldDisplay: !shouldHideFooterItems && isProductReleased,
     },
     {
       label: 'About q/acc',

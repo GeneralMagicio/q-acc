@@ -1,8 +1,11 @@
 'use client';
 import React from 'react';
 import { useAccount } from 'wagmi';
+import { redirect } from 'next/navigation';
 import DashboardIndex from '@/components/DonarDashboard/DashboardIndex';
 import { ConnectModal } from '@/components/ConnectModal';
+import { isProductReleased } from '@/config/configuration';
+import Routes from '@/lib/constants/Routes';
 
 const Dashboard = () => {
   const { address, isConnected } = useAccount();
@@ -18,10 +21,12 @@ const Dashboard = () => {
       </>
     );
   }
-  return (
+  return isProductReleased ? (
     <div>
       <DashboardIndex />
     </div>
+  ) : (
+    redirect(Routes.KycLanding)
   );
 };
 
