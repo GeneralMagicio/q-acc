@@ -24,7 +24,7 @@ const ProjectDonateButton = () => {
   const [loadingNFTCheck, setLoadingNFTCheck] = useState(true);
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
-  const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
@@ -38,7 +38,13 @@ const ProjectDonateButton = () => {
           await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
         setMaxPOLCap(capAmount);
-        setAmountDonatedInRound(totalDonationAmountInRound);
+        let tempprogress = 0;
+        if (maxPOLCap > 0) {
+          tempprogress =
+            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+            100;
+          setProgress(tempprogress);
+        }
       }
     };
 
@@ -138,7 +144,7 @@ const ProjectDonateButton = () => {
             disabled={
               (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
                 !ownsNFT) ||
-              amountDonatedInRound >= maxPOLCap ||
+              progress >= 100 ||
               remainingTime === 'Time is up!' ||
               remainingTime === '--:--:--'
             }
@@ -146,7 +152,7 @@ const ProjectDonateButton = () => {
           >
             {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
               ? 'Support This Project'
-              : amountDonatedInRound >= maxPOLCap
+              : progress >= 100
                 ? 'Project Maxed Out'
                 : 'Support This Project'}
           </Button>
