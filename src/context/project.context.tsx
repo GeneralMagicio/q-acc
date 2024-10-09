@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { fetchProjectBySlug } from '@/services/project.service';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import {
   calculateTotalDonations,
   calculateUniqueDonors,
@@ -52,7 +52,7 @@ export const ProjectProvider = ({
   useEffect(() => {
     if (projectData?.id) {
       const fetchProjectDonations = async () => {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(projectData?.id),
           1000,
           0,

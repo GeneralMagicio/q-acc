@@ -21,11 +21,7 @@ import {
 } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
-import {
-  fetchDonationStatus,
-  formatAmount,
-  formatNumber,
-} from '@/helpers/donation';
+import { formatAmount, formatNumber } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
@@ -85,7 +81,6 @@ const DonatePageBody = () => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
-  const [donationStatus, setDonationStatus] = useState<string>('');
   const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
     null,
   );
@@ -228,25 +223,6 @@ const DonatePageBody = () => {
     }
   }, [isConfirmed, hasSavedDonation]);
 
-  useEffect(() => {
-    if (isConfirmed && hash) {
-      const checkDonationStatus = async () => {
-        const donation = await fetchDonationStatus(Number(user?.id), hash);
-        if (donation?.status === 'verified') {
-          setDonationStatus(DonationStatus.Verified);
-          clearInterval(interval);
-          // Stop the polling when verified
-        } else {
-          setDonationStatus(donation?.status || DonationStatus.Pending);
-        }
-        console.log('Current donation', donation);
-      };
-
-      const interval = setInterval(checkDonationStatus, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [isConfirmed, hash]);
-
   const getTokenDetails = async () => {
     if (!address) return;
     const data = await fetchTokenDetails({
@@ -278,7 +254,6 @@ const DonatePageBody = () => {
   };
 
   const handleDonate = async () => {
-    setDonationStatus(DonationStatus.Pending);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -299,7 +274,6 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
-      setDonationStatus('');
     }
   };
 
@@ -383,7 +357,7 @@ const DonatePageBody = () => {
     setTerms(isChecked);
   };
 
-  if (donationStatus === DonationStatus.Verified) {
+  if (isConfirmed) {
     return (
       <DonateSuccessPage
         transactionHash={hash}
@@ -450,9 +424,7 @@ const DonatePageBody = () => {
                 onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
-                disabled={
-                  isConfirming || donationStatus === DonationStatus.Pending
-                }
+                disabled={isConfirming}
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
               />
 
@@ -573,9 +545,7 @@ const DonatePageBody = () => {
             <Button
               onClick={handleDonateClick}
               disabled={!isConnected}
-              loading={
-                isConfirming || donationStatus === DonationStatus.Pending
-              }
+              loading={isConfirming}
               color={ButtonColor.Giv}
               className={`text-white justify-center ${
                 !donateDisabled

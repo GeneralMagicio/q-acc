@@ -75,9 +75,11 @@ const ProjectDetail = () => {
 
           <DonateSection />
         </div>
-        <div className='my-6'>
-          <RoundCountBanner projectMaxedOut={progress >= 100} />
-        </div>
+        {activeRoundDetails && (
+          <div className='my-6'>
+            <RoundCountBanner projectMaxedOut={progress >= 100} />
+          </div>
+        )}
       </div>
 
       <ProjectTabs activeTab={activeTab} slug={projectData?.slug} />

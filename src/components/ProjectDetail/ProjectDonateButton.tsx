@@ -121,7 +121,7 @@ const ProjectDonateButton = () => {
   let currentState = 'early';
   return (
     <div className='flex flex-col gap-4'>
-      {PriceInfo()}
+      {activeRoundDetails && PriceInfo()}
       {currentState === EDonationCardStates.beforeFirstRound ? (
         <Button
           color={ButtonColor.Pink}
@@ -151,17 +151,19 @@ const ProjectDonateButton = () => {
                 : 'Support This Project'}
           </Button>
 
-          {activeRoundDetails?.__typename === 'QfRound' ? (
-            ''
-          ) : !ownsNFT ? (
-            <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
-              Missing early access NFT
-            </span>
-          ) : (
-            <span className='text-[#2EA096] p-1 rounded-full bg-[#D2FFFB] text-xs px-2 text-center font-medium'>
-              You are on the early access list
-            </span>
-          )}
+          {activeRoundDetails ? (
+            activeRoundDetails.__typename === 'EarlyAccessRound' ? (
+              !ownsNFT ? (
+                <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
+                  Missing early access NFT
+                </span>
+              ) : (
+                <span className='text-[#2EA096] p-1 rounded-full bg-[#D2FFFB] text-xs px-2 text-center font-medium'>
+                  You are on the early access list
+                </span>
+              )
+            ) : null
+          ) : null}
         </>
       )}
     </div>

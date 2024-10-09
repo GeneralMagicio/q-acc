@@ -7,7 +7,7 @@ import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 
 import { formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
@@ -48,7 +48,7 @@ const ProjectDonationTable = () => {
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
-      const data = await fecthProjectDonationsById(
+      const data = await fetchProjectDonationsById(
         parseInt(projectData?.id),
         itemPerPage,
         page * itemPerPage,
