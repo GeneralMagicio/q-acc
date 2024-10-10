@@ -16,8 +16,15 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://sepolia.base.org',
   privadoConfig: {
     chain: polygonZkEvmCardona,
+    chainName: 'zkevm_cardona',
+    allowedIssuers: [
+      'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
+    ],
     contractAddress: '0xdE9eBC446d69EF9a876a377e3E3cEe91d08fE2A0',
     requestId: 34,
+    webWalletBaseUrl: 'https://wallet-dev.privado.id',
+    verifierDid:
+      'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
   },
 };
 
