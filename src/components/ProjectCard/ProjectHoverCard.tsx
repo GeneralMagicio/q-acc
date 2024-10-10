@@ -113,11 +113,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     router.push(`/project/${project.slug}`);
   };
 
-  // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18);
-
   const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
@@ -127,7 +124,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
     >
-      <NFTModal isOpen={isModalOpen} onClose={closeModal} />
+      <NFTModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        showCloseButton={true}
+      />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}

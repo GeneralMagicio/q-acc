@@ -1,4 +1,7 @@
-import { fetchProjectRoundRecords } from '@/services/round.services';
+import {
+  fetchAllRoundDetails,
+  fetchProjectRoundRecords,
+} from '@/services/round.services';
 
 export const calculateCapAmount = async (
   activeRoundDetails: any,
@@ -37,4 +40,15 @@ export const calculateCapAmount = async (
   }
 
   return { capAmount: maxPOLAmount, totalDonationAmountInRound: 0 };
+};
+
+export const getMostRecentEndRound = async () => {
+  const allRounds = await fetchAllRoundDetails();
+  const now = new Date();
+  const endedRounds = allRounds?.filter(round => new Date(round.endDate) < now);
+  endedRounds?.sort(
+    (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+  );
+
+  return endedRounds!.length > 0 ? endedRounds![0] : null;
 };
