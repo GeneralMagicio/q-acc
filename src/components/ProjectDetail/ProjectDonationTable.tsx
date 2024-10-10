@@ -187,9 +187,13 @@ const ProjectDonationTable = () => {
                       </div>
                     </div>
                     <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                      {donation.rewardTokenAmount || '---'}
-                      {'  '}
-                      {projectData?.abc?.tokenTicker}
+                      {donation.rewardTokenAmount
+                        ? formatAmount(
+                            Math.round(donation.rewardTokenAmount * 100) / 100,
+                          ) +
+                          ' ' +
+                          projectData?.abc?.tokenTicker
+                        : '-'}
                     </div>
                   </div>
                 ))}
