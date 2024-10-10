@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Banner } from '@/components/Banner';
@@ -9,6 +10,8 @@ import { RoundInfoSupporter } from '@/components/RoundInfoSupporter';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
+
+import { getMostRecentEndRound } from '@/helpers/round';
 
 const roundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -33,7 +36,24 @@ export default function Home() {
   const { data: activeRoundDetails, isLoading: isLoadingActiveROund } =
     useFetchActiveRoundDetails();
 
-  const isEarlyAccess = activeRoundDetails?.__typename === 'EarlyAccessRound';
+  const isEarlyAccess = false; //activeRoundDetails?.__typename === 'EarlyAccessRound';
+
+  const [isRoundEnded, setIsRoundEnded] = useState(false);
+
+  useEffect(() => {
+    const fetchMostRecentEndRound = async () => {
+      const res = await getMostRecentEndRound();
+
+      return res?.__typename === 'QfRound';
+    };
+
+    const getData = async () => {
+      const data = await fetchMostRecentEndRound();
+      setIsRoundEnded(data);
+    };
+
+    getData();
+  }, [activeRoundDetails, isRoundEnded]);
 
   return isProductReleased ? (
     <main className='flex flex-col gap-4'>
@@ -51,38 +71,67 @@ export default function Home() {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-          {activeRoundDetails && <RoundInfoSupporter />}
+          {isRoundEnded ? '' : <RoundInfoSupporter />}
+
+          <h1 className='text-5xl text-gray-900 font-bold my-6'>
+            Welcome to q/acc Season 1
+          </h1>
           <div>
-            <h1 className='text-5xl text-gray-900 font-bold my-6'>
-              Welcome to q/acc Season 1
-            </h1>
-            <p>
-              The q/acc protocol provides a community-first, fair launch for
-              projects ready to tokenize and share their value creation with
-              their community of supporters. We believe in a future where
-              community-owned protocols are abundant and mainstream.
-            </p>
+            {isRoundEnded ? (
+              <p>
+                We're currently between seasons, but don't worry—the next
+                opportunity to support q/acc projects is just around the corner.
+              </p>
+            ) : (
+              <p>
+                The q/acc protocol provides a community-first, fair launch for
+                projects ready to tokenize and share their value creation with
+                their community of supporters. We believe in a future where
+                community-owned protocols are abundant and mainstream.
+              </p>
+            )}
+
             <br />
-            <p>
-              If you’ve been invited by a project to their early access period,
-              you’re in the right place.
-              <br />
-              Here’s what you need to know:
-            </p>
+
+            {isRoundEnded ? (
+              <>
+                <p>
+                  {' '}
+                  In the meantime, you can explore q/acc projects’ tokens
+                  available on{' '}
+                  <span className='text-[#E1458D] font-bold'>Quickswap</span>.
+                </p>
+                <br />
+                <p> Stay tuned for the next q/acc season!</p>
+              </>
+            ) : (
+              <p>
+                If you’ve been invited by a project to their early access
+                period, you’re in the right place.
+                <br />
+                Here’s what you need to know:
+              </p>
+            )}
           </div>
 
-          <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
-            <h1 className='text-gray-800 text-2xl font-bold'>
-              🔐 Private Chat
-            </h1>
-            <p>
-              You already have access to the project’s token-gated chat using
-              the early access NFT sent to your wallet address by the project.
-              Drop by to meet the team.
-            </p>
-          </div>
+          {isRoundEnded ? (
+            ''
+          ) : (
+            <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
+              <h1 className='text-gray-800 text-2xl font-bold'>
+                🔐 Private Chat
+              </h1>
+              <p>
+                You already have access to the project’s token-gated chat using
+                the early access NFT sent to your wallet address by the project.
+                Drop by to meet the team.
+              </p>
+            </div>
+          )}
 
-          {isEarlyAccess ? (
+          {isRoundEnded ? (
+            ''
+          ) : isEarlyAccess ? (
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
               <h1 className='text-gray-800 text-2xl font-bold'>
                 📅 Early Access Mint Rounds
@@ -171,24 +220,28 @@ export default function Home() {
             </div>
           )}
 
-          <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
-            <h1 className='text-gray-800 text-2xl font-bold'>🪪 KYC</h1>
-            <p>
-              You will be asked to complete a zero knowledge KYC before you
-              support a project during the mint rounds. This step mitigates
-              Sybil attacks and prevents prohibited actors from participating.
-              It is fast and easy: find the step-by-step instructions on how to
-              complete KYC in our{' '}
-              <a
-                className='text-[#E1458D] font-semibold'
-                target='_blank'
-                href='https://giveth.notion.site/Quadratic-Acceleration-q-acc-Knowledge-Hub-4752f35fee2a47fe9e29556dbcfe6883'
-              >
-                Knowledge Hub
-              </a>
-              .
-            </p>
-          </div>
+          {isRoundEnded ? (
+            ''
+          ) : (
+            <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
+              <h1 className='text-gray-800 text-2xl font-bold'>🪪 KYC</h1>
+              <p>
+                You will be asked to complete a zero knowledge KYC before you
+                support a project during the mint rounds. This step mitigates
+                Sybil attacks and prevents prohibited actors from participating.
+                It is fast and easy: find the step-by-step instructions on how
+                to complete KYC in our{' '}
+                <a
+                  className='text-[#E1458D] font-semibold'
+                  target='_blank'
+                  href='https://giveth.notion.site/Quadratic-Acceleration-q-acc-Knowledge-Hub-4752f35fee2a47fe9e29556dbcfe6883'
+                >
+                  Knowledge Hub
+                </a>
+                .
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <About />
