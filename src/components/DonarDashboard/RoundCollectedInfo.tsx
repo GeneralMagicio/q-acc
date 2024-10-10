@@ -4,7 +4,6 @@ import { formatAmount } from '@/helpers/donation';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { calculateCapAmount } from '@/helpers/round';
 import useRemainingTime from '@/hooks/useRemainingTime';
-import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 interface IRoundCollectedInfoProps {
   info: IEarlyAccessRound | IQfRound;
@@ -25,7 +24,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
     const updatePOLCap = async () => {
       if (info) {
         const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(info, Number(projectId));
+          await calculateCapAmount(info, Number(projectId), true);
         setMaxPOLCap(capAmount);
         setAmountDonatedInRound(totalDonationAmountInRound);
       }
@@ -39,7 +38,8 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
   const endData =
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
 
-  const percentage = ((amountDonatedInRound / maxPOLCap) * 100).toFixed(2);
+  const percentage = (amountDonatedInRound / maxPOLCap) * 100;
+  const truncatedProgress = Math.floor(percentage * 100) / 100;
   const title =
     info.__typename === 'EarlyAccessRound'
       ? `Early Access - Round ${info.roundNumber}`
@@ -81,15 +81,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
       <div className='flex flex-col justify-between gap-2  font-redHatText  w-full md:w-fit '>
         <div className='flex gap-2 text-xs font-medium items-center justify-between  md:w-[400px]'>
           <div className='bg-white p-[2px] rounded-md flex gap-1'>
-            {percentage}% Collected
-            <div className='relative group'>
-              <IconTokenSchedule />
-              <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                Every round has a round limit. This is the % of the current
-                round limit that has been collected. Once it reaches 100%, the
-                round will close
-              </div>
-            </div>
+            {truncatedProgress}% Collected
           </div>
 
           <div className='flex gap-2 items-center'>
@@ -103,7 +95,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
         <div className='h-2 bg-gray-200 rounded-lg overflow-hidden'>
           <div
             className={`h-full ${currentRound ? 'bg-giv-500' : 'bg-gray-500'}`}
-            style={{ width: `${percentage}%` }}
+            style={{ width: `${truncatedProgress}%` }}
           ></div>
         </div>
 
@@ -115,7 +107,7 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
             {formatAmount(Math.floor(maxPOLCap * 100) / 100)} POL
           </span>
           <div className='text-xs text-gray-500'>
-            ~${' '}
+            ${' '}
             {formatAmount(Math.floor(maxPOLCap * info.tokenPrice * 100) / 100)}
           </div>
         </div>

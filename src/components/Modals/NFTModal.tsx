@@ -1,16 +1,14 @@
 import { type FC } from 'react';
 import Link from 'next/link';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Modal, { BaseModalProps } from '../Modal';
 
-interface ConnectModalProps extends BaseModalProps {}
+interface ConnectModalProps extends BaseModalProps {
+  showCloseButton?: boolean;
+}
 
-export const NFTModal: FC<ConnectModalProps> = props => {
-  const { onClose } = props;
-  const { open } = useWeb3Modal();
-
+export const NFTModal: FC<ConnectModalProps> = ({ ...props }) => {
   return (
-    <Modal {...props} title='Uh-oh!' showCloseButton>
+    <Modal {...props} title='Uh-oh!'>
       <div className='flex flex-col gap-5 '>
         <h1 className='text-[#1D1E1F] font-bold text-[25px]'>
           Missing Required NFT

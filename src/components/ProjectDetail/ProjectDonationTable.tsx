@@ -7,7 +7,7 @@ import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 
 import { formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
@@ -48,7 +48,7 @@ const ProjectDonationTable = () => {
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
-      const data = await fecthProjectDonationsById(
+      const data = await fetchProjectDonationsById(
         parseInt(projectData?.id),
         itemPerPage,
         page * itemPerPage,
@@ -187,9 +187,13 @@ const ProjectDonationTable = () => {
                       </div>
                     </div>
                     <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                      {donation.rewardTokenAmount || '---'}
-                      {'  '}
-                      {projectData?.abc?.tokenTicker}
+                      {donation.rewardTokenAmount
+                        ? formatAmount(
+                            Math.round(donation.rewardTokenAmount * 100) / 100,
+                          ) +
+                          ' ' +
+                          projectData?.abc?.tokenTicker
+                        : '-'}
                     </div>
                   </div>
                 ))}

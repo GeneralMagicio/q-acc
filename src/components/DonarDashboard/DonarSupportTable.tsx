@@ -4,7 +4,7 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { useProjectContext } from '@/context/project.context';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
@@ -46,7 +46,7 @@ const DonarSupportTable = () => {
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
-      const data = await fecthProjectDonationsById(
+      const data = await fetchProjectDonationsById(
         parseInt('43'),
         itemPerPage,
         page * itemPerPage,

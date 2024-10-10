@@ -10,7 +10,7 @@ import {
   GET_USER_DONATIONS_COUNT,
 } from '@/queries/user.query';
 
-export const fecthProjectDonationsById = async (
+export const fetchProjectDonationsById = async (
   projectId: number,
   take: number,
   skip: number,

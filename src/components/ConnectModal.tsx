@@ -6,7 +6,6 @@ import { Button } from './Button';
 interface ConnectModalProps extends BaseModalProps {}
 
 export const ConnectModal: FC<ConnectModalProps> = props => {
-  const { onClose } = props;
   const { open } = useWeb3Modal();
 
   return (
