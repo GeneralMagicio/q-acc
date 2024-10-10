@@ -15,8 +15,15 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://mainnet.base.org',
   privadoConfig: {
     chain: polygonZkEvm,
-    contractAddress: '0x',
-    requestId: 1,
+    chainName: 'zkevm',
+    contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
+    allowedIssuers: [
+      'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
+    ],
+    requestId: 10,
+    webWalletBaseUrl: 'https://wallet.privado.id',
+    verifierDid:
+      'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
   },
 };
 

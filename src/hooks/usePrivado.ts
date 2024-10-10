@@ -7,9 +7,18 @@ import { CHECK_USER_PRIVADO_VERIFIED_STATE } from '@/queries/project.query';
 import { useFetchUser } from './useFetchUser';
 import { KYC_EXCLUDED_COUNTRIES } from '@/lib/constants/privado';
 
+const {
+  chain,
+  contractAddress,
+  requestId,
+  chainName,
+  allowedIssuers,
+  webWalletBaseUrl,
+  verifierDid,
+} = config.privadoConfig;
+
 export const usePrivadoChainStatus = ({ disable }: { disable: boolean }) => {
   const { address } = useAccount();
-  const { chain, contractAddress, requestId } = config.privadoConfig;
   const publicClient = createPublicClient({
     chain: chain,
     transport: http(),
@@ -87,9 +96,7 @@ const verifyAccount = () => {
         circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
         id: config.privadoConfig.requestId,
         query: {
-          allowedIssuers: [
-            'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
-          ],
+          allowedIssuers: allowedIssuers,
           context:
             'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
           type: 'AnimaProofOfIdentity',
@@ -100,18 +107,17 @@ const verifyAccount = () => {
           },
         },
         params: {
-          nullifierSessionId: config.privadoConfig.requestId,
+          nullifierSessionId: config.privadoConfig.requestId.toString(),
         },
       },
     ],
-    verifierDid:
-      'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
+    verifierDid,
     transactionData: {
-      contractAddress: '0xdE9eBC446d69EF9a876a377e3E3cEe91d08fE2A0',
+      contractAddress,
       functionName: 'submitZKPResponse',
       methodId: '0xb68967e2',
-      chainId: 2442,
-      network: 'zkevm_cardona',
+      chainId: chain.id,
+      network: chainName,
     },
   };
 
@@ -123,9 +129,7 @@ const verifyAccount = () => {
   );
 
   // Open the Polygon ID Verification Web Wallet with the encoded verification request
-  window.open(
-    `https://wallet-dev.privado.id/#${base64EncodedVerificationRequest}`,
-  );
+  window.open(`${webWalletBaseUrl}/#${base64EncodedVerificationRequest}`);
 };
 export const usePrivado = () => {
   const userFetch = useFetchUser();

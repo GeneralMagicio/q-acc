@@ -33,7 +33,9 @@ export const FeaturedProjects = () => {
     ? 'Welcome'
     : activeRoundDetails?.__typename === 'QfRound'
       ? 'Welcome to q/acc round'
-      : 'Welcome to early access';
+      : activeRoundDetails?.__typename === 'EarlyAccessRound'
+        ? 'Welcome to early access'
+        : '';
 
   console.log('activeRoundDetails', activeRoundDetails);
 
