@@ -107,11 +107,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     router.push(`/project/${project.slug}`);
   };
 
-  // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18);
-
   const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
