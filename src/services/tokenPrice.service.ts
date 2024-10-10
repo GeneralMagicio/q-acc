@@ -1,5 +1,11 @@
 import { useMemo } from 'react';
-import { ethers, BigNumberish, Contract, formatUnits } from 'ethers';
+import {
+  ethers,
+  BigNumberish,
+  Contract,
+  formatUnits,
+  parseUnits,
+} from 'ethers';
 import { useQuery } from '@tanstack/react-query';
 import config from '@/config/configuration';
 
@@ -49,6 +55,19 @@ export const useTokenPriceRange = ({
     if (!contractAddress) return null;
     return new Contract(contractAddress, abi, provider);
   }, [contractAddress]);
+  const staticPriceForBuying = useQuery<BigNumberish, Error>({
+    queryKey: ['getStaticPriceForBuying', contractAddress],
+    queryFn: async () => {
+      if (!contract) throw new Error('Contract not loaded');
+      const result: BigNumberish = await contract.getStaticPriceForBuying();
+      return result;
+    },
+    enabled: !!contract,
+    select: data => Number(data), // Convert BigNumber to number
+  });
+
+  const minPrice =
+    parseFloat((staticPriceForBuying.data || '0').toString()) / 1_000_000; // convert PPM to price in POL
 
   // Fetch `getVirtualCollateralSupply` (total contributed so far)
   const virtualCollateralSupply = useQuery<BigNumberish, Error>({
@@ -73,30 +92,23 @@ export const useTokenPriceRange = ({
     queryKey: ['calculatePurchaseReturn', X.toString(), contractAddress],
     queryFn: async () => {
       if (!contract) throw new Error('Contract not loaded');
-      const result: BigNumberish = await contract.calculatePurchaseReturn(X);
+      const result: BigNumberish = await contract.calculatePurchaseReturn(
+        parseUnits(X.toString(), 18),
+      );
       return result;
     },
     enabled: !!contract && !!X,
-    select: data => Number(data), // Convert BigNumber to number
+    select: data => Number(formatUnits(data, 18)),
   });
 
-  const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
-  // Calculate the max token price (P = X / Y)
-  const maxPrice = X / Y;
-
-  const staticPriceForBuying = useQuery<BigNumberish, Error>({
-    queryKey: ['getStaticPriceForBuying', contractAddress],
-    queryFn: async () => {
-      if (!contract) throw new Error('Contract not loaded');
-      const result: BigNumberish = await contract.getStaticPriceForBuying();
-      return result;
-    },
-    enabled: !!contract,
-    select: data => Number(data), // Convert BigNumber to number
-  });
-
-  const minPrice =
-    parseFloat((staticPriceForBuying.data || '0').toString()) / 1_000_000; // convert PPM to price in POL
+  let maxPrice = minPrice;
+  if (calculatePurchaseReturn.data) {
+    const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
+    // Calculate the max token price (P = X / Y)
+    console.log('X:', X, 'Y:', Y);
+    maxPrice = X / Y;
+    console.log('max price:', maxPrice);
+  }
 
   return { min: minPrice, max: maxPrice };
 };
