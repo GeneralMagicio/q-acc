@@ -3,7 +3,7 @@ import { EnvConfig } from '@/types/config.type';
 
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygonZkEvm] as const,
-  SCAN_URL: 'https://basescan.org/',
+  SCAN_URL: 'https://zkevm.polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x9Cc1c42e4525ba4116d7948741ccA9C7446596b2',
   ERC_TOKEN_SYMBOL: 'POL',
   GRAPHQL_ENDPOINT:

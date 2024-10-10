@@ -8,8 +8,8 @@ export interface IEarlyAccessRound {
   roundUSDCapPerProject: number;
   roundUSDCapPerUserPerProject: number;
   tokenPrice: number;
-  cumulativeCapPerProject: number;
-  cumulativeCapPerUserPerProject: number;
+  cumulativeUSDCapPerProject: number;
+  cumulativeUSDCapPerUserPerProject: number;
 }
 
 export interface IQfRound {
@@ -23,6 +23,7 @@ export interface IQfRound {
   roundUSDCapPerProject: number;
   roundUSDCapPerUserPerProject: number;
   tokenPrice: number;
-  cumulativeCapPerProject: number;
-  cumulativeCapPerUserPerProject: number;
+  cumulativeUSDCapPerProject: number;
+  cumulativeUSDCapPerUserPerProject: number;
+  roundUSDCloseCapPerProject: number;
 }

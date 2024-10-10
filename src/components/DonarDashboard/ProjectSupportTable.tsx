@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import { useFetchProjectById } from '@/hooks/useFetchProjectById';
 import {
   formatDateMonthDayYear,
@@ -53,7 +53,7 @@ const ProjectSupportTable = ({
   useEffect(() => {
     const fetchProjectDonations = async () => {
       if (projectId) {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(projectId),
           itemPerPage,
           page * itemPerPage,
@@ -127,7 +127,7 @@ const ProjectSupportTable = ({
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px]'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full  border-b-2  font-medium text-[#1D1E1F] items-center min-w-[150px] justify-center'>
               Token
               <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
                 <IconSort size={16} />
@@ -190,29 +190,33 @@ const ProjectSupportTable = ({
                     </span>
                   </div>
                 </div>
-                <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {formatAmount(donation.rewardTokenAmount) || '---'}
-                  {'  '}
-                  {projectData?.abc?.tokenTicker}
+                <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
+                  {donation?.rewardTokenAmount
+                    ? formatAmount(donation.rewardTokenAmount) +
+                      ' ' +
+                      donation.project.abc.tokenTicker
+                    : '-'}
                 </div>
-                <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {donation.earlyAccessRound
+                <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
+                  {donation.rewardStreamStart
                     ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
-                    : getDifferenceFromPeriod(donation.createdAt, 0.5)}
+                    : '-'}
                 </div>
-                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                  <div className='flex flex-col'>
-                    <div className='flex gap-1 items-center'>
+                <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px] justify-center'>
+                  {donation.rewardStreamStart !== null &&
+                  donation.rewardStreamEnd !== null ? (
+                    <div className='flex flex-col'>
                       <span className='font-medium'>
-                        {formatDateMonthDayYear(donation.rewardStreamStart)} End
+                        {formatDateMonthDayYear(donation.rewardStreamEnd)} End
+                      </span>
+                      <span className='text-xs font-medium text-[#A5ADBF]'>
+                        Starts on{' '}
+                        {formatDateMonthDayYear(donation.rewardStreamStart)}
                       </span>
                     </div>
-
-                    <span className='text-xs font-medium  text-[#A5ADBF]'>
-                      Starts on{' '}
-                      {formatDateMonthDayYear(donation.rewardStreamEnd)}
-                    </span>
-                  </div>
+                  ) : (
+                    '-'
+                  )}
                 </div>
               </div>
             ))}

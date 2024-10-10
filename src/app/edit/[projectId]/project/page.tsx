@@ -1,7 +1,9 @@
 'use client';
-import { useParams } from 'next/navigation';
+import { redirect, useParams } from 'next/navigation';
 
 import EditProjectForm from '@/components/EditForm/EditProjectForm';
+import { isProductReleased } from '@/config/configuration';
+import Routes from '@/lib/constants/Routes';
 
 export default function CreateProjectPage() {
   const params = useParams();
@@ -9,5 +11,9 @@ export default function CreateProjectPage() {
     ? parseInt(params.projectId[0])
     : parseInt(params.projectId);
 
-  return <EditProjectForm projectId={projectId} />;
+  return isProductReleased ? (
+    <EditProjectForm projectId={projectId} />
+  ) : (
+    redirect(Routes.KycLanding)
+  );
 }

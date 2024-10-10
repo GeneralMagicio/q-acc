@@ -40,10 +40,10 @@ const ProjectDetail = () => {
 
         let tempprogress = 0;
         if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
+          tempprogress = tempprogress =
+            (totalDonationAmountInRound / maxPOLCap) * 100;
+          const truncatedProgress = Math.floor(tempprogress * 100) / 100;
+          setProgress(truncatedProgress);
         }
       }
     };
@@ -75,9 +75,11 @@ const ProjectDetail = () => {
 
           <DonateSection />
         </div>
-        <div className='my-6'>
-          <RoundCountBanner projectMaxedOut={progress >= 100} />
-        </div>
+        {activeRoundDetails && (
+          <div className='my-6'>
+            <RoundCountBanner projectMaxedOut={progress >= 100} />
+          </div>
+        )}
       </div>
 
       <ProjectTabs activeTab={activeTab} slug={projectData?.slug} />

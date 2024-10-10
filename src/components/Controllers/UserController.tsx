@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import {
   fetchGivethUserInfo,
   checkUserIsWhiteListed,
@@ -14,6 +14,7 @@ import Routes from '@/lib/constants/Routes';
 import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { IUser } from '@/types/user.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { isProductReleased } from '@/config/configuration';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -50,6 +51,10 @@ export const UserController = () => {
         console.log('No user in giveth data');
         setShowCompleteProfileModal(true);
       }
+    }
+
+    if (!isProductReleased) {
+      return redirect(Routes.KycLanding);
     }
 
     // Check if user is whitelisted

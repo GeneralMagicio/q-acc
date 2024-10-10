@@ -1,17 +1,55 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button, ButtonColor } from '../Button';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useDonateContext } from '@/context/donation.context';
 import config from '@/config/configuration';
+import { fetchDonationStatus } from '@/helpers/donation';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { IconTransactionVerified } from '../Icons/IconTransactionVerified';
+import { IconPendingSpinner } from '../Icons/IconPendingSpinner';
 
-interface transactionHashType {
+interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
   round?: string;
 }
-const DonateSuccessPage = (props: transactionHashType) => {
+export enum DonationStatus {
+  Verified = 'verified',
+  Pending = 'pending',
+}
+const DonateSuccessPage: FC<IDonateSuccessPage> = ({
+  transactionHash,
+  round,
+}) => {
   const { projectData } = useDonateContext();
+  const [donationStatus, setDonationStatus] = useState<string>(
+    DonationStatus.Pending,
+  );
+  const { data: user } = useFetchUser();
+
+  useEffect(() => {
+    if (transactionHash) {
+      const checkDonationStatus = async () => {
+        const donation = await fetchDonationStatus(
+          Number(user?.id),
+          transactionHash,
+        );
+        if (donation?.status === 'verified') {
+          setDonationStatus(DonationStatus.Verified);
+          clearInterval(interval);
+          // Stop the polling when verified
+        } else {
+          setDonationStatus(donation?.status || DonationStatus.Pending);
+        }
+        console.log('Current donation', donation);
+      };
+
+      const interval = setInterval(checkDonationStatus, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [transactionHash]);
+
   return (
     <div className='bg-[#F7F7F9] w-full h-screen  py-10 absolute z-40 my-20'>
       <div className='container w-full flex  flex-col gap-14 '>
@@ -43,7 +81,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
           {/* Your are Giver Now */}
           <div className='w-full bg-white lg:w-1/2 lg:rounded-r-xl  flex flex-col gap-8 p-10 shadow-xl min-h-[450px] '>
             <div
-              className='w-full h-[288px] flex flex-col gap-8  '
+              className='w-full min-h-[288px] flex flex-col gap-8  '
               style={{
                 backgroundImage: "url('/images/successbg.png')",
               }}
@@ -57,6 +95,27 @@ const DonateSuccessPage = (props: transactionHashType) => {
                 schedule and claim unlocked tokens once the unlock stream has
                 started. 
               </p>
+
+              {donationStatus === DonationStatus.Pending ? (
+                <div className='p-4 flex flex-col gap-2 font-redHatText  rounded-lg bg-[#FFF] shadow-tabShadow'>
+                  <h1 className=' text-[#0A91FE] font-medium flex gap-1 items-center'>
+                    Transaction being processed <IconPendingSpinner />
+                  </h1>
+                  <span className='text-[#4F576A]'>
+                    We received your contribution, we just need a bit to process
+                    it.
+                  </span>
+                </div>
+              ) : (
+                <div className='p-4 flex flex-col gap-2 font-redHatText  rounded-lg bg-[#FFF] shadow-tabShadow'>
+                  <h1 className=' text-[#37B4A9] font-medium flex gap-1 items-center'>
+                    It's done <IconTransactionVerified size={16} />
+                  </h1>
+                  <span className='text-[#4F576A]'>
+                    Your transaction has been verified and completely processed.
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Token Lock Schedule */}
@@ -70,7 +129,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                     <h3 className='font-bold'>Token Lock Schedule</h3>
-                    {props.round === 'early'
+                    {round === 'EarlyAccessRound'
                       ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.`
                       : `Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens will unlock in a stream over the following 6 months.`}
                   </div>
@@ -78,7 +137,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
               </div>
               <hr />
               <h2 className='text-[#4F576A]'>
-                {props.round === 'early'
+                {round === 'EarlyAccessRound'
                   ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. `
                   : 'Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens are locked for 6 months and unlocked in a 6 month stream.'}
               </h2>
@@ -107,7 +166,7 @@ const DonateSuccessPage = (props: transactionHashType) => {
           <div className='text-xl font-redHatText'>
             <h3 className='text-[#82899A] flex gap-2'>
               <a
-                href={`${config.SCAN_URL}/tx/${props.transactionHash}`}
+                href={`${config.SCAN_URL}/tx/${transactionHash}`}
                 target='_blank'
               >
                 <span className='text-[#E1458D] text-xl flex gap-2'>

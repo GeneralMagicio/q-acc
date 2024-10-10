@@ -21,11 +21,7 @@ import {
 } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
 import { getIpfsAddress } from '@/helpers/image';
-import {
-  fetchDonationStatus,
-  formatAmount,
-  formatNumber,
-} from '@/helpers/donation';
+import { formatAmount, formatNumber } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
@@ -85,7 +81,6 @@ const DonatePageBody = () => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
-  const [donationStatus, setDonationStatus] = useState<string>('');
   const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
     null,
   );
@@ -172,9 +167,6 @@ const DonatePageBody = () => {
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
-  // const totalSupply = totalPol * 0.125;
-  let round = 'early';
-
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
@@ -204,7 +196,7 @@ const DonatePageBody = () => {
   }, [terms, isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
-    if (round === 'early') {
+    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
       const message =
         'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
       const toolTip =
@@ -221,7 +213,7 @@ const DonatePageBody = () => {
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
         transactionNetworkId: chain?.id,
-        amount: parseInt(inputAmount),
+        amount: parseFloat(inputAmount),
         token,
         transactionId: hash,
         tokenAddress,
@@ -230,25 +222,6 @@ const DonatePageBody = () => {
       setHasSavedDonation(true);
     }
   }, [isConfirmed, hasSavedDonation]);
-
-  useEffect(() => {
-    if (isConfirmed && hash) {
-      const checkDonationStatus = async () => {
-        const donation = await fetchDonationStatus(Number(user?.id), hash);
-        if (donation?.status === 'verified') {
-          setDonationStatus(DonationStatus.Verified);
-          clearInterval(interval);
-          // Stop the polling when verified
-        } else {
-          setDonationStatus(donation?.status || DonationStatus.Pending);
-        }
-        console.log('Current donation', donation);
-      };
-
-      const interval = setInterval(checkDonationStatus, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [isConfirmed, hash]);
 
   const getTokenDetails = async () => {
     if (!address) return;
@@ -281,12 +254,11 @@ const DonatePageBody = () => {
   };
 
   const handleDonate = async () => {
-    setDonationStatus(DonationStatus.Pending);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
         chain?.id!,
-        parseInt(inputAmount),
+        parseFloat(inputAmount),
         config.ERC_TOKEN_SYMBOL,
         projectData?.addresses[0].address,
         tokenAddress,
@@ -302,7 +274,6 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
-      setDonationStatus('');
     }
   };
 
@@ -386,8 +357,13 @@ const DonatePageBody = () => {
     setTerms(isChecked);
   };
 
-  if (donationStatus === DonationStatus.Verified) {
-    return <DonateSuccessPage transactionHash={hash} round={round} />;
+  if (isConfirmed) {
+    return (
+      <DonateSuccessPage
+        transactionHash={hash}
+        round={activeRoundDetails?.__typename}
+      />
+    );
   }
   const percentages = [25, 50, 100];
   return (
@@ -448,9 +424,7 @@ const DonatePageBody = () => {
                 onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
-                disabled={
-                  isConfirming || donationStatus === DonationStatus.Pending
-                }
+                disabled={isConfirming}
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
               />
 
@@ -458,8 +432,10 @@ const DonatePageBody = () => {
                 ~ ${' '}
                 {inputAmount === ''
                   ? 0
-                  : Math.floor(
-                      parseFloat(inputAmount) * Number(POLPrice) * 100,
+                  : Math.round(
+                      parseFloat(inputAmount) *
+                        Number(activeRoundDetails?.tokenPrice) *
+                        100,
                     ) / 100}
               </span>
             </div>
@@ -569,9 +545,7 @@ const DonatePageBody = () => {
             <Button
               onClick={handleDonateClick}
               disabled={!isConnected}
-              loading={
-                isConfirming || donationStatus === DonationStatus.Pending
-              }
+              loading={isConfirming}
               color={ButtonColor.Giv}
               className={`text-white justify-center ${
                 !donateDisabled
@@ -661,7 +635,7 @@ const DonatePageBody = () => {
 
           {/* Percentage Bar */}
 
-          <div className='flex flex-col gap-2 '>
+          <div className='flex flex-col gap-2  px-4 py-4 bg-[#F7F7F9] rounded-lg'>
             <div
               className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
             >
@@ -682,7 +656,10 @@ const DonatePageBody = () => {
             </div>
             <ProgressBar progress={progress} isStarted={false} />
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
-              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#A5ADBF] text-xs'>
+                {' '}
+                Cumulative Round Cap
+              </span>
               <span className='text-[#1D1E1F]'>
                 {formatAmount(maxPOLCap)} POL
               </span>
@@ -772,7 +749,7 @@ const DonatePageBody = () => {
         </div>
       </div>
 
-      {round === 'early' ? (
+      {activeRoundDetails?.__typename === 'EarlyAccessRound' ? (
         ''
       ) : (
         <div className='flex flex-col items-center  gap-6 mt-20 p-5 font-redHatText'>
