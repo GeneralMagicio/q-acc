@@ -36,10 +36,17 @@ export const calculateCapAmount = async (
         ? maxPOLAmount - cumulativeAmount
         : maxPOLAmount;
 
-    return { capAmount, totalDonationAmountInRound };
-  }
+    const truncatedCapAmount = Math.trunc(capAmount * 100) / 100;
+    const truncatedTotalDonation =
+      Math.trunc(totalDonationAmountInRound * 100) / 100;
 
-  return { capAmount: maxPOLAmount, totalDonationAmountInRound: 0 };
+    return {
+      capAmount: truncatedCapAmount,
+      totalDonationAmountInRound: truncatedTotalDonation,
+    };
+  }
+  const truncatedMaxPOLAmount = Math.trunc(maxPOLAmount * 100) / 100;
+  return { capAmount: truncatedMaxPOLAmount, totalDonationAmountInRound: 0 };
 };
 
 export const getMostRecentEndRound = async () => {

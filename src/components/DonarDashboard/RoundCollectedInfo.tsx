@@ -39,7 +39,8 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
     info.__typename === 'EarlyAccessRound' ? info.endDate : info.endDate;
 
   const percentage = (amountDonatedInRound / maxPOLCap) * 100;
-  const truncatedProgress = Math.floor(percentage * 100) / 100;
+  const truncatedProgress = Math.round(percentage * 100) / 100;
+
   const title =
     info.__typename === 'EarlyAccessRound'
       ? `Early Access - Round ${info.roundNumber}`
@@ -104,11 +105,11 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
             {info.roundNumber === 1 ? 'Round Cap' : 'Cumulative Round Cap'}
           </div>
           <span className='text-base text-[#1D1E1F] font-medium'>
-            {formatAmount(Math.floor(maxPOLCap * 100) / 100)} POL
+            {formatAmount(Math.round(maxPOLCap * 100) / 100)} POL
           </span>
           <div className='text-xs text-gray-500'>
             ${' '}
-            {formatAmount(Math.floor(maxPOLCap * info.tokenPrice * 100) / 100)}
+            {formatAmount(Math.round(maxPOLCap * info.tokenPrice * 100) / 100)}
           </div>
         </div>
       </div>
