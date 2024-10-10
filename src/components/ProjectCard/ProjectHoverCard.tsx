@@ -124,7 +124,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
     >
-      <NFTModal isOpen={isModalOpen} onClose={closeModal} />
+      <NFTModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        showCloseButton={true}
+      />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
