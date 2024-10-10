@@ -11,7 +11,11 @@ export type EnvConfig = {
   NETWORK_RPC_ADDRESS: string;
   privadoConfig: {
     chain: Chain;
+    chainName: string;
     contractAddress: Address;
     requestId: number;
+    allowedIssuers: string[];
+    webWalletBaseUrl: string;
+    verifierDid: string;
   };
 };
