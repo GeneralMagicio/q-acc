@@ -102,7 +102,8 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                     Transaction being processed <IconPendingSpinner />
                   </h1>
                   <span className='text-[#4F576A]'>
-                    We received your support, we just need a bit to process it.
+                    We received your contribution, we just need a bit to process
+                    it.
                   </span>
                 </div>
               ) : (
