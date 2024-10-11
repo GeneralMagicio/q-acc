@@ -8,6 +8,10 @@ export const isProductReleased =
 console.log('isProductReleased', isProductReleased);
 console.log('isProduction', isProduction);
 
+if (!isProduction) {
+  console.log('Running in development mode');
+}
+
 const envConfig = isProduction ? production : development;
 const config = {
   ...envConfig,
