@@ -20,7 +20,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear, isMiddleOfThePeriod } from '@/helpers/date';
 import config from '@/config/configuration';
-import { fecthProjectDonationsById } from '@/services/donation.services';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 import {
   calculateTotalDonations,
   calculateUniqueDonors,
@@ -35,6 +35,9 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { RoundCollectHeader } from './RoundCollectHeader';
+import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -56,15 +59,22 @@ const MyProjects = () => {
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
   const [filteredRoundData, setFilteredRoundData] = useState<{
-    activeRound: IEarlyAccessRound;
-    notActiveRounds: (IEarlyAccessRound | IQfRound)[];
+    activeRound: IEarlyAccessRound | IQfRound;
+    pastRounds: (IEarlyAccessRound | IQfRound)[];
+    roundType: string;
+    lastRound: IEarlyAccessRound | IQfRound;
+    qfRoundEnded: boolean;
+    pastRoundNumber: number;
   }>({
-    activeRound: {} as IEarlyAccessRound,
-    notActiveRounds: [],
+    activeRound: {} as IEarlyAccessRound | IQfRound,
+    pastRounds: [],
+    roundType: '',
+    lastRound: {} as IEarlyAccessRound | IQfRound,
+    qfRoundEnded: false,
+    pastRoundNumber: 1,
   });
   const { data: allRoundData } = useFetchAllRound();
-
-  console.log({ projectData });
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -75,27 +85,69 @@ const MyProjects = () => {
 
   useEffect(() => {
     if (!allRoundData) return;
-    let activeRound: IEarlyAccessRound | IQfRound = {} as IEarlyAccessRound;
-    let notActiveRounds: (IEarlyAccessRound | IQfRound)[] = [];
+
+    let activeRound: IEarlyAccessRound | IQfRound = {} as
+      | IEarlyAccessRound
+      | IQfRound;
+    let pastRounds: (IEarlyAccessRound | IQfRound)[] = [];
+    let roundType = 'ea';
+    let qfRoundEnded = false;
+    let lastRound: IEarlyAccessRound | IQfRound = {} as
+      | IEarlyAccessRound
+      | IQfRound;
+    let pastRoundNumber = 1;
     allRoundData.forEach(round => {
+      const { __typename, startDate, endDate } = round;
+
+      // Update last round if it's an EarlyAccessRound
+      if (__typename === 'EarlyAccessRound') {
+        lastRound = round;
+      }
+
+      // Check if the round is active
+      let isActive = isMiddleOfThePeriod(startDate, endDate);
       if (
-        (round.__typename === 'EarlyAccessRound' &&
-          isMiddleOfThePeriod(round.startDate, round.endDate)) ||
-        (round.__typename === 'QfRound' &&
-          isMiddleOfThePeriod(round.startDate, round.endDate))
+        (__typename === 'EarlyAccessRound' && isActive) ||
+        (__typename === 'QfRound' && isActive)
       ) {
         activeRound = round;
-      } else {
-        notActiveRounds.push(round);
+        roundType = __typename;
+        console.log('active', activeRound);
+      }
+
+      // Push past EarlyAccessRounds to pastRounds
+      const hasEnded = new Date(endDate) < new Date();
+      if (__typename === 'EarlyAccessRound' && (hasEnded || isActive)) {
+        pastRounds.push(round);
+        pastRoundNumber = round.roundNumber;
+      }
+
+      // Check if a QfRound has ended
+      if (__typename === 'QfRound' && hasEnded) {
+        activeRound = round;
+        qfRoundEnded = true;
       }
     });
-    setFilteredRoundData({ activeRound, notActiveRounds });
+
+    // Sort past rounds by endDate in descending order
+    pastRounds.sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+    );
+
+    setFilteredRoundData({
+      activeRound,
+      pastRounds,
+      roundType,
+      lastRound,
+      qfRoundEnded,
+      pastRoundNumber,
+    });
   }, [allRoundData]);
 
   useEffect(() => {
     if (projectData?.id) {
       const fetchProjectDonations = async () => {
-        const data = await fecthProjectDonationsById(
+        const data = await fetchProjectDonationsById(
           parseInt(projectData?.id),
           1000,
           0,
@@ -132,6 +184,10 @@ const MyProjects = () => {
       handleSearchClick();
     }
   };
+
+  const tributeReceived = useProjectCollateralFeeCollected({
+    contractAddress: projectData?.abc?.fundingManagerAddress,
+  }).collectedFees;
 
   if (!userWhiteListed) {
     return (
@@ -252,41 +308,42 @@ const MyProjects = () => {
                 </span>
               </div>
             </div>
-
-            <div className='flex gap-1 items-center'>
-              <img
-                className='w-6 h-6 rounded-full'
-                src={getIpfsAddress(
-                  projectData?.abc?.icon! ||
-                    'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                )}
-              />
-              {projectData?.abc?.tokenTicker} range
-              <div className='relative group'>
-                <IconTokenSchedule />
-                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  The mint value of the ABC token will be within this range,
-                  based on the amount of POL this project receives.
+            {activeRoundDetails && (
+              <>
+                <div className='flex gap-1 items-center'>
+                  <img
+                    className='w-6 h-6 rounded-full'
+                    src={getIpfsAddress(
+                      projectData?.abc?.icon! ||
+                        'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                    )}
+                  />
+                  {projectData?.abc?.tokenTicker} range
+                  <div className='relative group'>
+                    <IconTokenSchedule />
+                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                      The mint value of the ABC token will be within this range,
+                      based on the amount of POL this project receives.
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
-              <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                {tokenPriceRange.min.toFixed(2)} -{' '}
-                {tokenPriceRange.max.toFixed(2)}
-                <span className='text-gray-400 text-xs'>POL</span>
-              </div>
-              <div className='w-[20%] text-gray-400 text-right font-medium'>
-                ~${' '}
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                -{' '}
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-              </div>
-            </div>
-
+                <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
+                  <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
+                    {tokenPriceRange.min.toFixed(2)} -{' '}
+                    {tokenPriceRange.max.toFixed(2)}
+                    <span className='text-gray-400 text-xs'>POL</span>
+                  </div>
+                  <div className='w-[20%] text-gray-400 text-right font-medium'>
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                    -{' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                  </div>
+                </div>
+              </>
+            )}
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b'>
               <div className='flex gap-2'>
                 <IconTotalSupply />
@@ -316,12 +373,12 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(totalAmount)} POL
+                  {formatAmount(tributeReceived)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                    Math.round(tributeReceived * Number(POLPrice) * 100) / 100,
                   )}
                 </span>
               </div>
@@ -345,7 +402,7 @@ const MyProjects = () => {
                 </span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.mintedAmount || 0}{' '}
+                {formatAmount(projectData?.abc?.mintedAmount || 0)}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>
@@ -363,32 +420,44 @@ const MyProjects = () => {
         </div>
 
         <div className='flex flex-col gap-4'>
-          {filteredRoundData.activeRound && (
-            <RoundCollectedInfo
+          {(filteredRoundData.roundType === 'QfRound' ||
+            filteredRoundData.qfRoundEnded) && (
+            <RoundCollectHeader
+              type={'qacc'}
               info={filteredRoundData.activeRound}
-              currentRound={true}
               projectId={projectId}
-            />
+            ></RoundCollectHeader>
           )}
-          {showRoundCollected && filteredRoundData.notActiveRounds
-            ? filteredRoundData.notActiveRounds.map((round, id) => (
-                <RoundCollectedInfo
-                  key={id}
-                  info={round}
-                  projectId={projectId}
-                />
-              ))
-            : null}
-          <div
-            className='bg-gray-100 w-fit mx-auto py-3 px-4 rounded-lg flex gap-1 cursor-pointer select-none'
-            onClick={() => setShowRoundCollected(!showRoundCollected)}
-          >
-            View {showRoundCollected ? 'less' : 'all previous rounds info'}
-            {showRoundCollected ? (
-              <IconChevronUp size={24} />
-            ) : (
-              <IconChevronDown size={24} />
-            )}
+
+          <div className='flex flex-col'>
+            <RoundCollectHeader
+              type={'ea'}
+              info={filteredRoundData.lastRound}
+              projectId={projectId}
+              pastRoundNumber={filteredRoundData.pastRoundNumber}
+            ></RoundCollectHeader>
+
+            {showRoundCollected && filteredRoundData.pastRounds
+              ? filteredRoundData.pastRounds.map((round, id) => (
+                  <RoundCollectedInfo
+                    key={id}
+                    info={round}
+                    projectId={projectId}
+                    currentRound={filteredRoundData.activeRound === round}
+                  />
+                ))
+              : null}
+            <div
+              className='bg-[#D7DDEA] w-full  justify-center mx-auto py-1 px-4 rounded-b-lg flex gap-1 cursor-pointer select-none'
+              onClick={() => setShowRoundCollected(!showRoundCollected)}
+            >
+              {showRoundCollected ? 'Hide breakdown' : 'Early access breakdown'}
+              {showRoundCollected ? (
+                <IconChevronUp size={24} />
+              ) : (
+                <IconChevronDown size={24} />
+              )}
+            </div>
           </div>
         </div>
 

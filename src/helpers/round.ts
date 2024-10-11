@@ -1,13 +1,18 @@
-import { fetchProjectRoundRecords } from '@/services/round.services';
+import {
+  fetchAllRoundDetails,
+  fetchProjectRoundRecords,
+} from '@/services/round.services';
 
 export const calculateCapAmount = async (
   activeRoundDetails: any,
   projectId: number,
+  includeCumulativeAmount: boolean = false,
 ) => {
   if (!activeRoundDetails) return null;
 
   let maxPOLAmount =
-    activeRoundDetails?.cumulativeCapPerProject /
+    (activeRoundDetails?.roundUSDCloseCapPerProject ??
+      activeRoundDetails?.cumulativeUSDCapPerProject) /
     activeRoundDetails?.tokenPrice;
 
   const roundRecords = await fetchProjectRoundRecords(
@@ -21,14 +26,36 @@ export const calculateCapAmount = async (
   if (roundRecords?.length > 0) {
     const cumulativeAmount =
       roundRecords[0].cumulativePastRoundsDonationAmounts;
-    const totalDonationAmountInRound = roundRecords[0].totalDonationAmount;
 
-    const capAmount = cumulativeAmount
-      ? maxPOLAmount - cumulativeAmount
-      : maxPOLAmount;
+    const totalDonationAmountInRound = includeCumulativeAmount
+      ? roundRecords[0].totalDonationAmount
+      : roundRecords[0].totalDonationAmount + cumulativeAmount;
 
-    return { capAmount, totalDonationAmountInRound };
+    const capAmount =
+      cumulativeAmount && includeCumulativeAmount
+        ? maxPOLAmount - cumulativeAmount
+        : maxPOLAmount;
+
+    const truncatedCapAmount = Math.trunc(capAmount * 100) / 100;
+    const truncatedTotalDonation =
+      Math.trunc(totalDonationAmountInRound * 100) / 100;
+
+    return {
+      capAmount: truncatedCapAmount,
+      totalDonationAmountInRound: truncatedTotalDonation,
+    };
   }
+  const truncatedMaxPOLAmount = Math.trunc(maxPOLAmount * 100) / 100;
+  return { capAmount: truncatedMaxPOLAmount, totalDonationAmountInRound: 0 };
+};
 
-  return { capAmount: maxPOLAmount, totalDonationAmountInRound: 0 };
+export const getMostRecentEndRound = async () => {
+  const allRounds = await fetchAllRoundDetails();
+  const now = new Date();
+  const endedRounds = allRounds?.filter(round => new Date(round.endDate) < now);
+  endedRounds?.sort(
+    (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+  );
+
+  return endedRounds!.length > 0 ? endedRounds![0] : null;
 };

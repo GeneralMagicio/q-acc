@@ -15,6 +15,7 @@ import { Button, ButtonColor } from '../Button';
 import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 const DonarSuppotedProjects = ({
   projectId,
@@ -28,6 +29,7 @@ const DonarSuppotedProjects = ({
   onClickBreakdown,
 }: any) => {
   const { data: POLPrice } = useFetchTokenPrice();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -121,39 +123,44 @@ const DonarSuppotedProjects = ({
 
       {/* Project Claim and Reward */}
       <div className='flex flex-col gap-4 w-full lg:w-1/2  font-redHatText'>
-        <div className='flex items-center gap-2'>
-          <img
-            className='w-6 h-6 rounded-full'
-            src={getIpfsAddress(
-              project.abc?.icon ||
-                'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-            )}
-          />
-          <span className='text-[#4F576A] font-medium'>
-            {project.abc.tokenTicker} range
-          </span>
-          <div className='relative group'>
-            <IconTokenSchedule />
-            <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-              The mint value of the ABC token will be within this range, based
-              on the amount of POL this project receives.
+        {activeRoundDetails && (
+          <>
+            <div className='flex items-center gap-2'>
+              <img
+                className='w-6 h-6 rounded-full'
+                src={getIpfsAddress(
+                  project.abc?.icon ||
+                    'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                )}
+              />
+              <span className='text-[#4F576A] font-medium'>
+                {project.abc.tokenTicker} range
+              </span>
+              <div className='relative group'>
+                <IconTokenSchedule />
+                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                  The mint value of the ABC token will be within this range,
+                  based on the amount of POL this project receives.
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className='flex justify-between text-[#1D1E1F] font-medium'>
-          <h2 className='flex gap-1 items-center'>
-            {tokenPriceRange.min.toFixed(2)} - {tokenPriceRange.max.toFixed(2)}
-            <span className='text-[#4F576A] text-xs pb-1'>POL</span>
-          </h2>
-          <h2 className='text-[#4F576A]'>
-            ~${' '}
-            {Number(POLPrice) &&
-              formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-            -
-            {Number(POLPrice) &&
-              formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-          </h2>
-        </div>
+            <div className='flex justify-between text-[#1D1E1F] font-medium'>
+              <h2 className='flex gap-1 items-center'>
+                {tokenPriceRange.min.toFixed(2)} -{' '}
+                {tokenPriceRange.max.toFixed(2)}
+                <span className='text-[#4F576A] text-xs pb-1'>POL</span>
+              </h2>
+              <h2 className='text-[#4F576A]'>
+                ~${' '}
+                {Number(POLPrice) &&
+                  formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                -
+                {Number(POLPrice) &&
+                  formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+              </h2>
+            </div>
+          </>
+        )}
         <hr />
 
         <h1 className='flex p-[4px_16px] bg-[#EBECF2] w-fit rounded-md'>

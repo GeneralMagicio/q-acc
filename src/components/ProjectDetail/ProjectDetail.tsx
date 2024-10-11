@@ -15,6 +15,8 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
 import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { calculateCapAmount } from '@/helpers/round';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -23,12 +25,31 @@ export enum EProjectPageTabs {
 const ProjectDetail = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
-  const projectId = 1;
-
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const [progress, setProgress] = useState(0);
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
 
-  const description =
-    '<h1>The novelty of rich text has sadly wore off</h1><a href="" target="_blank">This is a link</a><p><br></p><p><img src="https://giveth.mypinata.cloud/ipfs/QmbtyYZyBLFoGSqBgYvH84Z5VQmzSoBbvBc8RvksvChmTN"></p><h2>but I can still try to cause trouble with grey-area projects</h2><p><br></p><p><strong>like this one... I mean... it has "drugs" in the title... but is that really a violation? I\'m raising money to develop drugs to help sleepy people... is that so bad</strong></p><p><br></p><p><strong class="ql-size-small">is it any different really than what the pharmaceutical industry does?</strong></p>';
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectData?.id));
+
+        setMaxPOLCap(capAmount);
+
+        let tempprogress = 0;
+        if (maxPOLCap > 0) {
+          tempprogress =
+            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+            100;
+          setProgress(tempprogress);
+        }
+      }
+    };
+
+    updatePOLCap();
+  }, [activeRoundDetails, projectData, maxPOLCap]);
 
   useEffect(() => {
     switch (searchParams.get('tab')) {
@@ -54,9 +75,11 @@ const ProjectDetail = () => {
 
           <DonateSection />
         </div>
-        <div className='my-6'>
-          <RoundCountBanner />
-        </div>
+        {activeRoundDetails && (
+          <div className='my-6'>
+            <RoundCountBanner projectMaxedOut={progress >= 100} />
+          </div>
+        )}
       </div>
 
       <ProjectTabs activeTab={activeTab} slug={projectData?.slug} />

@@ -16,7 +16,7 @@ export default function ClientLayout({
   const pathname = usePathname(); // Get the current route
 
   // Conditionally render the Header based on the route
-  const showHeader = !pathname.startsWith('/donate');
+  const showHeader = !pathname.startsWith('/support');
 
   return (
     <Web3ModalProvider initialState={initialState}>

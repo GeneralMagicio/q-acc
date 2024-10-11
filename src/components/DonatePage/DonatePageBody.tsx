@@ -1,9 +1,10 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
+import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -32,12 +33,18 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
+import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
+import { IconArrowRight } from '../Icons/IconArrowRight';
 
 interface ITokenSchedule {
   message: string;
   toolTip: string;
 }
 
+export enum DonationStatus {
+  Verified = 'verified',
+  Pending = 'pending',
+}
 const PercentageButton = ({
   percentage,
   selectedPercentage,
@@ -74,6 +81,12 @@ const DonatePageBody = () => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
+  const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
+    null,
+  );
+
+  const drawerRef = useRef<WidgetDrawer>(null);
+
   let { isVerified, isLoading, verifyAccount } = usePrivado();
   isVerified = true;
   const {
@@ -86,6 +99,7 @@ const DonatePageBody = () => {
 
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [remainingDonationAmount, setRemainingDonationAmount] = useState(0);
 
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
@@ -103,7 +117,8 @@ const DonatePageBody = () => {
           await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
         setMaxPOLCap(capAmount);
-
+        setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
+        console.log('Remaining Donation Limit', remainingDonationAmount);
         let tempprogress = 0;
         if (maxPOLCap > 0) {
           tempprogress =
@@ -119,6 +134,11 @@ const DonatePageBody = () => {
       updatePOLCap();
     }
   }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
+
+  // LIFI LOGIC
+  const toggleWidget = () => {
+    drawerRef.current?.toggleDrawer();
+  };
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -147,11 +167,6 @@ const DonatePageBody = () => {
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
-  // const totalSupply = totalPol * 0.125;
-  let round = 'early';
-
-  console.log(projectData?.addresses[0].address, projectData?.id);
-
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, chain]);
@@ -171,7 +186,8 @@ const DonatePageBody = () => {
       !(
         parseFloat(inputAmount) >= 5 &&
         parseFloat(inputAmount) <= userDonationCap
-      )
+      ) ||
+      parseFloat(inputAmount) > remainingDonationAmount
     ) {
       setDonateDisabled(true);
     } else {
@@ -180,7 +196,7 @@ const DonatePageBody = () => {
   }, [terms, isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
-    if (round === 'early') {
+    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
       const message =
         'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
       const toolTip =
@@ -197,7 +213,7 @@ const DonatePageBody = () => {
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
         transactionNetworkId: chain?.id,
-        amount: parseInt(inputAmount),
+        amount: parseFloat(inputAmount),
         token,
         transactionId: hash,
         tokenAddress,
@@ -242,7 +258,7 @@ const DonatePageBody = () => {
       await createDraftDonation(
         parseInt(projectData?.id),
         chain?.id!,
-        parseInt(inputAmount),
+        parseFloat(inputAmount),
         config.ERC_TOKEN_SYMBOL,
         projectData?.addresses[0].address,
         tokenAddress,
@@ -264,20 +280,24 @@ const DonatePageBody = () => {
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     if (!isVerified) {
-      setFlashMessage('User is not verified with Privado');
+      console.log('User is not verified with Privado');
       return;
     }
 
     if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
-      setFlashMessage('The minimum donation amount is 5.');
+      console.log('The minimum donation amount is 5.');
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
-      setFlashMessage('The donation amount exceeds the cap limit.');
+      console.log('The donation amount exceeds the cap limit.');
       return;
     }
     if (!terms) {
-      setFlashMessage('Please accept the terms and conditions.');
+      console.log('Please accept the terms and conditions.');
+      return;
+    }
+    if (parseFloat(inputAmount) > remainingDonationAmount) {
+      console.log('Input amount will exceed the round cap');
       return;
     }
     handleDonate();
@@ -295,11 +315,34 @@ const DonatePageBody = () => {
         return null;
       } else {
         // Set the new selected percentage and calculate the amount
-        const amount = (userDonationCap * percentage) / 100;
+        const amount =
+          Math.floor(((userDonationCap * percentage) / 100) * 100) / 100;
+
         setInputAmount(amount.toString());
         return percentage;
       }
     });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const regex = /^\d*\.?\d{0,2}$/;
+
+    if (regex.test(value)) {
+      setInputAmount(value);
+      const inputAmount = parseFloat(value);
+
+      if (inputAmount < 5) {
+        setInputErrorMessage('Minimum contribution: 5 POL');
+      }
+      // else if (inputAmount > userDonationCap) {
+      //   setInputErrorMessage('Amount should be less than the remaining cap');
+      // }
+      else {
+        setInputErrorMessage(null);
+      }
+    }
   };
 
   // Handle Terms checkbox change event
@@ -315,7 +358,12 @@ const DonatePageBody = () => {
   };
 
   if (isConfirmed) {
-    return <DonateSuccessPage transactionHash={hash} round={round} />;
+    return (
+      <DonateSuccessPage
+        transactionHash={hash}
+        round={activeRoundDetails?.__typename}
+      />
+    );
   }
   const percentages = [25, 50, 100];
   return (
@@ -336,7 +384,10 @@ const DonatePageBody = () => {
               <span className='flex gap-2 items-center  '>
                 Your remaining cap
                 <span className='font-medium text-[#4F576A]'>
-                  {userDonationCap ? formatAmount(userDonationCap) : '---'} POL
+                  {userDonationCap
+                    ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                    : '---'}{' '}
+                  POL
                 </span>
               </span>
 
@@ -370,7 +421,7 @@ const DonatePageBody = () => {
                 <h1 className=' font-medium'>POL</h1>
               </div>
               <input
-                onChange={e => setInputAmount(e.target.value)}
+                onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
                 disabled={isConfirming}
@@ -381,27 +432,88 @@ const DonatePageBody = () => {
                 ~ ${' '}
                 {inputAmount === ''
                   ? 0
-                  : Math.floor(
-                      parseFloat(inputAmount) * Number(POLPrice) * 100,
+                  : Math.round(
+                      parseFloat(inputAmount) *
+                        Number(activeRoundDetails?.tokenPrice) *
+                        100,
                     ) / 100}
               </span>
             </div>
             {/* Avaliable token */}
-            <div className='flex gap-1'>
-              {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
-              <div
-                onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
-                className='cursor-pointer hover:underline'
-              >
-                Available in your wallet:{' '}
-                {!tokenDetails
-                  ? 'Loading...'
-                  : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+            <div className='flex md:flex-row flex-col justify-between'>
+              <div className='flex gap-1'>
+                {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
+                <div
+                  onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
+                  className='cursor-pointer hover:underline'
+                >
+                  Available in your wallet:{' '}
+                  {!tokenDetails
+                    ? 'Loading...'
+                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+                </div>
+
+                <button onClick={handleRefetch}>
+                  <IconRefresh size={16} />
+                </button>
               </div>
 
-              <button onClick={handleRefetch}>
-                <IconRefresh size={16} />
+              <div>
+                {/* {inputErrorMessage && (
+                  <span className='font-redHatText text-[#E6492D] flex gap-1 items-center'>
+                    <IconAlertTriangle />
+                    {inputErrorMessage}
+                    Minimum contribution: 5 POL
+                  </span>
+                )} */}
+
+                <h2
+                  className={`font-redHatText  flex gap-1 items-center ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                >
+                  {inputErrorMessage && <IconAlertTriangle />}
+                  Minimum contribution:{' '}
+                  <span
+                    className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
+                  >
+                    5 POL
+                  </span>
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          {/* LIFI */}
+
+          <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
+            <div>
+              <span className='text-[#4F576A] font-medium'>
+                Need POL or ETH (for gas) ?
+              </span>
+            </div>
+
+            <div className='flex gap-2 font-medium items-center'>
+              <button
+                className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
+                onClick={toggleWidget}
+              >
+                <span className='text-[#5326EC]'>Use Li.FI</span>
               </button>
+              <LiFiWidget
+                ref={drawerRef}
+                config={{
+                  variant: 'drawer',
+                  fromChain: 137,
+                  fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
+                  toChain: 1101,
+                  toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
+                }}
+                integrator='drawer'
+              />
+
+              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
+                <span className='text-[#5326EC]'>Need help!</span>
+                <IconArrowRight color='#5326EC' />
+              </div>
             </div>
           </div>
 
@@ -523,28 +635,33 @@ const DonatePageBody = () => {
 
           {/* Percentage Bar */}
 
-          <div className='flex flex-col gap-2 '>
+          <div className='flex flex-col gap-2  px-4 py-4 bg-[#F7F7F9] rounded-lg'>
             <div
               className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
             >
-              {progress === 0
-                ? 'Getting started !'
-                : progress !== 100
-                  ? progress + '% collected'
-                  : 'Maxed out this round!'}
-
-              <div className='relative group'>
-                <IconTokenSchedule />
-                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  Every round has a round limit. This is the % of the current
-                  round limit that has been collected. Once it reaches 100%, the
-                  round will close.
+              {progress === 0 ? (
+                'Getting started !'
+              ) : progress >= 100 ? (
+                'Maxed out this round!'
+              ) : (
+                <div className='flex gap-1'>
+                  {progress} % collected
+                  <div className='relative group'>
+                    <IconTokenSchedule />
+                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                      Bonding curves have a mint price and a burn price. This
+                      shows the mint price.
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <ProgressBar progress={progress} isStarted={false} />
             <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
-              <span className='text-[#A5ADBF] text-xs'> Round Cap</span>
+              <span className='text-[#A5ADBF] text-xs'>
+                {' '}
+                Cumulative Round Cap
+              </span>
               <span className='text-[#1D1E1F]'>
                 {formatAmount(maxPOLCap)} POL
               </span>
@@ -634,7 +751,7 @@ const DonatePageBody = () => {
         </div>
       </div>
 
-      {round === 'early' ? (
+      {activeRoundDetails?.__typename === 'EarlyAccessRound' ? (
         ''
       ) : (
         <div className='flex flex-col items-center  gap-6 mt-20 p-5 font-redHatText'>
