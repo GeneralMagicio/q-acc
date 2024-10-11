@@ -16,7 +16,7 @@ import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
-import { calculateCapAmount } from '@/helpers/round';
+import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -45,6 +45,22 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const { data: POLPrice } = useFetchTokenPrice();
 
   const [progress, setProgress] = useState(0);
+  const [isRoundEnded, setIsRoundEnded] = useState(false);
+
+  useEffect(() => {
+    const fetchMostRecentEndRound = async () => {
+      const res = await getMostRecentEndRound();
+
+      return res?.__typename === 'QfRound';
+    };
+
+    const getData = async () => {
+      const data = await fetchMostRecentEndRound();
+      setIsRoundEnded(data);
+    };
+
+    getData();
+  }, [activeRoundDetails, isRoundEnded]);
 
   useEffect(() => {
     console.log(
@@ -181,7 +197,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {activeRoundDetails && (
+            {!isRoundEnded && (
               <>
                 {/* Percentage Bar */}
                 <div className='flex flex-col gap-2'>
