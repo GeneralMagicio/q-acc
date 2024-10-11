@@ -12,7 +12,7 @@ const config: EnvConfig = {
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS: 'https://mainnet.base.org',
+  NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com',
   privadoConfig: {
     chain: polygonZkEvm,
     chainName: 'zkevm',
