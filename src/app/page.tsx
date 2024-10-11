@@ -49,12 +49,13 @@ export default function Home() {
   useEffect(() => {
     const fetchMostRecentEndRound = async () => {
       const res = await getMostRecentEndRound();
-
+      console.log('lovel', res);
       return res?.__typename === 'QfRound';
     };
 
     const getData = async () => {
       const data = await fetchMostRecentEndRound();
+
       setIsRoundEnded(data);
     };
 
