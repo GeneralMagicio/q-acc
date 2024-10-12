@@ -21,7 +21,7 @@ const config: EnvConfig = {
       'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
     ],
     requestId: 10,
-    webWalletBaseUrl: 'https://wallet.privado.id',
+    webWalletBaseUrl: 'https://wallet-quadratic.privado.id',
     verifierDid:
       'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
   },
