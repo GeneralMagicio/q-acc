@@ -40,6 +40,7 @@ import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.se
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { Button, ButtonColor } from '../Button';
 import { IconShare } from '../Icons/IconShare';
+import { IconUnlock } from '../Icons/IconUnlock';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -56,7 +57,7 @@ const MyProjects = () => {
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const { data: POLPrice } = useFetchTokenPrice();
-
+  const [copied, setCopied] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
@@ -173,6 +174,31 @@ const MyProjects = () => {
     if (event.target.value === '') {
       setSubmittedSearchTerm(searchTerm);
     }
+  };
+
+  const handleShare = () => {
+    const currentUrl = window.location.href;
+
+    // Create a URL object
+    const url = new URL(currentUrl);
+
+    // Extract the domain (protocol + host)
+    const domainName = `${url.protocol}//${url.host}`;
+
+    navigator.clipboard
+      .writeText(domainName + '/project/' + projectData?.slug)
+      .then(() => {
+        console.log('Domain name copied to clipboard:', domainName);
+        setCopied(true);
+
+        // Hide the message after 2 seconds
+        setTimeout(() => {
+          setCopied(false);
+        }, 2000);
+      })
+      .catch(error => {
+        console.error('Failed to copy domain name:', error);
+      });
   };
 
   // Handler for search button click
@@ -302,18 +328,15 @@ const MyProjects = () => {
                   </span>
                 </div>{' '}
               </Link>
-
-              <Link
-                target='_blank'
-                href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
-              >
+              <div onClick={handleShare} className='cursor-pointer'>
                 <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
                   <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
                     Share your project
                     <IconShare color='#5326EC' size={24} />
                   </span>
-                </div>{' '}
-              </Link>
+                </div>
+                {copied && <span className=''>Copied Link to Project</span>}
+              </div>{' '}
             </div>
           </div>
 
@@ -433,7 +456,7 @@ const MyProjects = () => {
 
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
               <div className='flex gap-2 items-center'>
-                <IconTributesReceived />
+                <IconUnlock />
                 <span className='text-[#4F576A] font-medium'>
                   Tributes available to claim
                 </span>
@@ -458,7 +481,7 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <Button color={ButtonColor.Gray} className='flex justify-center'>
+            <Button color={ButtonColor.Giv} className='flex justify-center'>
               Claim Tributes
             </Button>
           </div>
