@@ -8,10 +8,11 @@ import { checkUserOwnsNFT } from '@/helpers/token';
 import { useDonateContext } from '@/context/donation.context';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { NFTModal } from '../Modals/NFTModal';
+import { ConnectModal } from '../ConnectModal';
 
 const DonateIndex = () => {
   const [ownsNFT, setOwnsNFT] = useState(false);
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { projectData } = useDonateContext();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [loading, setLoading] = useState(true);
@@ -31,10 +32,21 @@ const DonateIndex = () => {
     checkNFT();
   }, [projectData?.abc?.nftContractAddress, address, ownsNFT]);
 
+  if (!isConnected) {
+    return (
+      <>
+        <ConnectModal
+          isOpen={true}
+          onClose={function (): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+      </>
+    );
+  }
   if (loading) {
     return;
   }
-
   if (activeRoundDetails?.__typename === 'EarlyAccessRound' && !ownsNFT) {
     return (
       <NFTModal isOpen={true} onClose={() => true} showCloseButton={false} />
