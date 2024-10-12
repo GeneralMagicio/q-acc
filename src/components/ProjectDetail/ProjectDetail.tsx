@@ -16,7 +16,7 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { calculateCapAmount } from '@/helpers/round';
+import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -29,6 +29,21 @@ const ProjectDetail = () => {
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
+  const [isRoundEnded, setIsRoundEnded] = useState(false);
+  useEffect(() => {
+    const fetchMostRecentEndRound = async () => {
+      const res = await getMostRecentEndRound();
+
+      return res?.__typename === 'QfRound';
+    };
+
+    const getData = async () => {
+      const data = await fetchMostRecentEndRound();
+      setIsRoundEnded(data);
+    };
+
+    getData();
+  }, [activeRoundDetails, isRoundEnded]);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -75,7 +90,7 @@ const ProjectDetail = () => {
 
           <DonateSection />
         </div>
-        {activeRoundDetails && (
+        {!isRoundEnded && (
           <div className='my-6'>
             <RoundCountBanner projectMaxedOut={progress >= 100} />
           </div>

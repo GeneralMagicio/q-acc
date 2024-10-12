@@ -6,7 +6,7 @@ import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { calculateCapAmount } from '@/helpers/round';
+import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 
 export enum EDonationCardStates {
   beforeFirstRound = 'before',
@@ -29,6 +29,22 @@ const DonateSection = () => {
     uniqueDonars,
     totalAmount: totalPOLDonated,
   } = useProjectContext();
+
+  const [isRoundEnded, setIsRoundEnded] = useState(false);
+  useEffect(() => {
+    const fetchMostRecentEndRound = async () => {
+      const res = await getMostRecentEndRound();
+
+      return res?.__typename === 'QfRound';
+    };
+
+    const getData = async () => {
+      const data = await fetchMostRecentEndRound();
+      setIsRoundEnded(data);
+    };
+
+    getData();
+  }, [activeRoundDetails, isRoundEnded]);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -75,7 +91,7 @@ const DonateSection = () => {
             supporters
           </p>
 
-          {activeRoundDetails && (
+          {!isRoundEnded && (
             <>
               {/* Percentage Bar */}
               <div className='flex flex-col gap-2 mt-12'>

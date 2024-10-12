@@ -105,9 +105,9 @@ export const useTokenPriceRange = ({
   if (calculatePurchaseReturn.data) {
     const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
     // Calculate the max token price (P = X / Y)
-    console.log('X:', X, 'Y:', Y);
+    // console.log('X:', X, 'Y:', Y);
     maxPrice = X / Y;
-    console.log('max price:', maxPrice);
+    // console.log('max price:', maxPrice);
   }
 
   return { min: minPrice, max: maxPrice };
