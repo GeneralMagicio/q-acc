@@ -38,6 +38,9 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { Button, ButtonColor } from '../Button';
+import { IconShare } from '../Icons/IconShare';
+import { IconUnlock } from '../Icons/IconUnlock';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -54,7 +57,7 @@ const MyProjects = () => {
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const { data: POLPrice } = useFetchTokenPrice();
-
+  const [copied, setCopied] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
@@ -173,6 +176,31 @@ const MyProjects = () => {
     }
   };
 
+  const handleShare = () => {
+    const currentUrl = window.location.href;
+
+    // Create a URL object
+    const url = new URL(currentUrl);
+
+    // Extract the domain (protocol + host)
+    const domainName = `${url.protocol}//${url.host}`;
+
+    navigator.clipboard
+      .writeText(domainName + '/project/' + projectData?.slug)
+      .then(() => {
+        console.log('Domain name copied to clipboard:', domainName);
+        setCopied(true);
+
+        // Hide the message after 2 seconds
+        setTimeout(() => {
+          setCopied(false);
+        }, 2000);
+      })
+      .catch(error => {
+        console.error('Failed to copy domain name:', error);
+      });
+  };
+
   // Handler for search button click
   const handleSearchClick = () => {
     setSubmittedSearchTerm(searchTerm);
@@ -284,13 +312,32 @@ const MyProjects = () => {
               target='_blank'
               href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
             >
-              <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center font-redHatText'>
+              <div className='w-full p-[10px_16px] shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
                 <span className='flex gap-4 text-[#5326EC] font-bold'>
                   Project Contract Address
                   <IconViewTransaction color='#5326EC' />
                 </span>
               </div>{' '}
             </Link>
+            <div className='flex justify-center gap-4'>
+              <Link target='_blank' href={`/project/${projectData?.slug}`}>
+                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
+                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                    View Project
+                    <IconViewTransaction color='#5326EC' />
+                  </span>
+                </div>{' '}
+              </Link>
+              <div onClick={handleShare} className='cursor-pointer'>
+                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
+                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                    Share your project
+                    <IconShare color='#5326EC' size={24} />
+                  </span>
+                </div>
+                {copied && <span className=''>Copied Link to Project</span>}
+              </div>{' '}
+            </div>
           </div>
 
           {/* Project Stats */}
@@ -357,6 +404,29 @@ const MyProjects = () => {
               </span>
             </div>
 
+            <div className='flex justify-between py-2'>
+              <div className='flex gap-2'>
+                <IconTotalDonars />
+                <span className='text-[#4F576A] font-medium'>
+                  Total supporters
+                </span>
+              </div>
+              <span className='text-[#1D1E1F] font-medium'>{uniqueDonars}</span>
+            </div>
+
+            <div className='flex  flex-col md:flex-row gap-2 justify-between py-2'>
+              <div className='flex gap-2'>
+                <IconTokenMinted />
+                <span className='text-[#4F576A] font-medium'>
+                  Tokens minted to supporters
+                </span>
+              </div>
+              <span className='text-[#1D1E1F] font-medium'>
+                {formatAmount(projectData?.abc?.mintedAmount || 0)}{' '}
+                {projectData?.abc?.tokenTicker}
+              </span>
+            </div>
+
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
               <div className='flex gap-2 items-center'>
                 <IconTributesReceived />
@@ -384,28 +454,36 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex justify-between py-2'>
-              <div className='flex gap-2'>
-                <IconTotalDonars />
+            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
+              <div className='flex gap-2 items-center'>
+                <IconUnlock />
                 <span className='text-[#4F576A] font-medium'>
-                  Total supporters
+                  Tributes available to claim
+                </span>
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    These are the tributes your project receives from the mint
+                    and burn transactions on the ABC.
+                  </div>
+                </div>
+              </div>
+              <div className='flex gap-1'>
+                <span className='font-medium text-[#1D1E1F]'>
+                  {formatAmount(tributeReceived)} POL
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(tributeReceived * Number(POLPrice) * 100) / 100,
+                  )}
                 </span>
               </div>
-              <span className='text-[#1D1E1F] font-medium'>{uniqueDonars}</span>
             </div>
 
-            <div className='flex  flex-col md:flex-row gap-2 justify-between py-2'>
-              <div className='flex gap-2'>
-                <IconTokenMinted />
-                <span className='text-[#4F576A] font-medium'>
-                  Tokens minted to supporters
-                </span>
-              </div>
-              <span className='text-[#1D1E1F] font-medium'>
-                {formatAmount(projectData?.abc?.mintedAmount || 0)}{' '}
-                {projectData?.abc?.tokenTicker}
-              </span>
-            </div>
+            <Button color={ButtonColor.Giv} className='flex justify-center'>
+              Claim Tributes
+            </Button>
           </div>
         </div>
       </div>
