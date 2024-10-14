@@ -22,10 +22,12 @@ export const requestGraphQL = async <T>(
   const { data, errors } = await response.json();
 
   if (errors) {
+    console.log('errors', errors);
     const errorMessages = errors.map((error: any) => error.message).join(', ');
+    console.log('errorMessages', errorMessages);
 
     // Check if any error message contains "Authentication required."
-    if (errorMessages.includes('Authentication required.')) {
+    if (errorMessages && errorMessages.includes('Authentication required.')) {
       // Dispatch a custom event to show the sign-in modal
       window.dispatchEvent(new CustomEvent('showSignInModal'));
 
