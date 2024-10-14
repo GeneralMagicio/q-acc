@@ -24,7 +24,7 @@ const config: EnvConfig = {
     requestId: 12,
     webWalletBaseUrl: 'https://wallet-quadratic.privado.id',
     verifierDid:
-      'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
+      'did:iden3:polygon:amoy:x6x5sor7zpyefHwZu9RE4xiuRWBkq9xAEHxrKbKWb',
     method: PrivadoContractMethodV2,
   },
 };
