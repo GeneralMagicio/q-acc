@@ -1,4 +1,8 @@
 import { Address, Chain } from 'viem';
+import {
+  PrivadoContractMethodV1,
+  PrivadoContractMethodV2,
+} from '@/lib/constants/privado';
 
 export type EnvConfig = {
   SUPPORTED_CHAINS: readonly [Chain, ...Chain[]];
@@ -17,5 +21,6 @@ export type EnvConfig = {
     allowedIssuers: string[];
     webWalletBaseUrl: string;
     verifierDid: string;
+    method: typeof PrivadoContractMethodV1 | typeof PrivadoContractMethodV2;
   };
 };
