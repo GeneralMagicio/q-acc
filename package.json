@@ -24,6 +24,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.53.0",
     "react-quill": "^2.0.0",
+    "react-share": "^5.1.0",
     "siwe": "^2.3.2",
     "swiper": "^11.1.12",
     "viem": "^2.21.4",

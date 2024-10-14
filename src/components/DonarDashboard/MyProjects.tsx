@@ -41,6 +41,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { Button, ButtonColor } from '../Button';
 import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
+import { ShareProjectModal } from '../Modals/ShareProjectModal';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -57,7 +58,6 @@ const MyProjects = () => {
   const [uniqueDonars, setUniqueDonars] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const { data: POLPrice } = useFetchTokenPrice();
-  const [copied, setCopied] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [showRoundCollected, setShowRoundCollected] = useState(false);
@@ -78,6 +78,10 @@ const MyProjects = () => {
   });
   const { data: allRoundData } = useFetchAllRound();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const openShareModal = () => setIsShareModalOpen(true);
+  const closeShareModal = () => setIsShareModalOpen(false);
 
   // New token price logic
   const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
@@ -177,28 +181,7 @@ const MyProjects = () => {
   };
 
   const handleShare = () => {
-    const currentUrl = window.location.href;
-
-    // Create a URL object
-    const url = new URL(currentUrl);
-
-    // Extract the domain (protocol + host)
-    const domainName = `${url.protocol}//${url.host}`;
-
-    navigator.clipboard
-      .writeText(domainName + '/project/' + projectData?.slug)
-      .then(() => {
-        console.log('Domain name copied to clipboard:', domainName);
-        setCopied(true);
-
-        // Hide the message after 2 seconds
-        setTimeout(() => {
-          setCopied(false);
-        }, 2000);
-      })
-      .catch(error => {
-        console.error('Failed to copy domain name:', error);
-      });
+    openShareModal();
   };
 
   // Handler for search button click
@@ -335,8 +318,13 @@ const MyProjects = () => {
                     <IconShare color='#5326EC' size={24} />
                   </span>
                 </div>
-                {copied && <span className=''>Copied Link to Project</span>}
               </div>{' '}
+              <ShareProjectModal
+                isOpen={isShareModalOpen}
+                onClose={closeShareModal}
+                showCloseButton={true}
+                projectSlug={projectData?.slug || ''}
+              />
             </div>
           </div>
 
