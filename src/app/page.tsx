@@ -289,13 +289,13 @@ export default function Home() {
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
               <h1 className='text-gray-800 text-2xl font-bold'>🪪 KYC</h1>
               <p>
-                All supporters are required to complete KYC with Privado before
-                participating. The q/acc protocol uses zero knowledge ID to
-                comply with AML guidelines, ensure age requirements are met, and
-                restrict participation from USA and UK citizens for regulatory
-                reasons. This measure both protects project teams and mitigates
-                Sybil attacks during q/acc rounds. If you already have
-                credentials with Privado, they should work here. If not, it’s
+                All supporters are required to complete KYC with PrivadoID
+                before participating. The q/acc protocol uses zero knowledge ID
+                to comply with AML guidelines, ensure age requirements are met,
+                and restrict participation from USA and UK citizens for
+                regulatory reasons. This measure both protects project teams and
+                mitigates Sybil attacks during q/acc rounds. If you already have
+                credentials with PrivadoID, they should work here. If not, it’s
                 fast and easy to set up. Get it done so you’re ready to go!.
               </p>
             </div>
