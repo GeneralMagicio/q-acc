@@ -28,7 +28,7 @@ export const PrivadoBanner = () => {
             className='flex flex-row gap-2 w-1/2 justify-start cursor-pointer center items-center'
             onClick={verifyAccount}
           >
-            <p className='text-giv-500'>Check status with Privado</p>
+            <p className='text-giv-500'>Check status with PrivadoID</p>
             <IconExternalLink size={12} />
           </div>
         </div>

@@ -45,7 +45,7 @@ const VerifyPrivado = () => {
             <p className='text-[#1D1E1F] text-xl'>
               We use zero knowledge ID to maintain the integrity of quadratic
               acceleration. All participants are required to validate their
-              credentials with out identity partner, Privado.
+              credentials with out identity partner, PrivadoID.
             </p>
           </div>
           {!verified.isVerified && !isLoading && (
@@ -59,7 +59,7 @@ const VerifyPrivado = () => {
               <div className='bg-[#F7F7F9] flex flex-col p-6 rounded-2xl'>
                 <div className='flex flex-col gap-4'>
                   <h6 className='text-[#1D1E1F] font-bold text-lg'>
-                    1. Click the button below to go to Privado.
+                    1. Click the button below to go to PrivadoID.
                   </h6>
                   <p className='text-[#4F576A] text-xl font-normal'>
                     A new tab will open where you can complete the verification
@@ -114,7 +114,7 @@ const VerifyPrivado = () => {
                     <IconInfo size={17} color='#8668FC' />
                     <span className='text-[#8668FC] font-redHatText text-sm'>
                       You are not able to participate in q/acc until you have
-                      validated your credentials with Privado.
+                      validated your credentials with PrivadoID.
                     </span>
                   </>
                 )}
@@ -151,7 +151,7 @@ const VerifyPrivado = () => {
                     'Loading'
                   ) : (
                     <>
-                      Go to Privado
+                      Go to PrivadoID
                       <IconArrowRight size={16} />
                     </>
                   )}

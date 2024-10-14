@@ -67,7 +67,7 @@ export const signWithEVM = async (
   console.log('message', message);
   console.log('nonce', nonce);
 
-  const headers = { 'Content-Type': 'application/json' };
+  const headers = { 'Content-Type': 'application/json', authVersion: '2' };
   const body: Record<string, any> = {
     signature,
     message,

@@ -16,7 +16,7 @@ const config: EnvConfig = {
   privadoConfig: {
     chain: polygonZkEvm,
     chainName: 'zkevm',
-    contractAddress: '0xB752Eec418f178ac8B48f15962B55c37F8D4748d',
+    contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
       'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
     ],

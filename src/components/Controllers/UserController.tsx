@@ -23,7 +23,7 @@ export const UserController = () => {
   const { address } = useAccount();
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
-  const { data: user, refetch } = useFetchUser();
+  const { refetch } = useFetchUser();
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);

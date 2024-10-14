@@ -29,7 +29,7 @@ const KycLanding = () => {
             <p>
               We use zero knowledge KYC to maintain the integrity of quadratic
               acceleration. Everyone is required to validate their credentials
-              with our identity partner, Privado.
+              with our identity partner, PrivadoID.
             </p>
             <br />
             <p>

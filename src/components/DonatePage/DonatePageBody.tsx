@@ -280,7 +280,7 @@ const DonatePageBody = () => {
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     if (!isVerified) {
-      console.log('User is not verified with Privado');
+      console.log('User is not verified with PrivadoID');
       return;
     }
 

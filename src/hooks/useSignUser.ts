@@ -15,6 +15,7 @@ export const useSignUser = (onSigned?: (user: IUser) => void) => {
 
       // Check if token exists in localStorage
       const localStorageToken = getLocalStorageToken(address);
+      console.log('localStorageToken', localStorageToken);
       if (localStorageToken) {
         const { data: newUser } = await refetch();
         if (newUser) {

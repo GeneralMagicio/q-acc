@@ -16,7 +16,7 @@ const DashboardPrivado = () => {
               <p className='text-[#1D1E1F] text-xl'>
                 We use zero knowledge ID to maintain the integrity of quadratic
                 acceleration. All participants are required to validate their
-                credentials with our identity partner, Privado.
+                credentials with our identity partner, PrivadoID.
               </p>
             </div>
             <div className='flex flex-col gap-10 lg:flex-row justify-between'>
@@ -43,7 +43,7 @@ const DashboardPrivado = () => {
                       <IconInfo size={17} color='#8668FC' />
                       <span className='text-[#8668FC] font-redHatText text-sm'>
                         Please note: You cannot proceed on q/acc until your
-                        identity is verified by Privado
+                        identity is verified by PrivadoID
                       </span>
                     </>
                   )}
@@ -71,7 +71,7 @@ const DashboardPrivado = () => {
                       'Loading'
                     ) : (
                       <>
-                        Go to Privado
+                        Go to PrivadoID
                         <IconArrowRight size={16} />
                       </>
                     )}
