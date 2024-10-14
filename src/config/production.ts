@@ -1,5 +1,6 @@
 import { polygonZkEvm } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
+import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygonZkEvm] as const,
@@ -24,6 +25,7 @@ const config: EnvConfig = {
     webWalletBaseUrl: 'https://wallet-quadratic.privado.id',
     verifierDid:
       'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
+    method: PrivadoContractMethodV2,
   },
 };
 

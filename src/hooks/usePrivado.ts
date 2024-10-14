@@ -114,8 +114,8 @@ const verifyAccount = () => {
     verifierDid,
     transactionData: {
       contractAddress,
-      functionName: 'submitZKPResponse',
-      methodId: '0xb68967e2',
+      functionName: config.privadoConfig.method.functionName,
+      methodId: config.privadoConfig.method.methodId,
       chainId: chain.id,
       network: chainName,
     },

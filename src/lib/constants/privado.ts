@@ -40,3 +40,13 @@ export const KYC_EXCLUDED_COUNTRIES = {
   'United Kingdom': 826,
   'United States': 840,
 };
+
+export const PrivadoContractMethodV1 = {
+  functionName: 'submitZKPResponse',
+  methodId: '0xb68967e2',
+};
+
+export const PrivadoContractMethodV2 = {
+  functionName: 'submitZKPResponseV2',
+  methodId: '0xade09fcd',
+};
