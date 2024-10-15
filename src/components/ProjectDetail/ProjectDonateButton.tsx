@@ -75,9 +75,9 @@ const ProjectDonateButton = () => {
   };
 
   // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+
   const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxPOLCap,
     contractAddress: projectData.abc?.fundingManagerAddress || '',
   });
 
