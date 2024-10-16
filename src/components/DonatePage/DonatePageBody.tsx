@@ -36,6 +36,7 @@ import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
+import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
 
 interface ITokenSchedule {
   message: string;
@@ -89,7 +90,7 @@ const DonatePageBody = () => {
   const drawerRef = useRef<WidgetDrawer>(null);
 
   let { isVerified, isLoading, verifyAccount } = usePrivado();
-  isVerified = true;
+
   const {
     projectData,
     totalAmount: totalPOLDonated,
@@ -107,6 +108,10 @@ const DonatePageBody = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
+
+  const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(!isVerified);
+  const openPrivadoModal = () => setPrivadoModalOpen(true);
+  const closePrivadoModal = () => setPrivadoModalOpen(false);
 
   const handleShare = () => {
     openShareModal();
@@ -289,6 +294,8 @@ const DonatePageBody = () => {
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     if (!isVerified) {
+      openPrivadoModal();
+
       console.log('User is not verified with PrivadoID');
       return;
     }
@@ -375,8 +382,16 @@ const DonatePageBody = () => {
     );
   }
   const percentages = [25, 50, 100];
+
   return (
     <div className='bg-[#F7F7F9] w-full my-10'>
+      {
+        <PrivadoVerificationModal
+          isOpen={isPrivadoModalOpen}
+          onClose={closePrivadoModal}
+          showCloseButton={true}
+        />
+      }
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <div className='flex p-4 rounded-lg border-[1px] border-[#8668FC] bg-[#F6F3FF] gap-2 font-redHatText text-[#8668FC] flex-col'>
