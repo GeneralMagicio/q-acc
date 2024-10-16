@@ -4,6 +4,7 @@ import Routes from '@/lib/constants/Routes';
 import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { fetchUserDonationsCount } from '@/services/donation.services';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 
 interface IDashboardTabs {
   activeTab: number;
@@ -17,6 +18,10 @@ const DashboardTabs = (props: IDashboardTabs) => {
   const { data: userWhiteListed } = useIsUserWhiteListed();
   const [donationCount, setDonationCount] = useState<number>(0);
   const { activeTab } = props;
+  const { data: userData } = useFetchUser(true);
+  const { data: projectData } = useFetchProjectByUserId(
+    parseInt(userData?.id ?? ''),
+  );
   const badgeCount = (count?: number) => {
     return count || null;
   };
@@ -44,7 +49,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
   const tabsArray = [
     {
       title: 'My Projects',
-      badge: !userWhiteListed ? 0 : 1,
+      badge: !userWhiteListed || !projectData ? 0 : 1,
       query: EDashboardPageTabs.PROJECTS,
     },
 

@@ -10,6 +10,7 @@ export interface BaseModalProps {
 
 interface ModalProps extends BaseModalProps {
   title?: string;
+  titleIcon?: React.ReactNode;
   children: React.ReactNode;
   showCloseButton?: boolean;
 }
@@ -18,6 +19,7 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
+  titleIcon,
   showCloseButton = false,
   children,
   className,
@@ -55,7 +57,11 @@ const Modal: React.FC<ModalProps> = ({
             <IconX size={14} />
           </button>
         )}
-        {title && <h2 className='text-lg font-bold mb-4'>{title}</h2>}
+        <div className='flex gap-4'>
+          {titleIcon && titleIcon}
+          {title && <h2 className='text-lg font-bold mb-4'>{title}</h2>}
+        </div>
+
         <div>{children}</div>
       </div>
     </div>,

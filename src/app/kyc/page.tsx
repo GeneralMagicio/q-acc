@@ -27,9 +27,10 @@ const KycLanding = () => {
               Get ready for Season 1
             </h1>
             <p>
-              We use zero knowledge KYC to maintain the integrity of quadratic
-              acceleration. Everyone is required to validate their credentials
-              with our identity partner, PrivadoID.
+              We use Privado ID zero knowledge identity system to maintain the
+              integrity of quadratic acceleration while ensuring privacy. All
+              participants are required to complete verification in order to
+              receive a KYC credential from the Synaps identity provider.
             </p>
             <br />
             <p>

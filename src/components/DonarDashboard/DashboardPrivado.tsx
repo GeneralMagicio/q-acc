@@ -14,9 +14,10 @@ const DashboardPrivado = () => {
           <div className='flex flex-col gap-8'>
             <div className='font-redHatText'>
               <p className='text-[#1D1E1F] text-xl'>
-                We use zero knowledge ID to maintain the integrity of quadratic
-                acceleration. All participants are required to validate their
-                credentials with our identity partner, PrivadoID.
+                We use Privado ID zero knowledge identity system to maintain the
+                integrity of quadratic acceleration while ensuring privacy. All
+                participants are required to complete verification in order to
+                receive a KYC credential from the Synaps identity provider.
               </p>
             </div>
             <div className='flex flex-col gap-10 lg:flex-row justify-between'>

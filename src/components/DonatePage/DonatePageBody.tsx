@@ -35,6 +35,7 @@ import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
+import { ShareProjectModal } from '../Modals/ShareProjectModal';
 
 interface ITokenSchedule {
   message: string;
@@ -102,6 +103,14 @@ const DonatePageBody = () => {
   const [remainingDonationAmount, setRemainingDonationAmount] = useState(0);
 
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
+
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const openShareModal = () => setIsShareModalOpen(true);
+  const closeShareModal = () => setIsShareModalOpen(false);
+
+  const handleShare = () => {
+    openShareModal();
+  };
 
   useEffect(() => {
     const getDonationCap: any = async () => {
@@ -758,10 +767,19 @@ const DonatePageBody = () => {
           <h1 className=' text-center text-xl  text-[#1D1E1F]'>
             Want to spread the word about this project? Tell others now.
           </h1>
-          <span className='text-xs  flex gap-2 font-medium text-[#E1458D]'>
+          <span
+            onClick={handleShare}
+            className='text-xs cursor-pointer flex gap-2 font-medium text-[#E1458D] px-[15px] py-2 bg-white w-[220px] h-[48px] justify-center items-center rounded-full'
+          >
             <IconShare size={16} />
             Share
           </span>
+          <ShareProjectModal
+            isOpen={isShareModalOpen}
+            onClose={closeShareModal}
+            showCloseButton={true}
+            projectSlug={projectData?.slug || ''}
+          />
         </div>
       )}
     </div>
