@@ -38,7 +38,6 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { Button, ButtonColor } from '../Button';
 import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
@@ -200,7 +199,7 @@ const MyProjects = () => {
     contractAddress: projectData?.abc?.fundingManagerAddress,
   }).collectedFees;
 
-  if (!userWhiteListed || !projectData) {
+  if (!userWhiteListed) {
     return (
       <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
         You don't have any project!
@@ -303,7 +302,11 @@ const MyProjects = () => {
               </div>{' '}
             </Link>
             <div className='flex justify-center gap-4'>
-              <Link target='_blank' href={`/project/${projectData?.slug}`}>
+              <Link
+                target='_blank'
+                href={`/project/${projectData?.slug}`}
+                className='w-full'
+              >
                 <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
                   <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
                     View Project
@@ -311,7 +314,7 @@ const MyProjects = () => {
                   </span>
                 </div>{' '}
               </Link>
-              <div onClick={handleShare} className='cursor-pointer'>
+              <div onClick={handleShare} className='cursor-pointer w-full'>
                 <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
                   <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
                     Share your project
@@ -402,7 +405,7 @@ const MyProjects = () => {
               <span className='text-[#1D1E1F] font-medium'>{uniqueDonars}</span>
             </div>
 
-            <div className='flex  flex-col md:flex-row gap-2 justify-between py-2'>
+            <div className='flex  flex-col md:flex-row gap-2 justify-between py-2 border-b'>
               <div className='flex gap-2'>
                 <IconTokenMinted />
                 <span className='text-[#4F576A] font-medium'>
@@ -415,7 +418,7 @@ const MyProjects = () => {
               </span>
             </div>
 
-            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
+            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 '>
               <div className='flex gap-2 items-center'>
                 <IconTributesReceived />
                 <span className='text-[#4F576A] font-medium'>
@@ -442,7 +445,7 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b '>
+            <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 '>
               <div className='flex gap-2 items-center'>
                 <IconUnlock />
                 <span className='text-[#4F576A] font-medium'>
@@ -469,9 +472,9 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <Button color={ButtonColor.Giv} className='flex justify-center'>
+            {/* <Button color={ButtonColor.Giv} className='flex justify-center'>
               Claim Tributes
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
