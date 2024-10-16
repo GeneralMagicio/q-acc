@@ -1,11 +1,15 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
 import { Banner } from '@/components/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
 import { KycLandingButton } from '@/components/KycLandingButton';
+import { KycCompleteBox } from '@/components/KycCompleteBox';
+import { usePrivado } from '@/hooks/usePrivado';
 
 const KycLanding = () => {
+  const { isVerified } = usePrivado();
   return (
     <div className='flex flex-col gap-4'>
       <Banner
@@ -22,6 +26,7 @@ const KycLanding = () => {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.2 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
+          {isVerified && <KycCompleteBox />}
           <div>
             <h1 className='text-5xl text-gray-900 font-bold mb-6'>
               Get ready for Season 1
@@ -64,9 +69,11 @@ const KycLanding = () => {
               </li>
             </ol>
           </div>
-          <div>
-            <KycLandingButton />
-          </div>
+          {!isVerified && (
+            <div>
+              <KycLandingButton />
+            </div>
+          )}
         </div>
       </div>
       <About />
