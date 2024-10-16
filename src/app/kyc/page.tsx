@@ -4,6 +4,7 @@ import { Banner } from '@/components/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
 import { KycLandingButton } from '@/components/KycLandingButton';
+import { KycCompleteBox } from '@/components/KycCompleteBox';
 
 const KycLanding = () => {
   return (
@@ -22,6 +23,7 @@ const KycLanding = () => {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.2 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
+          <KycCompleteBox />
           <div>
             <h1 className='text-5xl text-gray-900 font-bold mb-6'>
               Get ready for Season 1
