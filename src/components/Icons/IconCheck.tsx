@@ -14,8 +14,8 @@ export const IconCheck: FC<IIcon> = ({ size = 16, color = 'currentColor' }) => {
       <path
         d='M13.8307 4.5L6.4974 11.8333L3.16406 8.5'
         stroke={color}
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   );
