@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import config from '@/config/configuration';
 import { getIpfsAddress } from '@/helpers/image';
@@ -16,6 +16,7 @@ import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { calculateCapAmount } from '@/helpers/round';
 
 const DonarSuppotedProjects = ({
   projectId,
@@ -30,11 +31,23 @@ const DonarSuppotedProjects = ({
 }: any) => {
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
 
-  // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectId));
+
+        setMaxPOLCap(capAmount);
+      }
+    };
+
+    updatePOLCap();
+  }, [activeRoundDetails, projectId, maxPOLCap]);
+
   const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
   return (
