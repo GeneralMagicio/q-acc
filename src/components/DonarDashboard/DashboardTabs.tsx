@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { fetchUserDonationsCount } from '@/services/donation.services';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 interface IDashboardTabs {
   activeTab: number;
@@ -15,7 +15,7 @@ export enum EDashboardPageTabs {
   CONTRIBUTIONS = 'contributions',
 }
 const DashboardTabs = (props: IDashboardTabs) => {
-  const { data: userWhiteListed } = useIsUserWhiteListed();
+  const { data: addrWhitelist } = useAddressWhitelist();
   const [donationCount, setDonationCount] = useState<number>(0);
   const { activeTab } = props;
   const { data: userData } = useFetchUser(true);
@@ -49,7 +49,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
   const tabsArray = [
     {
       title: 'My Projects',
-      badge: !userWhiteListed || !projectData ? 0 : 1,
+      badge: !addrWhitelist || !projectData ? 0 : 1,
       query: EDashboardPageTabs.PROJECTS,
     },
 

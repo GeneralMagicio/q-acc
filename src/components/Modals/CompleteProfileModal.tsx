@@ -5,14 +5,14 @@ import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import Routes from '@/lib/constants/Routes';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 interface CompleteProfileModalProps extends BaseModalProps {}
 
 export const CompleteProfileModal: FC<CompleteProfileModalProps> = props => {
-  const { data: userWhitelisted } = useIsUserWhiteListed();
+  const { data: addrWhitelist } = useAddressWhitelist();
 
-  const modalTitle = userWhitelisted
+  const modalTitle = addrWhitelist
     ? 'Before you continue'
     : 'Before you contribute';
 
