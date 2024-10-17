@@ -8,7 +8,7 @@ import { Dropzone } from '@/components/DropZone';
 import CreateNavbar from '../CreateNavbar';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 export interface ProfileFormData {
   fullName: string;
@@ -21,7 +21,6 @@ const CreateProjectForm: FC = () => {
   const router = useRouter();
   const { data: user } = useFetchUser();
   const { mutateAsync: updateUser, isPending } = useUpdateUser();
-  const { data: isUserWhiteListed } = useIsUserWhiteListed();
 
   const methods = useForm<ProfileFormData>({
     defaultValues: {
