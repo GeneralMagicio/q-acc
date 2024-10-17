@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { redirect, useRouter } from 'next/navigation';
-import {
-  fetchGivethUserInfo,
-  checkUserIsWhiteListed,
-} from '../../services/user.service';
+import { fetchGivethUserInfo } from '../../services/user.service';
 import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
@@ -15,6 +12,7 @@ import { getLocalStorageToken } from '@/helpers/generateJWT';
 import { IUser } from '@/types/user.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -24,6 +22,7 @@ export const UserController = () => {
   const route = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
   const { refetch } = useFetchUser();
+  const useWhitelist = useAddressWhitelist();
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -58,9 +57,8 @@ export const UserController = () => {
     }
 
     // Check if user is whitelisted
-    const isUserWhiteListed = await checkUserIsWhiteListed(address);
 
-    if (isUserWhiteListed) {
+    if (!!useWhitelist.data) {
       const isUserCreatedProject = false;
       if (!isUserCreatedProject) {
         route.push(Routes.Create); //TODO: should we redirect or not
