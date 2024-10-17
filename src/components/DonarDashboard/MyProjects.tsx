@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -9,7 +8,6 @@ import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import ProjectSupportTable from './ProjectSupportTable';
 import { IconCreatedAt } from '../Icons/IconCreatedAt';
 import { IconTokenMinted } from '../Icons/IconTokenMinted';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { IconViewProject } from '../Icons/IconViewProject';
 import { IconEditProject } from '../Icons/IconEditProject';
 import { IconSearch } from '../Icons/IconSearch';
@@ -41,6 +39,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -49,8 +48,7 @@ const MyProjects = () => {
   );
   const projectId = projectData?.id;
   const projectSlug = projectData?.slug;
-  const { address, isConnected } = useAccount();
-  const { data: userWhiteListed } = useIsUserWhiteListed();
+  const { data: addrWhitelist } = useAddressWhitelist();
   const [isHovered, setIsHovered] = useState(false);
   const [donations, setDonations] = useState<any[]>([]);
   const [totalDonationsCount, setTotalDonationsCount] = useState(0);
@@ -199,7 +197,7 @@ const MyProjects = () => {
     contractAddress: projectData?.abc?.fundingManagerAddress,
   }).collectedFees;
 
-  if (!userWhiteListed) {
+  if (!addrWhitelist) {
     return (
       <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
         You don't have any project!

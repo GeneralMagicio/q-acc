@@ -1,7 +1,6 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { isAddress } from 'viem';
 import { type FC } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -19,12 +18,12 @@ import CreateNavbar from '../CreateNavbar';
 import { EProjectSocialMediaType } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import { TeamMember } from '../CreateTeamForm';
 import { HoldModal } from '@/components/Modals/HoldModal';
 import { ConnectModal } from '@/components/ConnectModal';
 import { IconExternalLink } from '@/components/Icons/IconExternalLink';
 import Routes from '@/lib/constants/Routes';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 export interface ProjectFormData {
   projectName: string;
@@ -133,7 +132,7 @@ const CreateProjectForm: FC = () => {
     defaultValues: formData.project,
     mode: 'onChange',
   });
-  const { data: isWhiteListed, isFetching } = useIsUserWhiteListed();
+  const { data: addrWhitelist, isFetching } = useAddressWhitelist();
   const router = useRouter();
 
   const { handleSubmit, getValues } = methods;
@@ -154,7 +153,7 @@ const CreateProjectForm: FC = () => {
 
   return isFetching ? (
     <div>Loading...</div>
-  ) : isWhiteListed ? (
+  ) : addrWhitelist ? (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
@@ -253,11 +252,10 @@ const CreateProjectForm: FC = () => {
                 label='Project Address'
                 description='This is the address to which ABC tributes and arbitrage results will be sent.'
                 placeholder='0x...'
+                value={addrWhitelist.fundingPotMultisig}
+                readOnly
                 rules={{
                   required: 'Project Address is required',
-                  validate: value => {
-                    return isAddress(value) ? true : 'Address in not valid'; // Add your validation logic here
-                  },
                 }}
               />
               <div className='border-t pt-2'>
