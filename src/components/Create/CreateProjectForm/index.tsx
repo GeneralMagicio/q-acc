@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
@@ -135,7 +135,16 @@ const CreateProjectForm: FC = () => {
   const { data: addrWhitelist, isFetching } = useAddressWhitelist();
   const router = useRouter();
 
-  const { handleSubmit, getValues } = methods;
+  const { handleSubmit, getValues, setValue, resetField } = methods;
+
+  const projectAddress = addrWhitelist?.fundingPotMultisig;
+  useEffect(() => {
+    if (projectAddress) {
+      setValue('projectAddress', projectAddress);
+    } else {
+      resetField('projectAddress');
+    }
+  }, [projectAddress]);
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
