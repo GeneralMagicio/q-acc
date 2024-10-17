@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
