@@ -57,7 +57,7 @@ const ProjectDetailPreview = () => {
       <div className='container'>
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailPreviewBanner projectData={projectData} />
-          <ProjectDetailPreviewDonationSection />
+          <ProjectDetailPreviewDonationSection projectFormData={projectData} />
         </div>
         <div className='my-6'>{<RoundCountBanner />}</div>
       </div>
