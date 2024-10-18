@@ -121,20 +121,18 @@ const DonatePageBody = () => {
     };
 
     const updatePOLCap = async () => {
-      if (activeRoundDetails) {
-        const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+      const { capAmount, totalDonationAmountInRound }: any =
+        await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
-        setMaxPOLCap(capAmount);
-        setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
-        console.log('Remaining Donation Limit', remainingDonationAmount);
-        let tempprogress = 0;
-        if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
-        }
+      setMaxPOLCap(capAmount);
+      setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
+      console.log('Remaining Donation Limit', remainingDonationAmount);
+      let tempprogress = 0;
+      if (maxPOLCap > 0) {
+        tempprogress =
+          Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+          100;
+        setProgress(tempprogress);
       }
     };
 
@@ -142,7 +140,13 @@ const DonatePageBody = () => {
       getDonationCap();
       updatePOLCap();
     }
-  }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
+  }, [
+    projectData,
+    activeRoundDetails,
+    remainingDonationAmount,
+    maxPOLCap,
+    progress,
+  ]);
 
   // LIFI LOGIC
   const toggleWidget = () => {
