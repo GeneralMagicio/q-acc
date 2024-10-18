@@ -14,7 +14,7 @@ export const HoldModal: FC<HoldModalProps> = props => {
         <p className='mt-4 mb-10'>
           The connected address is not on the allow list for any project. Double
           check you are connected with the right address. If you believe this is
-          in error, reach out the the Quadratic Accelerator team..
+          in error, reach out to the Quadratic Accelerator team..
         </p>
         <div className='flex justify-center'>
           <a

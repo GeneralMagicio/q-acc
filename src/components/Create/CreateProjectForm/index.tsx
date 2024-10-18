@@ -2,17 +2,14 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { useEffect, type FC } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
-import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
 import Textarea from '../../TextArea';
 import { SocialMediaInput } from '../../SocialMediaInput';
 import { validators } from '../../SocialMediaInput/vaildators';
 import { RichTextEditor } from '@/components/RichTextEditor';
-import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
 import { EProjectSocialMediaType } from '@/types/project.type';
@@ -235,7 +232,7 @@ const CreateProjectForm: FC = () => {
             </div>
           </section>
 
-          <section className='flex flex-col gap-4 w-full mx-auto'>
+          {/* <section className='flex flex-col gap-4 w-full mx-auto'>
             <h1 className='text-4xl font-bold text-gray-800'>
               Your Multisig Address
             </h1>
@@ -278,7 +275,7 @@ const CreateProjectForm: FC = () => {
                 />
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className='flex flex-col gap-6 w-full mx-auto'>
             <label className='text-4xl font-bold text-gray-800'>
