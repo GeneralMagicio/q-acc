@@ -109,6 +109,8 @@ const DonatePageBody = () => {
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
+  const [donationId, setDonationId] = useState<number>(0);
+
   const handleShare = () => {
     openShareModal();
   };
@@ -172,10 +174,13 @@ const DonatePageBody = () => {
     chain: chain,
     transport: http(config.NETWORK_RPC_ADDRESS),
   });
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    status,
+  } = useWaitForTransactionReceipt({
+    hash,
+  });
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
@@ -263,6 +268,7 @@ const DonatePageBody = () => {
       tokenAddress,
       anoynmous,
     );
+    setDonationId(Number(data));
   };
 
   const handleDonate = async () => {
@@ -369,11 +375,13 @@ const DonatePageBody = () => {
     setTerms(isChecked);
   };
 
-  if (isConfirmed) {
+  if (isConfirmed && donationId) {
     return (
       <DonateSuccessPage
         transactionHash={hash}
         round={activeRoundDetails?.__typename}
+        donationId={donationId}
+        status={status}
       />
     );
   }
