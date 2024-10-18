@@ -5,50 +5,69 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useDonateContext } from '@/context/donation.context';
 import config from '@/config/configuration';
-import { fetchDonationStatus } from '@/helpers/donation';
-import { useFetchUser } from '@/hooks/useFetchUser';
 import { IconTransactionVerified } from '../Icons/IconTransactionVerified';
 import { IconPendingSpinner } from '../Icons/IconPendingSpinner';
+import { updateDonation } from '@/services/donation.services';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
   round?: string;
+  donationId: number;
+  status: string;
 }
 export enum DonationStatus {
   Verified = 'verified',
   Pending = 'pending',
+  Failed = 'failed',
 }
 const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   transactionHash,
   round,
+  donationId,
+  status,
 }) => {
   const { projectData } = useDonateContext();
   const [donationStatus, setDonationStatus] = useState<string>(
     DonationStatus.Pending,
   );
-  const { data: user } = useFetchUser();
+  // const { data: user } = useFetchUser();
+
+  // useEffect(() => {
+  //   if (transactionHash) {
+  //     const checkDonationStatus = async () => {
+  //       const donation = await fetchDonationStatus(
+  //         Number(user?.id),
+  //         transactionHash,
+  //       );
+  //       if (donation?.status === 'verified') {
+  //         setDonationStatus(DonationStatus.Verified);
+  //         clearInterval(interval);
+  //         // Stop the polling when verified
+  //       } else {
+  //         setDonationStatus(donation?.status || DonationStatus.Pending);
+  //       }
+  //       // console.log('Current donation', donation);
+  //     };
+
+  //     const interval = setInterval(checkDonationStatus, 1000);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [transactionHash]);
 
   useEffect(() => {
-    if (transactionHash) {
-      const checkDonationStatus = async () => {
-        const donation = await fetchDonationStatus(
-          Number(user?.id),
-          transactionHash,
-        );
-        if (donation?.status === 'verified') {
-          setDonationStatus(DonationStatus.Verified);
-          clearInterval(interval);
-          // Stop the polling when verified
-        } else {
-          setDonationStatus(donation?.status || DonationStatus.Pending);
-        }
-        console.log('Current donation', donation);
-      };
-
-      const interval = setInterval(checkDonationStatus, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [transactionHash]);
+    const checkDonationStatus = async () => {
+      if (status === 'success') {
+        setDonationStatus(DonationStatus.Pending);
+        const res = await updateDonation(DonationStatus.Verified, donationId);
+        setDonationStatus(res?.status);
+      }
+      if (status === 'error') {
+        updateDonation(DonationStatus.Failed, donationId);
+        setDonationStatus(DonationStatus.Failed);
+      }
+    };
+    checkDonationStatus();
+  }, [status, donationId]);
 
   return (
     <div className='bg-[#F7F7F9] w-full h-screen  py-10 absolute z-40 my-20'>
@@ -106,7 +125,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                     it.
                   </span>
                 </div>
-              ) : (
+              ) : donationStatus === DonationStatus.Verified ? (
                 <div className='p-4 flex flex-col gap-2 font-redHatText  rounded-lg bg-[#FFF] shadow-tabShadow'>
                   <h1 className=' text-[#37B4A9] font-medium flex gap-1 items-center'>
                     It's done <IconTransactionVerified size={16} />
@@ -114,6 +133,10 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                   <span className='text-[#4F576A]'>
                     Your transaction has been verified and completely processed.
                   </span>
+                </div>
+              ) : (
+                <div className='p-4 flex flex-col gap-2 font-redHatText  rounded-lg bg-[#FFF] shadow-tabShadow'>
+                  <span className='text-[#4F576A]'>Some error occured</span>
                 </div>
               )}
             </div>
