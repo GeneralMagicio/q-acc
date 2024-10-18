@@ -1,18 +1,15 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { type FC } from 'react';
-import Image from 'next/image';
+import { useEffect, type FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
-import Checkbox from '@/components/Checkbox';
 import { Dropzone } from '@/components/DropZone';
 import Textarea from '../../TextArea';
 import { SocialMediaInput } from '../../SocialMediaInput';
 import { validators } from '../../SocialMediaInput/vaildators';
 import { RichTextEditor } from '@/components/RichTextEditor';
-import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { useCreateContext } from '../CreateContext';
 import CreateNavbar from '../CreateNavbar';
 import { EProjectSocialMediaType } from '@/types/project.type';
@@ -135,7 +132,16 @@ const CreateProjectForm: FC = () => {
   const { data: addrWhitelist, isFetching } = useAddressWhitelist();
   const router = useRouter();
 
-  const { handleSubmit, getValues } = methods;
+  const { handleSubmit, getValues, setValue, resetField } = methods;
+
+  const projectAddress = addrWhitelist?.fundingPotMultisig;
+  useEffect(() => {
+    if (projectAddress) {
+      setValue('projectAddress', projectAddress);
+    } else {
+      resetField('projectAddress');
+    }
+  }, [projectAddress]);
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
@@ -226,7 +232,7 @@ const CreateProjectForm: FC = () => {
             </div>
           </section>
 
-          <section className='flex flex-col gap-4 w-full mx-auto'>
+          {/* <section className='flex flex-col gap-4 w-full mx-auto'>
             <h1 className='text-4xl font-bold text-gray-800'>
               Your Multisig Address
             </h1>
@@ -269,7 +275,7 @@ const CreateProjectForm: FC = () => {
                 />
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className='flex flex-col gap-6 w-full mx-auto'>
             <label className='text-4xl font-bold text-gray-800'>

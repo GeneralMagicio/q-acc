@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { formatAmount, formatNumber } from '@/helpers/donation';
 import ProgressBar from '../ProgressBar';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -17,20 +16,22 @@ export enum EDonationCardStates {
 }
 
 interface ProjectDetailPreviewBannerProps {
-  projectData: ProjectFormData;
+  projectFormData: ProjectFormData;
 }
 
-const ProjectDetailPreviewDonationSection = () => {
-  const { address } = useAccount();
+const ProjectDetailPreviewDonationSection = ({
+  projectFormData,
+}: ProjectDetailPreviewBannerProps) => {
+  const projectAddress = projectFormData.projectAddress;
   const [projectTokenData, setProjectTokenData] = useState<any>(null);
 
   useEffect(() => {
-    if (address) {
-      fetchAbcToken({ userAddress: address }).then(data => {
+    if (projectAddress) {
+      fetchAbcToken({ projectAddress }).then(data => {
         setProjectTokenData(data);
       });
     }
-  }, [address]);
+  }, [projectAddress]);
 
   let totalDonations = 10;
   let currentState = 'early';

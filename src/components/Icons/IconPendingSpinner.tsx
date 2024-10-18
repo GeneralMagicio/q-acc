@@ -15,7 +15,7 @@ export const IconPendingSpinner: FC<IIcon> = ({
     >
       <g>
         <circle
-          stroke-dasharray='103.67255756846316 36.55751918948772'
+          strokeDasharray='103.67255756846316 36.55751918948772'
           r='22'
           strokeWidth='10'
           stroke='#0a91fe'
