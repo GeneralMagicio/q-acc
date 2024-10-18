@@ -4,6 +4,7 @@ import {
   SAVE_DONATION,
   GET_PROJECT_DONATIONS_USERS_BY_ID,
   CREATE_DRAFT_DONATION,
+  UPDATE_DONATION_STATUS,
 } from '@/queries/project.query';
 import {
   GET_USER_DONATIONS,
@@ -147,5 +148,23 @@ export const fetchUserDonationsCount = async (userId: number) => {
     return res?.donationsByUserId;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const updateDonation = async (status: string, donationId: number) => {
+  try {
+    const res = await requestGraphQL<{ updateDonationStatus: any }>(
+      UPDATE_DONATION_STATUS,
+      {
+        status,
+        donationId,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.updateDonationStatus;
+  } catch (error) {
+    console.error(error, 'donation', donationId);
   }
 };
