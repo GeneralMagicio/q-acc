@@ -290,7 +290,7 @@ const MyProjects = () => {
 
             <Link
               target='_blank'
-              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.issuanceTokenAddress}`}
             >
               <div className='w-full p-[10px_16px] shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
                 <span className='flex gap-4 text-[#5326EC] font-bold'>

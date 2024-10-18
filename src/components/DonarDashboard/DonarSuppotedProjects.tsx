@@ -82,7 +82,7 @@ const DonarSuppotedProjects = ({
         <div className='flex flex-col gap-4 font-redHatText'>
           <Link
             target='_blank'
-            href={`${config.SCAN_URL}/address/${project?.abc?.projectAddress}`}
+            href={`${config.SCAN_URL}/address/${project?.abc?.issuanceTokenAddress}`}
           >
             <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
               <span className='flex gap-4 text-[#5326EC] font-bold'>

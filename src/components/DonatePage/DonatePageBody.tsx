@@ -541,10 +541,17 @@ const DonatePageBody = () => {
                 integrator='drawer'
               />
 
-              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                <span className='text-[#5326EC]'>Need help!</span>
-                <IconArrowRight color='#5326EC' />
-              </div>
+              <Link
+                target='_blank'
+                href={
+                  'https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
+                }
+              >
+                <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
+                  <span className='text-[#5326EC]'>Need help!</span>
+                  <IconArrowRight color='#5326EC' />
+                </div>
+              </Link>
             </div>
           </div>
 
