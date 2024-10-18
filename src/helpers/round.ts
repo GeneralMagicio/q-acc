@@ -8,7 +8,12 @@ export const calculateCapAmount = async (
   projectId: number,
   includeCumulativeAmount: boolean = false,
 ) => {
-  if (!activeRoundDetails) return null;
+  if (!activeRoundDetails) {
+    activeRoundDetails = await getMostRecentEndRound();
+    if (!activeRoundDetails) {
+      return { capAmount: 0, totalDonationAmountInRound: 0 };
+    }
+  }
 
   let maxPOLAmount =
     (activeRoundDetails?.roundUSDCloseCapPerProject ??
