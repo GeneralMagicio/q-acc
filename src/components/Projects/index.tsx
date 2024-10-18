@@ -15,14 +15,14 @@ export const ProjectsView = () => {
   const [isRoundEnded, setIsRoundEnded] = useState(false);
 
   useEffect(() => {
-    const fetchMostRecentEndRound = async () => {
+    const checkRoundEnded = async () => {
       const res = await getMostRecentEndRound();
 
       return res?.__typename === 'QfRound';
     };
 
     const getData = async () => {
-      const data = await fetchMostRecentEndRound();
+      const data = await checkRoundEnded();
       setIsRoundEnded(data);
     };
 

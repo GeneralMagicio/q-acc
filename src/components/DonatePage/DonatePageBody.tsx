@@ -5,6 +5,7 @@ import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
 import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
+import round from 'lodash/round';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -129,9 +130,7 @@ const DonatePageBody = () => {
       console.log('Remaining Donation Limit', remainingDonationAmount);
       let tempprogress = 0;
       if (maxPOLCap > 0) {
-        tempprogress =
-          Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-          100;
+        tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
         setProgress(tempprogress);
       }
     };
