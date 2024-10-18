@@ -127,7 +127,9 @@ const DonarSuppotedProjects = ({
                 {formatAmount(totalContributions) || 0} POL{' '}
               </span>
               <span className='font-medium text-[#82899A]'>
-                ~ $ {formatAmount(project.totalDonations) || 0}
+                ~ ${' '}
+                {formatAmount(Math.round(project.totalDonations * 100) / 100) ||
+                  0}
               </span>
             </div>
           </div>

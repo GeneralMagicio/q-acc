@@ -156,7 +156,10 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
             {formatAmount(totalContributions)} POL
           </h1>
           <span className='font-medium'>
-            ~ ${formatAmount(totalContributions * Number(POLPrice))}
+            ~ $
+            {formatAmount(
+              Math.round(totalContributions * Number(POLPrice) * 100) / 100,
+            )}
           </span>
         </div>
       </div>
@@ -218,7 +221,11 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                       </Link>
                     </div>
                     <span className='text-xs font-medium text-[#A5ADBF]'>
-                      $ {formatAmount(donation.amount * Number(POLPrice))}
+                      ${' '}
+                      {formatAmount(
+                        Math.round(donation.amount * Number(POLPrice) * 100) /
+                          100,
+                      )}
                     </span>
                   </div>
                 </div>
