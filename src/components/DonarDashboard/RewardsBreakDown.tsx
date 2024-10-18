@@ -122,7 +122,11 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                   {formatAmount(totalContributions)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ $ {formatAmount(totalContributions * Number(POLPrice)) || 0}
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(totalContributions * Number(POLPrice) * 100) /
+                      100,
+                  ) || 0}
                 </span>
               </div>
             </div>
@@ -166,7 +170,8 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {totalTokensReceived} {project?.abc?.tokenTicker}
+                  {formatAmount(Math.round(totalTokensReceived * 100) / 100)}{' '}
+                  {project?.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
@@ -184,7 +189,8 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {lockedTokens} {project?.abc?.tokenTicker}
+                  {formatAmount(Math.round(lockedTokens * 100) / 100)}{' '}
+                  {project?.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ $ {formatAmount(lockedTokens * project?.abc?.tokenPrice)}
@@ -201,11 +207,16 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1 items-center font-medium text-[#1D1E1F]'>
                 <span className='text-2xl'>
-                  {availableToClaim} {project?.abc?.tokenTicker}
+                  {formatAmount(Math.round(availableToClaim * 100) / 100)}{' '}
+                  {project?.abc?.tokenTicker}
                 </span>
                 <span>
                   ~ ${' '}
-                  {formatAmount(availableToClaim * project?.abc?.tokenPrice)}
+                  {formatAmount(
+                    Math.round(
+                      availableToClaim * project?.abc?.tokenPrice * 100,
+                    ) / 100,
+                  )}
                 </span>
               </div>
             </div>
