@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { ProjectFormData } from '../Create/CreateProjectForm';
 import { fetchAbcToken } from '@/app/actions/fetch-abc-token';
 
@@ -10,16 +9,16 @@ interface ProjectDetailPreviewBannerProps {
 const ProjectDetailPreviewBanner = ({
   projectData,
 }: ProjectDetailPreviewBannerProps) => {
-  const { address } = useAccount();
   const [projectTokenData, setProjectTokenData] = useState<any>(null);
 
+  const projectAddress = projectData.projectAddress;
   useEffect(() => {
-    if (address) {
-      fetchAbcToken({ userAddress: address }).then(data => {
+    if (projectAddress) {
+      fetchAbcToken({ projectAddress }).then(data => {
         setProjectTokenData(data);
       });
     }
-  }, [address]);
+  }, [projectAddress]);
 
   const bgSrc = projectData?.banner
     ? projectData.banner

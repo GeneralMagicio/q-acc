@@ -635,3 +635,11 @@ query (
       totalUsdBalance
     }
   }`;
+
+export const UPDATE_DONATION_STATUS = `	mutation ($status: String!, $donationId: Float!) {
+		updateDonationStatus(status: $status, donationId: $donationId) {
+			id
+			status
+			verifyErrorMessage
+		}
+	}`;

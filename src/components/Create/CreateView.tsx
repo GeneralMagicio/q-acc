@@ -8,18 +8,18 @@ import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
 import { HelpSection } from '@/components/HelpSection';
 import InfoSection from '@/components/InfoSection';
-import { useIsUserWhiteListed } from '@/hooks/useIsUserWhiteListed';
 import Routes from '@/lib/constants/Routes';
 import { HoldModal } from '../Modals/HoldModal';
+import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
   const { address } = useAccount();
-  const { data: isUserWhiteListed, isPending } = useIsUserWhiteListed();
+  const { data: addrWhitelist, isPending } = useAddressWhitelist();
 
   useEffect(() => {
-    setShowHoldModal(!!address && !isPending && !isUserWhiteListed);
-  }, [address, isUserWhiteListed, isPending]);
+    setShowHoldModal(!!address && !isPending && !addrWhitelist);
+  }, [address, addrWhitelist, isPending]);
 
   return (
     <main className='flex flex-col gap-4'>
