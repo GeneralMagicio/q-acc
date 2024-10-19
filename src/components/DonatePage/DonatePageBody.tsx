@@ -14,7 +14,6 @@ import round from 'lodash/round';
 import floor from 'lodash/floor';
 import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers';
 import debounce from 'lodash/debounce';
-import { wagmiConfig } from '@/config/wagmi';
 
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -68,6 +67,7 @@ import {
   SquidTokenType,
   SwapData,
 } from '@/helpers/squidTransactions';
+import { wagmiAdapter } from '@/config/wagmi';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
@@ -83,7 +83,9 @@ export function clientToSigner(client: Client<Transport, Chain, Account>) {
 }
 
 export async function getEthersSigner({ chainId }: { chainId?: number } = {}) {
-  const client = await getConnectorClient(wagmiConfig, { chainId });
+  const client = await getConnectorClient(wagmiAdapter.wagmiConfig, {
+    chainId,
+  });
   return clientToSigner(client);
 }
 
@@ -205,7 +207,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
 
-  let provider = new ethers.BrowserProvider(window.ethereum);
+  // let provider = new ethers.BrowserProvider(window.ethereum);
 
   useEffect(() => {
     const fetchConversion = async () => {
@@ -696,7 +698,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         to: squidTransactionRequest.target,
         data: squidTransactionRequest.data,
         value: squidTransactionRequest.value,
-        gasPrice: (await provider.getFeeData()).gasPrice,
+        // gasPrice: (await provider.getFeeData()).gasPrice,
         gasLimit: squidTransactionRequest.gasLimit,
       });
       console.log(tx.hash);

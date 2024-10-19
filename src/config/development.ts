@@ -16,7 +16,8 @@ import {
   optimism,
   polygon,
   scroll,
-} from 'wagmi/chains';
+} from '@reown/appkit/networks';
+
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 

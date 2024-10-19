@@ -2,8 +2,7 @@ import { readContract, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { multicall, getBalance, getPublicClient } from 'wagmi/actions';
-
-import { wagmiConfig } from '@/config/wagmi';
+import { wagmiAdapter } from '@/config/wagmi';
 
 import config from '@/config/configuration';
 import { SquidTokenType } from './squidTransactions';
@@ -16,7 +15,7 @@ export const fetchBalanceWithDecimals = async (
 ) => {
   try {
     if (tokenAddress === AddressZero) {
-      const client = getPublicClient(wagmiConfig);
+      const client = getPublicClient(wagmiAdapter.wagmiConfig);
       const balance = await client?.getBalance({ address: userAddress });
       const formattedBalance = formatUnits(balance!, 18);
       return {
@@ -25,13 +24,13 @@ export const fetchBalanceWithDecimals = async (
       };
     } else {
       const [balance, decimals] = await Promise.all([
-        readContract(wagmiConfig, {
+        readContract(wagmiAdapter.wagmiConfig, {
           address: tokenAddress,
           abi: erc20Abi,
           functionName: 'balanceOf',
           args: [userAddress],
         }),
-        readContract(wagmiConfig, {
+        readContract(wagmiAdapter.wagmiConfig, {
           address: tokenAddress,
           abi: erc20Abi,
           functionName: 'decimals',
@@ -99,7 +98,7 @@ export const handleErc20Transfer = async ({
   projectAddress,
 }: any) => {
   const value = parseUnits(inputAmount, 18);
-  const hash = await writeContract(wagmiConfig, {
+  const hash = await writeContract(wagmiAdapter.wagmiConfig, {
     address: tokenAddress,
     abi: erc20Abi,
     functionName: 'transfer',
@@ -205,7 +204,7 @@ export const fetchEVMTokenBalances = async <T extends { [key: string]: any }>(
 
   try {
     // Fetch balances for ERC20 tokens via multicall
-    const erc20Results = await multicall(wagmiConfig, {
+    const erc20Results = await multicall(wagmiAdapter.wagmiConfig, {
       contracts: erc20Calls,
       allowFailure: true,
     });
@@ -213,7 +212,7 @@ export const fetchEVMTokenBalances = async <T extends { [key: string]: any }>(
     // // Fetch balances for native tokens (e.g., ETH)
     const nativeTokenBalances = await Promise.all(
       nativeTokens.map(async nativeToken => {
-        const balance = await getBalance(wagmiConfig, {
+        const balance = await getBalance(wagmiAdapter.wagmiConfig, {
           address: walletAddress as Address,
         });
         return {
