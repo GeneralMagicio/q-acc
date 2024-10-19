@@ -1,4 +1,6 @@
-import { polygonZkEvm } from 'wagmi/chains';
+import { polygonZkEvm } from '@reown/appkit/networks';
+import { polygonZkEvmCardona as viemPolygonZkEvmCardona } from 'wagmi/chains';
+
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
@@ -15,7 +17,7 @@ const config: EnvConfig = {
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
   NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com',
   privadoConfig: {
-    chain: polygonZkEvm,
+    chain: viemPolygonZkEvmCardona,
     chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [

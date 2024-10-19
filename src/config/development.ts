@@ -1,4 +1,6 @@
-import { baseSepolia, polygonZkEvmCardona } from 'wagmi/chains';
+import { baseSepolia } from '@reown/appkit/networks';
+import { polygonZkEvmCardona } from 'wagmi/chains';
+
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 

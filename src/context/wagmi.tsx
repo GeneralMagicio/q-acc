@@ -1,19 +1,18 @@
 'use client';
 
 import { createAppKit } from '@reown/appkit/react';
-import { baseSepolia } from '@reown/appkit/networks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { Config, State, WagmiProvider } from 'wagmi';
 import { projectId, wagmiAdapter, metadata } from '@/config/wagmi';
+import config from '@/config/configuration';
 
 const queryClient = new QueryClient();
 
 createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: [baseSepolia],
-  defaultNetwork: baseSepolia,
+  networks: config.SUPPORTED_CHAINS,
   metadata,
   features: {
     analytics: true,
