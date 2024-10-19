@@ -1,5 +1,5 @@
 import { Connector, signMessage } from '@wagmi/core';
-import { wagmiConfig } from '@/config/wagmi';
+import { wagmiAdapter } from '@/config/wagmi';
 import config from '@/config/configuration';
 
 // Generate Nonce
@@ -59,7 +59,7 @@ export const signWithEVM = async (
 
   const { message, nonce } = siweMessage;
 
-  const signature = await signMessage(wagmiConfig, {
+  const signature = await signMessage(wagmiAdapter.wagmiConfig, {
     connector: connector,
     message: message,
   });
