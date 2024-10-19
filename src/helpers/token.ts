@@ -1,8 +1,8 @@
 import { writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { erc20Abi, formatUnits, parseUnits } from 'viem';
-import { wagmiConfig } from '@/config/wagmi';
 import config from '@/config/configuration';
+import { wagmiAdapter } from '@/config/wagmi';
 
 export const fetchTokenDetails = async ({
   tokenAddress,
@@ -53,7 +53,7 @@ export const handleErc20Transfer = async ({
   projectAddress,
 }: any) => {
   const value = parseUnits(inputAmount, 18);
-  const hash = await writeContract(wagmiConfig, {
+  const hash = await writeContract(wagmiAdapter.wagmiConfig, {
     address: tokenAddress,
     abi: erc20Abi,
     functionName: 'transfer',

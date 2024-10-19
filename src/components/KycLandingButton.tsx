@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAppKit } from '@reown/appkit/react';
 import { Button, ButtonStyle, ButtonColor } from './Button';
 import { IconArrowRight } from './Icons/IconArrowRight';
 import { fetchGivethUserInfo } from '@/services/user.service';
@@ -14,7 +14,7 @@ export const KycLandingButton = () => {
   const { address } = useAccount();
   const { mutateAsync: updateUser } = useUpdateUser();
   const route = useRouter();
-  const { open } = useWeb3Modal();
+  const { open } = useAppKit();
 
   const handleStartKyc = async () => {
     if (!address) {
