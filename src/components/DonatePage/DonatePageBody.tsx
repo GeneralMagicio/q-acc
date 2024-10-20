@@ -114,6 +114,7 @@ const DonatePageBody = () => {
   const openPrivadoModal = () => setPrivadoModalOpen(true);
   const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleShare = () => {
     openShareModal();
@@ -276,6 +277,7 @@ const DonatePageBody = () => {
   };
 
   const handleDonate = async () => {
+    setButtonDisabled(true);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -296,6 +298,7 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
+      setButtonDisabled(false);
     }
   };
 
@@ -586,7 +589,7 @@ const DonatePageBody = () => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected}
+              disabled={!isConnected || buttonDisabled}
               loading={isConfirming}
               color={ButtonColor.Giv}
               className={`text-white justify-center ${
