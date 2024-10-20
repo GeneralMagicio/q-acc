@@ -460,6 +460,7 @@ const DonatePageBody = () => {
                 type='number'
                 disabled={isConfirming}
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
+                onWheel={(e: any) => e.target.blur()}
               />
 
               <span className='absolute text-sm  md:text-base top-0 right-0 h-full flex items-center pr-5 text-gray-400 pointer-events-none'>
