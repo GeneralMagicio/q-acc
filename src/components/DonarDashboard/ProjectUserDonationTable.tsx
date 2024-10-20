@@ -226,7 +226,9 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                   {donation?.rewardTokenAmount
                     ? formatAmount(
                         Math.round(donation.rewardTokenAmount * 100) / 100,
-                      ) + donation.project.abc.tokenTicker
+                      ) +
+                      ' ' +
+                      donation.project.abc.tokenTicker
                     : '-'}
                 </div>
                 <div className='p-[18px_4px] text-[#1D1E1F] flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>

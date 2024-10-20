@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import round from 'lodash/round';
 import config from '@/config/configuration';
 import { getIpfsAddress } from '@/helpers/image';
 
@@ -212,7 +213,8 @@ const DonarSuppotedProjects = ({
           </div>
           <div className='flex gap-1'>
             <span className='font-medium text-[#1D1E1F]'>
-              {totalRewardTokens || '---'} {project.abc.tokenTicker}
+              {formatAmount(round(totalRewardTokens, 2)) || '---'}{' '}
+              {project.abc.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
               ~ ${totalRewardTokens * project.abc.tokenPrice || '---'}

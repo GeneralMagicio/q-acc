@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import round from 'lodash/round';
 import ProjectUserDonationTable from './ProjectUserDonationTable'; // Import the ProjectUserDonationTable component
 import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
@@ -166,7 +167,8 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {totalTokensReceived} {project?.abc?.tokenTicker}
+                  {formatAmount(round(totalTokensReceived, 2))}{' '}
+                  {project?.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
@@ -201,7 +203,8 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1 items-center font-medium text-[#1D1E1F]'>
                 <span className='text-2xl'>
-                  {availableToClaim} {project?.abc?.tokenTicker}
+                  {formatAmount(round(availableToClaim, 2))}{' '}
+                  {project?.abc?.tokenTicker}
                 </span>
                 <span>
                   ~ ${' '}
