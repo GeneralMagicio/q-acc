@@ -87,25 +87,23 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
   useEffect(() => {
     const updatePOLCap = async () => {
-      if (activeRoundDetails) {
-        const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(activeRoundDetails, Number(project.id));
+      const { capAmount, totalDonationAmountInRound }: any =
+        await calculateCapAmount(activeRoundDetails, Number(project.id));
 
-        setMaxPOLCap(capAmount);
-        setAmountDonatedInRound(totalDonationAmountInRound);
+      setMaxPOLCap(capAmount);
+      setAmountDonatedInRound(totalDonationAmountInRound);
 
-        let tempprogress = 0;
-        if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
-        }
+      let tempprogress = 0;
+      if (maxPOLCap > 0) {
+        tempprogress =
+          Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
+          100;
+        setProgress(tempprogress);
       }
     };
 
     updatePOLCap();
-  }, [totalPOLDonated, activeRoundDetails, project]);
+  }, [activeRoundDetails, project, progress, maxPOLCap, amountDonatedInRound]);
 
   const handleSupport = async (e: any) => {
     e.stopPropagation();
