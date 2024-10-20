@@ -134,7 +134,7 @@ export default function Home() {
             ''
           ) : (
             <>
-              {isEarlyAccess ? (
+              {isEarlyAccess || !isRoundEnded ? (
                 <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
                   <h1 className='text-gray-800 text-2xl font-bold'>
                     🔐 Private Chat
@@ -153,7 +153,7 @@ export default function Home() {
 
           {isRoundEnded ? (
             ''
-          ) : isEarlyAccess ? (
+          ) : isEarlyAccess || !isRoundEnded ? (
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
               <h1 className='text-gray-800 text-2xl font-bold'>
                 📅 Early Access Mint Rounds
