@@ -13,6 +13,7 @@ export type EnvConfig = {
   SCAN_URL: string;
   GIVETH_GQL_ENDPOINT: string;
   NETWORK_RPC_ADDRESS: string;
+  INDEXER_GRAPHQL_URL: string;
   privadoConfig: {
     chain: Chain;
     chainName: string;

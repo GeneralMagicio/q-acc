@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { ethers, BigNumberish, Contract, formatUnits } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import config from '@/config/configuration';
 
 const provider = new ethers.JsonRpcProvider(config.NETWORK_RPC_ADDRESS);
@@ -14,6 +15,19 @@ const abi = [
     type: 'function',
   },
 ];
+
+const getClaimedTributesQuery = `
+    query GetTokenTotalSupplyByAddress($orchestratorAddress: String!) {
+      BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
+        id
+        feeClaim {
+          id
+          amount
+          recipient
+        }
+      }
+    }
+`;
 
 interface UseProjectCollateralFeeCollectedProps {
   contractAddress?: string;
@@ -43,4 +57,33 @@ export const useProjectCollateralFeeCollected = ({
   );
 
   return { collectedFees };
+};
+
+async function getClaimedTributes(orchestratorAddress?: string): Promise<any> {
+  try {
+    const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
+      query: getClaimedTributesQuery,
+      variables: {
+        orchestratorAddress,
+      },
+    });
+    const feeClaims = result.data.data.BondingCurve[0]?.feeClaim;
+    return feeClaims.reduce(
+      (sum: any, fee: { amount: any }) => sum + (Number(fee.amount) || 0),
+      0,
+    );
+  } catch (e) {
+    console.error('error in getting claimed tributes', e);
+    return 0;
+  }
+}
+
+export const useClaimedTributes = (orchestratorAddress?: string) => {
+  const query = useQuery<number, Error>({
+    queryKey: ['claimedTributes', orchestratorAddress],
+    queryFn: () => getClaimedTributes(orchestratorAddress),
+    enabled: !!orchestratorAddress, // Run only if orchestratorAddress is provided
+  });
+
+  return query.data || 0;
 };
