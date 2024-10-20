@@ -106,7 +106,7 @@ const ProjectDetail = () => {
           <div className='container'>
             <Link
               target='_blank'
-              href={`${config.SCAN_URL}/address/${projectData?.abc?.projectAddress}`}
+              href={`${config.SCAN_URL}/address/${projectData?.abc?.issuanceTokenAddress}`}
               className='  w-fit px-6 py-[10px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
             >
               <span className='flex gap-4 text-[#5326EC]  font-bold font-redHatText'>
