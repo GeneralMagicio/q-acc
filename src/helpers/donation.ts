@@ -46,8 +46,8 @@ export const calculateLockedRewardTokenAmount = (
     return 0;
   }
 
-  if (now < streamStart) {
-    return rewardTokenAmount + cliff;
+  if (now.getTime() < streamStart.getTime() + cliff) {
+    return rewardTokenAmount;
   }
 
   if (now > streamEnd) {
