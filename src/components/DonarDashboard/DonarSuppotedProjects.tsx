@@ -217,7 +217,9 @@ const DonarSuppotedProjects = ({
               {project.abc.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
-              ~ ${totalRewardTokens * project.abc.tokenPrice || '---'}
+              ~ $
+              {formatAmount(totalRewardTokens * project.abc.tokenPrice) ||
+                '---'}
             </span>
           </div>
         </div>
