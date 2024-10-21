@@ -5,6 +5,7 @@ import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
 import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
+import round from 'lodash/round';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -113,6 +114,7 @@ const DonatePageBody = () => {
   const openPrivadoModal = () => setPrivadoModalOpen(true);
   const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleShare = () => {
     openShareModal();
@@ -127,20 +129,16 @@ const DonatePageBody = () => {
     };
 
     const updatePOLCap = async () => {
-      if (activeRoundDetails) {
-        const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+      const { capAmount, totalDonationAmountInRound }: any =
+        await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
-        setMaxPOLCap(capAmount);
-        setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
-        console.log('Remaining Donation Limit', remainingDonationAmount);
-        let tempprogress = 0;
-        if (maxPOLCap > 0) {
-          tempprogress =
-            Math.round((totalDonationAmountInRound / capAmount) * 100 * 100) /
-            100;
-          setProgress(tempprogress);
-        }
+      setMaxPOLCap(capAmount);
+      setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
+      console.log('Remaining Donation Limit', remainingDonationAmount);
+      let tempprogress = 0;
+      if (maxPOLCap > 0) {
+        tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
+        setProgress(tempprogress);
       }
     };
 
@@ -148,7 +146,13 @@ const DonatePageBody = () => {
       getDonationCap();
       updatePOLCap();
     }
-  }, [projectData, activeRoundDetails, totalPOLDonated, maxPOLCap]);
+  }, [
+    projectData,
+    activeRoundDetails,
+    remainingDonationAmount,
+    maxPOLCap,
+    progress,
+  ]);
 
   // LIFI LOGIC
   const toggleWidget = () => {
@@ -273,6 +277,7 @@ const DonatePageBody = () => {
   };
 
   const handleDonate = async () => {
+    setButtonDisabled(true);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -293,6 +298,7 @@ const DonatePageBody = () => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
+      setButtonDisabled(false);
     }
   };
 
@@ -457,6 +463,7 @@ const DonatePageBody = () => {
                 type='number'
                 disabled={isConfirming}
                 className='w-full  text-sm  md:text-base border rounded-lg  px-4'
+                onWheel={(e: any) => e.target.blur()}
               />
 
               <span className='absolute text-sm  md:text-base top-0 right-0 h-full flex items-center pr-5 text-gray-400 pointer-events-none'>
@@ -541,10 +548,17 @@ const DonatePageBody = () => {
                 integrator='drawer'
               />
 
-              <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                <span className='text-[#5326EC]'>Need help!</span>
-                <IconArrowRight color='#5326EC' />
-              </div>
+              <Link
+                target='_blank'
+                href={
+                  'https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
+                }
+              >
+                <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
+                  <span className='text-[#5326EC]'>Need help!</span>
+                  <IconArrowRight color='#5326EC' />
+                </div>
+              </Link>
             </div>
           </div>
 
@@ -575,7 +589,7 @@ const DonatePageBody = () => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected}
+              disabled={!isConnected || buttonDisabled}
               loading={isConfirming}
               color={ButtonColor.Giv}
               className={`text-white justify-center ${

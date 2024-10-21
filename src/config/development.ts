@@ -1,14 +1,13 @@
-import { baseSepolia } from '@reown/appkit/networks';
 import { polygonZkEvmCardona } from 'wagmi/chains';
-
+import { polygonZkEvm } from '@reown/appkit/networks';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [baseSepolia] as const,
-  ERC_TOKEN_ADDRESS: '0x065775C7aB4E60ad1776A30DCfB15325d231Ce4F',
-  ERC_TOKEN_SYMBOL: 'iUSD',
-  SCAN_URL: 'https://sepolia.basescan.org',
+  SUPPORTED_CHAINS: [polygonZkEvm] as const,
+  ERC_TOKEN_ADDRESS: '0x961bB3932A7efAa9aDcc7409e1fea090479E8312',
+  ERC_TOKEN_SYMBOL: 'TPOL',
+  SCAN_URL: 'https://zkevm.polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
     'https://staging.qacc-be.generalmagic.io/graphql',
@@ -16,7 +15,7 @@ const config: EnvConfig = {
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     'https://auth.serve.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://impact-graph.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS: 'https://sepolia.base.org',
+  NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com	',
   privadoConfig: {
     chain: polygonZkEvmCardona,
     chainName: 'zkevm_cardona',

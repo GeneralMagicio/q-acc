@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import round from 'lodash/round';
 import Pagination from '../Pagination';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconSort } from '../Icons/IconSort';
@@ -192,7 +193,7 @@ const ProjectSupportTable = ({
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
                   {donation?.rewardTokenAmount
-                    ? formatAmount(donation.rewardTokenAmount) +
+                    ? formatAmount(round(donation.rewardTokenAmount, 2)) +
                       ' ' +
                       projectData?.abc.tokenTicker
                     : '-'}
