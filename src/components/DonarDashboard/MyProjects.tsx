@@ -34,7 +34,10 @@ import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
-import { useProjectCollateralFeeCollected } from '@/services/tributeCollected.service';
+import {
+  useClaimedTributes,
+  useProjectCollateralFeeCollected,
+} from '@/services/tributeCollected.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
@@ -193,9 +196,11 @@ const MyProjects = () => {
     }
   };
 
-  const tributeReceived = useProjectCollateralFeeCollected({
+  const claimableFees = useProjectCollateralFeeCollected({
     contractAddress: projectData?.abc?.fundingManagerAddress,
   }).collectedFees;
+
+  const claimedFees = useClaimedTributes(projectData?.abc?.orchestratorAddress);
 
   if (!addrWhitelist) {
     return (
@@ -432,12 +437,14 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(tributeReceived)} POL
+                  {formatAmount(claimableFees + claimedFees)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(tributeReceived * Number(POLPrice) * 100) / 100,
+                    Math.round(
+                      (claimableFees + claimedFees) * Number(POLPrice) * 100,
+                    ) / 100,
                   )}
                 </span>
               </div>
@@ -459,12 +466,12 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(tributeReceived)} POL
+                  {formatAmount(claimableFees)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(tributeReceived * Number(POLPrice) * 100) / 100,
+                    Math.round(claimableFees * Number(POLPrice) * 100) / 100,
                   )}
                 </span>
               </div>
