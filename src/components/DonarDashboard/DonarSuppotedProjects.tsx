@@ -217,9 +217,7 @@ const DonarSuppotedProjects = ({
               {project.abc.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
-              ~ $
-              {formatAmount(totalRewardTokens * project.abc.tokenPrice) ||
-                '---'}
+              ~ ${totalRewardTokens * project.abc.tokenPrice || '---'}
             </span>
           </div>
         </div>
@@ -234,7 +232,7 @@ const DonarSuppotedProjects = ({
           <div className='flex gap-1 font-medium text-[#1D1E1F]'>
             <span>
               {totalClaimableRewardTokens !== null
-                ? `${parseFloat(totalClaimableRewardTokens.toFixed(2)).toString()} ${project.abc?.tokenTicker || ''}`
+                ? `${formatAmount(parseFloat(totalClaimableRewardTokens.toFixed(2)))} ${project.abc?.tokenTicker || ''}`
                 : '---'}
             </span>
             <span>

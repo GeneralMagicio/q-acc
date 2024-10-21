@@ -63,6 +63,8 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
     availableToClaim += claimableRewardTokenAmount || 0;
   });
 
+  console.log('project?.abc?.tokenTicker', project?.abc?.tokenTicker);
+
   return (
     <>
       <div className='container flex flex-col gap-8 my-8'>
@@ -186,7 +188,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {lockedTokens} {project?.abc?.tokenTicker}
+                  {formatAmount(lockedTokens)} {project?.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ $ {formatAmount(lockedTokens * project?.abc?.tokenPrice)}

@@ -89,7 +89,9 @@ export const formatAmount = (number: number) => {
   if (typeof number !== 'number') {
     return '---';
   }
-  return number.toLocaleString('en-US');
+  return number.toLocaleString('en-US', {
+    maximumFractionDigits: 2,
+  });
 };
 
 export const formatNumber = (number?: number) => {
