@@ -3,7 +3,7 @@ import { Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { cookieToInitialState } from 'wagmi';
 import { headers } from 'next/headers';
-import { wagmiConfig } from '@/config/wagmi';
+import { wagmiAdapter } from '@/config/wagmi';
 import ClientLayout from './ClientLayout';
 
 import type { Metadata } from 'next';
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialState = cookieToInitialState(
-    wagmiConfig,
+    wagmiAdapter.wagmiConfig,
     headers().get('cookie'),
   );
 

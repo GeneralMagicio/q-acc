@@ -1,11 +1,12 @@
-import { Address, Chain } from 'viem';
+import { Address, Chain as viemChain } from 'viem';
+import { Chain } from '@reown/appkit/networks';
 import {
   PrivadoContractMethodV1,
   PrivadoContractMethodV2,
 } from '@/lib/constants/privado';
 
 export type EnvConfig = {
-  SUPPORTED_CHAINS: readonly [Chain, ...Chain[]];
+  SUPPORTED_CHAINS: [Chain, ...Chain[]];
   ERC_TOKEN_ADDRESS: string;
   ERC_TOKEN_SYMBOL: string;
   GRAPHQL_ENDPOINT: string;
@@ -15,7 +16,7 @@ export type EnvConfig = {
   NETWORK_RPC_ADDRESS: string;
   INDEXER_GRAPHQL_URL: string;
   privadoConfig: {
-    chain: Chain;
+    chain: viemChain;
     chainName: string;
     contractAddress: Address;
     requestId: number;
