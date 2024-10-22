@@ -11,11 +11,16 @@ import InfoSection from '@/components/InfoSection';
 import Routes from '@/lib/constants/Routes';
 import { HoldModal } from '../Modals/HoldModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUserId';
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
   const { address } = useAccount();
   const { data: addrWhitelist, isPending } = useAddressWhitelist();
+  const { data: user } = useFetchUser();
+  const { data: userProjectsCount, isFetched: isProjectsCountFetched } =
+    useFetchProjectsCountByUserId(parseInt(user?.id ?? ''));
 
   useEffect(() => {
     setShowHoldModal(!!address && !isPending && !addrWhitelist);
@@ -58,15 +63,37 @@ export const CreateView = () => {
           more. It is also where your community will create profiles to
           participate in the early access window and all q/acc rounds.
         </p>
-        <Link href={Routes.CreateProject}>
+        {isProjectsCountFetched ? (
+          userProjectsCount || 0 > 0 ? (
+            <Button
+              className='mx-auto !py-6 !px-10 mt-20'
+              color={ButtonColor.Pink}
+              styleType={ButtonStyle.Solid}
+              disabled
+            >
+              You have already created a project
+            </Button>
+          ) : (
+            <Link href={Routes.CreateProject}>
+              <Button
+                className='mx-auto !py-6 !px-10 mt-20'
+                color={ButtonColor.Pink}
+                styleType={ButtonStyle.Solid}
+              >
+                Create Project
+              </Button>
+            </Link>
+          )
+        ) : (
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
             color={ButtonColor.Pink}
             styleType={ButtonStyle.Solid}
+            loading
           >
-            Create Project
+            Loading
           </Button>
-        </Link>
+        )}
       </InfoSection>
       <HelpSection />
       <Collaborator />
