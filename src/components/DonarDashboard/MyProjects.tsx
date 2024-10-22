@@ -437,14 +437,12 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimableFees + claimedFees)} POL
+                  {formatAmount(claimedFees)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(
-                      (claimableFees + claimedFees) * Number(POLPrice) * 100,
-                    ) / 100,
+                    Math.round(claimedFees * Number(POLPrice) * 100) / 100,
                   )}
                 </span>
               </div>
