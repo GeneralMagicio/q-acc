@@ -12,7 +12,7 @@ import {
   calculateUniqueDonors,
   groupDonationsByProject,
 } from '@/helpers/donation';
-import DonarSuppotedProjects from './DonarSuppotedProjects';
+import DonarSuppotedProjects from './DonarSupportedProjects';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
