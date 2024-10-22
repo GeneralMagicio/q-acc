@@ -1,45 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 const useScrollDirection = (threshold = 10) => {
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(
     null,
   );
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [ticking, setTicking] = useState(false);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
-  const updateScrollDirection = () => {
+  const updateScrollDirection = useCallback(() => {
     const scrollY = window.scrollY;
 
     // Only update scroll direction if the user has scrolled more than the threshold
-    if (Math.abs(scrollY - lastScrollY) < threshold) {
-      setTicking(false); // Allow the next frame update
-      return;
+    if (Math.abs(scrollY - lastScrollY.current) >= threshold) {
+      const direction = scrollY > lastScrollY.current ? 'down' : 'up';
+
+      // Only update state if the direction has changed
+      if (direction !== scrollDirection) {
+        setScrollDirection(direction);
+      }
+
+      lastScrollY.current = scrollY;
     }
 
-    if (scrollY > lastScrollY) {
-      setScrollDirection('down');
-    } else if (scrollY < lastScrollY) {
-      setScrollDirection('up');
-    }
+    ticking.current = false;
+  }, [scrollDirection, threshold]);
 
-    setLastScrollY(scrollY);
-    setTicking(false); // Allow the next frame update
-  };
-
-  const handleScroll = () => {
-    if (!ticking) {
-      setTicking(true);
-      requestAnimationFrame(updateScrollDirection); // Use requestAnimationFrame for smooth updates
+  const handleScroll = useCallback(() => {
+    if (!ticking.current) {
+      ticking.current = true;
+      requestAnimationFrame(updateScrollDirection);
     }
-  };
+  }, [updateScrollDirection]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [lastScrollY, ticking]);
+  }, [handleScroll]);
 
   return scrollDirection;
 };
