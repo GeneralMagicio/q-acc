@@ -179,7 +179,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                 <IconSort size={16} />
               </button>
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px] justify-center'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Tokens
               <button onClick={() => handleSort(EOrderBy.Tokens)}>
                 <IconSort size={16} />
@@ -188,7 +188,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
             <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Unlock Remaining
             </div>
-            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px] justify-center'>
+            <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2 font-medium text-[#1D1E1F] items-center min-w-[150px]'>
               Stream Details
             </div>
           </div>
@@ -222,7 +222,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                     </span>
                   </div>
                 </div>
-                <div className='p-[18px_4px] text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
+                <div className='p-[18px_4px] text-[#1D1E1F] font-medium flex gap-2 text-start border-b w-full min-w-[150px] '>
                   {donation?.rewardTokenAmount
                     ? formatAmount(
                         Math.round(donation.rewardTokenAmount * 100) / 100,
@@ -231,12 +231,12 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                       donation.project.abc.tokenTicker
                     : '-'}
                 </div>
-                <div className='p-[18px_4px] text-[#1D1E1F] flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
+                <div className='p-[18px_4px] text-[#1D1E1F] flex gap-2 text-start border-b w-full min-w-[150px]'>
                   {donation.rewardStreamStart
                     ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
                     : '-'}
                 </div>
-                <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px] justify-center'>
+                <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
                   {donation.rewardStreamStart !== null &&
                   donation.rewardStreamEnd !== null ? (
                     <div className='flex flex-col'>
