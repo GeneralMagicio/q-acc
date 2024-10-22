@@ -216,9 +216,10 @@ const DonarSupportedProjects = ({
               {project.abc.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
-              ~ $
-              {formatAmount(totalRewardTokens * project.abc.tokenPrice) ||
-                '---'}
+              ~ ${' '}
+              {formatAmount(
+                totalRewardTokens * (project.abc.tokenPrice * Number(POLPrice)),
+              ) || '---'}
             </span>
           </div>
         </div>
