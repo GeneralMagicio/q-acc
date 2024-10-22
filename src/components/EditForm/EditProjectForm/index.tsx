@@ -319,7 +319,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
             </div>
           </section>
 
-          <section className='flex flex-col gap-4 w-full mx-auto'>
+          {/* <section className='flex flex-col gap-4 w-full mx-auto'>
             <h1 className='text-4xl font-bold text-gray-800'>
               Your Multisig Address
             </h1>
@@ -359,7 +359,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
                 </span>
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className='flex flex-col gap-6 w-full mx-auto'>
             <label className='text-4xl font-bold text-gray-800'>
