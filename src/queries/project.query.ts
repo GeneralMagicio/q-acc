@@ -611,6 +611,14 @@ export const GET_PROJECT_BY_USER_ID = `
 }
 `;
 
+export const GET_PROJECTS_COUNT_BY_USER_ID = `
+ query ($take: Float, $skip: Float, $userId: Int!) {
+  projectsByUserId(take: $take, skip: $skip, userId: $userId) {
+    totalCount
+  }
+}
+`;
+
 export const GET_PROJECT_DONATIONS_USERS_BY_ID = `
 query (
     $projectId: Int!

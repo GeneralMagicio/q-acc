@@ -8,6 +8,7 @@ import {
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
   GET_PROJECT_BY_USER_ID,
+  GET_PROJECTS_COUNT_BY_USER_ID,
   UPDATE_PROJECT_BY_ID,
 } from '@/queries/project.query';
 import type { IGivethUser } from '@/types/user.type';
@@ -121,6 +122,28 @@ export const fetchProjectByUserId = async (userId: number) => {
       },
     );
     return res?.projectsByUserId.projects[0];
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProjectsCountByUserId = async (userId: number) => {
+  try {
+    const res = await requestGraphQL<{
+      projectsByUserId: {
+        totalCount: number;
+      };
+    }>(
+      GET_PROJECTS_COUNT_BY_USER_ID,
+      {
+        userId,
+        take: 1,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.projectsByUserId.totalCount;
   } catch (error) {
     console.error(error);
   }
