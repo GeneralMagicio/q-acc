@@ -4,13 +4,24 @@ import { ConnectButton } from '../ConnectButton/ConnectButton';
 import { IconGoBack } from '../Icons/IconGoBack';
 import { useDonateContext } from '@/context/donation.context';
 
-const DonateNavbar = () => {
+interface DonateNavbarProps {
+  isConfirming: boolean;
+}
+
+const DonateNavbar: React.FC<DonateNavbarProps> = ({ isConfirming }) => {
   const { projectData } = useDonateContext();
   return (
     <div className='bg-white flex items-center justify-between px-10 py-4 gap-4   w-full top-0  shadow-tabShadow'>
       <div className='flex gap-4 items-center'>
-        <Link href={`/project/${projectData?.slug}`}>
-          <div className='p-4 rounded-full flex items-center border shadow-md'>
+        <Link
+          href={`/project/${projectData?.slug}`}
+          onClick={(e: any) => isConfirming && e.preventDefault()}
+        >
+          <div
+            className={`p-4 rounded-full flex items-center border shadow-md ${
+              isConfirming ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
             <IconGoBack />
           </div>
         </Link>

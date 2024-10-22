@@ -64,6 +64,7 @@ export const createDraftDonation = async (
     return res?.createDraftDonation;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 

@@ -16,6 +16,7 @@ const DonateIndex = () => {
   const { projectData } = useDonateContext();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [loading, setLoading] = useState(true);
+  const [isConfirming, setIsConfirming] = useState<boolean>(false);
 
   useEffect(() => {
     const checkNFT = async () => {
@@ -55,8 +56,8 @@ const DonateIndex = () => {
 
   return (
     <div>
-      <DonateNavbar />
-      <DonatePageBody />
+      <DonateNavbar isConfirming={isConfirming} />
+      <DonatePageBody setIsConfirming={setIsConfirming} />
     </div>
   );
 };
