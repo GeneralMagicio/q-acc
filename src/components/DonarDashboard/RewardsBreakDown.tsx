@@ -173,7 +173,10 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
-                  {formatAmount(totalTokensReceived * project?.abc?.tokenPrice)}
+                  {formatAmount(
+                    totalTokensReceived *
+                      (project?.abc?.tokenPrice * Number(POLPrice)),
+                  )}
                 </span>
               </div>
             </div>
@@ -190,7 +193,11 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                   {formatAmount(lockedTokens)} {project?.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ $ {formatAmount(lockedTokens * project?.abc?.tokenPrice)}
+                  ~ ${' '}
+                  {formatAmount(
+                    lockedTokens *
+                      (project?.abc?.tokenPrice * Number(POLPrice)),
+                  )}
                 </span>
               </div>
             </div>
