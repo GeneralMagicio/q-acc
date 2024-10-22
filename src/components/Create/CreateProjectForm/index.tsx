@@ -19,7 +19,6 @@ import { TeamMember } from '../CreateTeamForm';
 import { HoldModal } from '@/components/Modals/HoldModal';
 import { ConnectModal } from '@/components/ConnectModal';
 import { IconExternalLink } from '@/components/Icons/IconExternalLink';
-import Routes from '@/lib/constants/Routes';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUserId';
 import ProjectDetailPreview from '@/components/ProjectPreview/ProjectDetailPreview';
