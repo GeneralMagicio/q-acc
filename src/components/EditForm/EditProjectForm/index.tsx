@@ -2,7 +2,6 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
@@ -11,7 +10,6 @@ import Textarea from '../../TextArea';
 import { SocialMediaInput } from '../../SocialMediaInput';
 import { validators } from '../../SocialMediaInput/vaildators';
 import { RichTextEditor } from '@/components/RichTextEditor';
-import { IconAlertCircleOutline } from '@/components/Icons/IconAlertCircleOutline';
 import { EProjectSocialMediaType } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useCreateProject } from '@/hooks/useCreateProject';
