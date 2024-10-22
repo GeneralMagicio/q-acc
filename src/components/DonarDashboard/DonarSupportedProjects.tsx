@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import round from 'lodash/round';
 import config from '@/config/configuration';
 import { getIpfsAddress } from '@/helpers/image';
 
@@ -19,7 +18,7 @@ import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 
-const DonarSuppotedProjects = ({
+const DonarSupportedProjects = ({
   projectId,
   project,
   uniqueDonors,
@@ -213,11 +212,13 @@ const DonarSuppotedProjects = ({
           </div>
           <div className='flex gap-1'>
             <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(round(totalRewardTokens, 2)) || '---'}{' '}
+              {formatAmount(totalRewardTokens) || '---'}{' '}
               {project.abc.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
-              ~ ${totalRewardTokens * project.abc.tokenPrice || '---'}
+              ~ $
+              {formatAmount(totalRewardTokens * project.abc.tokenPrice) ||
+                '---'}
             </span>
           </div>
         </div>
@@ -232,17 +233,15 @@ const DonarSuppotedProjects = ({
           <div className='flex gap-1 font-medium text-[#1D1E1F]'>
             <span>
               {totalClaimableRewardTokens !== null
-                ? `${formatAmount(parseFloat(totalClaimableRewardTokens.toFixed(2)))} ${project.abc?.tokenTicker || ''}`
+                ? `${formatAmount(totalClaimableRewardTokens)} ${project.abc?.tokenTicker || ''}`
                 : '---'}
             </span>
             <span>
               ~ $
               {totalClaimableRewardTokens !== null
-                ? parseFloat(
-                    (
-                      totalClaimableRewardTokens * project.abc.tokenPrice
-                    ).toFixed(2),
-                  ).toString()
+                ? formatAmount(
+                    totalClaimableRewardTokens * project.abc.tokenPrice,
+                  )
                 : '---'}
             </span>
           </div>
@@ -271,4 +270,4 @@ const DonarSuppotedProjects = ({
   );
 };
 
-export default DonarSuppotedProjects;
+export default DonarSupportedProjects;

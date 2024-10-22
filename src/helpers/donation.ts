@@ -85,12 +85,26 @@ export const calculateTotalDonations = (donations: any[]) => {
  * @param {number} number - The number to be formatted.
  * @returns {string} The formatted number as a string with commas separating thousands.
  */
-export const formatAmount = (number: number) => {
-  if (typeof number !== 'number') {
+export const formatAmount = (
+  number: number | null | undefined,
+  fractionDigits: number = 2, // Default fraction digits
+): string => {
+  if (typeof number !== 'number' || isNaN(number)) {
     return '---';
   }
+
+  if (number === 0) return '0';
+
+  const threshold = Math.pow(10, -fractionDigits);
+  if (number > 0 && number < threshold) {
+    return `<${threshold.toFixed(fractionDigits)}`;
+  }
+
+  const maximumFractionDigits = number >= 1000 ? 0 : fractionDigits;
+
   return number.toLocaleString('en-US', {
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits,
   });
 };
 
