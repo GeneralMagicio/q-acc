@@ -140,7 +140,7 @@ const DonatePageBody = () => {
       let tempprogress = 0;
       if (maxPOLCap > 0) {
         tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
-        setProgress(100);
+        setProgress(tempprogress);
       }
     };
 
