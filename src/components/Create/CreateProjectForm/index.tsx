@@ -21,6 +21,7 @@ import { ConnectModal } from '@/components/ConnectModal';
 import { IconExternalLink } from '@/components/Icons/IconExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
+import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUserId';
 
 export interface ProjectFormData {
   projectName: string;
@@ -129,7 +130,10 @@ const CreateProjectForm: FC = () => {
     defaultValues: formData.project,
     mode: 'onChange',
   });
-  const { data: addrWhitelist, isFetching } = useAddressWhitelist();
+  const { data: addrWhitelist, isFetched: isWhiteListFetched } =
+    useAddressWhitelist();
+  const { data: userProjectsCount, isFetched: isProjectsCountFetched } =
+    useFetchProjectsCountByUserId(parseInt(user?.id ?? ''));
   const router = useRouter();
 
   const { handleSubmit, getValues, setValue, resetField } = methods;
@@ -157,8 +161,12 @@ const CreateProjectForm: FC = () => {
     window.open(Routes.Preview, '_blank');
   };
 
-  return isFetching ? (
+  return !isWhiteListFetched || !isProjectsCountFetched ? (
     <div>Loading...</div>
+  ) : userProjectsCount || 0 > 0 ? (
+    <div className='flex-1 flex items-center justify-center'>
+      you already created a project
+    </div>
   ) : addrWhitelist ? (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
