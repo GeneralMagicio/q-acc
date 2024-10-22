@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useScrollDirection = () => {
+const useScrollDirection = (threshold = 10) => {
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(
     null,
   );
@@ -10,11 +10,18 @@ const useScrollDirection = () => {
   const updateScrollDirection = () => {
     const scrollY = window.scrollY;
 
+    // Only update scroll direction if the user has scrolled more than the threshold
+    if (Math.abs(scrollY - lastScrollY) < threshold) {
+      setTicking(false); // Allow the next frame update
+      return;
+    }
+
     if (scrollY > lastScrollY) {
       setScrollDirection('down');
     } else if (scrollY < lastScrollY) {
       setScrollDirection('up');
     }
+
     setLastScrollY(scrollY);
     setTicking(false); // Allow the next frame update
   };
