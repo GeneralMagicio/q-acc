@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
+import { useRouter } from 'next/navigation';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
 import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
@@ -115,6 +116,7 @@ const DonatePageBody = () => {
   const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const router = useRouter();
 
   const handleShare = () => {
     openShareModal();
@@ -138,7 +140,7 @@ const DonatePageBody = () => {
       let tempprogress = 0;
       if (maxPOLCap > 0) {
         tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
-        setProgress(tempprogress);
+        setProgress(100);
       }
     };
 
@@ -394,6 +396,10 @@ const DonatePageBody = () => {
       />
     );
   }
+
+  if (progress >= 100) {
+    router.push(`/project/${projectData.slug}`);
+  }
   const percentages = [25, 50, 100];
 
   return (
@@ -402,7 +408,7 @@ const DonatePageBody = () => {
         <PrivadoVerificationModal
           isOpen={isPrivadoModalOpen}
           onClose={closePrivadoModal}
-          showCloseButton={true}
+          showCloseButton={false}
         />
       }
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
@@ -421,7 +427,7 @@ const DonatePageBody = () => {
               <span className='flex gap-2 items-center  '>
                 Your remaining cap
                 <span className='font-medium text-[#4F576A]'>
-                  {userDonationCap
+                  {userDonationCap !== null && userDonationCap !== undefined
                     ? formatAmount(Math.floor(userDonationCap * 100) / 100)
                     : '---'}{' '}
                   POL
