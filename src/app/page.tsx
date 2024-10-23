@@ -38,6 +38,7 @@ export default function Home() {
     useFetchActiveRoundDetails();
 
   const isEarlyAccess = activeRoundDetails?.__typename === 'EarlyAccessRound';
+  const isQaccRound = activeRoundDetails?.__typename === 'QfRound';
 
   const [isRoundEnded, setIsRoundEnded] = useState(false);
 
@@ -129,7 +130,7 @@ export default function Home() {
             ''
           ) : (
             <>
-              {isEarlyAccess || !isRoundEnded ? (
+              {isEarlyAccess || !isQaccRound ? (
                 <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
                   <h1 className='text-gray-800 text-2xl font-bold'>
                     🔐 Private Chat
@@ -148,7 +149,7 @@ export default function Home() {
 
           {isRoundEnded ? (
             ''
-          ) : isEarlyAccess || !isRoundEnded ? (
+          ) : isEarlyAccess || !isQaccRound ? (
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
               <h1 className='text-gray-800 text-2xl font-bold'>
                 📅 Early Access Mint Rounds
