@@ -78,17 +78,23 @@ async function getClaimedTributesAndMintedTokenAmounts(
         orchestratorAddress,
       },
     });
+
     const feeClaims = result.data.data.BondingCurve[0]?.feeClaim;
     const claimedTributes = feeClaims.reduce(
       (sum: any, fee: { amount: any }) => sum + (Number(fee.amount) || 0),
       0,
     );
+
     const swaps = result.data.data.BondingCurve[0]?.swaps;
-    const mintedTokenAmounts = swaps.reduce(
-      (sum: any, swap: { issuanceAmount: any }) =>
-        sum + (Number(swap.issuanceAmount) || 0),
-      0,
-    );
+
+    const mintedTokenAmounts = swaps
+      .filter((swap: { swapType: string }) => swap.swapType === 'BUY')
+      .reduce(
+        (sum: any, swap: { issuanceAmount: any }) =>
+          sum + (Number(swap.issuanceAmount) || 0),
+        0,
+      );
+
     return {
       claimedTributes,
       mintedTokenAmounts,
