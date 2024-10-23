@@ -17,7 +17,7 @@ export const RoundInfoSupporter = () => {
             {activeRoundDetails?.__typename === 'EarlyAccessRound'
               ? 'Early access - Round ' +
                 activeRoundDetails?.roundNumber +
-                ' of 4'
+                ' of 3'
               : activeRoundDetails?.__typename === 'QfRound'
                 ? 'q/acc Round'
                 : 'No Active Round'}
