@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import { useEffect, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import Input from '@/components/Input';
@@ -19,9 +19,9 @@ import { TeamMember } from '../CreateTeamForm';
 import { HoldModal } from '@/components/Modals/HoldModal';
 import { ConnectModal } from '@/components/ConnectModal';
 import { IconExternalLink } from '@/components/Icons/IconExternalLink';
-import Routes from '@/lib/constants/Routes';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUserId';
+import ProjectDetailPreview from '@/components/ProjectPreview/ProjectDetailPreview';
 
 export interface ProjectFormData {
   projectName: string;
@@ -135,6 +135,7 @@ const CreateProjectForm: FC = () => {
   const { data: userProjectsCount, isFetched: isProjectsCountFetched } =
     useFetchProjectsCountByUserId(parseInt(user?.id ?? ''));
   const router = useRouter();
+  const [showPreview, setShowPreview] = useState(false);
 
   const { handleSubmit, getValues, setValue, resetField } = methods;
 
@@ -158,8 +159,13 @@ const CreateProjectForm: FC = () => {
   const handlePreview = () => {
     const formData = getValues();
     sessionStorage.setItem('previewData', JSON.stringify(formData));
-    window.open(Routes.Preview, '_blank');
+    setShowPreview(true);
+    // window.open(Routes.Preview, '_blank');
   };
+
+  if (showPreview) {
+    return <ProjectDetailPreview setShowPreview={setShowPreview} />;
+  }
 
   return !isWhiteListFetched || !isProjectsCountFetched ? (
     <div>Loading...</div>
