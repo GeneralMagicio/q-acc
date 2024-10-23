@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
-import { useAppKit } from '@reown/appkit/react';
 
 import { Banner } from '@/components/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
@@ -24,15 +23,6 @@ export const CreateView = () => {
   const { address, isConnected } = useAccount();
   const { data: addrWhitelist, isPending } = useAddressWhitelist();
   const { data: user } = useFetchUser();
-  const { open } = useAppKit();
-
-  const handleCreate = () => {
-    if (isConnected) {
-      router.push(Routes.CreateProject);
-    } else {
-      open();
-    }
-  };
 
   const { data: userProjectsCount, isFetched: isProjectsCountFetched } =
     useFetchProjectsCountByUserId(parseInt(user?.id ?? ''));
@@ -78,36 +68,26 @@ export const CreateView = () => {
           more. It is also where your community will create profiles to
           participate in the early access window and all q/acc rounds.
         </p>
-        {isConnected ? (
-          userProjectsCount || 0 > 0 ? (
-            <Button
-              className='mx-auto !py-6 !px-10 mt-20'
-              color={ButtonColor.Pink}
-              styleType={ButtonStyle.Solid}
-              disabled
-            >
-              You have already created a project
-            </Button>
-          ) : (
-            <Link href={Routes.CreateProject}>
-              <Button
-                className='mx-auto !py-6 !px-10 mt-20'
-                color={ButtonColor.Pink}
-                styleType={ButtonStyle.Solid}
-              >
-                Create Project
-              </Button>
-            </Link>
-          )
-        ) : (
+
+        {isConnected && (userProjectsCount || 0 > 0) ? (
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
             color={ButtonColor.Pink}
             styleType={ButtonStyle.Solid}
-            onClick={handleCreate}
+            disabled
           >
-            Create Project
+            You have already created a project
           </Button>
+        ) : (
+          <Link href={Routes.CreateProject}>
+            <Button
+              className='mx-auto !py-6 !px-10 mt-20'
+              color={ButtonColor.Pink}
+              styleType={ButtonStyle.Solid}
+            >
+              Create Project
+            </Button>
+          </Link>
         )}
       </InfoSection>
       <HelpSection />
