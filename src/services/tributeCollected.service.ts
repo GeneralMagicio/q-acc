@@ -16,7 +16,7 @@ const abi = [
   },
 ];
 
-const getClaimedTributesQuery = `
+const getClaimedTributesAndMintedTokenAmountsQuery = `
     query GetTokenTotalSupplyByAddress($orchestratorAddress: String!) {
       BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
         id
@@ -24,6 +24,12 @@ const getClaimedTributesQuery = `
           id
           amount
           recipient
+        }
+        swaps {
+          blockTimestamp
+          issuanceAmount
+          collateralAmount
+          swapType
         }
       }
     }
@@ -59,31 +65,65 @@ export const useProjectCollateralFeeCollected = ({
   return { collectedFees };
 };
 
-async function getClaimedTributes(orchestratorAddress?: string): Promise<any> {
+async function getClaimedTributesAndMintedTokenAmounts(
+  orchestratorAddress?: string,
+): Promise<{
+  claimedTributes: number;
+  mintedTokenAmounts: number;
+}> {
   try {
     const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
-      query: getClaimedTributesQuery,
+      query: getClaimedTributesAndMintedTokenAmountsQuery,
       variables: {
         orchestratorAddress,
       },
     });
     const feeClaims = result.data.data.BondingCurve[0]?.feeClaim;
-    return feeClaims.reduce(
+    const claimedTributes = feeClaims.reduce(
       (sum: any, fee: { amount: any }) => sum + (Number(fee.amount) || 0),
       0,
     );
+    const swaps = result.data.data.BondingCurve[0]?.swaps;
+    const mintedTokenAmounts = swaps.reduce(
+      (sum: any, swap: { issuanceAmount: any }) =>
+        sum + (Number(swap.issuanceAmount) || 0),
+      0,
+    );
+    return {
+      claimedTributes,
+      mintedTokenAmounts,
+    };
   } catch (e) {
-    console.error('error in getting claimed tributes', e);
-    return 0;
+    console.error(
+      'error in getting claimed tributes and minted ABC token amounts',
+      e,
+    );
+    return {
+      claimedTributes: 0,
+      mintedTokenAmounts: 0,
+    };
   }
 }
 
-export const useClaimedTributes = (orchestratorAddress?: string) => {
-  const query = useQuery<number, Error>({
-    queryKey: ['claimedTributes', orchestratorAddress],
-    queryFn: () => getClaimedTributes(orchestratorAddress),
+export const useClaimedTributesAndMintedTokenAmounts = (
+  orchestratorAddress?: string,
+) => {
+  const query = useQuery<
+    {
+      claimedTributes: number;
+      mintedTokenAmounts: number;
+    },
+    Error
+  >({
+    queryKey: ['claimedTributesAndMintedTokens', orchestratorAddress],
+    queryFn: () => getClaimedTributesAndMintedTokenAmounts(orchestratorAddress),
     enabled: !!orchestratorAddress, // Run only if orchestratorAddress is provided
   });
 
-  return query.data || 0;
+  return (
+    query.data || {
+      claimedTributes: 0,
+      mintedTokenAmounts: 0,
+    }
+  );
 };
