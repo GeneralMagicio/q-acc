@@ -44,6 +44,9 @@ interface ITokenSchedule {
   message: string;
   toolTip: string;
 }
+interface DonatePageBodyProps {
+  setIsConfirming: (isConfirming: boolean) => void;
+}
 
 export enum DonationStatus {
   Verified = 'verified',
@@ -70,7 +73,7 @@ const PercentageButton = ({
   );
 };
 
-const DonatePageBody = () => {
+const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const { address, isConnected } = useAccount();
   const { chain } = useAccount();
   const { data: user } = useFetchUser();
@@ -188,6 +191,27 @@ const DonatePageBody = () => {
   } = useWaitForTransactionReceipt({
     hash,
   });
+  useEffect(() => {
+    setIsConfirming(isConfirming);
+  }, [isConfirming, setIsConfirming]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      if (isConfirming) {
+        event.preventDefault();
+
+        event.returnValue =
+          'Transaction is in progress. Are you sure you want to leave?';
+        return 'Transaction is in progress. Are you sure you want to leave?';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isConfirming]);
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
