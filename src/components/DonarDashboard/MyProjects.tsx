@@ -35,7 +35,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useTokenPriceRange } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import {
-  useClaimedTributes,
+  useClaimedTributesAndMintedTokenAmounts,
   useProjectCollateralFeeCollected,
 } from '@/services/tributeCollected.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
@@ -200,7 +200,10 @@ const MyProjects = () => {
     contractAddress: projectData?.abc?.fundingManagerAddress,
   }).collectedFees;
 
-  const claimedFees = useClaimedTributes(projectData?.abc?.orchestratorAddress);
+  const { claimedTributes, mintedTokenAmounts } =
+    useClaimedTributesAndMintedTokenAmounts(
+      projectData?.abc?.orchestratorAddress,
+    );
 
   if (!addrWhitelist) {
     return (
@@ -416,7 +419,7 @@ const MyProjects = () => {
                 </span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {formatAmount(projectData?.abc?.mintedAmount || 0)}{' '}
+                {formatAmount(mintedTokenAmounts)}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
             </div>
@@ -437,12 +440,12 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimedFees)} POL
+                  {formatAmount(claimedTributes)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(claimedFees * Number(POLPrice) * 100) / 100,
+                    Math.round(claimedTributes * Number(POLPrice) * 100) / 100,
                   )}
                 </span>
               </div>
