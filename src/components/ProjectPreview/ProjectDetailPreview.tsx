@@ -21,7 +21,13 @@ export enum EProjectPageTabs {
   MEMEBERS = 'members',
 }
 
-const ProjectDetailPreview = () => {
+interface ProjectDetailPreviewProps {
+  setShowPreview: (value: boolean) => void;
+}
+
+const ProjectDetailPreview: React.FC<ProjectDetailPreviewProps> = ({
+  setShowPreview,
+}) => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -55,6 +61,36 @@ const ProjectDetailPreview = () => {
   return (
     <div className=''>
       <div className='container'>
+        <div className='p-6 bg-white mt-10  rounded-2xl border border-[#EA960D] flex justify-between'>
+          <button
+            className='flex gap-3 items-center'
+            onClick={() => setShowPreview(false)}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='32'
+              height='32'
+              viewBox='0 0 32 32'
+              fill='none'
+            >
+              <path
+                d='M25.3332 15.9993H6.6665M6.6665 15.9993L15.9998 25.3327M6.6665 15.9993L15.9998 6.66602'
+                stroke='#030823'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              />
+            </svg>
+            <span className='text-[#1D1E1F] text-lg font-bold'>
+              Go back to edit
+            </span>
+          </button>
+          <div className='px-4 py-2 bg-[#FFF3D2] rounded-xl font-redHatText'>
+            <span className='text-[#EA960D] font-medium'>
+              You are in preview mode
+            </span>
+          </div>
+        </div>
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailPreviewBanner projectData={projectData} />
           <ProjectDetailPreviewDonationSection projectFormData={projectData} />
