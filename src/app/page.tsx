@@ -17,16 +17,11 @@ const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
   {
     round: 2,
-    cap: '$10K minus [any funds sent in previous round]',
-    limit: '$200K minus [any funds collected in previous rounds]',
-  },
-  {
-    round: 3,
     cap: '$15K minus [any funds sent in previous round]',
     limit: '$300K minus [any funds collected in previous rounds]',
   },
   {
-    round: 4,
+    round: 3,
     cap: '$25K minus [any funds sent in previous round]',
     limit: '$500K minus [any funds collected in previous rounds]',
   },
