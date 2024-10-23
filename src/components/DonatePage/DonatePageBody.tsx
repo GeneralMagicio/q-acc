@@ -7,6 +7,8 @@ import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
 import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
 import round from 'lodash/round';
+import floor from 'lodash/floor';
+
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -368,9 +370,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return null;
       } else {
         // Set the new selected percentage and calculate the amount
-        const amount =
-          Math.floor(((userDonationCap * percentage) / 100) * 100) / 100;
-
+        const amount = floor((userDonationCap * percentage) / 100);
         setInputAmount(amount.toString());
         return percentage;
       }
@@ -500,11 +500,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 ~ ${' '}
                 {inputAmount === ''
                   ? 0
-                  : Math.round(
-                      parseFloat(inputAmount) *
-                        Number(activeRoundDetails?.tokenPrice) *
-                        100,
-                    ) / 100}
+                  : formatAmount(
+                      round(
+                        parseFloat(inputAmount) *
+                          Number(activeRoundDetails?.tokenPrice),
+                      ),
+                    )}
               </span>
             </div>
             {/* Avaliable token */}
