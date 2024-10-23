@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { useRouter } from 'next/navigation';
+import { useAppKit } from '@reown/appkit/react';
+
 import { Banner } from '@/components/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
@@ -16,9 +19,21 @@ import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUs
 
 export const CreateView = () => {
   const [showHoldModal, setShowHoldModal] = useState(false);
-  const { address } = useAccount();
+  const router = useRouter();
+
+  const { address, isConnected } = useAccount();
   const { data: addrWhitelist, isPending } = useAddressWhitelist();
   const { data: user } = useFetchUser();
+  const { open } = useAppKit();
+
+  const handleCreate = () => {
+    if (isConnected) {
+      router.push(Routes.CreateProject);
+    } else {
+      open();
+    }
+  };
+
   const { data: userProjectsCount, isFetched: isProjectsCountFetched } =
     useFetchProjectsCountByUserId(parseInt(user?.id ?? ''));
 
@@ -63,7 +78,7 @@ export const CreateView = () => {
           more. It is also where your community will create profiles to
           participate in the early access window and all q/acc rounds.
         </p>
-        {isProjectsCountFetched ? (
+        {isConnected ? (
           userProjectsCount || 0 > 0 ? (
             <Button
               className='mx-auto !py-6 !px-10 mt-20'
@@ -89,9 +104,9 @@ export const CreateView = () => {
             className='mx-auto !py-6 !px-10 mt-20'
             color={ButtonColor.Pink}
             styleType={ButtonStyle.Solid}
-            loading
+            onClick={handleCreate}
           >
-            Loading
+            Create Project
           </Button>
         )}
       </InfoSection>
