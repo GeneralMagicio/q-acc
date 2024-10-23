@@ -6,13 +6,24 @@ export const requestGraphQL = async <T>(
   variables: Record<string, any> = {},
   options: { auth?: boolean; url?: string } = {},
 ): Promise<T> => {
+  let headers: HeadersInit_ = {
+    'Content-Type': 'application/json',
+  };
+
+  if (options.auth) {
+    const token = getCurrentUserToken();
+
+    if (token) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${token}`,
+        authVersion: '2',
+      };
+    }
+  }
   const response = await fetch(options.url || config.GRAPHQL_ENDPOINT, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${options.auth ? getCurrentUserToken() : ''}`,
-      authVersion: '2',
-    },
+    headers,
     body: JSON.stringify({
       query,
       variables,
