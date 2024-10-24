@@ -96,6 +96,7 @@ export const saveDonations = async (
     return res?.createDonation;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconMoon } from './Icons/IconMoon';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface RoundCountBannerProps {
   projectMaxedOut?: boolean;
@@ -10,6 +11,15 @@ const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
   projectMaxedOut = false,
 }) => {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+  const { data: allRounds } = useFetchAllRound();
+  const [totalRounds, setTotalRounds] = useState<number>();
+  useEffect(() => {
+    const eaRoundCount = allRounds?.filter(
+      round => round.__typename === 'EarlyAccessRound',
+    ).length;
+    setTotalRounds(eaRoundCount);
+  }, [allRounds]);
+
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
     activeRoundDetails?.endDate,
@@ -23,7 +33,8 @@ const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
             {activeRoundDetails?.__typename === 'EarlyAccessRound'
               ? 'Early access - Round ' +
                 activeRoundDetails?.roundNumber +
-                ' of 4'
+                ' of ' +
+                totalRounds
               : activeRoundDetails?.__typename === 'QfRound'
                 ? 'q/acc Round'
                 : 'No Active Round'}
