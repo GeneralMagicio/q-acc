@@ -93,6 +93,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
     null,
   );
+  const [inputBalanceError, setInputBalanceError] = useState<boolean>(false);
 
   const drawerRef = useRef<WidgetDrawer>(null);
 
@@ -237,7 +238,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         parseFloat(inputAmount) >= 5 &&
         parseFloat(inputAmount) <= userDonationCap
       ) ||
-      parseFloat(inputAmount) > remainingDonationAmount
+      parseFloat(inputAmount) > remainingDonationAmount ||
+      parseFloat(inputAmount) > tokenDetails?.formattedBalance
     ) {
       setDonateDisabled(true);
     } else {
@@ -355,6 +357,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log('Input amount will exceed the round cap');
       return;
     }
+    if (parseFloat(inputAmount) > tokenDetails.formattedBalance) {
+      console.log('Input amount is more than available balance');
+      return;
+    }
     handleDonate();
   };
 
@@ -367,11 +373,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     setSelectedPercentage((prevSelected): any => {
       if (prevSelected === percentage) {
         setInputAmount('');
+        setInputBalanceError(false);
         return null;
       } else {
-        // Set the new selected percentage and calculate the amount
         const amount = floor((userDonationCap * percentage) / 100);
         setInputAmount(amount.toString());
+        if (amount > parseFloat(tokenDetails.formattedBalance)) {
+          setInputBalanceError(true);
+        } else {
+          setInputBalanceError(false);
+        }
         return percentage;
       }
     });
@@ -394,6 +405,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       // }
       else {
         setInputErrorMessage(null);
+      }
+      if (inputAmount > tokenDetails.formattedBalance) {
+        setInputBalanceError(true);
+      } else {
+        setInputBalanceError(false);
       }
     }
   };
@@ -514,7 +530,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
                 <div
                   onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
-                  className='cursor-pointer hover:underline'
+                  className={`cursor-pointer hover:underline ${inputBalanceError ? 'text-[#E6492D]' : 'text-black'}`}
                 >
                   Available in your wallet:{' '}
                   {!tokenDetails
