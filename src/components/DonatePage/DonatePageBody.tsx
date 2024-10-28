@@ -294,16 +294,24 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     transactionId,
     tokenAddress,
   }: any) => {
-    const data = await saveDonations(
-      projectId,
-      transactionNetworkId,
-      amount,
-      token,
-      transactionId,
-      tokenAddress,
-      anoynmous,
-    );
-    setDonationId(Number(data));
+    try {
+      const data = await saveDonations(
+        projectId,
+        transactionNetworkId,
+        amount,
+        token,
+        transactionId,
+        tokenAddress,
+        anoynmous,
+      );
+      setDonationId(Number(data));
+    } catch (error) {
+      console.log('Save donation error', error);
+      setFlashMessage('Error saving  donation : ' + error);
+      setHash(undefined);
+      setHasSavedDonation(false);
+      setButtonDisabled(false);
+    }
   };
 
   const handleDonate = async () => {

@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { RemainingTime } from './RemainingTime';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Routes from '@/lib/constants/Routes';
 import { IconMoon } from '../Icons/IconMoon';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 export const RoundInfoSupporter = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const [totalRounds, setTotalRounds] = useState<number>();
+  const { data: allRounds } = useFetchAllRound();
+
+  useEffect(() => {
+    const eaRoundCount = allRounds?.filter(
+      round => round.__typename === 'EarlyAccessRound',
+    ).length;
+    setTotalRounds(eaRoundCount);
+  }, [allRounds]);
 
   return (
     <>
@@ -17,7 +27,8 @@ export const RoundInfoSupporter = () => {
             {activeRoundDetails?.__typename === 'EarlyAccessRound'
               ? 'Early access - Round ' +
                 activeRoundDetails?.roundNumber +
-                ' of 4'
+                ' of ' +
+                totalRounds
               : activeRoundDetails?.__typename === 'QfRound'
                 ? 'q/acc Round'
                 : 'No Active Round'}
