@@ -60,12 +60,9 @@ const KycLanding = () => {
                 </p>
               </li>
               <li className='mb-8'>
-                Verification may take up to 24 hours but is often done much
-                faster
-                <p>
-                  Once your credentials are successfully validated, the status
-                  will be displayed on your profile page.
-                </p>
+                Check back again in 24 hours and claim your credentials. Once
+                you have passed KYC and claimed your credentials, your status
+                will be displayed on your profile page.
               </li>
             </ol>
           </div>
