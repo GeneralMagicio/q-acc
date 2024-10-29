@@ -195,8 +195,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     hash,
   });
   useEffect(() => {
-    setIsConfirming(isConfirming);
-  }, [isConfirming, setIsConfirming]);
+    if (hash !== undefined && donationId === 0) {
+      setIsConfirming(true);
+    } else {
+      setIsConfirming(false);
+    }
+  }, [isConfirming, setIsConfirming, hash, donationId]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
@@ -214,7 +218,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [isConfirming]);
+  }, [isConfirming, donationId]);
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
