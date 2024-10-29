@@ -10,9 +10,13 @@ import { checkUserOwnsNFT } from '@/helpers/token';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -81,6 +85,12 @@ const ProjectDonateButton = () => {
     contractAddress: projectData.abc?.fundingManagerAddress || '',
   });
 
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project: projectData,
+    allRounds,
+  });
+
   const PriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
@@ -106,21 +116,28 @@ const ProjectDonateButton = () => {
 
         {/* <IconInfo /> */}
       </div>
-      <div className='flex items-center  text-sm  gap-2 text-[#82899A] flex-wrap  justify-between'>
-        <h1 className='  p-2 bg-[#F7F7F9] rounded-lg pr-10'>
-          <span className='text-[#1D1E1F] font-medium'>
-            {tokenPriceRange.min.toFixed(2)} - {tokenPriceRange.max.toFixed(2)}
-          </span>
-          <span className='text-[#4F576A] text-xs '> POL</span>
-        </h1>
-        <span className='text-[#4F576A] font-medium'>
-          ~${' '}
-          {Number(POLPrice) &&
-            formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-          -
-          {Number(POLPrice) &&
-            formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-        </span>
+      <div className='flex items-center text-sm gap-2 text-[#82899A] flex-wrap justify-between'>
+        {tokenPriceRangeStatus.isUpdated ? (
+          <>
+            <h1 className='p-2 bg-[#F7F7F9] rounded-lg pr-10'>
+              <span className='text-[#1D1E1F] font-medium'>
+                {tokenPriceRange.min.toFixed(2)} -{' '}
+                {tokenPriceRange.max.toFixed(2)}
+              </span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>
+              ~${' '}
+              {Number(POLPrice) &&
+                formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+              -{' '}
+              {Number(POLPrice) &&
+                formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+            </span>
+          </>
+        ) : (
+          <p>Calculating...</p>
+        )}
       </div>
     </div>
   );

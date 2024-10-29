@@ -32,7 +32,10 @@ import { IconChevronUp } from '../Icons/IconChevronUp';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import {
   useClaimedTributesAndMintedTokenAmounts,
@@ -43,6 +46,7 @@ import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
+import { calculateCapAmount } from '@/helpers/round';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -83,11 +87,27 @@ const MyProjects = () => {
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  // New token price logic
-  const maxContributionPOLAmountInCurrentRound = 200000 * (10 ^ 18); // Adjust the max cap later from backend
+  const [maxPOLCap, setMaxPOLCap] = useState(0);
+
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      if (activeRoundDetails) {
+        const { capAmount, totalDonationAmountInRound }: any =
+          await calculateCapAmount(activeRoundDetails, Number(projectId));
+
+        setMaxPOLCap(capAmount);
+      }
+    };
+
+    updatePOLCap();
+  }, [activeRoundDetails, projectId, maxPOLCap]);
   const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxContributionPOLAmountInCurrentRound,
+    contributionLimit: maxPOLCap,
     contractAddress: projectData?.abc?.fundingManagerAddress || '',
+  });
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project: projectData,
+    allRounds: allRoundData,
   });
 
   useEffect(() => {
@@ -203,6 +223,7 @@ const MyProjects = () => {
   const { claimedTributes, mintedTokenAmounts } =
     useClaimedTributesAndMintedTokenAmounts(
       projectData?.abc?.orchestratorAddress,
+      projectData?.abc?.projectAddress,
     );
 
   if (!addrWhitelist) {
@@ -371,20 +392,29 @@ const MyProjects = () => {
                     </div>
                   </div>
                 </div>
+                {/* Conditional Rendering for Token Price Range */}
                 <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
-                  <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex  items-center gap-1'>
-                    {tokenPriceRange.min.toFixed(2)} -{' '}
-                    {tokenPriceRange.max.toFixed(2)}
-                    <span className='text-gray-400 text-xs'>POL</span>
-                  </div>
-                  <div className='w-[20%] text-gray-400 text-right font-medium'>
-                    ~${' '}
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                    -{' '}
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-                  </div>
+                  {tokenPriceRangeStatus.isUpdated ? (
+                    <>
+                      <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex items-center gap-1'>
+                        {tokenPriceRange.min.toFixed(2)} -{' '}
+                        {tokenPriceRange.max.toFixed(2)}
+                        <span className='text-gray-400 text-xs'>POL</span>
+                      </div>
+                      <div className='w-[20%] text-gray-400 text-right font-medium'>
+                        ~${' '}
+                        {Number(POLPrice) &&
+                          formatNumber(
+                            Number(POLPrice) * tokenPriceRange.min,
+                          )}{' '}
+                        -{' '}
+                        {Number(POLPrice) &&
+                          formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                      </div>
+                    </>
+                  ) : (
+                    <p>Calculating...</p>
+                  )}
                 </div>
               </>
             )}
