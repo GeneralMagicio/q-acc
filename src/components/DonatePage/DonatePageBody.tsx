@@ -824,7 +824,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   )}
                 />
 
-                <span>{projectData?.abc?.tokenTicker} range</span>
+                <span>
+                  {projectData?.abc?.tokenTicker} range{' '}
+                  {tokenPriceRangeStatus.isSuccess &&
+                  tokenPriceRangeStatus.data?.isPriceUpToDate
+                    ? ' '
+                    : ' (Calculating) '}
+                </span>
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -859,7 +865,17 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     </h2>
                   </>
                 ) : (
-                  <p>Calculating...</p>
+                  <>
+                    <h2 className='flex gap-1 items-center'>
+                      <span className='text-base font-medium text-[#4F576A]'>
+                        ---
+                      </span>
+                      <span className='text-xs text-[#82899A]'>POL</span>
+                    </h2>
+                    <h2>
+                      <span>~$ ---</span>
+                    </h2>
+                  </>
                 )}
               </div>
             </div>

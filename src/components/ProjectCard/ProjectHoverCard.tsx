@@ -240,6 +240,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     {/* <IconABC /> */}
                     <p className='text-gray-800 font-medium'>
                       {project?.abc?.tokenTicker} range
+                      {tokenPriceRangeStatus.isSuccess &&
+                      tokenPriceRangeStatus.data?.isPriceUpToDate
+                        ? ' '
+                        : ' (Calculating) '}
                     </p>
                   </div>
                   <div className='mt-1 flex justify-between'>
@@ -263,7 +267,17 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         </div>
                       </>
                     ) : (
-                      <p>Calculating...</p>
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>---</p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$ ---
+                          </p>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
