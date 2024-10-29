@@ -6,11 +6,14 @@ import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Routes from '@/lib/constants/Routes';
 import { IconMoon } from '../Icons/IconMoon';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getAdjustedEndDate } from '@/helpers/date';
 
 export const RoundInfoSupporter = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [totalRounds, setTotalRounds] = useState<number>();
   const { data: allRounds } = useFetchAllRound();
+
+  const adjustedEndDate = getAdjustedEndDate(activeRoundDetails?.endDate);
 
   useEffect(() => {
     const eaRoundCount = allRounds?.filter(
@@ -35,7 +38,7 @@ export const RoundInfoSupporter = () => {
           </span>
           <RemainingTime
             startDate={activeRoundDetails?.startDate}
-            endDate={activeRoundDetails?.endDate}
+            endDate={adjustedEndDate}
           />
           <Link href={Routes.Projects}>
             <Button styleType={ButtonStyle.Solid} color={ButtonColor.Pink}>

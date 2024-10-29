@@ -106,6 +106,10 @@ const ProjectDonateButton = () => {
         <div className='flex gap-2 items-center'>
           <span className='text-[#4F576A] font-medium'>
             {projectData?.abc?.tokenTicker} range
+            {tokenPriceRangeStatus.isSuccess &&
+            tokenPriceRangeStatus.data?.isPriceUpToDate
+              ? ' '
+              : ' (Calculating) '}
           </span>
           <div className='relative group'>
             <IconTokenSchedule />
@@ -139,7 +143,13 @@ const ProjectDonateButton = () => {
             </span>
           </>
         ) : (
-          <p>Calculating...</p>
+          <>
+            <h1 className='p-2 bg-[#F7F7F9] rounded-lg pr-10'>
+              <span className='text-[#1D1E1F] font-medium'>---</span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>~$ ---</span>
+          </>
         )}
       </div>
     </div>
