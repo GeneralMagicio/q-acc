@@ -17,9 +17,9 @@ const itemPerPage = 5;
 
 export enum EOrderBy {
   CreationDate = 'CreationDate',
-  Round = 'Round',
-  Amount = 'Amount',
-  Reward = 'RewardToken',
+  Round = 'EarlyAccessRound',
+  Amount = 'TokenAmount',
+  RewardTokenAmount = 'RewardTokenAmount',
 }
 
 export enum EDirection {
@@ -129,7 +129,11 @@ const ProjectDonationTable = () => {
                 </div>
                 <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
                   Tokens
-                  <button onClick={() => orderChangeHandler(EOrderBy.Reward)}>
+                  <button
+                    onClick={() =>
+                      orderChangeHandler(EOrderBy.RewardTokenAmount)
+                    }
+                  >
                     <IconSort size={16} />
                   </button>
                 </div>
