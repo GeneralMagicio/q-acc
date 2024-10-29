@@ -30,6 +30,8 @@ const getClaimedTributesAndMintedTokenAmountsQuery = `
           issuanceAmount
           collateralAmount
           swapType
+          initiator
+          recipient
         }
       }
     }
@@ -67,6 +69,7 @@ export const useProjectCollateralFeeCollected = ({
 
 async function getClaimedTributesAndMintedTokenAmounts(
   orchestratorAddress?: string,
+  projectAddress?: string,
 ): Promise<{
   claimedTributes: number;
   mintedTokenAmounts: number;
@@ -88,7 +91,14 @@ async function getClaimedTributesAndMintedTokenAmounts(
     const swaps = result.data.data.BondingCurve[0]?.swaps;
 
     const mintedTokenAmounts = swaps
-      .filter((swap: { swapType: string }) => swap.swapType === 'BUY')
+      .filter(
+        (swap: { swapType: string; initiator: string; recipient: string }) =>
+          swap.swapType === 'BUY' &&
+          swap.initiator.toLowerCase() === swap.recipient.toLowerCase() &&
+          (projectAddress
+            ? swap.recipient.toLowerCase() === projectAddress?.toLowerCase()
+            : true),
+      )
       .reduce(
         (sum: any, swap: { issuanceAmount: any }) =>
           sum + (Number(swap.issuanceAmount) || 0),
@@ -113,6 +123,7 @@ async function getClaimedTributesAndMintedTokenAmounts(
 
 export const useClaimedTributesAndMintedTokenAmounts = (
   orchestratorAddress?: string,
+  projectAddress?: string,
 ) => {
   const query = useQuery<
     {
@@ -121,9 +132,17 @@ export const useClaimedTributesAndMintedTokenAmounts = (
     },
     Error
   >({
-    queryKey: ['claimedTributesAndMintedTokens', orchestratorAddress],
-    queryFn: () => getClaimedTributesAndMintedTokenAmounts(orchestratorAddress),
-    enabled: !!orchestratorAddress, // Run only if orchestratorAddress is provided
+    queryKey: [
+      'claimedTributesAndMintedTokens',
+      orchestratorAddress,
+      projectAddress,
+    ],
+    queryFn: () =>
+      getClaimedTributesAndMintedTokenAmounts(
+        orchestratorAddress,
+        projectAddress,
+      ),
+    enabled: !!orchestratorAddress && !!projectAddress, // Run only if orchestratorAddress and projectAddress is provided
   });
 
   return (
