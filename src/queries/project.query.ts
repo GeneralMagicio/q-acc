@@ -468,6 +468,7 @@ export const GET_ALL_PROJECTS = `
     sumDonationValueUsdForActiveQfRound
     countUniqueDonorsForActiveQfRound
     countUniqueDonors
+    numberOfBatchMintingTransactions
     estimatedMatching{
        projectDonationsSqrtRootSum
        allProjectsSum
@@ -516,6 +517,7 @@ export const GET_PROJECT_BY_USER_ID = `
       reviewStatus
       givingBlocksId
       icon
+      numberOfBatchMintingTransactions
       qfRounds {
         name
         id
