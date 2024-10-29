@@ -169,7 +169,8 @@ const DonarSupportedProjects = ({
 
             {/* Conditional Rendering for Token Price Range */}
             <div className='flex justify-between text-[#1D1E1F] font-medium'>
-              {tokenPriceRangeStatus.isUpdated ? (
+              {tokenPriceRangeStatus.isSuccess &&
+              tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                 <>
                   <h2 className='flex gap-1 items-center'>
                     {tokenPriceRange.min.toFixed(2)} -{' '}

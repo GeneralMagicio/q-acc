@@ -122,7 +122,7 @@ interface UseTokenPriceRangeStatusProps {
 }
 
 interface TokenPriceRangeStatusResult {
-  isUpdated: boolean;
+  isPriceUpToDate: boolean;
 }
 
 const getBondingCurveSwapsQuery = `
@@ -155,7 +155,7 @@ async function getTokenPriceRangeStatus({
       // if batch minting was not executed yet for the past round, it means the token price range is not valid
       if (!latestEndedRound.isBatchMintingExecuted) {
         return {
-          isUpdated: false,
+          isPriceUpToDate: false,
         };
       }
       // otherwise, we need to check number of executed transactions to be same with expected value
@@ -180,22 +180,25 @@ async function getTokenPriceRangeStatus({
         ).length;
         if (numberOfExecutedTransactions < expectedTransactionsNumber) {
           return {
-            isUpdated: false,
+            isPriceUpToDate: false,
           };
         }
       }
     }
   }
   return {
-    isUpdated: true,
+    isPriceUpToDate: true,
   };
 }
 
 export const useTokenPriceRangeStatus = ({
   allRounds,
   project,
-}: UseTokenPriceRangeStatusProps): TokenPriceRangeStatusResult => {
-  const query = useQuery<TokenPriceRangeStatusResult, Error>({
+}: UseTokenPriceRangeStatusProps): {
+  data?: TokenPriceRangeStatusResult;
+  isSuccess: boolean;
+} => {
+  return useQuery<TokenPriceRangeStatusResult, Error>({
     queryKey: ['tokenPriceRangeStatus', allRounds, project],
     queryFn: () =>
       getTokenPriceRangeStatus({
@@ -204,10 +207,4 @@ export const useTokenPriceRangeStatus = ({
       }),
     enabled: !!allRounds && !!project, // Run only if allRounds and project is provided
   });
-
-  return (
-    query.data || {
-      isUpdated: !query.isPending || query.isSuccess,
-    }
-  );
 };

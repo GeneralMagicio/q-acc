@@ -394,7 +394,8 @@ const MyProjects = () => {
                 </div>
                 {/* Conditional Rendering for Token Price Range */}
                 <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
-                  {tokenPriceRangeStatus.isUpdated ? (
+                  {tokenPriceRangeStatus.isSuccess &&
+                  tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                     <>
                       <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex items-center gap-1'>
                         {tokenPriceRange.min.toFixed(2)} -{' '}

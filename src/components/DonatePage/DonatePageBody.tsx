@@ -825,7 +825,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 </div>
               </div>
               <div className='flex gap-8 font-redHatText'>
-                {tokenPriceRangeStatus.isUpdated ? (
+                {tokenPriceRangeStatus.isSuccess &&
+                tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                   <>
                     <h2 className='flex gap-1 items-center'>
                       <span className='text-base font-medium text-[#4F576A]'>

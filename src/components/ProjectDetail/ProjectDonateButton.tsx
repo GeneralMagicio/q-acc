@@ -117,7 +117,8 @@ const ProjectDonateButton = () => {
         {/* <IconInfo /> */}
       </div>
       <div className='flex items-center text-sm gap-2 text-[#82899A] flex-wrap justify-between'>
-        {tokenPriceRangeStatus.isUpdated ? (
+        {tokenPriceRangeStatus.isSuccess &&
+        tokenPriceRangeStatus.data?.isPriceUpToDate ? (
           <>
             <h1 className='p-2 bg-[#F7F7F9] rounded-lg pr-10'>
               <span className='text-[#1D1E1F] font-medium'>

@@ -239,7 +239,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </p>
                   </div>
                   <div className='mt-1 flex justify-between'>
-                    {tokenPriceRangeStatus.isUpdated ? (
+                    {tokenPriceRangeStatus.isSuccess &&
+                    tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                       <>
                         <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
                           <p className='font-bold text-gray-800'>
