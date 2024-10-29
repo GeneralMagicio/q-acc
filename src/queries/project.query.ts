@@ -135,6 +135,7 @@ export const GET_PROJECT_BY_ID = `
       icon
       walletAddress
       adminUserId
+      numberOfBatchMintingTransactions
       categories{
           name
       }
@@ -267,6 +268,7 @@ export const GET_PROJECT_BY_SLUG = `
 			totalDonations
 			description
       teaser
+      numberOfBatchMintingTransactions
 			addresses {
 				address
 				isRecipient

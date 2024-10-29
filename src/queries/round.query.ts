@@ -13,6 +13,7 @@ export const GET_ALL_ROUNDS = `
         tokenPrice
         cumulativeUSDCapPerProject
         cumulativeUSDCapPerUserPerProject
+        isBatchMintingExecuted
       }
       ... on QfRound {
       __typename
@@ -27,6 +28,7 @@ export const GET_ALL_ROUNDS = `
         cumulativeUSDCapPerProject
         cumulativeUSDCapPerUserPerProject
         roundUSDCloseCapPerProject
+        isBatchMintingExecuted
       }
     }
   }
@@ -48,6 +50,7 @@ export const GET_ACTIVE_ROUND = `
           tokenPrice
           cumulativeUSDCapPerProject
           cumulativeUSDCapPerUserPerProject
+          isBatchMintingExecuted
         }
         ... on QfRound {
           __typename
@@ -62,6 +65,7 @@ export const GET_ACTIVE_ROUND = `
           cumulativeUSDCapPerProject
           cumulativeUSDCapPerUserPerProject
           roundUSDCloseCapPerProject
+          isBatchMintingExecuted
         }
       }
     }
