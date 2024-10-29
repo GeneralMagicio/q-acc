@@ -6,6 +6,7 @@ import { fetchProjectRoundRecords } from '@/services/round.services';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { getAdjustedEndDate } from '@/helpers/date';
 
 interface IRoundCollectHeaderProps {
   type: string;
@@ -24,7 +25,8 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
 }) => {
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
-  const remainingTime = useRemainingTime(' ', info?.endDate);
+  const adjustedEndDate = getAdjustedEndDate(info?.endDate);
+  const remainingTime = useRemainingTime(' ', adjustedEndDate);
   let { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   const { data: POLPrice } = useFetchTokenPrice();
 

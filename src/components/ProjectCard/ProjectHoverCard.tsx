@@ -21,6 +21,7 @@ import {
 } from '@/services/tokenPrice.service';
 import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getAdjustedEndDate } from '@/helpers/date';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -35,10 +36,13 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { address } = useAccount();
   const [isModalOpen, setModalOpen] = useState(false);
+
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const adjustedEndDate = getAdjustedEndDate(activeRoundDetails?.endDate);
+
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
-    activeRoundDetails?.endDate,
+    adjustedEndDate,
   );
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);

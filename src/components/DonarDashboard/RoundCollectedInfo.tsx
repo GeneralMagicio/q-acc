@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from 'react';
-import { formatDate } from '@/helpers/date';
+import { formatDate, getAdjustedEndDate } from '@/helpers/date';
 import { formatAmount } from '@/helpers/donation';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { calculateCapAmount } from '@/helpers/round';
@@ -18,7 +18,8 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
 }) => {
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
-  const remainingTime = useRemainingTime(info?.startDate, info?.endDate);
+  const adjustedEndDate = getAdjustedEndDate(info?.endDate);
+  const remainingTime = useRemainingTime(info?.startDate, adjustedEndDate);
 
   useEffect(() => {
     const updatePOLCap = async () => {

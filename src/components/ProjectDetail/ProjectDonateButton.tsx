@@ -17,6 +17,7 @@ import {
 import { formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getAdjustedEndDate } from '@/helpers/date';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -29,10 +30,11 @@ const ProjectDonateButton = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [progress, setProgress] = useState(0);
+  const adjustedEndDate = getAdjustedEndDate(activeRoundDetails?.endDate);
 
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
-    activeRoundDetails?.endDate,
+    adjustedEndDate,
   );
 
   useEffect(() => {
