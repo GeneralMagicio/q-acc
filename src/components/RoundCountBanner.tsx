@@ -3,6 +3,7 @@ import useRemainingTime from '@/hooks/useRemainingTime';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconMoon } from './Icons/IconMoon';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getAdjustedEndDate } from '@/helpers/date';
 
 interface RoundCountBannerProps {
   projectMaxedOut?: boolean;
@@ -19,10 +20,11 @@ const RoundCountBanner: React.FC<RoundCountBannerProps> = ({
     ).length;
     setTotalRounds(eaRoundCount);
   }, [allRounds]);
+  const adjustedEndDate = getAdjustedEndDate(activeRoundDetails?.endDate);
 
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
-    activeRoundDetails?.endDate,
+    adjustedEndDate,
   );
 
   return (
