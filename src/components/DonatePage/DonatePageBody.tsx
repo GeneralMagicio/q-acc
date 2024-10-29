@@ -136,7 +136,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     const getDonationCap: any = async () => {
       if (projectData?.id) {
         const cap = await fetchProjectUserDonationCap(Number(projectData?.id));
-        setUserDonationCap(Number(cap) || 0);
+        const res = remainingDonationAmount / 2 - 1;
+        if (progress >= 90) {
+          console.log('Res', res, progress);
+          setUserDonationCap(Math.min(res, Number(cap)));
+        } else {
+          setUserDonationCap(Number(cap) || 0);
+        }
       }
     };
 
