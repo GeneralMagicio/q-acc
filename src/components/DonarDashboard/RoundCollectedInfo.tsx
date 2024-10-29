@@ -18,7 +18,12 @@ export const RoundCollectedInfo: FC<IRoundCollectedInfoProps> = ({
 }) => {
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
-  const remainingTime = useRemainingTime(info?.startDate, info?.endDate);
+
+  // Close round 10 minutes before  it actually closes
+  const adjustedEndDate = info?.endDate
+    ? new Date(new Date(info.endDate).getTime() - 10 * 60 * 1000).toISOString()
+    : undefined;
+  const remainingTime = useRemainingTime(info?.startDate, adjustedEndDate);
 
   useEffect(() => {
     const updatePOLCap = async () => {

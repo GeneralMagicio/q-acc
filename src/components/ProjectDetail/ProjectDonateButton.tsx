@@ -30,9 +30,16 @@ const ProjectDonateButton = () => {
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  // Close round 10 minutes before  it actually closes
+  const adjustedEndDate = activeRoundDetails?.endDate
+    ? new Date(
+        new Date(activeRoundDetails.endDate).getTime() - 10 * 60 * 1000,
+      ).toISOString()
+    : undefined;
+
   const remainingTime = useRemainingTime(
     activeRoundDetails?.startDate,
-    activeRoundDetails?.endDate,
+    adjustedEndDate,
   );
 
   useEffect(() => {

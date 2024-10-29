@@ -24,7 +24,12 @@ export const RoundCollectHeader: FC<IRoundCollectHeaderProps> = ({
 }) => {
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
-  const remainingTime = useRemainingTime(' ', info?.endDate);
+
+  // Close round 10 minutes before  it actually closes
+  const adjustedEndDate = info?.endDate
+    ? new Date(new Date(info.endDate).getTime() - 10 * 60 * 1000).toISOString()
+    : undefined;
+  const remainingTime = useRemainingTime(' ', adjustedEndDate);
   let { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   const { data: POLPrice } = useFetchTokenPrice();
 

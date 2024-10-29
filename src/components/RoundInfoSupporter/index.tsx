@@ -19,6 +19,12 @@ export const RoundInfoSupporter = () => {
     setTotalRounds(eaRoundCount);
   }, [allRounds]);
 
+  // Close round 10 minutes before  it actually closes
+  const adjustedEndDate = activeRoundDetails?.endDate
+    ? new Date(
+        new Date(activeRoundDetails.endDate).getTime() - 10 * 60 * 1000,
+      ).toISOString()
+    : undefined;
   return (
     <>
       {activeRoundDetails ? (
@@ -35,7 +41,7 @@ export const RoundInfoSupporter = () => {
           </span>
           <RemainingTime
             startDate={activeRoundDetails?.startDate}
-            endDate={activeRoundDetails?.endDate}
+            endDate={adjustedEndDate}
           />
           <Link href={Routes.Projects}>
             <Button styleType={ButtonStyle.Solid} color={ButtonColor.Pink}>
