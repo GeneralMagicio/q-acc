@@ -95,8 +95,8 @@ async function getClaimedTributesAndMintedTokenAmounts(
         (swap: { swapType: string; initiator: string; recipient: string }) =>
           swap.swapType === 'BUY' &&
           swap.initiator.toLowerCase() === swap.recipient.toLowerCase() &&
-          (!projectAddress
-            || swap.recipient.toLowerCase() === projectAddress?.toLowerCase()),
+          (!projectAddress ||
+            swap.recipient.toLowerCase() === projectAddress?.toLowerCase()),
       )
       .reduce(
         (sum: any, swap: { issuanceAmount: any }) =>
