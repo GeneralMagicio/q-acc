@@ -15,8 +15,12 @@ import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -132,6 +136,12 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project,
+    allRounds,
+  });
+
   const polPriceNumber = Number(POLPrice);
 
   return (
@@ -229,21 +239,28 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </p>
                   </div>
                   <div className='mt-1 flex justify-between'>
-                    <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                      <p className='font-bold text-gray-800'>
-                        {tokenPriceRange.min.toFixed(2)} -{' '}
-                        {tokenPriceRange.max.toFixed(2)}
-                      </p>
-                      <p className='text-xs text-gray-400'> POL</p>
-                    </div>
-                    <div className='flex gap-1 items-center'>
-                      <p className='text-sm text-[#4F576A] font-medium'>
-                        ~$
-                        {polPriceNumber
-                          ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
-                          : ''}
-                      </p>
-                    </div>
+                    {tokenPriceRangeStatus.isSuccess &&
+                    tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>
+                            {tokenPriceRange.min.toFixed(2)} -{' '}
+                            {tokenPriceRange.max.toFixed(2)}
+                          </p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$
+                            {polPriceNumber
+                              ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                              : ''}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <p>Calculating...</p>
+                    )}
                   </div>
                 </div>
 

@@ -7,7 +7,10 @@ import {
   parseUnits,
 } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import config from '@/config/configuration';
+import { IProject } from '@/types/project.type';
+import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 
 const provider = new ethers.JsonRpcProvider(config.NETWORK_RPC_ADDRESS);
 
@@ -111,4 +114,97 @@ export const useTokenPriceRange = ({
   }
 
   return { min: minPrice, max: maxPrice };
+};
+
+interface UseTokenPriceRangeStatusProps {
+  allRounds?: (IQfRound | IEarlyAccessRound)[];
+  project?: IProject;
+}
+
+interface TokenPriceRangeStatusResult {
+  isPriceUpToDate: boolean;
+}
+
+const getBondingCurveSwapsQuery = `
+    query getBondingCurveSwapsQuery($orchestratorAddress: String!) {
+      BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
+        id  
+        swaps {
+          blockTimestamp
+          issuanceAmount
+          collateralAmount
+          swapType
+          initiator
+          recipient
+        }
+      }
+    }
+`;
+
+async function getTokenPriceRangeStatus({
+  allRounds,
+  project,
+}: UseTokenPriceRangeStatusProps): Promise<TokenPriceRangeStatusResult> {
+  if (allRounds && project) {
+    const latestEndedRound = allRounds
+      .filter(round => new Date(round.endDate) < new Date()) // Select rounds with endDate in the past
+      .sort(
+        (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+      )[0]; // Sort descending and take the first one
+    if (latestEndedRound) {
+      // if batch minting was not executed yet for the past round, it means the token price range is not valid
+      if (!latestEndedRound.isBatchMintingExecuted) {
+        return {
+          isPriceUpToDate: false,
+        };
+      }
+      // otherwise, we need to check number of executed transactions to be same with expected value
+      const expectedTransactionsNumber =
+        project.numberOfBatchMintingTransactions;
+      if (expectedTransactionsNumber) {
+        const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
+          query: getBondingCurveSwapsQuery,
+          variables: {
+            orchestratorAddress: project.abc?.orchestratorAddress,
+          },
+        });
+        const swaps = result.data.data.BondingCurve[0]?.swaps;
+        const numberOfExecutedTransactions: number = swaps.filter(
+          (swap: { swapType: string; initiator: string; recipient: string }) =>
+            swap.swapType === 'BUY' &&
+            swap.initiator.toLowerCase() === swap.recipient.toLowerCase() &&
+            (project.abc?.projectAddress
+              ? swap.recipient.toLowerCase() ===
+                project.abc?.projectAddress.toLowerCase()
+              : true),
+        ).length;
+        if (numberOfExecutedTransactions < expectedTransactionsNumber) {
+          return {
+            isPriceUpToDate: false,
+          };
+        }
+      }
+    }
+  }
+  return {
+    isPriceUpToDate: true,
+  };
+}
+
+export const useTokenPriceRangeStatus = ({
+  allRounds,
+  project,
+}: UseTokenPriceRangeStatusProps): {
+  data?: TokenPriceRangeStatusResult;
+  isSuccess: boolean;
+} => {
+  return useQuery<TokenPriceRangeStatusResult, Error>({
+    queryKey: ['tokenPriceRangeStatus', allRounds, project],
+    queryFn: () =>
+      getTokenPriceRangeStatus({
+        allRounds,
+        project,
+      }),
+    enabled: !!allRounds && !!project, // Run only if allRounds and project is provided
+  });
 };

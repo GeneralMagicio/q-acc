@@ -33,7 +33,10 @@ import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
@@ -41,6 +44,7 @@ import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface ITokenSchedule {
   message: string;
@@ -172,6 +176,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxPOLCap,
     contractAddress: projectData?.abc?.fundingManagerAddress || '',
+  });
+
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project: projectData,
+    allRounds,
   });
 
   const [selectedPercentage, setSelectedPercentage] = useState(0);
@@ -819,23 +829,32 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 </div>
               </div>
               <div className='flex gap-8 font-redHatText'>
-                <h2 className=' flex gap-1 items-center'>
-                  <span className='text-base font-medium text-[#4F576A] '>
-                    {tokenPriceRange.min.toFixed(2)} -{' '}
-                    {tokenPriceRange.max.toFixed(2)}
-                  </span>
-                  <span className='text-xs text-[#82899A]'>POL</span>
-                </h2>
-                <h2 className=''>
-                  <span>
-                    ~${' '}
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                    -
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-                  </span>
-                </h2>
+                {tokenPriceRangeStatus.isSuccess &&
+                tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                  <>
+                    <h2 className='flex gap-1 items-center'>
+                      <span className='text-base font-medium text-[#4F576A]'>
+                        {tokenPriceRange.min.toFixed(2)} -{' '}
+                        {tokenPriceRange.max.toFixed(2)}
+                      </span>
+                      <span className='text-xs text-[#82899A]'>POL</span>
+                    </h2>
+                    <h2>
+                      <span>
+                        ~${' '}
+                        {Number(POLPrice) &&
+                          formatNumber(
+                            Number(POLPrice) * tokenPriceRange.min,
+                          )}{' '}
+                        -
+                        {Number(POLPrice) &&
+                          formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                      </span>
+                    </h2>
+                  </>
+                ) : (
+                  <p>Calculating...</p>
+                )}
               </div>
             </div>
 
