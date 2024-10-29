@@ -207,7 +207,7 @@ export const useTokenPriceRangeStatus = ({
 
   return (
     query.data || {
-      isUpdated: false,
+      isUpdated: !query.isPending || query.isSuccess,
     }
   );
 };
