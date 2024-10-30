@@ -135,7 +135,7 @@ export const GET_PROJECT_BY_ID = `
       icon
       walletAddress
       adminUserId
-      numberOfBatchMintingTransactions
+      batchNumbersWithSafeTransactions
       categories{
           name
       }
@@ -268,7 +268,7 @@ export const GET_PROJECT_BY_SLUG = `
 			totalDonations
 			description
       teaser
-      numberOfBatchMintingTransactions
+      batchNumbersWithSafeTransactions
 			addresses {
 				address
 				isRecipient
@@ -468,7 +468,7 @@ export const GET_ALL_PROJECTS = `
     sumDonationValueUsdForActiveQfRound
     countUniqueDonorsForActiveQfRound
     countUniqueDonors
-    numberOfBatchMintingTransactions
+    batchNumbersWithSafeTransactions
     estimatedMatching{
        projectDonationsSqrtRootSum
        allProjectsSum
@@ -517,7 +517,7 @@ export const GET_PROJECT_BY_USER_ID = `
       reviewStatus
       givingBlocksId
       icon
-      numberOfBatchMintingTransactions
+      batchNumbersWithSafeTransactions
       qfRounds {
         name
         id
