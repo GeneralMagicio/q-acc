@@ -89,6 +89,7 @@ export interface IProject {
     matchingPool?: number;
   };
   icon?: string;
+  batchNumbersWithSafeTransactions?: number[];
   abc?: {
     tokenName?: string;
     tokenTicker?: string;

@@ -14,9 +14,13 @@ import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { Button, ButtonColor } from '../Button';
 import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -46,6 +50,11 @@ const DonarSupportedProjects = ({
     updatePOLCap();
   }, [activeRoundDetails, projectId, maxPOLCap]);
 
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project,
+    allRounds,
+  });
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
@@ -148,6 +157,10 @@ const DonarSupportedProjects = ({
               />
               <span className='text-[#4F576A] font-medium'>
                 {project.abc.tokenTicker} range
+                {tokenPriceRangeStatus.isSuccess &&
+                tokenPriceRangeStatus.data?.isPriceUpToDate
+                  ? ' '
+                  : ' (Calculating) '}
               </span>
               <div className='relative group'>
                 <IconTokenSchedule />
@@ -157,20 +170,37 @@ const DonarSupportedProjects = ({
                 </div>
               </div>
             </div>
+
+            {/* Conditional Rendering for Token Price Range */}
             <div className='flex justify-between text-[#1D1E1F] font-medium'>
-              <h2 className='flex gap-1 items-center'>
-                {tokenPriceRange.min.toFixed(2)} -{' '}
-                {tokenPriceRange.max.toFixed(2)}
-                <span className='text-[#4F576A] text-xs pb-1'>POL</span>
-              </h2>
-              <h2 className='text-[#4F576A]'>
-                ~${' '}
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                -
-                {Number(POLPrice) &&
-                  formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-              </h2>
+              {tokenPriceRangeStatus.isSuccess &&
+              tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                <>
+                  <h2 className='flex gap-1 items-center'>
+                    {tokenPriceRange.min.toFixed(2)} -{' '}
+                    {tokenPriceRange.max.toFixed(2)}
+                    <span className='text-[#4F576A] text-xs pb-1'>POL</span>
+                  </h2>
+                  <h2 className='text-[#4F576A]'>
+                    ~${' '}
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
+                    -
+                    {Number(POLPrice) &&
+                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                  </h2>
+                </>
+              ) : (
+                <>
+                  <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex items-center gap-1'>
+                    ---
+                    <span className='text-gray-400 text-xs'>POL</span>
+                  </div>
+                  <div className='w-[20%] text-gray-400 text-right font-medium'>
+                    ~$ ---
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}

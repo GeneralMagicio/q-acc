@@ -33,7 +33,10 @@ import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import { useTokenPriceRange } from '@/services/tokenPrice.service';
+import {
+  useTokenPriceRange,
+  useTokenPriceRangeStatus,
+} from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
@@ -41,6 +44,7 @@ import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface ITokenSchedule {
   message: string;
@@ -132,7 +136,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     const getDonationCap: any = async () => {
       if (projectData?.id) {
         const cap = await fetchProjectUserDonationCap(Number(projectData?.id));
-        setUserDonationCap(Number(cap) || 0);
+        const res = remainingDonationAmount / 2 - 1;
+        if (progress >= 90) {
+          console.log('Res', res, progress);
+          setUserDonationCap(Math.min(res, Number(cap)));
+        } else {
+          setUserDonationCap(Number(cap) || 0);
+        }
       }
     };
 
@@ -174,6 +184,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     contractAddress: projectData?.abc?.fundingManagerAddress || '',
   });
 
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project: projectData,
+    allRounds,
+  });
+
   const [selectedPercentage, setSelectedPercentage] = useState(0);
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
@@ -195,8 +211,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     hash,
   });
   useEffect(() => {
-    setIsConfirming(isConfirming);
-  }, [isConfirming, setIsConfirming]);
+    if (hash !== undefined && donationId === 0) {
+      setIsConfirming(true);
+    } else {
+      setIsConfirming(false);
+    }
+  }, [isConfirming, setIsConfirming, hash, donationId]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
@@ -214,7 +234,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [isConfirming]);
+  }, [isConfirming, donationId]);
 
   const tokenAddress = config.ERC_TOKEN_ADDRESS;
 
@@ -804,7 +824,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   )}
                 />
 
-                <span>{projectData?.abc?.tokenTicker} range</span>
+                <span>
+                  {projectData?.abc?.tokenTicker} range{' '}
+                  {tokenPriceRangeStatus.isSuccess &&
+                  tokenPriceRangeStatus.data?.isPriceUpToDate
+                    ? ' '
+                    : ' (Calculating) '}
+                </span>
                 <div className='relative group'>
                   <IconTokenSchedule />
                   <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -815,23 +841,42 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 </div>
               </div>
               <div className='flex gap-8 font-redHatText'>
-                <h2 className=' flex gap-1 items-center'>
-                  <span className='text-base font-medium text-[#4F576A] '>
-                    {tokenPriceRange.min.toFixed(2)} -{' '}
-                    {tokenPriceRange.max.toFixed(2)}
-                  </span>
-                  <span className='text-xs text-[#82899A]'>POL</span>
-                </h2>
-                <h2 className=''>
-                  <span>
-                    ~${' '}
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.min)}{' '}
-                    -
-                    {Number(POLPrice) &&
-                      formatNumber(Number(POLPrice) * tokenPriceRange.max)}
-                  </span>
-                </h2>
+                {tokenPriceRangeStatus.isSuccess &&
+                tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                  <>
+                    <h2 className='flex gap-1 items-center'>
+                      <span className='text-base font-medium text-[#4F576A]'>
+                        {tokenPriceRange.min.toFixed(2)} -{' '}
+                        {tokenPriceRange.max.toFixed(2)}
+                      </span>
+                      <span className='text-xs text-[#82899A]'>POL</span>
+                    </h2>
+                    <h2>
+                      <span>
+                        ~${' '}
+                        {Number(POLPrice) &&
+                          formatNumber(
+                            Number(POLPrice) * tokenPriceRange.min,
+                          )}{' '}
+                        -
+                        {Number(POLPrice) &&
+                          formatNumber(Number(POLPrice) * tokenPriceRange.max)}
+                      </span>
+                    </h2>
+                  </>
+                ) : (
+                  <>
+                    <h2 className='flex gap-1 items-center'>
+                      <span className='text-base font-medium text-[#4F576A]'>
+                        ---
+                      </span>
+                      <span className='text-xs text-[#82899A]'>POL</span>
+                    </h2>
+                    <h2>
+                      <span>~$ ---</span>
+                    </h2>
+                  </>
+                )}
               </div>
             </div>
 

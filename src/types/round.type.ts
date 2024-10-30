@@ -10,6 +10,7 @@ export interface IEarlyAccessRound {
   tokenPrice: number;
   cumulativeUSDCapPerProject: number;
   cumulativeUSDCapPerUserPerProject: number;
+  isBatchMintingExecuted: boolean;
 }
 
 export interface IQfRound {
@@ -26,4 +27,5 @@ export interface IQfRound {
   cumulativeUSDCapPerProject: number;
   cumulativeUSDCapPerUserPerProject: number;
   roundUSDCloseCapPerProject: number;
+  isBatchMintingExecuted: boolean;
 }
