@@ -1,10 +1,13 @@
 import Image from 'next/image';
 import { usePrivado } from '@/hooks/usePrivado';
 import { IconExternalLink } from '../Icons/IconExternalLink';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 export const PrivadoBanner = () => {
   const { isVerified, isLoading, verifyAccount } = usePrivado();
-  const showPrivadoBanner = !isVerified && !isLoading;
+  const { data: user } = useFetchUser();
+  const isUserProfileCreated = user?.fullName != null && user?.email != null;
+  const showPrivadoBanner = !isVerified && !isLoading && isUserProfileCreated;
 
   return (
     <>
