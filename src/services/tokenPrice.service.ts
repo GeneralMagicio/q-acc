@@ -161,7 +161,7 @@ async function getTokenPriceRangeStatus({
       }
       // otherwise, we need to check number of executed transactions to be same with expected value
       const expectedTransactionsNumber =
-        project.numberOfBatchMintingTransactions;
+        project.batchNumbersWithSafeTransactions?.length;
       if (expectedTransactionsNumber) {
         const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
           query: getBondingCurveSwapsQuery,
