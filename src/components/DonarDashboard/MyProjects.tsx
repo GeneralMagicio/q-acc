@@ -383,7 +383,11 @@ const MyProjects = () => {
                         'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
                     )}
                   />
-                  {projectData?.abc?.tokenTicker} range
+                  {projectData?.abc?.tokenTicker} range{' '}
+                  {tokenPriceRangeStatus.isSuccess &&
+                  tokenPriceRangeStatus.data?.isPriceUpToDate
+                    ? ' '
+                    : ' (Calculating) '}
                   <div className='relative group'>
                     <IconTokenSchedule />
                     <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
@@ -414,7 +418,15 @@ const MyProjects = () => {
                       </div>
                     </>
                   ) : (
-                    <p>Calculating...</p>
+                    <>
+                      <div className='p-2 w-[80%] rounded-lg bg-[#F7F7F9] text-[#1D1E1F] font-medium flex items-center gap-1'>
+                        ---
+                        <span className='text-gray-400 text-xs'>POL</span>
+                      </div>
+                      <div className='w-[20%] text-gray-400 text-right font-medium'>
+                        ~$ ---
+                      </div>
+                    </>
                   )}
                 </div>
               </>
