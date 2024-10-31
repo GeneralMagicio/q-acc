@@ -23,6 +23,7 @@ const DonateSection = () => {
 
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [totalAmountDonated, setTotalAmountDonated] = useState(0);
 
   const {
     projectData,
@@ -52,6 +53,7 @@ const DonateSection = () => {
         await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
       setMaxPOLCap(capAmount);
+      setTotalAmountDonated(totalDonationAmountInRound);
 
       let tempprogress = 0;
       if (maxPOLCap > 0) {
@@ -74,7 +76,7 @@ const DonateSection = () => {
           </div>
           <h3 className='text-[41px] font-bold'>
             {' '}
-            {formatAmount(totalPOLDonated)} POL
+            {formatAmount(totalAmountDonated)} POL
           </h3>
           <h2 className='text-[#1D1E1F] font-bold font-redHatText'>
             {' '}
