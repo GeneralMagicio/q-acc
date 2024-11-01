@@ -82,13 +82,13 @@ export const validators = {
   farcaster: {
     pattern: {
       value: regexList.website,
-      message: 'Invalid reddit URL',
+      message: 'Invalid farcaster URL',
     },
   },
   lens: {
     pattern: {
       value: regexList.website,
-      message: 'Invalid reddit URL',
+      message: 'Invalid lens URL',
     },
   },
   discord: {
