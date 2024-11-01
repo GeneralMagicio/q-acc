@@ -12,6 +12,8 @@ import { fetchProjectDonationsById } from '@/services/donation.services';
 import { formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { calculateCapAmount } from '@/helpers/round';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 const itemPerPage = 5;
 
@@ -36,6 +38,7 @@ const ProjectDonationTable = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const { projectData, uniqueDonars, totalAmount } = useProjectContext();
   const { data: POLPrice } = useFetchTokenPrice();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   // get project data from context
   const id = 19;
@@ -45,6 +48,18 @@ const ProjectDonationTable = () => {
   });
 
   const [pageDonations, setPageDonations] = useState<any>();
+  const [totalAmountDonated, setTotalAmountDonated] = useState(0);
+
+  useEffect(() => {
+    const updatePOLCap = async () => {
+      const { capAmount, totalDonationAmountInRound }: any =
+        await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+
+      setTotalAmountDonated(totalDonationAmountInRound);
+    };
+
+    updatePOLCap();
+  }, [totalAmount, activeRoundDetails, projectData]);
 
   useEffect(() => {
     const fetchProjectDonations = async () => {
@@ -225,12 +240,12 @@ const ProjectDonationTable = () => {
               </div>
 
               <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
-                {formatAmount(totalAmount)} POL
+                {formatAmount(totalAmountDonated)} POL
               </h1>
               <h2 className='font-medium text-[#1D1E1F]'>
                 ~ ${' '}
                 {formatAmount(
-                  Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                  Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
                 )}
               </h2>
             </div>

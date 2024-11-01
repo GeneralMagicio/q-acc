@@ -82,7 +82,7 @@ const DonateSection = () => {
             {' '}
             ~ ${' '}
             {formatAmount(
-              Math.round(totalPOLDonated * Number(POLPrice) * 100) / 100,
+              Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
             )}
           </h2>
           <p className='text-gray-700'>

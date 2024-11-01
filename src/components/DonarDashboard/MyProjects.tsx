@@ -88,19 +88,22 @@ const MyProjects = () => {
   const closeShareModal = () => setIsShareModalOpen(false);
 
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [totalAmountDonated, setTotalAmountDonated] = useState(0);
 
   useEffect(() => {
     const updatePOLCap = async () => {
-      if (activeRoundDetails) {
-        const { capAmount, totalDonationAmountInRound }: any =
-          await calculateCapAmount(activeRoundDetails, Number(projectId));
+      const { capAmount, totalDonationAmountInRound }: any =
+        await calculateCapAmount(activeRoundDetails, Number(projectId));
 
-        setMaxPOLCap(capAmount);
-      }
+      setMaxPOLCap(capAmount);
+      setTotalAmountDonated(totalDonationAmountInRound);
     };
 
-    updatePOLCap();
-  }, [activeRoundDetails, projectId, maxPOLCap]);
+    if (projectId) {
+      updatePOLCap();
+    }
+  }, [activeRoundDetails, projectId, maxPOLCap, totalAmount]);
+
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxPOLCap,
     contractAddress: projectData?.abc?.fundingManagerAddress || '',
@@ -589,12 +592,12 @@ const MyProjects = () => {
 
           <div className='flex items-center gap-4'>
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
-              {formatAmount(totalAmount)} POL
+              {formatAmount(totalAmountDonated)} POL
             </span>
             <span className='text-[#1D1E1F]  font-medium'>
               ~ ${' '}
               {formatAmount(
-                Math.round(totalAmount * Number(POLPrice) * 100) / 100,
+                Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
               )}
             </span>
           </div>
