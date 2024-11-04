@@ -7,7 +7,7 @@ import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygonZkEvm] as const,
   SCAN_URL: 'https://zkevm.polygonscan.com/',
-  ERC_TOKEN_ADDRESS: '0x9Cc1c42e4525ba4116d7948741ccA9C7446596b2',
+  ERC_TOKEN_ADDRESS: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D',
   ERC_TOKEN_SYMBOL: 'POL',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
