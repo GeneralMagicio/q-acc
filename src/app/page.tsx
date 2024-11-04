@@ -37,14 +37,21 @@ export default function Home() {
   const { data: activeRoundDetails, isLoading: isLoadingActiveROund } =
     useFetchActiveRoundDetails();
 
+  const [isQaccRound, setIsQaccRound] = useState(false);
   const isEarlyAccess = activeRoundDetails?.__typename === 'EarlyAccessRound';
-  const isQaccRound = activeRoundDetails?.__typename === 'QfRound';
+  // const isQaccRound = activeRoundDetails?.__typename === 'QfRound';
 
   const [isRoundEnded, setIsRoundEnded] = useState(false);
 
   useEffect(() => {
     const fetchMostRecentEndRound = async () => {
       const res = await getMostRecentEndRound();
+      if (
+        res?.roundNumber === 3 ||
+        activeRoundDetails?.__typename === 'QfRound'
+      ) {
+        setIsQaccRound(true);
+      }
       return res?.__typename === 'QfRound';
     };
 
