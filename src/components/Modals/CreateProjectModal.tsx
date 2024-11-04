@@ -1,8 +1,8 @@
 import { type FC } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor } from '../Button';
-import { useRouter } from 'next/navigation';
 import Routes from '@/lib/constants/Routes';
 
 interface ConnectModalProps extends BaseModalProps {
