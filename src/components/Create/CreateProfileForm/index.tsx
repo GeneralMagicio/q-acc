@@ -8,6 +8,7 @@ import { Dropzone } from '@/components/DropZone';
 import CreateNavbar from '../CreateNavbar';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { validators } from '@/components/SocialMediaInput/vaildators';
 
 export interface ProfileFormData {
   fullName: string;
@@ -99,9 +100,11 @@ const CreateProjectForm: FC = () => {
                 name='emailAddress'
                 label='Email Address'
                 placeholder='Enter your email address'
-                rules={{
-                  required: 'Email Address is required',
-                }}
+                // rules={{
+                //   required: 'Email Address is required',
+                // }}
+                rules={validators.email}
+                type='email'
               />
               {/* <div className='flex items-center ml-3'>
                 <Button

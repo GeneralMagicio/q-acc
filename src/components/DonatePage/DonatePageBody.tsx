@@ -141,7 +141,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           console.log('Res', res, progress);
           setUserDonationCap(Math.min(res, Number(cap)));
         } else {
-          setUserDonationCap(Number(cap) || 0);
+          setUserDonationCap(floor(Number(cap)) || 0);
         }
       }
     };
@@ -616,11 +616,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 config={{
                   variant: 'drawer',
                   fromChain: 137,
+                  fee: 0.006,
                   fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
                   toChain: 1101,
                   toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
                 }}
-                integrator='drawer'
+                integrator='general-magic'
               />
 
               <Link
