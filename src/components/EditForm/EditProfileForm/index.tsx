@@ -8,6 +8,7 @@ import { Dropzone } from '@/components/DropZone';
 import EditNavbar from '@/components/EditForm/EditNavbar';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { validators } from '@/components/SocialMediaInput/vaildators';
 
 export interface ProfileFormData {
   fullName: string;
@@ -92,9 +93,7 @@ const EditProjectForm: FC = () => {
                 name='emailAddress'
                 label='Email Address'
                 placeholder='Enter your email address'
-                rules={{
-                  required: 'Email Address is required',
-                }}
+                rules={validators.email}
               />
             </div>
             <div className='border-b-2 text-[18px] font-bold text-[#4F576A]'>

@@ -9,7 +9,7 @@ export const useFetchProjectByUserId = (userId: number) => {
       return await fetchProjectByUserId(userId);
     },
     enabled: !!userId,
-    staleTime: Infinity,
+    // staleTime: Infinity,
     gcTime: Infinity,
   });
 };
