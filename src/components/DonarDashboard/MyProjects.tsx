@@ -229,7 +229,7 @@ const MyProjects = () => {
       projectData?.abc?.projectAddress,
     );
 
-  if (!addrWhitelist) {
+  if (!addrWhitelist || !projectData) {
     return (
       <div className='container bg-white w-full h-[500px] flex items-center justify-center text-[25px]  font-bold text-[#82899A] rounded-2xl'>
         You don't have any project!
