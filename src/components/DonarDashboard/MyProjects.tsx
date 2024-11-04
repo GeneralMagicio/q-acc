@@ -46,7 +46,7 @@ import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
-import { calculateCapAmount } from '@/helpers/round';
+import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -89,6 +89,16 @@ const MyProjects = () => {
 
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalAmountDonated, setTotalAmountDonated] = useState(0);
+
+  const round1 = allRoundData?.find(
+    round => round.__typename === 'EarlyAccessRound' && round.roundNumber === 1,
+  );
+
+  // Check if Round 1 has started
+  const round1Started = round1
+    ? new Date().toISOString().split('T')[0] >=
+      new Date(round1.startDate).toISOString().split('T')[0]
+    : false;
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -550,36 +560,42 @@ const MyProjects = () => {
             ></RoundCollectHeader>
           )}
 
-          <div className='flex flex-col'>
-            <RoundCollectHeader
-              type={'ea'}
-              info={filteredRoundData.lastRound}
-              projectId={projectId}
-              pastRoundNumber={filteredRoundData.pastRoundNumber}
-            ></RoundCollectHeader>
+          {round1Started ? (
+            <div className='flex flex-col'>
+              <RoundCollectHeader
+                type={'ea'}
+                info={filteredRoundData.lastRound}
+                projectId={projectId}
+                pastRoundNumber={filteredRoundData.pastRoundNumber}
+              ></RoundCollectHeader>
 
-            {showRoundCollected && filteredRoundData.pastRounds
-              ? filteredRoundData.pastRounds.map((round, id) => (
-                  <RoundCollectedInfo
-                    key={id}
-                    info={round}
-                    projectId={projectId}
-                    currentRound={filteredRoundData.activeRound === round}
-                  />
-                ))
-              : null}
-            <div
-              className='bg-[#D7DDEA] w-full  justify-center mx-auto py-1 px-4 rounded-b-lg flex gap-1 cursor-pointer select-none'
-              onClick={() => setShowRoundCollected(!showRoundCollected)}
-            >
-              {showRoundCollected ? 'Hide breakdown' : 'Early access breakdown'}
-              {showRoundCollected ? (
-                <IconChevronUp size={24} />
-              ) : (
-                <IconChevronDown size={24} />
-              )}
+              {showRoundCollected && filteredRoundData.pastRounds
+                ? filteredRoundData.pastRounds.map((round, id) => (
+                    <RoundCollectedInfo
+                      key={id}
+                      info={round}
+                      projectId={projectId}
+                      currentRound={filteredRoundData.activeRound === round}
+                    />
+                  ))
+                : null}
+              <div
+                className='bg-[#D7DDEA] w-full  justify-center mx-auto py-1 px-4 rounded-b-lg flex gap-1 cursor-pointer select-none'
+                onClick={() => setShowRoundCollected(!showRoundCollected)}
+              >
+                {showRoundCollected
+                  ? 'Hide breakdown'
+                  : 'Early access breakdown'}
+                {showRoundCollected ? (
+                  <IconChevronUp size={24} />
+                ) : (
+                  <IconChevronDown size={24} />
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            ''
+          )}
         </div>
 
         <div className='flex  flex-col md:flex-row justify-between p-4 bg-[#EBECF2] md:items-center rounded-xl'>
