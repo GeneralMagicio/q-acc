@@ -46,7 +46,7 @@ import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
-import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
+import { calculateCapAmount } from '@/helpers/round';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
