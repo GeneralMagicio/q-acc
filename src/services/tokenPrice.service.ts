@@ -148,7 +148,7 @@ async function getTokenPriceRangeStatus({
   if (allRounds && project) {
     const tenMinutesLater =
       new Date().getTime() +
-      Number(process.env.NEXT_PUBLIC_ADJUSTED_MINUTES) * 60 * 1000;
+      Number(process.env.NEXT_PUBLIC_ADJUSTED_MINUTES || '10') * 60 * 1000;
     const latestEndedRound = allRounds
       .filter(round => new Date(round.endDate).getTime() < tenMinutesLater) // Select rounds with endDate in past or less than 10 minutes later
       .sort(
