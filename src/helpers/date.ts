@@ -151,6 +151,9 @@ export const formatDate = (date: string) => {
 
 export const getAdjustedEndDate = (endDate?: string): string | undefined => {
   if (!endDate) return undefined;
-  const adjustedDate = new Date(new Date(endDate).getTime() - 2 * 60 * 1000);
+  const adjustedDate = new Date(
+    new Date(endDate).getTime() -
+      Number(process.env.NEXT_PUBLIC_ADJUSTED_MINUTES || '10') * 60 * 1000,
+  );
   return adjustedDate.toISOString();
 };
