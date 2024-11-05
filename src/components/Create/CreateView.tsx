@@ -38,18 +38,18 @@ export const CreateView = () => {
         title2='Season one'
         subTitle='q/acc = QF*ABC'
       />
-      <InfoSection title='Congratulations on making it to Season 1!'>
+      <InfoSection title='Congratulations, you’re in Season 1!'>
         <p>
-          We are thrilled to have you in the program! You were accepted into
-          this season because your project has shown significant potential, and
-          we are confident that you will contribute meaningfully to Polygon’s
-          ecosystem.
+          Now you need to create your Giveth q/acc project page in preparation
+          for the Early Access Window and the q/acc round.
         </p>
         <p>
-          Are you eager to launch your token via an Augmented Bonding Curve? We
-          thought so—and we&apos;re just as excited! In preparation, one of the
-          first things to do is create your project’s profile page here, in the
-          q/acc section of Giveth’s platform. 
+          The Giveth platform is hosting this first q/acc Season. This is where
+          your supporters will be able to contribute to your project during the
+          Early Access Window and the subsequent q/acc round. As well, they will
+          create their own profile, verify their eligibility via zkID,
+          contribute to projects, see their tokens, and claim them once they
+          begin to unlock.
         </p>
         <p>This project page is where:</p>
         <ul className='list-disc pl-8'>
