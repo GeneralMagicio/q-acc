@@ -43,43 +43,126 @@ const VerifyPrivado = () => {
         <div className='flex flex-col gap-4'>
           <div className='font-redHatText'>
             <p className='text-[#1D1E1F] text-xl'>
-              We use Privado ID zero knowledge identity system to maintain the
-              integrity of quadratic acceleration while ensuring privacy. All
-              participants are required to complete verification in order to
-              receive a KYC credential from the Synaps identity provider.
+              Before you can support projects in q/acc, you need to complete a
+              quick, privacy-first identity verification through Privado ID.
             </p>
           </div>
           {!verified.isVerified && !isLoading && (
             <>
               <div className='font-redHatText'>
                 <p className='text-gray-900 text-xl font-medium'>
-                  Here is how it works:
+                  Here’s why the q/acc partnered with Privado ID:
+                </p>
+                <ul>
+                  <li className='text-lg font-normal'>
+                    <strong className='font-bold'>
+                      Zero-knowledge technology:{' '}
+                    </strong>
+                    Zero-knowledge proofs mean you can prove your eligibility
+                    without sharing any underlying personal data.
+                  </li>
+                  <li className='text-lg font-normal'>
+                    <strong className='font-bold'>Data protection: </strong> You
+                    are always in control of your data. Privado ID doesn’t store
+                    your personal information, so the risk of data leaks is
+                    eliminated.
+                  </li>
+                  <li className='text-lg font-normal'>
+                    <strong className='font-bold'>Simplified UX: </strong>
+                    With Privado ID’s web wallet and mobile app, you can collect
+                    credentials like proof of humanity and proof of residency
+                    easily.
+                  </li>
+                  <li className='text-lg font-normal'>
+                    <strong className='font-bold'>
+                      Reusable credentials:{' '}
+                    </strong>
+                    Once you complete zkID verification, your credentials are
+                    reusable across other apps, chains and devices. This means
+                    that you only need to complete the process once, and your
+                    wallet will be whitelisted for future initiatives. More on
+                    credentials reusability in this{' '}
+                    <a
+                      href='https://www.privado.id/blog/reusable-ekyc---the-fintech-white-whale'
+                      target='_blank'
+                      className='font-bold text-pink-500'
+                    >
+                      article
+                    </a>
+                    .
+                  </li>
+                </ul>
+                <br />
+                <p>
+                  Read more about the partnership &nbsp;
+                  <a
+                    href='https://www.privado.id/blog/get-ready-for-q-acc-decentralized-funding'
+                    target='_blank'
+                    className='font-bold text-pink-500'
+                  >
+                    here
+                  </a>
+                  .
                 </p>
               </div>
+              <br />
 
+              <h2 className='font-bold text-xl'>What’s next?</h2>
               <div className='bg-[#F7F7F9] flex flex-col p-6 rounded-2xl'>
                 <div className='flex flex-col gap-4'>
                   <h6 className='text-[#1D1E1F] font-bold text-lg'>
-                    1. Click the button below to go to PrivadoID.
+                    1. Click the “Go to Privado ID” button and complete the
+                    steps.
                   </h6>
                   <p className='text-[#4F576A] text-xl font-normal'>
-                    A new tab will open where you can complete the verification
-                    steps.
+                    We’ve put together a simple{' '}
+                    <a
+                      href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
+                      target='_blank'
+                      className='font-bold text-pink-500'
+                    >
+                      step-by-step guide
+                    </a>{' '}
+                    to walk you through the process.
                   </p>
                 </div>
               </div>
-
               <div className='bg-[#F7F7F9] flex flex-col  p-6 rounded-2xl'>
                 <div className='flex flex-col gap-4'>
                   <h6 className='text-[#1D1E1F] font-bold text-lg'>
-                    2. Verification may take up to 24 hours.
+                    2. After submitting, come back to this site in approximately
+                    24 hours and click “Check status with Privado ID”.
                   </h6>
-                  <p className='text-[#4F576A] text-xl font-normal'>
-                    Once your credentials are validated, we will show the
-                    success status on your q/acc profile page.
-                  </p>
                 </div>
               </div>
+              <div className='bg-[#F7F7F9] flex flex-col  p-6 rounded-2xl'>
+                <div className='flex flex-col gap-4'>
+                  <h6 className='text-[#1D1E1F] font-bold text-lg'>
+                    3. Claim your credentials.
+                  </h6>
+                </div>
+              </div>
+              <div className='bg-[#F7F7F9] flex flex-col  p-6 rounded-2xl'>
+                <div className='flex flex-col gap-4'>
+                  <h6 className='text-[#1D1E1F] font-bold text-lg'>
+                    4. Once verified, your profile will display a “Verified”
+                    status.
+                  </h6>
+                </div>
+              </div>
+              <p>
+                Got stuck somewhere in the process? If you’re having trouble or
+                received an error, don’t hesitate to contact us at{' '}
+                <a
+                  href='https://t.me/qaccsupport'
+                  target='_blank'
+                  className='font-bold text-pink-500'
+                >
+                  q/acc Support Telegram channel{' '}
+                </a>
+                or send an email to qacc@giveth.io We’ll help you get back on
+                track!
+              </p>
 
               <hr />
             </>
@@ -152,7 +235,7 @@ const VerifyPrivado = () => {
                     'Loading'
                   ) : (
                     <>
-                      Go to PrivadoID
+                      Go to Privado ID
                       <IconArrowRight size={16} />
                     </>
                   )}

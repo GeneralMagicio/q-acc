@@ -27,6 +27,6 @@ const Routes = {
   OnboardingProjects: '/onboarding/projects',
   OnboardingDonors: '/onboarding/donors',
   Preview: '/preview',
-  KycLanding: '/kyc',
+  KycLanding: '/zkid',
 };
 export default Routes;
