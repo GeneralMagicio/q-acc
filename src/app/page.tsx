@@ -308,6 +308,13 @@ export default function Home() {
                   UK for regulatory reasons.
                 </li>
               </ul>
+              <p>
+                Once verified, your wallet will hold your{' '}
+                <strong className='font-bold'>KYC credential</strong>, which
+                will allow you to participate without sharing personal data.
+                This easy process protects against Sybil attacks and strengthens
+                regulatory compliance.
+              </p>
             </div>
           )}
         </div>
