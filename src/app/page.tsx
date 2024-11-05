@@ -165,13 +165,13 @@ export default function Home() {
                 <span className=' italic underline'>
                   Making this a fair launch!
                 </span>{' '}
-                Making this a fair launch! Individual caps allow more people to
-                participate in the important early stage of a project’s token
-                economy. Limits for the total amount raised during this period
-                ensures that q/acc round supporters will also have a fair deal.
-                Once the per-round limit is reached, the round is closed. When
-                the round limit is reached in the last round, the early access
-                window is closed for that project.
+                Individual caps allow more people to participate in the
+                important early stage of a project’s token economy. Limits for
+                the total amount raised during this period ensures that q/acc
+                round supporters will also have a fair deal. Once the per-round
+                limit is reached, the round is closed. When the round limit is
+                reached in the last round, the early access window is closed for
+                that project.
               </p>
               <p>
                 The per-person, per-project cap and per-round limit for each of
