@@ -17,6 +17,15 @@ const nextConfig = {
       },
     ],
   },
+  redirects: async () => {
+    return [
+      {
+        source: '/kyc',
+        destination: '/zkid',
+        permanent: true,
+      },
+    ];
+  },
   webpack: config => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
