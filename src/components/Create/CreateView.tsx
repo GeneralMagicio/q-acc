@@ -51,23 +51,6 @@ export const CreateView = () => {
           contribute to projects, see their tokens, and claim them once they
           begin to unlock.
         </p>
-        <p>This project page is where:</p>
-        <ul className='list-disc pl-8'>
-          <li>
-            your invited early access participants will make their contributions
-            to your project. 
-          </li>
-          <li>
-            your public donors will make their contributions during the q/acc
-            rounds.
-          </li>
-        </ul>
-        <p>
-          This is also the platform where you have a project dashboard to check
-          the status of contributions, token supply, token distribution and
-          more. It is also where your community will create profiles to
-          participate in the early access window and all q/acc rounds.
-        </p>
 
         {isConnected && (userProjectsCount || 0 > 0) ? (
           <Button
