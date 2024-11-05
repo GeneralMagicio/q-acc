@@ -49,31 +49,32 @@ const VerifyPrivado = () => {
           </div>
           {!verified.isVerified && !isLoading && (
             <>
-              <div className='font-redHatText'>
-                <p className='text-gray-900 text-xl font-medium'>
+              <div className='font-redHatText text-xl'>
+                <p className='text-gray-900'>
                   Here’s why the q/acc partnered with Privado ID:
                 </p>
-                <ul>
-                  <li className='text-lg font-normal'>
+                <br />
+                <ul className='list-disc px-10 leading-loose '>
+                  <li className='font-normal'>
                     <strong className='font-bold'>
                       Zero-knowledge technology:{' '}
                     </strong>
                     Zero-knowledge proofs mean you can prove your eligibility
                     without sharing any underlying personal data.
                   </li>
-                  <li className='text-lg font-normal'>
+                  <li className='font-normal'>
                     <strong className='font-bold'>Data protection: </strong> You
                     are always in control of your data. Privado ID doesn’t store
                     your personal information, so the risk of data leaks is
                     eliminated.
                   </li>
-                  <li className='text-lg font-normal'>
+                  <li className='font-normal'>
                     <strong className='font-bold'>Simplified UX: </strong>
                     With Privado ID’s web wallet and mobile app, you can collect
                     credentials like proof of humanity and proof of residency
                     easily.
                   </li>
-                  <li className='text-lg font-normal'>
+                  <li className='font-normal'>
                     <strong className='font-bold'>
                       Reusable credentials:{' '}
                     </strong>
@@ -150,7 +151,8 @@ const VerifyPrivado = () => {
                   </h6>
                 </div>
               </div>
-              <p>
+              <br />
+              <p className='font-redHatText text-xl'>
                 Got stuck somewhere in the process? If you’re having trouble or
                 received an error, don’t hesitate to contact us at{' '}
                 <a
