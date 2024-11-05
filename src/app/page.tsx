@@ -283,17 +283,31 @@ export default function Home() {
             ''
           ) : (
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
-              <h1 className='text-gray-800 text-2xl font-bold'>🪪 KYC</h1>
+              <h1 className='text-gray-800 text-2xl font-bold'>🪪 zkID</h1>
               <p>
-                All supporters are required to complete KYC with PrivadoID
-                before participating. The q/acc protocol uses zero knowledge ID
-                to comply with AML guidelines, ensure age requirements are met,
-                and restrict participation from USA and UK citizens for
-                regulatory reasons. This measure both protects project teams and
-                mitigates Sybil attacks during q/acc rounds. If you already have
-                credentials with PrivadoID, they should work here. If not, it’s
-                fast and easy to set up. Get it done so you’re ready to go!.
+                The q/acc protocol uses Privado ID zero knowledge system to
+                maintain integrity and ensure privacy. Participants receive
+                their KYC credential from the Synaps identity verification
+                provider. Whether you have an existing Giveth profile or are
+                creating a new one, you’ll need to complete your{' '}
+                <strong className='font-bold'>
+                  zero-knowledge identity verification (zkID)
+                </strong>
+                .
               </p>
+              <p>The process is simple:</p>
+              <ul className='list-disc px-10'>
+                <li>
+                  <strong className='font-bold'>Liveness Check:</strong> This
+                  step confirms you’re a real human.
+                </li>
+                <li>
+                  <strong className='font-bold'>Documentation Check:</strong>{' '}
+                  This step ensures you are not a minor and prevents AML-listed
+                  countries from participating, as well as those from the US or
+                  UK for regulatory reasons.
+                </li>
+              </ul>
             </div>
           )}
         </div>
