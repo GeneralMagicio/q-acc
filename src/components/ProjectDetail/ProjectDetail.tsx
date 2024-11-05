@@ -13,7 +13,7 @@ import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
-import config from '@/config/configuration';
+import config, { isEarlyAccessBranch } from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
@@ -88,7 +88,7 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner />
 
-          <DonateSection />
+          {isEarlyAccessBranch ? <DonateSection /> : ''}
         </div>
         {!isRoundEnded && (
           <div className='my-6'>

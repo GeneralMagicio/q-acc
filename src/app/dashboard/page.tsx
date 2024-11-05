@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi';
 import { redirect } from 'next/navigation';
 import DashboardIndex from '@/components/DonarDashboard/DashboardIndex';
 import { ConnectModal } from '@/components/ConnectModal';
-import { isProductReleased } from '@/config/configuration';
+import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
 const Dashboard = () => {
@@ -22,9 +22,13 @@ const Dashboard = () => {
     );
   }
   return isProductReleased ? (
-    <div>
-      <DashboardIndex />
-    </div>
+    isEarlyAccessBranch ? (
+      <div>
+        <DashboardIndex />
+      </div>
+    ) : (
+      redirect(Routes.Home)
+    )
   ) : (
     redirect(Routes.KycLanding)
   );
