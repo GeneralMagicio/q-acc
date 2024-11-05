@@ -107,17 +107,14 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             <span className='text-[#E1458D] '>Change Wallet</span>
           </div>
           <div className='flex flex-col gap-4'>
-            {isProductReleased &&
-              (isEarlyAccessBranch ? (
-                <Link
-                  href={'/dashboard'}
-                  className='p-2 hover:bg-[#F7F7F9] rounded-lg'
-                >
-                  My Account
-                </Link>
-              ) : (
-                ''
-              ))}
+            {isProductReleased && (
+              <Link
+                href={'/dashboard'}
+                className='p-2 hover:bg-[#F7F7F9] rounded-lg'
+              >
+                My Account
+              </Link>
+            )}
             <Link
               href={'mailto:qacc@giveth.io'}
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'

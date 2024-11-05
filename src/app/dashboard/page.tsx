@@ -22,13 +22,9 @@ const Dashboard = () => {
     );
   }
   return isProductReleased ? (
-    isEarlyAccessBranch ? (
-      <div>
-        <DashboardIndex />
-      </div>
-    ) : (
-      redirect(Routes.Home)
-    )
+    <div>
+      <DashboardIndex />
+    </div>
   ) : (
     redirect(Routes.KycLanding)
   );
