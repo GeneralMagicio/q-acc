@@ -22,7 +22,7 @@ const eaRoundsData = [
   },
   {
     round: 3,
-    cap: '$25K minus [any funds sent in previous round]',
+    cap: '$25K minus [any funds sent in previous rounds]',
     limit: '$500K minus [any funds collected in previous rounds]',
   },
 ];
@@ -152,7 +152,7 @@ export default function Home() {
           ) : isEarlyAccess || !isQaccRound ? (
             <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
               <h1 className='text-gray-800 text-2xl font-bold'>
-                📅 Early Access Mint Rounds
+                📅 Early Access
               </h1>
               <p>
                 Your early-access NFT grants you access to participate in the
@@ -171,13 +171,19 @@ export default function Home() {
                 round supporters will also have a fair deal. Once the per-round
                 limit is reached, the round is closed. When the round limit is
                 reached in the last round, the early access window is closed for
-                that project
+                that project.
               </p>
               <p>
                 The per-person, per-project cap and per-round limit for each of
                 the early access mint rounds are in POL. They are calculated at
                 the start of the round based on what the following USD-equiv of
-                POL is at that time:
+                POL is at that time.
+              </p>
+              <p>
+                Once the per-round limit has reached 90%, the per-person
+                per-per-project cap is adjusted downward to prevent multiple
+                pending transactions from exceeding the per-round limit. What
+                this means is: the sooner your supporters act, the better.
               </p>
               <div className='overflow-x-auto'>
                 <table className='min-w-full table-auto'>
@@ -185,10 +191,10 @@ export default function Home() {
                     <tr className='rounded-t-lg'>
                       <th className='px-4 py-2 text-left '>Round</th>
                       <th className='px-4 py-2 text-left'>
-                        Per person, per project cap (in USD)
+                        Per-person, per-project cap (in USD)
                       </th>
                       <th className='px-4 py-2 text-left '>
-                        Per-round, per project cap (in USD)
+                        Per-round limit (in USD)
                       </th>
                     </tr>
                   </thead>
