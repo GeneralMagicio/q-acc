@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useState, type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
+import { isProductReleased } from '@/config/configuration';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
