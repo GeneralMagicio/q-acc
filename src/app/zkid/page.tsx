@@ -115,7 +115,7 @@ const KycLanding = () => {
             Got stuck somewhere in the process? If you’re having trouble or
             received an error, contact the{' '}
             <a
-              href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
+              href='https://t.me/qaccsupport'
               target='_blank'
               className='font-bold text-pink-500'
             >
