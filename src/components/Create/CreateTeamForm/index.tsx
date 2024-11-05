@@ -14,6 +14,7 @@ import {
   IProjectCreation,
 } from '@/types/project.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { CreateProjectModal } from '@/components/Modals/CreateProjectModal';
 
 export interface TeamMember {
   name: string;
@@ -40,6 +41,12 @@ const CreateTeamForm: FC = () => {
     mode: 'onChange', // This enables validation on change
   });
   const router = useRouter();
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+  const [projectSlug, setProjectSlug] = useState('');
 
   const { handleSubmit, setValue, watch, reset } = methods;
 
@@ -114,9 +121,10 @@ const CreateTeamForm: FC = () => {
     console.log('Submitting project data:', project);
 
     try {
-      const res = await createProject(project);
-      console.log(res);
-      router.push(Routes.DashBoard);
+      const res: any = await createProject(project);
+      setProjectSlug(res?.createProject?.slug);
+      openModal();
+      // router.push(Routes.DashBoard);
     } catch (err: any) {
       setErrorMessage(
         err.message || 'Failed to create project. Please try again.',
@@ -155,6 +163,12 @@ const CreateTeamForm: FC = () => {
           </Button>
         </div>
       </form>
+      <CreateProjectModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        showCloseButton={true}
+        slug={projectSlug}
+      />
     </FormProvider>
   );
 };
