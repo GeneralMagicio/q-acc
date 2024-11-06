@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const FlashMessage = ({ message, onClose, duration = 3000 }: any) => {
+const FlashMessage = ({ message, onClose, duration = 4000 }: any) => {
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
