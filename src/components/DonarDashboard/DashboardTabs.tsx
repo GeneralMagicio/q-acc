@@ -54,7 +54,7 @@ const DashboardTabs = (props: IDashboardTabs) => {
     },
 
     {
-      title: 'My Contributions',
+      title: 'My Tokens',
       badge: donationCount,
       query: EDashboardPageTabs.CONTRIBUTIONS,
     },

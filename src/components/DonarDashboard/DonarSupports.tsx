@@ -109,7 +109,7 @@ const DonarSupports = () => {
   if (!totalCount) {
     return (
       <div className='container'>
-        <div className='bg-white rounded-xl py-40 text-center text-gray-400 text-2xl'>
+        <div className='bg-white rounded-xl py-40 text-center text-gray-400 text-2xl font-bold'>
           You didn’t support any project.
         </div>
       </div>
