@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { LogoInverter } from './Logos/LogoInverter';
 import { LogoGiveth } from './Logos/LogoGiveth';
 import { LogoPolygon } from './Logos/LogoPolygon';
@@ -28,8 +29,27 @@ const lines = [
       label: 'Acceleration partners',
       logos: [
         <LogoMidao key='midao' />,
-        <LogoGM key='general-magic' />,
-        <LogoInverter key='inverter' />,
+        <Image
+          src='/images/logos/counity.png'
+          alt='counity'
+          key='counity'
+          height={41}
+          width={151}
+        />,
+        <Image
+          src='/images/logos/serious-people.png'
+          alt='Serious People'
+          key='serious-people'
+          height={41}
+          width={151}
+        />,
+        <Image
+          src='/images/logos/innerly.png'
+          alt='innerly'
+          key='innerly'
+          height={41}
+          width={151}
+        />,
       ],
     },
   ],
