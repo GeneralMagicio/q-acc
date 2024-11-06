@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { IIcon } from './type';
+import { ILogo } from './types';
 
-export const IconInverter: FC<IIcon> = ({ size = 14, color = '#4F576A' }) => {
+interface IProps extends ILogo {}
+
+export const LogoInverter: FC<IProps> = () => {
   return (
     <svg
       width='212'
