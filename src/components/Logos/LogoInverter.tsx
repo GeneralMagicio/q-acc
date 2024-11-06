@@ -1,11 +1,13 @@
 import { FC } from 'react';
-import { IIcon } from './type';
+import { ILogo } from './types';
 
-export const IconInverter: FC<IIcon> = ({ size = 14, color = '#4F576A' }) => {
+interface IProps extends ILogo {}
+
+export const LogoInverter: FC<IProps> = () => {
   return (
     <svg
       width='212'
-      height='61'
+      height='51'
       viewBox='0 0 212 61'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
