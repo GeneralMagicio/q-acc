@@ -38,7 +38,7 @@ export const PrivadoVerificationModal: FC<ConnectModalProps> = ({
             onClick={verifyAccount}
             className='p-4 rounded-full shadow-baseShadow text-sm font-bold w-[200px] justify-center'
           >
-            {isLoading ? 'Loading' : <>Go to PrivadoID</>}
+            {isLoading ? 'Loading' : <>Go to Privado ID</>}
           </Button>
         </div>
       </div>

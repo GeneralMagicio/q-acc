@@ -200,7 +200,7 @@ const VerifyPrivado = () => {
                     <IconInfo size={17} color='#8668FC' />
                     <span className='text-[#8668FC] font-redHatText text-sm'>
                       You are not able to participate in q/acc until you have
-                      validated your credentials with PrivadoID.
+                      validated your credentials with Privado ID.
                     </span>
                   </>
                 )}
