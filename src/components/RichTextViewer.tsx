@@ -22,15 +22,35 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
         }
 
         .ql-container > .ql-editor h1 {
-          font-family: "TeX Gyre Adventor", serif;
-          line-height: 45px;
-          margin-bottom: 10px;
+          line-height: 1.2;
+          font-size: 3rem;
+          margin-bottom: 24px;
         }
 
         .ql-container > .ql-editor h2 {
-          font-family: "TeX Gyre Adventor", serif;
-          line-height: 35px;
-          margin-bottom: 10px;
+          line-height: 1.25;
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+        }
+          .ql-container > .ql-editor h3 {
+          line-height: 1.3;
+          font-size: 2rem;
+          margin-bottom: 16px;
+        }
+          .ql-container > .ql-editor h4 {
+          line-height: 1.35;
+          font-size: 1.75rem;
+          margin-bottom: 12px;
+        }
+          .ql-container > .ql-editor h5 {
+          line-height: 1.4;
+          font-size: 1.5rem;
+          margin-bottom: 8px;
+        }
+          .ql-container > .ql-editor h6 {
+          line-height: 1.5;
+          font-size: 1.25rem;
+          margin-bottom: 4px;
         }
 
         .ql-container > .ql-editor .ql-size-small {
