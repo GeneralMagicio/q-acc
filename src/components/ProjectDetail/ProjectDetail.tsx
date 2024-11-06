@@ -67,16 +67,28 @@ const ProjectDetail = () => {
   }, [activeRoundDetails, projectData, maxPOLCap]);
 
   useEffect(() => {
-    switch (searchParams.get('tab')) {
-      case EProjectPageTabs.DONATIONS:
-        setActiveTab(1);
-        break;
-      case EProjectPageTabs.MEMEBERS:
-        setActiveTab(2);
-        break;
-      default:
-        setActiveTab(0);
-        break;
+    const tab = searchParams.get('tab');
+    if (isEarlyAccessBranch) {
+      switch (tab) {
+        case EProjectPageTabs.DONATIONS:
+          setActiveTab(1);
+          break;
+        case EProjectPageTabs.MEMEBERS:
+          setActiveTab(2);
+          break;
+        default:
+          setActiveTab(0);
+          break;
+      }
+    } else {
+      switch (tab) {
+        case EProjectPageTabs.MEMEBERS:
+          setActiveTab(1);
+          break;
+        default:
+          setActiveTab(0);
+          break;
+      }
     }
   }, [searchParams.get('tab')]);
   if (!projectData) {
@@ -92,7 +104,11 @@ const ProjectDetail = () => {
         </div>
         {!isRoundEnded && (
           <div className='my-6'>
-            <RoundCountBanner projectMaxedOut={progress >= 100} />
+            {isEarlyAccessBranch ? (
+              <RoundCountBanner projectMaxedOut={progress >= 100} />
+            ) : (
+              ''
+            )}
           </div>
         )}
       </div>
@@ -122,7 +138,12 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {activeTab === 1 && <ProjectDonationTable />}
+      {isEarlyAccessBranch
+        ? activeTab === 1 && <ProjectDonationTable />
+        : activeTab === 1 && (
+            <ProjectTeamMembers teamMembers={projectData?.teamMembers} />
+          )}
+
       {/* Pass team members later */}
       {activeTab === 2 && (
         <ProjectTeamMembers teamMembers={projectData?.teamMembers} />

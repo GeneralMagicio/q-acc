@@ -8,7 +8,7 @@ import { FeaturedProjects } from '@/components/FeaturedProjects';
 import About from '@/components/About';
 import { RoundInfoSupporter } from '@/components/RoundInfoSupporter';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { isProductReleased } from '@/config/configuration';
+import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
 import { getMostRecentEndRound } from '@/helpers/round';
@@ -80,7 +80,15 @@ export default function Home() {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-          {isRoundEnded ? '' : <RoundInfoSupporter />}
+          {isEarlyAccessBranch ? (
+            isRoundEnded ? (
+              ''
+            ) : (
+              <RoundInfoSupporter />
+            )
+          ) : (
+            ''
+          )}
 
           <h1 className='text-5xl text-gray-900 font-bold my-6'>
             Welcome to q/acc Season 1
