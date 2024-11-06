@@ -6,8 +6,8 @@ interface IProps extends ILogo {}
 export const LogoPrivado: FC<IProps> = () => {
   return (
     <svg
-      width='383'
-      height='86'
+      width='183'
+      height='41'
       viewBox='0 0 383 86'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
