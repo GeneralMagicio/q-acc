@@ -365,7 +365,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     if (!isVerified) {
       openPrivadoModal();
 
-      console.log('User is not verified with PrivadoID');
+      console.log('User is not verified with Privado ID');
       return;
     }
 

@@ -44,7 +44,7 @@ const DashboardPrivado = () => {
                       <IconInfo size={17} color='#8668FC' />
                       <span className='text-[#8668FC] font-redHatText text-sm'>
                         Please note: You cannot proceed on q/acc until your
-                        identity is verified by PrivadoID
+                        identity is verified by Privado ID
                       </span>
                     </>
                   )}
@@ -72,7 +72,7 @@ const DashboardPrivado = () => {
                       'Loading'
                     ) : (
                       <>
-                        Go to PrivadoID
+                        Go to Privado ID
                         <IconArrowRight size={16} />
                       </>
                     )}
