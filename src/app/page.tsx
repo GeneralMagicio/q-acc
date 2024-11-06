@@ -327,7 +327,10 @@ export default function Home() {
                 <strong className='font-bold'>KYC credential</strong>, which
                 will allow you to participate without sharing personal data.
                 This easy process protects against Sybil attacks and strengthens
-                regulatory compliance.We’ve put together a simple{' '}
+                regulatory compliance.
+              </p>
+              <p>
+                We’ve put together a simple{' '}
                 <a
                   href={links.PRIVADO_GUIDE_LINK}
                   target='_blank'
