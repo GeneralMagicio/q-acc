@@ -7,6 +7,7 @@ import Collaborator from '@/components/Collaborator';
 import { KycLandingButton } from '@/components/KycLandingButton';
 import { KycCompleteBox } from '@/components/KycCompleteBox';
 import { usePrivado } from '@/hooks/usePrivado';
+import links from '@/lib/constants/links';
 
 const KycLanding = () => {
   const { isVerified } = usePrivado();
@@ -85,7 +86,7 @@ const KycLanding = () => {
                   A new tab will open where you can complete the verification.
                   Read this{' '}
                   <a
-                    href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
+                    href={links.PRIVADO_GUIDE_LINK}
                     target='_blank'
                     className='font-bold text-pink-500'
                   >

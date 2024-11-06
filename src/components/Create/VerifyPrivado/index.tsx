@@ -10,6 +10,7 @@ import { usePrivado } from '@/hooks/usePrivado';
 import { IconVerifiedFilled } from '@/components/Icons/IconVerifiedFilled';
 import { IconVerified } from '@/components/Icons/IconVerified';
 import { IconArrowRight } from '@/components/Icons/IconArrowRight';
+import links from '@/lib/constants/links';
 
 interface IVerified {
   isVerified: boolean;
@@ -118,7 +119,7 @@ const VerifyPrivado = () => {
                   <p className='text-[#4F576A] text-xl font-normal'>
                     We’ve put together a simple{' '}
                     <a
-                      href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
+                      href={links.PRIVADO_GUIDE_LINK}
                       target='_blank'
                       className='font-bold text-pink-500'
                     >
