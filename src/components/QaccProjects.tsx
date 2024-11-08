@@ -28,7 +28,9 @@ export const QaccProjects = () => {
             <div className='w-[] '>
               <img src='/Icons/akarun.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold  '>Akarun </h1>
+            <h1 className='text-[#E1458D] font-bold  '>
+              <a href='https://q-acc.giveth.io/project/akarun'>Akarun</a>{' '}
+            </h1>
             <p className='leading-9 text-[#4F576A] text-left'>
               Akarun is a mobile game where players race custom runners tied to
               live market assets. The fastest runner linked to the
@@ -40,7 +42,11 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/ancient.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Ancient Beast </h1>
+            <h1 className='text-[#E1458D] font-bold '>
+              <a href='https://q-acc.giveth.io/project/ancient-beast'>
+                Ancient Beast{' '}
+              </a>
+            </h1>
             <p className='leading-9 text-[#4F576A]'>
               Ancient Beast is an open-source, match-based (1v1 or 2v2) eSports
               strategy game played against other people or AI. It has no
@@ -53,7 +59,11 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/citizen.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Citizen Wallet </h1>
+            <h1 className='text-[#E1458D] font-bold '>
+              <a href='https://q-acc.giveth.io/project/citizen-wallet'>
+                Citizen Wallet
+              </a>{' '}
+            </h1>
             <p className='leading-9 text-[#4F576A]'>
               Citizen Wallet empowers communities and events with Web3 tools to
               easily launch, use, and manage community tokens via a mobile app
@@ -65,7 +75,11 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/grand.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>The Grand Timeline </h1>
+            <h1 className='text-[#E1458D] font-bold '>
+              <a href='https://q-acc.giveth.io/project/the-grand-timeline'>
+                The Grand Timeline
+              </a>{' '}
+            </h1>
             <p className='leading-9 text-[#4F576A]'>
               The Grand Timeline is a historical research and data visualization
               project about the entire history of blockchains and Web3. It will
@@ -77,7 +91,9 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/melodex.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Melodex </h1>
+            <h1 className='text-[#E1458D] font-bold '>
+              <a href='https://q-acc.giveth.io/project/melodex'>Melodex</a>{' '}
+            </h1>
             <p className='leading-9 text-[#4F576A]'>
               Melodex is a decentralized exchange focused on listing
               asset-backed music tokens that represent shares in song royalty
@@ -90,7 +106,7 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/prismo.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Prismo Technology </h1>
+            <h1 className='text-[#E1458D] font-bold '>Prismo Technology</h1>
             <p className='leading-9 text-[#4F576A]'>
               Prismo Technology is a layer-2 hybrid public-private blockchain
               platform designed to enable secure and scalable solutions for
@@ -105,7 +121,9 @@ export const QaccProjects = () => {
             <div className='w-[]'>
               <img src='/Icons/x23.png' />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>x23.ai </h1>
+            <h1 className='text-[#E1458D] font-bold '>
+              <a href='https://q-acc.giveth.io/project/x23ai'>x23.ai </a>
+            </h1>
             <p className='leading-9 text-[#4F576A]'>
               x23 is automating the future of decentralized organizations by
               integrating AI tools to streamline the operation and governance of
