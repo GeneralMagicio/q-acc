@@ -61,7 +61,7 @@ const ProjectTeamMembers: React.FC<ProjectTeamMembersProps> = ({
                 {/* Dynamically render social media icons if they exist */}
                 {member.twitter && (
                   <a
-                    href={`https://twitter.com/${member.twitter.replace('@', '')}`}
+                    href={`${member.twitter.replace('@', '')}`}
                     target='_blank'
                     rel='noopener noreferrer'
                   >
@@ -79,7 +79,7 @@ const ProjectTeamMembers: React.FC<ProjectTeamMembersProps> = ({
                 )}
                 {member.farcaster && (
                   <a
-                    href={`https://farcaster.xyz/${member.farcaster.replace('@', '')}`}
+                    href={`${member.farcaster.replace('@', '')}`}
                     target='_blank'
                     rel='noopener noreferrer'
                   >

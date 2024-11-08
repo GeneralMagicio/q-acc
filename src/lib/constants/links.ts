@@ -23,8 +23,9 @@ const links = {
   COMMONS_STACK: 'https://commonsstack.org/',
   RECRUITEE: 'https://giveth.recruitee.com/',
   DISCORD_SUPPORT: 'https://discord.gg/TeWHtAjNQT',
-
   PASSPORT: 'https://passport.gitcoin.co',
+  PRIVADO_GUIDE_LINK:
+    'https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494',
 };
 
 export default links;

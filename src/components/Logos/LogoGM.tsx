@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { IIcon } from './type';
+import { ILogo } from './types';
 
-export const IconGM: FC<IIcon> = () => {
+interface IProps extends ILogo {}
+
+export const LogoGM: FC<IProps> = () => {
   return (
     <svg
       width='126'

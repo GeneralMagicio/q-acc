@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { IIcon } from './type';
+import { ILogo } from './types';
 
-export const IconCommonStack: FC<IIcon> = () => {
+interface IProps extends ILogo {}
+
+export const LogoCommonStack: FC<IProps> = () => {
   return (
     <svg
       width='178'

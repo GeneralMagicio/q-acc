@@ -63,7 +63,9 @@ const ProjectDetail = () => {
       }
     };
 
-    updatePOLCap();
+    if (projectData) {
+      updatePOLCap();
+    }
   }, [activeRoundDetails, projectData, maxPOLCap]);
 
   useEffect(() => {

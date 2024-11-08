@@ -12,6 +12,7 @@ import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
 import { getMostRecentEndRound } from '@/helpers/round';
+import links from '@/lib/constants/links';
 
 const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -335,6 +336,18 @@ export default function Home() {
                 will allow you to participate without sharing personal data.
                 This easy process protects against Sybil attacks and strengthens
                 regulatory compliance.
+              </p>
+              <p>
+                We’ve put together a simple{' '}
+                <a
+                  href={links.PRIVADO_GUIDE_LINK}
+                  target='_blank'
+                  className='font-bold text-pink-500'
+                  referrerPolicy='no-referrer'
+                >
+                  step-by-step
+                </a>{' '}
+                guide to walk you through the process.
               </p>
             </div>
           )}

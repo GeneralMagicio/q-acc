@@ -1,7 +1,11 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useSwitchChain,
+} from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { createPublicClient, http } from 'viem';
 import Link from 'next/link';
@@ -82,6 +86,7 @@ const PercentageButton = ({
 const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const { address, isConnected } = useAccount();
   const { chain } = useAccount();
+  const { switchChain } = useSwitchChain();
   const { data: user } = useFetchUser();
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
@@ -362,10 +367,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
+    if (chain?.id !== 1101) {
+      {
+        switchChain({ chainId: 1101 });
+      }
+      console.log('chain', chain?.id);
+      setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
+      return;
+    }
     if (!isVerified) {
       openPrivadoModal();
 
-      console.log('User is not verified with PrivadoID');
+      console.log('User is not verified with Privado ID');
       return;
     }
 
