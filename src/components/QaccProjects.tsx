@@ -117,7 +117,7 @@ export const QaccProjects = () => {
         </div>
         <div className='flex flex-col sm:flex-row  flex-gap-9 justify-center '>
           <div className='w-[35%]'></div>
-          <div className='flex flex-col gap-3 text-[24px]  lg:w-1/2'>
+          <div className='flex flex-col gap-3 text-[24px]  lg:w-1/2 mr-9'>
             <div className='w-[]'>
               <img src='/Icons/x23.png' />
             </div>

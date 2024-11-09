@@ -456,6 +456,7 @@ export default function Home() {
       )}
 
       <About />
+      <br />
       {isEarlyAccessBranch ? <FeaturedProjects /> : ''}
       <Collaborator />
     </main>

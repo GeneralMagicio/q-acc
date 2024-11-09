@@ -59,7 +59,7 @@ const CreateAccount = () => {
             </ul>
           </div>
 
-          <div className='flex justify-center'>
+          <div className='flex justify-center p-6'>
             <Link href={'/create/profile'}>
               <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
                 Create Account
