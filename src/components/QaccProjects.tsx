@@ -25,8 +25,11 @@ export const QaccProjects = () => {
         </h1>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9 justify-center '>
           <div className='flex flex-col gap-3 text-[24px] text-center sm:text-left'>
-            <div className='w-[] '>
-              <img src='/Icons/akarun.png' />
+            <div className='w-[52px] h-[60px] '>
+              <img
+                src='/Icons/akarun1x.png'
+                srcSet='/Icons/akarun1x.png 1x, /Icons/akarun2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold  '>
               <a href='https://q-acc.giveth.io/project/akarun'>Akarun</a>{' '}
@@ -39,8 +42,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px]'>
-            <div className='w-[]'>
-              <img src='/Icons/ancient.png' />
+            <div className='w-[92px] h-[60px]'>
+              <img
+                src='/Icons/beast1x.png'
+                srcSet='/Icons/beast1x.png 1x, /Icons/beast2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
               <a href='https://q-acc.giveth.io/project/ancient-beast'>
@@ -56,8 +62,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px]'>
-            <div className='w-[]'>
-              <img src='/Icons/citizen.png' />
+            <div className='w-[50px] h-[60px]'>
+              <img
+                src='/Icons/citizen1x.png'
+                srcSet='/Icons/citizen1x.png 1x, /Icons/citizen2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
               <a href='https://q-acc.giveth.io/project/citizen-wallet'>
@@ -72,8 +81,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px]'>
-            <div className='w-[]'>
-              <img src='/Icons/grand.png' />
+            <div className='w-[60px] h-[60px]'>
+              <img
+                src='/Icons/grand1x.png'
+                srcSet='/Icons/grand1x.png 1x, /Icons/grand2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
               <a href='https://q-acc.giveth.io/project/the-grand-timeline'>
@@ -88,8 +100,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px]'>
-            <div className='w-[]'>
-              <img src='/Icons/melodex.png' />
+            <div className='w-[180px] h-[60px]'>
+              <img
+                src='/Icons/melodex1x.png'
+                srcSet='/Icons/melodex1x.png 1x, /Icons/melodex2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
               <a href='https://q-acc.giveth.io/project/melodex'>Melodex</a>{' '}
@@ -103,8 +118,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px]'>
-            <div className='w-[]'>
-              <img src='/Icons/prismo.png' />
+            <div className='w-[62px] h-[60px]'>
+              <img
+                src='/Icons/prismo1x.png'
+                srcSet='/Icons/prismo1x.png 1x, /Icons/prismo2x.png 2x'
+              />{' '}
             </div>
             <h1 className='text-[#E1458D] font-bold '>Prismo Technology</h1>
             <p className='leading-9 text-[#4F576A]'>
@@ -118,8 +136,11 @@ export const QaccProjects = () => {
         <div className='flex flex-col sm:flex-row  flex-gap-9 justify-center '>
           <div className='w-[35%]'></div>
           <div className='flex flex-col gap-3 text-[24px]  lg:w-1/2 mr-9'>
-            <div className='w-[]'>
-              <img src='/Icons/x23.png' />
+            <div className='w-[71px] h-[60px]'>
+              <img
+                src='/Icons/x231x.png'
+                srcSet='/Icons/x231x.png 1x, /Icons/x232x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
               <a href='https://q-acc.giveth.io/project/x23ai'>x23.ai </a>
@@ -132,8 +153,11 @@ export const QaccProjects = () => {
           </div>
 
           <div className='flex flex-col gap-3 text-[24px] lg:w-1/2'>
-            <div className='w-[]'>
-              <img src='/Icons/Xade.png' />
+            <div className='w-[86px] h-[60px] flex items-center'>
+              <img
+                src='/Icons/xade1x.png'
+                srcSet='/Icons/xade1x.png 1x, /Icons/xade2x.png 2x'
+              />
             </div>
             <h1 className='text-[#E1458D] font-bold '>Xade Finance</h1>
             <p className='leading-9 text-[#4F576A]'>
