@@ -148,6 +148,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   });
 
   const polPriceNumber = Number(POLPrice);
+  const isActionsActive = isEarlyAccessBranch && !isRoundEnded;
+  const totalHeightClass = isActionsActive
+    ? 'h-project-card-full'
+    : 'h-project-card';
 
   return (
     <div
@@ -162,10 +166,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full  h-[470px] rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
+        className={`relative  w-full ${totalHeightClass} rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
-        <div className='relative h-[350px] font-redHatText '>
+        <div className='relative h-[250px]'>
           <ProjectCardImage
             src={project.image}
             alt='Project Card'
@@ -209,95 +213,93 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {isEarlyAccessBranch
-              ? !isRoundEnded && (
-                  <>
-                    {/* Percentage Bar */}
-                    <div className='flex flex-col gap-2'>
-                      <div
-                        className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
-                      >
-                        {progress === 0
-                          ? 'Getting started !'
-                          : progress !== 100
-                            ? progress + '% collected'
-                            : 'Maxed out this round!'}
-                      </div>
-                      <ProgressBar progress={progress} isStarted={false} />
-                    </div>
+            {isActionsActive && (
+              <>
+                {/* Percentage Bar */}
+                <div className='flex flex-col gap-2'>
+                  <div
+                    className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
+                  >
+                    {progress === 0
+                      ? 'Getting started !'
+                      : progress !== 100
+                        ? progress + '% collected'
+                        : 'Maxed out this round!'}
+                  </div>
+                  <ProgressBar progress={progress} isStarted={false} />
+                </div>
 
-                    <div>
-                      <div className='flex gap-2 items-center pb-1'>
-                        {/* {getIpfsAddress(project.abc?.icon!)} */}
+                <div>
+                  <div className='flex gap-2 items-center pb-1'>
+                    {/* {getIpfsAddress(project.abc?.icon!)} */}
 
-                        <img
-                          className='w-6 h-6 rounded-full'
-                          src={getIpfsAddress(
-                            project.abc?.icon! ||
-                              'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                          )}
-                        />
+                    <img
+                      className='w-6 h-6 rounded-full'
+                      src={getIpfsAddress(
+                        project.abc?.icon! ||
+                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                      )}
+                    />
 
-                        {/* <IconABC /> */}
-                        <p className='text-gray-800 font-medium'>
-                          {project?.abc?.tokenTicker} range
-                          {tokenPriceRangeStatus.isSuccess &&
-                          tokenPriceRangeStatus.data?.isPriceUpToDate
-                            ? ' '
-                            : ' (Calculating) '}
-                        </p>
-                      </div>
-                      <div className='mt-1 flex justify-between'>
-                        {tokenPriceRangeStatus.isSuccess &&
-                        tokenPriceRangeStatus.data?.isPriceUpToDate ? (
-                          <>
-                            <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                              <p className='font-bold text-gray-800'>
-                                {tokenPriceRange.min.toFixed(2)} -{' '}
-                                {tokenPriceRange.max.toFixed(2)}
-                              </p>
-                              <p className='text-xs text-gray-400'>POL</p>
-                            </div>
-                            <div className='flex gap-1 items-center'>
-                              <p className='text-sm text-[#4F576A] font-medium'>
-                                ~$
-                                {polPriceNumber
-                                  ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
-                                  : ''}
-                              </p>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                              <p className='font-bold text-gray-800'>---</p>
-                              <p className='text-xs text-gray-400'>POL</p>
-                            </div>
-                            <div className='flex gap-1 items-center'>
-                              <p className='text-sm text-[#4F576A] font-medium'>
-                                ~$ ---
-                              </p>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
+                    {/* <IconABC /> */}
+                    <p className='text-gray-800 font-medium'>
+                      {project?.abc?.tokenTicker} range
+                      {tokenPriceRangeStatus.isSuccess &&
+                      tokenPriceRangeStatus.data?.isPriceUpToDate
+                        ? ' '
+                        : ' (Calculating) '}
+                    </p>
+                  </div>
+                  <div className='mt-1 flex justify-between'>
+                    {tokenPriceRangeStatus.isSuccess &&
+                    tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>
+                            {tokenPriceRange.min.toFixed(2)} -{' '}
+                            {tokenPriceRange.max.toFixed(2)}
+                          </p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$
+                            {polPriceNumber
+                              ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                              : ''}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>---</p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$ ---
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
 
-                    <Button
-                      color={ButtonColor.Pink}
-                      className={`w-full justify-center opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
-                      onClick={handleSupport}
-                      disabled={
-                        remainingTime === 'Time is up!' ||
-                        remainingTime === '--:--:--' ||
-                        maxPOLCap === amountDonatedInRound
-                      }
-                    >
-                      Support This Project
-                    </Button>
-                  </>
-                )
-              : ''}
+                <Button
+                  color={ButtonColor.Pink}
+                  className={`w-full justify-center opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
+                  onClick={handleSupport}
+                  disabled={
+                    remainingTime === 'Time is up!' ||
+                    remainingTime === '--:--:--' ||
+                    maxPOLCap === amountDonatedInRound
+                  }
+                >
+                  Support This Project
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
