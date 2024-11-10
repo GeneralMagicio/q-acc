@@ -7,8 +7,9 @@ export const isProductReleased =
 export const isEarlyAccessBranch =
   process.env.NEXT_PUBLIC_EARLY_ACCESS_BRANCH === 'true';
 
-console.log('isProductReleased', isProductReleased);
-console.log('isProduction', isProduction);
+console.log('config-isProductReleased', isProductReleased);
+console.log('config-isProduction', isProduction);
+console.log('config-isEarlyAccessBranch', isEarlyAccessBranch);
 
 if (!isProduction) {
   console.log('Running in development mode');
