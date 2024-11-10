@@ -232,14 +232,17 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                 <div>
                   <div className='flex gap-2 items-center pb-1'>
                     {/* {getIpfsAddress(project.abc?.icon!)} */}
-
-                    <img
-                      className='w-6 h-6 rounded-full'
-                      src={getIpfsAddress(
-                        project.abc?.icon! ||
-                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                      )}
-                    />
+                    <div className='w-6 h-6 relative rounded-full overflow-hidden'>
+                      <Image
+                        src={getIpfsAddress(
+                          project.abc?.icon! ||
+                            'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                        )}
+                        alt=''
+                        width={48}
+                        height={48}
+                      />
+                    </div>
 
                     {/* <IconABC /> */}
                     <p className='text-gray-800 font-medium'>
