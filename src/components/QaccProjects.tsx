@@ -24,7 +24,7 @@ export const QaccProjects = () => {
           Who can I support?
         </h1>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9 justify-center '>
-          <div className='flex flex-col gap-3 text-[24px] text-center sm:text-left'>
+          <div className='flex flex-col gap-3 text-[24px] sm:text-left'>
             <div className='w-[52px] h-[60px] '>
               <img
                 src='/Icons/akarun1x.png'
