@@ -169,7 +169,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           <ProjectCardImage
             src={project.image}
             alt='Project Card'
-            layout='fill'
             fallbackSrc='/images/project-card/card-image.jpeg'
           />
         </div>

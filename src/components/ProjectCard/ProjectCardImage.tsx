@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 interface ProjectCardImageProps {
   src?: string;
   alt: string;
-  layout: 'fill' | 'fixed' | 'intrinsic' | 'responsive';
   width?: number;
   height?: number;
   className?: string;
@@ -15,7 +14,6 @@ interface ProjectCardImageProps {
 const ProjectCardImage: React.FC<ProjectCardImageProps> = ({
   src,
   alt,
-  layout,
   width,
   height,
   className,
@@ -31,7 +29,8 @@ const ProjectCardImage: React.FC<ProjectCardImageProps> = ({
     <Image
       src={imgSrc || fallbackSrc}
       alt={alt}
-      layout={layout}
+      fill={true}
+      objectFit='cover'
       width={width}
       height={height}
       className={className}
