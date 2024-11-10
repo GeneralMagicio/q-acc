@@ -6,7 +6,7 @@ import { Banner } from '@/components/Banner';
 import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
 import About from '@/components/About';
-import { RoundInfoSupporter } from '@/components/RoundInfoSupporter';
+import { RoundInfoBanner } from '@/components/RoundInfoBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
@@ -86,7 +86,7 @@ export default function Home() {
 
         {isEarlyAccessBranch ? (
           <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-            {isRoundEnded ? '' : <RoundInfoSupporter />}
+            {isRoundEnded ? '' : <RoundInfoBanner />}
 
             <h1 className='text-5xl text-gray-900 font-bold my-6'>
               Welcome to q/acc Season 1

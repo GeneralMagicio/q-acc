@@ -8,7 +8,7 @@ import { IconMoon } from '../Icons/IconMoon';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getAdjustedEndDate } from '@/helpers/date';
 
-export const RoundInfoSupporter = () => {
+export const RoundInfoBanner = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [totalRounds, setTotalRounds] = useState<number>();
   const { data: allRounds } = useFetchAllRound();
