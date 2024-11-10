@@ -47,6 +47,10 @@ const config: Config = {
         cardShadow: '0px 3px 20px 0px rgba(49, 11, 181, 0.45)',
         GIV400: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
       },
+      height: {
+        'project-card-full': '572px',
+        'project-card': '370px',
+      },
     },
   },
   plugins: [],
