@@ -1,16 +1,11 @@
 import Image from 'next/image';
 import React, { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAccount } from 'wagmi';
 import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 
-import { Button, ButtonColor } from '../Button';
 import { getIpfsAddress } from '@/helpers/image';
-import { checkUserOwnsNFT } from '@/helpers/token';
-import { NFTModal } from '../Modals/NFTModal';
 import ProgressBar from '../ProgressBar';
-import useRemainingTime from '@/hooks/useRemainingTime';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -21,8 +16,8 @@ import {
 } from '@/services/tokenPrice.service';
 import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
-import { getAdjustedEndDate } from '@/helpers/date';
 import { isEarlyAccessBranch } from '@/config/configuration';
+import { SupportButton } from './SupportButton';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -35,20 +30,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
-  const { address } = useAccount();
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-  const adjustedEndDate = getAdjustedEndDate(activeRoundDetails?.endDate);
 
-  const remainingTime = useRemainingTime(
-    activeRoundDetails?.startDate,
-    adjustedEndDate,
-  );
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
   const { data: POLPrice } = useFetchTokenPrice();
@@ -114,24 +100,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     updatePOLCap();
   }, [activeRoundDetails, project, progress, maxPOLCap, amountDonatedInRound]);
 
-  const handleSupport = async (e: any) => {
-    e.stopPropagation();
-    if (activeRoundDetails?.__typename !== 'QfRound') {
-      console.log(activeRoundDetails);
-      const res = await checkUserOwnsNFT(
-        project?.abc?.nftContractAddress || '',
-        address || '',
-      );
-      if (res) {
-        router.push(`/support/${project.slug}`);
-      } else {
-        openModal();
-      }
-    } else {
-      router.push(`/support/${project.slug}`);
-    }
-  };
-
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
   };
@@ -157,11 +125,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
     >
-      <NFTModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        showCloseButton={true}
-      />
       <div
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -288,19 +251,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     )}
                   </div>
                 </div>
-
-                <Button
-                  color={ButtonColor.Pink}
-                  className={`w-full justify-center opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
-                  onClick={handleSupport}
-                  disabled={
-                    remainingTime === 'Time is up!' ||
-                    remainingTime === '--:--:--' ||
-                    maxPOLCap === amountDonatedInRound
-                  }
-                >
-                  Support This Project
-                </Button>
+                <SupportButton
+                  project={project}
+                  disabled={maxPOLCap === amountDonatedInRound}
+                />
               </>
             )}
           </div>
