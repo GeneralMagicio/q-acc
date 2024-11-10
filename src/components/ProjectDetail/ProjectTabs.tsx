@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { useProjectContext } from '@/context/project.context';
+import { isEarlyAccessBranch } from '@/config/configuration';
 
 interface IProjectTabs {
   activeTab: number;
@@ -20,11 +21,15 @@ const ProjectTabs = (props: IProjectTabs) => {
   };
   const tabsArray = [
     { title: 'About' },
-    {
-      title: 'Supporters',
-      badge: totalDonationsCount,
-      query: EProjectPageTabs.DONATIONS,
-    },
+    ...(isEarlyAccessBranch
+      ? [
+          {
+            title: 'Supporters',
+            badge: totalDonationsCount,
+            query: EProjectPageTabs.DONATIONS,
+          },
+        ]
+      : []),
     {
       title: 'Team Members',
       query: EProjectPageTabs.MEMEBERS,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProjectContext } from '@/context/project.context';
+import { isEarlyAccessBranch } from '@/config/configuration';
 const ProjectDetailBanner = () => {
   const { projectData } = useProjectContext();
 
@@ -9,7 +10,7 @@ const ProjectDetailBanner = () => {
       : '/images/project-card/card-image.jpeg';
   return (
     <div
-      className='w-full h-[440px] lg:h-[546px] lg:w-[80%]  bg-cover bg-center rounded-3xl relative'
+      className={`w-full h-[440px] lg:h-[546px] ${isEarlyAccessBranch ? 'lg:w-[80%]' : 'lg:w-[100%] '}  bg-cover bg-center rounded-3xl relative`}
       style={{
         backgroundImage: `url(${bgSrc})`,
       }}

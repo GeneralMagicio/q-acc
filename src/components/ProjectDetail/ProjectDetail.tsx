@@ -13,7 +13,7 @@ import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
-import config from '@/config/configuration';
+import config, { isEarlyAccessBranch } from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
@@ -69,16 +69,28 @@ const ProjectDetail = () => {
   }, [activeRoundDetails, projectData, maxPOLCap]);
 
   useEffect(() => {
-    switch (searchParams.get('tab')) {
-      case EProjectPageTabs.DONATIONS:
-        setActiveTab(1);
-        break;
-      case EProjectPageTabs.MEMEBERS:
-        setActiveTab(2);
-        break;
-      default:
-        setActiveTab(0);
-        break;
+    const tab = searchParams.get('tab');
+    if (isEarlyAccessBranch) {
+      switch (tab) {
+        case EProjectPageTabs.DONATIONS:
+          setActiveTab(1);
+          break;
+        case EProjectPageTabs.MEMEBERS:
+          setActiveTab(2);
+          break;
+        default:
+          setActiveTab(0);
+          break;
+      }
+    } else {
+      switch (tab) {
+        case EProjectPageTabs.MEMEBERS:
+          setActiveTab(1);
+          break;
+        default:
+          setActiveTab(0);
+          break;
+      }
     }
   }, [searchParams.get('tab')]);
   if (!projectData) {
@@ -90,11 +102,15 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner />
 
-          <DonateSection />
+          {isEarlyAccessBranch ? <DonateSection /> : ''}
         </div>
         {!isRoundEnded && (
           <div className='my-6'>
-            <RoundCountBanner projectMaxedOut={progress >= 100} />
+            {isEarlyAccessBranch ? (
+              <RoundCountBanner projectMaxedOut={progress >= 100} />
+            ) : (
+              ''
+            )}
           </div>
         )}
       </div>
@@ -124,7 +140,12 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {activeTab === 1 && <ProjectDonationTable />}
+      {isEarlyAccessBranch
+        ? activeTab === 1 && <ProjectDonationTable />
+        : activeTab === 1 && (
+            <ProjectTeamMembers teamMembers={projectData?.teamMembers} />
+          )}
+
       {/* Pass team members later */}
       {activeTab === 2 && (
         <ProjectTeamMembers teamMembers={projectData?.teamMembers} />

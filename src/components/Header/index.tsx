@@ -28,7 +28,7 @@ export const Header = () => {
   return (
     <>
       <nav className='bg-white flex items-center px-6 py-4 z-50 relative flex-wrap justify-between md:flex-nowrap gap-4 shadow-md'>
-        <Link href={shouldHideHeaderItems ? '' : Routes.Home}>
+        <Link href={Routes.Home}>
           <div className='flex gap-4 items-center order-1'>
             <Image
               src='/images/icons/logomark-dark.svg'
@@ -47,7 +47,6 @@ export const Header = () => {
         </Link>
         <div className='flex order-3 flex-1 sm:justify-between md:order-2 md:flex-grow-0 font-semibold font-redHatText'>
           {isProductReleased &&
-            !shouldHideHeaderItems &&
             HEADER_ITEMS.map((item, index) => (
               <HeaderItem key={index} label={item.label} route={item.route} />
             ))}
