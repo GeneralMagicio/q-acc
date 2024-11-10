@@ -8,6 +8,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { getMostRecentEndRound } from '@/helpers/round';
 import { isEarlyAccessBranch } from '@/config/configuration';
 import QaccRoundCounter from '../QaccRoundCounter';
+import { Spinner } from '../Loading/Spinner';
 
 const projectCardStyle = '';
 
@@ -42,11 +43,13 @@ export const ProjectsView = () => {
           )}
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10'>
-          {isLoading ? (
-            <h1>Loading Projects...</h1>
-          ) : (
-            allProjects?.projects?.map(project => (
+        {isLoading ? (
+          <div className='min-h-80 flex items-center justify-center '>
+            <Spinner />
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10'>
+            {allProjects?.projects?.map(project => (
               // <Link href={`/project/${project.slug}`} key={project.id}>
               <ProjectHoverCard
                 key={project.id}
@@ -54,9 +57,9 @@ export const ProjectsView = () => {
                 className={projectCardStyle}
               />
               // </Link>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
