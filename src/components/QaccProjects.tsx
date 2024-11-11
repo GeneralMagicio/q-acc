@@ -44,9 +44,11 @@ export const QaccProjects = () => {
 
           <div className='flex flex-col gap-3 text-[24px]'>
             <div className='w-[92px] h-[60px]'>
-              <img
-                src='/Icons/beast1x.png'
-                srcSet='/Icons/beast1x.png 1x, /Icons/beast2x.png 2x'
+              <Image
+                src={'/Icons/beast.png'}
+                width={60}
+                height={60}
+                alt='The Grand Timeline logo'
               />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
