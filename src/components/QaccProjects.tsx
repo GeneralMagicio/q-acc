@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 export const QaccProjects = () => {
@@ -82,9 +83,11 @@ export const QaccProjects = () => {
 
           <div className='flex flex-col gap-3 text-[24px]'>
             <div className='w-[60px] h-[60px]'>
-              <img
-                src='/Icons/grand1x.png'
-                srcSet='/Icons/grand1x.png 1x, /Icons/grand2x.png 2x'
+              <Image
+                src={'/Icons/grand.png'}
+                width={60}
+                height={60}
+                alt='The Grand Timeline logo'
               />
             </div>
             <h1 className='text-[#E1458D] font-bold '>
