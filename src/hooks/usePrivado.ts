@@ -119,6 +119,37 @@ const verifyAccount = () => {
     },
   };
 
+  const request = {
+    from: 'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNh',
+    id: '0d02b9e1-0113-422f-b91b-02618a178bfc',
+    thid: '0d02b9e1-0113-422f-b91b-02618a178bfc',
+    typ: 'application/iden3comm-plain-json',
+    type: 'https://iden3-communication.io/authorization/1.0/request',
+    body: {
+      callbackUrl: 'https://my-app.org/api/callback',
+      reason: 'demo flow',
+      scope: [
+        {
+          circuitId: 'credentialAtomicQuerySigV2',
+          id: 1,
+          query: {
+            allowedIssuers: [
+              'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
+            ],
+            context:
+              'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/pol-v1.json-ld',
+            type: 'AnimaProofOfLife',
+            credentialSubject: {
+              human: {
+                $eq: true,
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+
   console.log('verificationRequest', verificationRequest);
 
   // Define the URLs for redirection
@@ -126,7 +157,7 @@ const verifyAccount = () => {
   const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
 
   // Base64 encode the verification request
-  const base64EncodedRequest = btoa(JSON.stringify(verificationRequest));
+  const base64EncodedRequest = btoa(JSON.stringify(request));
 
   // Configure the Wallet URL (universal link)
   const walletUrlWithMessage = `https://wallet.privado.id/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
