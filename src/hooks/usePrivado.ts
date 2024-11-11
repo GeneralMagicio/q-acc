@@ -138,7 +138,7 @@ const verifyAccount = () => {
   const base64EncodedRequest = btoa(JSON.stringify(verificationRequest));
 
   // Configure the Wallet URL (universal link)
-  const walletUrlWithMessage = `https://wallet.privado.id/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
+  const walletUrlWithMessage = `${webWalletBaseUrl}/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
 
   // Open the Wallet URL to start the verification process
   window.open(walletUrlWithMessage);
