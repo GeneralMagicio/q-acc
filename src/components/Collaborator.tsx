@@ -65,11 +65,16 @@ const Collaborator = () => {
             className={`flex flex-col md:flex-row items-center justify-center gap-14 w-full py-8 ${i < lines.length - 1 ? 'border-b border-[#E5E5E5] ' : ''} `}
           >
             {line.map(({ label, logos }) => (
-              <div key={label} className='flex items-center gap-10'>
+              <div
+                key={label}
+                className='flex items-center justify-center gap-10 flex-wrap'
+              >
                 <p className='text-[#A5ADBF] font-bold text-lg leading-normal tracking-tight'>
                   {label}
                 </p>
-                {logos}
+                <div className='flex items-center justify-center gap-10 flex-wrap'>
+                  {logos}
+                </div>
               </div>
             ))}
           </div>
