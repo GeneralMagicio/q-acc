@@ -1,6 +1,7 @@
 import { createPublicClient, http } from 'viem';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
+// eslint-disable-next-line import/named
 import { v4 as uuidv4 } from 'uuid';
 import config from '@/config/configuration';
 import { requestGraphQL } from '@/helpers/request';
