@@ -87,8 +87,6 @@ const verifyAccount = () => {
     (a, b) => a - b,
   );
   const verificationRequest = {
-    backUrl: `${baseUrl}/create/verify-privado`,
-    finishUrl: `${baseUrl}/create/verify-privado`,
     logoUrl: `${baseUrl}/images/icons/logomark-dark.svg`,
     name: 'QAcc',
     zkQueries: [
@@ -123,13 +121,18 @@ const verifyAccount = () => {
 
   console.log('verificationRequest', verificationRequest);
 
-  // Encode the verification request to base64
-  const base64EncodedVerificationRequest = btoa(
-    JSON.stringify(verificationRequest),
-  );
+  // Define the URLs for redirection
+  const backUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
+  const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
 
-  // Open the Polygon ID Verification Web Wallet with the encoded verification request
-  window.open(`${webWalletBaseUrl}/#${base64EncodedVerificationRequest}`);
+  // Base64 encode the verification request
+  const base64EncodedRequest = btoa(JSON.stringify(verificationRequest));
+
+  // Configure the Wallet URL (universal link)
+  const walletUrlWithMessage = `https://wallet.privado.id/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
+
+  // Open the Wallet URL to start the verification process
+  window.open(walletUrlWithMessage);
 };
 export const usePrivado = () => {
   const userFetch = useFetchUser();
