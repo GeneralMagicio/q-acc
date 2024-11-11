@@ -1,6 +1,8 @@
 import { createPublicClient, http } from 'viem';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from 'uuid';
 import config from '@/config/configuration';
 import { requestGraphQL } from '@/helpers/request';
 import { CHECK_USER_PRIVADO_VERIFIED_STATE } from '@/queries/project.query';
@@ -86,51 +88,62 @@ const verifyAccount = () => {
   const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES).sort(
     (a, b) => a - b,
   );
+
+  const generatedUuid = uuidv4(); // Generate a unique UUID
+  const generatedThreadUuid = uuidv4(); // Generate another UUID for thid
+
   const verificationRequest = {
-    backUrl: `${baseUrl}/create/verify-privado`,
-    finishUrl: `${baseUrl}/create/verify-privado`,
-    logoUrl: `${baseUrl}/images/icons/logomark-dark.svg`,
-    name: 'QAcc',
-    zkQueries: [
-      {
-        circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
-        id: config.privadoConfig.requestId,
-        query: {
-          allowedIssuers: allowedIssuers,
-          context:
-            'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
-          type: 'AnimaProofOfIdentity',
-          credentialSubject: {
-            document_country_code: {
-              $nin: excludedCountryCodes,
+    id: generatedUuid,
+    typ: 'application/iden3comm-plain-json',
+    type: 'https://iden3-communication.io/proofs/1.0/contract-invoke-request',
+    thid: generatedThreadUuid,
+    from: verifierDid,
+    body: {
+      scope: [
+        {
+          circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
+          id: config.privadoConfig.requestId,
+          query: {
+            allowedIssuers: allowedIssuers,
+            context:
+              'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
+            type: 'AnimaProofOfIdentity',
+            credentialSubject: {
+              document_country_code: {
+                $nin: excludedCountryCodes,
+              },
             },
           },
+          params: {
+            nullifierSessionId: config.privadoConfig.requestId.toString(),
+          },
         },
-        params: {
-          nullifierSessionId: config.privadoConfig.requestId.toString(),
-        },
+      ],
+      transaction_data: {
+        contract_address: contractAddress,
+        method_id: config.privadoConfig.method.methodId,
+        chain_id: chain.id,
+        network: chainName,
       },
-    ],
-    verifierDid,
-    transactionData: {
-      contractAddress,
-      functionName: config.privadoConfig.method.functionName,
-      methodId: config.privadoConfig.method.methodId,
-      chainId: chain.id,
-      network: chainName,
     },
   };
 
   console.log('verificationRequest', verificationRequest);
 
-  // Encode the verification request to base64
-  const base64EncodedVerificationRequest = btoa(
-    JSON.stringify(verificationRequest),
-  );
+  // Define the URLs for redirection
+  const backUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
+  const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
 
-  // Open the Polygon ID Verification Web Wallet with the encoded verification request
-  window.open(`${webWalletBaseUrl}/#${base64EncodedVerificationRequest}`);
+  // Base64 encode the verification request
+  const base64EncodedRequest = btoa(JSON.stringify(verificationRequest));
+
+  // Configure the Wallet URL (universal link)
+  const walletUrlWithMessage = `${webWalletBaseUrl}/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
+
+  // Open the Wallet URL to start the verification process
+  window.open(walletUrlWithMessage);
 };
+
 export const usePrivado = () => {
   const userFetch = useFetchUser();
 
