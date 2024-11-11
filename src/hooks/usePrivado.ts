@@ -92,10 +92,10 @@ const verifyAccount = () => {
   const generatedThreadUuid = uuidv4(); // Generate another UUID for thid
 
   const verificationRequest = {
-    id: generatedUuid, // Use the generated UUID
+    id: generatedUuid,
     typ: 'application/iden3comm-plain-json',
     type: 'https://iden3-communication.io/proofs/1.0/contract-invoke-request',
-    thid: generatedThreadUuid, // Use the generated UUID for thid
+    thid: generatedThreadUuid,
     from: verifierDid,
     body: {
       scope: [
@@ -120,7 +120,7 @@ const verifyAccount = () => {
       ],
       transaction_data: {
         contract_address: contractAddress,
-        method_id: 'config.privadoConfig.method.methodId',
+        method_id: config.privadoConfig.method.methodId,
         chain_id: chain.id,
         network: chainName,
       },
