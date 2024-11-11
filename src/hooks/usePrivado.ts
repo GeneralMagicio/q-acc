@@ -1,6 +1,7 @@
 import { createPublicClient, http } from 'viem';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
 import config from '@/config/configuration';
 import { requestGraphQL } from '@/helpers/request';
 import { CHECK_USER_PRIVADO_VERIFIED_STATE } from '@/queries/project.query';
@@ -86,67 +87,43 @@ const verifyAccount = () => {
   const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES).sort(
     (a, b) => a - b,
   );
-  const verificationRequest = {
-    logoUrl: `${baseUrl}/images/icons/logomark-dark.svg`,
-    name: 'QAcc',
-    zkQueries: [
-      {
-        circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
-        id: config.privadoConfig.requestId,
-        query: {
-          allowedIssuers: allowedIssuers,
-          context:
-            'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
-          type: 'AnimaProofOfIdentity',
-          credentialSubject: {
-            document_country_code: {
-              $nin: excludedCountryCodes,
-            },
-          },
-        },
-        params: {
-          nullifierSessionId: config.privadoConfig.requestId.toString(),
-        },
-      },
-    ],
-    verifierDid,
-    transactionData: {
-      contractAddress,
-      functionName: config.privadoConfig.method.functionName,
-      methodId: config.privadoConfig.method.methodId,
-      chainId: chain.id,
-      network: chainName,
-    },
-  };
 
-  const request = {
-    from: 'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNh',
-    id: '0d02b9e1-0113-422f-b91b-02618a178bfc',
-    thid: '0d02b9e1-0113-422f-b91b-02618a178bfc',
+  const generatedUuid = uuidv4(); // Generate a unique UUID
+  const generatedThreadUuid = uuidv4(); // Generate another UUID for thid
+
+  const verificationRequest = {
+    id: generatedUuid, // Use the generated UUID
     typ: 'application/iden3comm-plain-json',
-    type: 'https://iden3-communication.io/authorization/1.0/request',
+    type: 'https://iden3-communication.io/proofs/1.0/contract-invoke-request',
+    thid: generatedThreadUuid, // Use the generated UUID for thid
+    from: verifierDid,
     body: {
-      callbackUrl: 'https://my-app.org/api/callback',
-      reason: 'demo flow',
       scope: [
         {
-          circuitId: 'credentialAtomicQuerySigV2',
-          id: 1,
+          circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
+          id: config.privadoConfig.requestId,
           query: {
-            allowedIssuers: [
-              'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
-            ],
+            allowedIssuers: allowedIssuers,
             context:
-              'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/pol-v1.json-ld',
-            type: 'AnimaProofOfLife',
+              'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
+            type: 'AnimaProofOfIdentity',
             credentialSubject: {
-              human: {
-                $eq: true,
+              document_country_code: {
+                $nin: excludedCountryCodes,
               },
             },
           },
+          params: {
+            nullifierSessionId: config.privadoConfig.requestId.toString(),
+          },
         },
       ],
+      transaction_data: {
+        contract_address: contractAddress,
+        method_id: 'config.privadoConfig.method.methodId',
+        chain_id: chain.id,
+        network: chainName,
+      },
     },
   };
 
@@ -157,7 +134,7 @@ const verifyAccount = () => {
   const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
 
   // Base64 encode the verification request
-  const base64EncodedRequest = btoa(JSON.stringify(request));
+  const base64EncodedRequest = btoa(JSON.stringify(verificationRequest));
 
   // Configure the Wallet URL (universal link)
   const walletUrlWithMessage = `https://wallet.privado.id/#i_m=${base64EncodedRequest}&back_url=${backUrl}&finish_url=${finishUrl}`;
@@ -165,6 +142,7 @@ const verifyAccount = () => {
   // Open the Wallet URL to start the verification process
   window.open(walletUrlWithMessage);
 };
+
 export const usePrivado = () => {
   const userFetch = useFetchUser();
 
