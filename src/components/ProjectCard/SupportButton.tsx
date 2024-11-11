@@ -28,22 +28,25 @@ export const SupportButton: FC<ISupportButtonProps> = ({
     activeRoundDetails?.startDate,
     adjustedEndDate,
   );
-  const handleSupport = async (e: any) => {
+  const handleSupport = (e: any) => {
     e.stopPropagation();
-    if (activeRoundDetails?.__typename !== 'QfRound') {
-      console.log(activeRoundDetails);
-      const res = await checkUserOwnsNFT(
-        project?.abc?.nftContractAddress || '',
-        address || '',
-      );
-      if (res) {
-        router.push(`/support/${project.slug}`);
+    async function checkUser() {
+      if (activeRoundDetails?.__typename !== 'QfRound') {
+        console.log(activeRoundDetails);
+        const res = await checkUserOwnsNFT(
+          project?.abc?.nftContractAddress || '',
+          address || '',
+        );
+        if (res) {
+          router.push(`/support/${project.slug}`);
+        } else {
+          setModalOpen(true);
+        }
       } else {
-        setModalOpen(true);
+        router.push(`/support/${project.slug}`);
       }
-    } else {
-      router.push(`/support/${project.slug}`);
     }
+    checkUser();
   };
   return (
     <>
