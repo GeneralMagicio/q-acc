@@ -45,9 +45,16 @@ const Modal: React.FC<ModalProps> = ({
   if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <div className='fixed inset-0 z-40 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'>
+    <div
+      className='fixed inset-0 z-40 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'
+      onClick={e => {
+        e.stopPropagation();
+        onClose();
+      }}
+    >
       <div
         className={`bg-white rounded-xl shadow-lg max-w-lg w-full p-6 relative ${className}`}
+        onClick={e => e.stopPropagation()} // Prevent modal content clicks from propagating
       >
         {showCloseButton && (
           <button
