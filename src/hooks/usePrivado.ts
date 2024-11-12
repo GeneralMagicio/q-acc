@@ -147,19 +147,19 @@ const verifyAccount = () => {
 export const usePrivado = () => {
   const userFetch = useFetchUser();
 
-  const privadaoChainStatus = usePrivadoChainStatus({
+  const privadoChainStatus = usePrivadoChainStatus({
     disable: userFetch.isPending || !!userFetch.data?.privadoVerified,
   });
 
   useTriggerUserPrivadoStatusCheck({
     trigger:
       userFetch.data?.privadoVerified === false &&
-      privadaoChainStatus.data === true,
+      privadoChainStatus.data === true,
   });
-  const error = privadaoChainStatus.error || userFetch.error;
+  const error = privadoChainStatus.error || userFetch.error;
   const isVerified =
-    userFetch.data?.privadoVerified || (privadaoChainStatus.data as boolean);
+    userFetch.data?.privadoVerified || (privadoChainStatus.data as boolean);
 
-  const isLoading = privadaoChainStatus.isLoading || userFetch.isPending;
+  const isLoading = privadoChainStatus.isLoading || userFetch.isPending;
   return { isVerified, isLoading, error, verifyAccount };
 };
