@@ -40,6 +40,6 @@ export async function generatePrivadoUuid(data: object) {
     return uuid;
   } catch (error) {
     console.error('Error in generatePrivadoUuid:', error);
-    return null;
+    throw error;
   }
 }

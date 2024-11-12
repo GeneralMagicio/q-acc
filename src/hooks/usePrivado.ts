@@ -102,71 +102,77 @@ export const usePrivado = () => {
     userFetch.data?.privadoVerified || (privadoChainStatus.data as boolean);
 
   const verifyAccount = async () => {
-    setIsPrivadoLoading(true);
-    // Define the verification request
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES).sort(
-      (a, b) => a - b,
-    );
+    try {
+      setIsPrivadoLoading(true);
+      // Define the verification request
+      const baseUrl =
+        typeof window !== 'undefined' ? window.location.origin : '';
+      const excludedCountryCodes = Object.values(KYC_EXCLUDED_COUNTRIES).sort(
+        (a, b) => a - b,
+      );
 
-    const generatedUuid = uuidv4(); // Generate a unique UUID
-    const generatedThreadUuid = uuidv4(); // Generate another UUID for thid
+      const generatedUuid = uuidv4(); // Generate a unique UUID
+      const generatedThreadUuid = uuidv4(); // Generate another UUID for thid
 
-    const verificationRequest = {
-      id: generatedUuid,
-      typ: 'application/iden3comm-plain-json',
-      type: 'https://iden3-communication.io/proofs/1.0/contract-invoke-request',
-      thid: generatedThreadUuid,
-      from: verifierDid,
-      body: {
-        scope: [
-          {
-            circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
-            id: config.privadoConfig.requestId,
-            query: {
-              allowedIssuers: allowedIssuers,
-              context:
-                'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
-              type: 'AnimaProofOfIdentity',
-              credentialSubject: {
-                document_country_code: {
-                  $nin: excludedCountryCodes,
+      const verificationRequest = {
+        id: generatedUuid,
+        typ: 'application/iden3comm-plain-json',
+        type: 'https://iden3-communication.io/proofs/1.0/contract-invoke-request',
+        thid: generatedThreadUuid,
+        from: verifierDid,
+        body: {
+          scope: [
+            {
+              circuitId: 'credentialAtomicQueryV3OnChain-beta.1',
+              id: config.privadoConfig.requestId,
+              query: {
+                allowedIssuers: allowedIssuers,
+                context:
+                  'https://raw.githubusercontent.com/anima-protocol/claims-polygonid/main/schemas/json-ld/poi-v2.json-ld',
+                type: 'AnimaProofOfIdentity',
+                credentialSubject: {
+                  document_country_code: {
+                    $nin: excludedCountryCodes,
+                  },
                 },
               },
+              params: {
+                nullifierSessionId: config.privadoConfig.requestId.toString(),
+              },
             },
-            params: {
-              nullifierSessionId: config.privadoConfig.requestId.toString(),
-            },
+          ],
+          transaction_data: {
+            contract_address: contractAddress,
+            method_id: config.privadoConfig.method.methodId,
+            chain_id: chain.id,
+            network: chainName,
           },
-        ],
-        transaction_data: {
-          contract_address: contractAddress,
-          method_id: config.privadoConfig.method.methodId,
-          chain_id: chain.id,
-          network: chainName,
         },
-      },
-    };
+      };
 
-    const shortenedUrlUuid = await generatePrivadoUuid(verificationRequest);
-    const shortenedUrl = encodeURIComponent(
-      `${baseUrl}/api/link-store?id=${shortenedUrlUuid}`,
-    );
+      const shortenedUrlUuid = await generatePrivadoUuid(verificationRequest);
+      const shortenedUrl = encodeURIComponent(
+        `${baseUrl}/api/link-store?id=${shortenedUrlUuid}`,
+      );
 
-    console.log('verificationRequest', verificationRequest);
+      console.log('verificationRequest', verificationRequest);
 
-    // Define the URLs for redirection
-    const backUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
-    const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
+      // Define the URLs for redirection
+      const backUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
+      const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
 
-    // Configure the Wallet URL (universal link)
-    const walletUrlWithMessage = `${webWalletBaseUrl}/#request_uri=${shortenedUrl}&back_url=${backUrl}&finish_url=${finishUrl}`;
-    setIsPrivadoLoading(false);
+      // Configure the Wallet URL (universal link)
+      const walletUrlWithMessage = `${webWalletBaseUrl}/#request_uri=${shortenedUrl}&back_url=${backUrl}&finish_url=${finishUrl}`;
+      setIsPrivadoLoading(false);
 
-    console.log('walletUrlWithMessage', walletUrlWithMessage);
+      console.log('walletUrlWithMessage', walletUrlWithMessage);
 
-    // Open the Wallet URL to start the verification process
-    window.open(walletUrlWithMessage);
+      // Open the Wallet URL to start the verification process
+      window.open(walletUrlWithMessage);
+    } catch (error) {
+      setIsPrivadoLoading(false);
+      console.error('Error in verifyAccount:', error);
+    }
   };
 
   const isLoading = privadoChainStatus.isLoading || userFetch.isPending;
