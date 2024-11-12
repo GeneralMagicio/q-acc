@@ -148,7 +148,10 @@ export const usePrivado = () => {
       },
     };
 
-    const shortenedUrl = await generatePrivadoUuid(verificationRequest);
+    const shortenedUrlUuid = await generatePrivadoUuid(verificationRequest);
+    const shortenedUrl = encodeURIComponent(
+      `${baseUrl}/api/link-store?id=${shortenedUrlUuid}`,
+    );
 
     console.log('verificationRequest', verificationRequest);
 
