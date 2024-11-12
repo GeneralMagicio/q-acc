@@ -106,7 +106,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const drawerRef = useRef<WidgetDrawer>(null);
 
-  let { isVerified, isLoading, verifyAccount } = usePrivado();
+  let { isVerified } = usePrivado();
 
   const {
     projectData,

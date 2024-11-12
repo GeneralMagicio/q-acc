@@ -18,7 +18,8 @@ interface IVerified {
 }
 const VerifyPrivado = () => {
   const router = useRouter();
-  const { verifyAccount, isVerified, error, isLoading } = usePrivado();
+  const { verifyAccount, isVerified, error, isLoading, isPrivadoLoading } =
+    usePrivado();
 
   const verified: IVerified = { isVerified, error: !!error };
 
@@ -215,6 +216,7 @@ const VerifyPrivado = () => {
                   type='button'
                   onClick={verifyAccount}
                   className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
+                  loading={isPrivadoLoading}
                 >
                   Retry
                 </Button>
@@ -230,7 +232,7 @@ const VerifyPrivado = () => {
               ) : (
                 <Button
                   type='button'
-                  loading={isLoading}
+                  loading={isLoading || isPrivadoLoading}
                   onClick={verifyAccount}
                   className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
                 >
