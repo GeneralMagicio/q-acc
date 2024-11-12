@@ -10,6 +10,22 @@ export async function generatePrivadoUuid(data: object) {
   try {
     const uuid = uuidv4();
     const db = await getMongoDB();
+
+    // Check if the collection exists
+    const collections = await db
+      .listCollections({ name: PRIVADO_LINK_COLLECTION_NAME })
+      .toArray();
+
+    if (collections.length === 0) {
+      // Collection does not exist, create it
+      await db.createCollection(PRIVADO_LINK_COLLECTION_NAME);
+
+      // Create TTL index on 'createdAt' field
+      await db
+        .collection(PRIVADO_LINK_COLLECTION_NAME)
+        .createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
+    }
+
     const collection = db.collection<IPrivadoStoredData>(
       PRIVADO_LINK_COLLECTION_NAME,
     );
@@ -21,15 +37,9 @@ export async function generatePrivadoUuid(data: object) {
       createdAt: new Date(),
     });
 
-    // Create TTL index on 'createdAt' field if not already created
-    await collection.createIndex(
-      { createdAt: 1 },
-      { expireAfterSeconds: 3600 },
-    );
-
     return uuid;
   } catch (error) {
-    console.error('Error in POST handler:', error);
+    console.error('Error in generatePrivadoUuid:', error);
     return null;
   }
 }
