@@ -3,10 +3,8 @@
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from 'uuid';
 import { getMongoDB } from '@/lib/db';
-import {
-  IPrivadoStoredData,
-  PRIVADO_LINK_COLLECTION_NAME,
-} from '../api/link-store/route';
+import { PRIVADO_LINK_COLLECTION_NAME } from '@/lib/constants/privado';
+import { IPrivadoStoredData } from '@/types/privado.type';
 
 export async function generatePrivadoUuid(data: object) {
   try {

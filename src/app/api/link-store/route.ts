@@ -3,15 +3,9 @@
 // eslint-disable-next-line import/named
 import { NextResponse } from 'next/server';
 import { getMongoDB } from '@/lib/db';
+import { PRIVADO_LINK_COLLECTION_NAME } from '@/lib/constants/privado';
+import { IPrivadoStoredData } from '@/types/privado.type';
 import type { NextRequest } from 'next/server';
-
-export interface IPrivadoStoredData {
-  _id: string;
-  data: any;
-  createdAt: Date;
-}
-
-export const PRIVADO_LINK_COLLECTION_NAME = 'privadoLinkStore';
 
 export async function GET(request: NextRequest) {
   try {
