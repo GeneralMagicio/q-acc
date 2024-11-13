@@ -10,10 +10,30 @@ import type { Metadata } from 'next';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 
+const title = 'Quadratic Acceleration';
+const description =
+  'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).';
+const image = '/images/intro.jpg';
+
 export const metadata: Metadata = {
-  title: 'Quadratic Acceleration',
-  description:
-    'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).',
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    images: [
+      {
+        url: image,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: [image],
+  },
 };
 
 export default function RootLayout({
