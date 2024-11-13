@@ -1,6 +1,6 @@
 'use client';
 
-import { useAppKit } from '@reown/appkit/react';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount } from 'wagmi';
 
 import Image from 'next/image';
@@ -16,7 +16,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   className,
   ...props
 }) => {
-  const { open } = useAppKit();
+  const { open } = useWeb3Modal();
 
   const { address, isConnecting, chain, isConnected } = useAccount();
   const { data: user } = useFetchUser();
