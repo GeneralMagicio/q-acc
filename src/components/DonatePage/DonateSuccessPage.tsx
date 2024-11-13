@@ -55,11 +55,12 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   // }, [transactionHash]);
 
   useEffect(() => {
+    // TODO: It should be changed!!! I think we need to make this better
     const checkDonationStatus = async () => {
       if (status === 'success') {
         setDonationStatus(DonationStatus.Pending);
         const res = await updateDonation(DonationStatus.Verified, donationId);
-        setDonationStatus(res?.status);
+        setDonationStatus(DonationStatus.Verified);
       }
       if (status === 'error') {
         updateDonation(DonationStatus.Failed, donationId);
