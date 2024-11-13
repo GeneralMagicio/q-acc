@@ -4,7 +4,8 @@ import { IconExternalLink } from '../Icons/IconExternalLink';
 import { useFetchUser } from '@/hooks/useFetchUser';
 
 export const PrivadoBanner = () => {
-  const { isVerified, isLoading, verifyAccount } = usePrivado();
+  const { isVerified, isLoading, verifyAccount, isPrivadoLoading } =
+    usePrivado();
   const { data: user } = useFetchUser();
   const isUserProfileCreated = user?.fullName != null && user?.email != null;
   const showPrivadoBanner = !isVerified && !isLoading && isUserProfileCreated;

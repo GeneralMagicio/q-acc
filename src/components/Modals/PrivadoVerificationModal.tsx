@@ -11,7 +11,7 @@ interface ConnectModalProps extends BaseModalProps {
 export const PrivadoVerificationModal: FC<ConnectModalProps> = ({
   ...props
 }) => {
-  const { verifyAccount, isLoading } = usePrivado();
+  const { verifyAccount, isLoading, isPrivadoLoading } = usePrivado();
 
   return (
     <Modal {...props} title='Account Verication'>
@@ -34,7 +34,7 @@ export const PrivadoVerificationModal: FC<ConnectModalProps> = ({
         <div className='font-redHatText flex justify-center'>
           <Button
             type='button'
-            loading={isLoading}
+            loading={isLoading || isPrivadoLoading}
             onClick={verifyAccount}
             className='p-4 rounded-full shadow-baseShadow text-sm font-bold w-[200px] justify-center'
           >
