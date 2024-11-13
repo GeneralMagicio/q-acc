@@ -50,3 +50,5 @@ export const PrivadoContractMethodV2 = {
   functionName: 'submitZKPResponseV2',
   methodId: '0xade09fcd',
 };
+
+export const PRIVADO_LINK_COLLECTION_NAME = 'privadoLinkStore';

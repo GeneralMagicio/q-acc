@@ -5,7 +5,8 @@ import { Button } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 
 const DashboardPrivado = () => {
-  const { isLoading, isVerified, error, verifyAccount } = usePrivado();
+  const { isLoading, isVerified, error, verifyAccount, isPrivadoLoading } =
+    usePrivado();
 
   return (
     !isVerified && (
@@ -58,13 +59,14 @@ const DashboardPrivado = () => {
                     type='button'
                     onClick={verifyAccount}
                     className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
+                    loading={isPrivadoLoading}
                   >
                     Retry
                   </Button>
                 ) : (
                   <Button
                     type='button'
-                    loading={isLoading}
+                    loading={isLoading || isPrivadoLoading}
                     onClick={verifyAccount}
                     className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
                   >
