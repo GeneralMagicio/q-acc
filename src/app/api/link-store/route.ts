@@ -1,6 +1,5 @@
 // app/api/link-store/route.ts
 
-// eslint-disable-next-line import/named
 import { NextResponse } from 'next/server';
 import { getMongoDB } from '@/lib/db';
 import { PRIVADO_LINK_COLLECTION_NAME } from '@/lib/constants/privado';
@@ -9,7 +8,7 @@ import type { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const id = searchParams.get('id');
 
     if (!id) {
@@ -43,4 +42,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export const runtime = 'nodejs'; // Ensure the code runs in a Node.js environment
+export const runtime = 'nodejs';
