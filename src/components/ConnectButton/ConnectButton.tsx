@@ -1,7 +1,7 @@
 'use client';
 
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 
 import Image from 'next/image';
 
@@ -17,6 +17,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   ...props
 }) => {
   const { open } = useWeb3Modal();
+  const { disconnect } = useDisconnect();
 
   const { address, isConnecting, chain, isConnected } = useAccount();
   const { data: user } = useFetchUser();
@@ -121,6 +122,15 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             >
               Do You Need Help?
             </Link>
+            <div
+              className='p-2 hover:bg-[#F7F7F9] rounded-lg'
+              onClick={() => {
+                localStorage.getItem('token');
+                disconnect();
+              }}
+            >
+              Sign out
+            </div>
           </div>
         </div>
       </div>
