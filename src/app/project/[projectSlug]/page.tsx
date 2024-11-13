@@ -27,16 +27,17 @@ export async function generateMetadata({
   if (!project) {
     return {
       title: 'Project Not Found',
-      description:
-        'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).',
+      description: defaultDesc,
     };
   }
 
+  const title = project.title ? `Q/ACC | ${project.title}` : defaultTitle;
+
   return {
-    title: project.title ? `Q/ACC | ${project.title}` : defaultTitle,
+    title,
     description: project.teaser || defaultDesc,
     openGraph: {
-      title: project.title,
+      title,
       description: project.teaser,
       images: [
         {
@@ -47,7 +48,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: project.title,
+      title: title,
       description: project.teaser,
       images: [project.image],
     },
