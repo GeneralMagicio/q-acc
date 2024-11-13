@@ -1,5 +1,4 @@
-import { Address, Chain as viemChain } from 'viem';
-import { Chain } from '@reown/appkit/networks';
+import { Address, Chain } from 'viem';
 import {
   PrivadoContractMethodV1,
   PrivadoContractMethodV2,
@@ -16,7 +15,7 @@ export type EnvConfig = {
   NETWORK_RPC_ADDRESS: string;
   INDEXER_GRAPHQL_URL: string;
   privadoConfig: {
-    chain: viemChain;
+    chain: Chain;
     chainName: string;
     contractAddress: Address;
     requestId: number;
