@@ -1,5 +1,4 @@
-import { polygonZkEvm } from '@reown/appkit/networks';
-import { polygonZkEvm as viemPolygonZkEvm } from 'wagmi/chains';
+import { polygonZkEvm } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
@@ -18,7 +17,7 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.bigdevenergy.link/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: viemPolygonZkEvm,
+    chain: polygonZkEvm,
     chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
