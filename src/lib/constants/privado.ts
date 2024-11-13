@@ -51,4 +51,4 @@ export const PrivadoContractMethodV2 = {
   methodId: '0xade09fcd',
 };
 
-export const PRIVADO_LINK_COLLECTION_NAME = 'privadoLinkStore';
+export const PRIVADO_LINK_COLLECTION_NAME = 'privadoJsonStore';

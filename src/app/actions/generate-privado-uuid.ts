@@ -19,11 +19,6 @@ export async function generatePrivadoUuid(data: object) {
     if (collections.length === 0) {
       // Collection does not exist, create it
       await db.createCollection(PRIVADO_LINK_COLLECTION_NAME);
-
-      // Create TTL index on 'createdAt' field
-      await db
-        .collection(PRIVADO_LINK_COLLECTION_NAME)
-        .createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
     }
 
     const collection = db.collection<IPrivadoStoredData>(
