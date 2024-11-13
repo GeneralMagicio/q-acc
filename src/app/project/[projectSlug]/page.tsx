@@ -20,16 +20,21 @@ export async function generateMetadata({
 
   const project = await fetchProjectBySlug(slug);
 
+  const defaultTitle = 'Quadratic Acceleration';
+  const defaultDesc =
+    'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).';
+
   if (!project) {
     return {
       title: 'Project Not Found',
-      description: 'The requested project could not be found.',
+      description:
+        'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).',
     };
   }
 
   return {
-    title: project.title || 'Default Title',
-    description: project.teaser || 'Default Description',
+    title: project.title ? `Q/ACC | ${project.title}` : defaultTitle,
+    description: project.teaser || defaultDesc,
     openGraph: {
       title: project.title,
       description: project.teaser,
