@@ -1,11 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import useRemainingTime from '@/hooks/useRemainingTime';
+import { usePrivado } from '@/hooks/usePrivado';
 
 interface QaccRoundCounterProps {
   page?: string;
 }
 const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
+  const { isVerified } = usePrivado();
   const now = new Date();
   const remainingTime = useRemainingTime(
     now.toISOString(),
@@ -37,13 +39,15 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
         {page === 'project' ? (
           ''
         ) : (
-          <div className='flex justify-center'>
-            <Link href={'/create/profile'}>
-              <div className='px-10 py-6 text-sm flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
-                Create Account
-              </div>
-            </Link>
-          </div>
+          <>
+            {!isVerified && (
+              <Link href={'/create/profile'}>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                  Get Verified
+                </div>
+              </Link>
+            )}
+          </>
         )}
       </div>
     </div>

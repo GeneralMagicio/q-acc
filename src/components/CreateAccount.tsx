@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
+import { usePrivado } from '@/hooks/usePrivado';
 
 const CreateAccount = () => {
+  const { isVerified } = usePrivado();
   return (
     <div className='bg-white'>
       <div className='container p-6'>
@@ -14,7 +16,7 @@ const CreateAccount = () => {
             <ul className='list-disc text-[24px] font-redHatText px-4'>
               <li className='text-[#4F576A]'>
                 <strong className='font-bold text-[#4F576A]'>
-                  Create your q/acc account .
+                  Create and verify your q/acc account.
                 </strong>{' '}
                 <span className='text-[#4F576A] leading-9'>
                   Get your KYC credentials using Privado ID. Zero-knowledge ID
@@ -60,11 +62,19 @@ const CreateAccount = () => {
           </div>
 
           <div className='flex justify-center p-6'>
-            <Link href={'/create/profile'}>
-              <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
-                Create Account
-              </div>
-            </Link>
+            {isVerified ? (
+              <Link href={'/projects'}>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                  View Projects
+                </div>
+              </Link>
+            ) : (
+              <Link href={'/create/profile'}>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                  Get Verified
+                </div>
+              </Link>
+            )}
           </div>
 
           <div className='flex  text-center '>
