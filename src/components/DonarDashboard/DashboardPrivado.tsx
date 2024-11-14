@@ -3,6 +3,7 @@ import { IconError } from '../Icons/IconError';
 import { IconInfo } from '../Icons/IconInfo';
 import { Button } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
+import links from '@/lib/constants/links';
 
 const DashboardPrivado = () => {
   const { isLoading, isVerified, error, verifyAccount, isPrivadoLoading } =
@@ -15,10 +16,48 @@ const DashboardPrivado = () => {
           <div className='flex flex-col gap-8'>
             <div className='font-redHatText'>
               <p className='text-[#1D1E1F] text-xl'>
-                We use Privado ID zero knowledge identity system to maintain the
-                integrity of quadratic acceleration while ensuring privacy. All
-                participants are required to complete verification in order to
-                receive a KYC credential from the Synaps identity provider.
+                Privado Zero-knowledge ID (zkID) system is used by the q/acc
+                protocol to comply with AML and restrict the US and UK for
+                regulatory reasons. It also mitigates Sybil attacks during the
+                q/acc rounds and protects the projects and their supporters.
+                Refer to the{' '}
+                <a
+                  className='text-[#E1458D] font-bold'
+                  href={links.PRIVADO_GUIDE_LINK}
+                  target='_blank'
+                >
+                  Complete zkID guide
+                </a>{' '}
+                and contact{' '}
+                <a
+                  href={links.TELEGRAM_SUPPORT}
+                  target='_blank'
+                  className='font-bold text-pink-500'
+                >
+                  q/acc Support Telegram channel
+                </a>{' '}
+                if you run into any issues during this process. There is a team
+                waiting to help you!
+              </p>
+              <p className='text-[#1D1E1F] text-xl'>
+                If you’ve already completed the zkID verification process, be
+                aware that verification can take UP TO 24 HOURS. For privacy
+                reasons, you will not be notified by email. After a couple of
+                hours, just come back here and click on “Check status with
+                Privado ID.” If your verification has passed, you can then claim
+                your credential!
+              </p>
+              <p className='text-[#1D1E1F] text-xl'>
+                If more than 24 hours have passed and you’re unable to claim
+                your credentials, reach out to us at{' '}
+                <a
+                  href={links.TELEGRAM_SUPPORT}
+                  target='_blank'
+                  className='font-bold text-pink-500'
+                >
+                  q/acc Support
+                </a>
+                .
               </p>
             </div>
             <div className='flex flex-col gap-10 lg:flex-row justify-between'>
