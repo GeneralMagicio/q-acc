@@ -7,7 +7,6 @@ import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { getMostRecentEndRound } from '@/helpers/round';
 import { isEarlyAccessBranch } from '@/config/configuration';
-import QaccRoundCounter from '../QaccRoundCounter';
 import { Spinner } from '../Loading/Spinner';
 
 const projectCardStyle = '';
@@ -36,11 +35,10 @@ export const ProjectsView = () => {
       <ProjectsBanner />
       <div className='container mx-auto'>
         <div className='my-[60px]'>
-          {isEarlyAccessBranch ? (
-            !isRoundEnded && <RoundCountBanner />
-          ) : (
-            <QaccRoundCounter page='project' />
-          )}
+          {isEarlyAccessBranch
+            ? !isRoundEnded && <RoundCountBanner />
+            : // <QaccRoundCounter page='project' />
+              null}
         </div>
 
         {isLoading ? (
