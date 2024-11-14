@@ -52,7 +52,7 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
         alt='Illustration'
         width={100}
         height={100}
-        className='top-0 right-0 absolute'
+        className='top-0 right-0 absolute z-0'
       />
       <Image
         src='/images/particles/trazado2.png'
