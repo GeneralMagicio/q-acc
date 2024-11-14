@@ -39,7 +39,7 @@ export const ProjectsView = () => {
           {isEarlyAccessBranch ? (
             !isRoundEnded && <RoundCountBanner />
           ) : (
-            <QaccRoundCounter />
+            <QaccRoundCounter page='project' />
           )}
         </div>
 

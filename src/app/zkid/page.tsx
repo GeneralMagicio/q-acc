@@ -8,6 +8,7 @@ import { KycLandingButton } from '@/components/KycLandingButton';
 import { KycCompleteBox } from '@/components/KycCompleteBox';
 import { usePrivado } from '@/hooks/usePrivado';
 import links from '@/lib/constants/links';
+import { PrivadoHoldUp } from '@/components/PrivadoHoldUp';
 
 const KycLanding = () => {
   const { isVerified } = usePrivado();
@@ -111,6 +112,13 @@ const KycLanding = () => {
                 </p>
               </li>
             </ol>
+          </div>
+          <div className='flex flex-col p-6 gap-6 rounded-2xl bg-gray-100'>
+            <h1 className='font-bold'>🛂 Hold Up!</h1>
+            <p className='mt-4 mb-4'>
+              Before proceeding, you should know that:
+            </p>
+            <PrivadoHoldUp />
           </div>
           <p>
             Got stuck somewhere in the process? If you’re having trouble or
