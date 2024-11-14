@@ -43,7 +43,7 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
             {!isVerified && (
               <Link href={'/create/profile'}>
                 <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow text-sm'>
-                  Get Verified
+                  Get Verified.
                 </div>
               </Link>
             )}
