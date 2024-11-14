@@ -3,6 +3,7 @@ import Modal, { BaseModalProps } from '../Modal';
 import { usePrivado } from '@/hooks/usePrivado';
 import { Button } from '../Button';
 import { IconInfo } from '../Icons/IconInfo';
+import { generatePrivadoShortenedUrl } from '@/services/privado.service';
 
 interface ConnectModalProps extends BaseModalProps {
   showCloseButton?: boolean;
@@ -11,7 +12,18 @@ interface ConnectModalProps extends BaseModalProps {
 export const PrivadoVerificationModal: FC<ConnectModalProps> = ({
   ...props
 }) => {
-  const { verifyAccount, isLoading, isPrivadoLoading } = usePrivado();
+  const { isLoading } = usePrivado();
+
+  const verifyAccount = async () => {
+    try {
+      const url = await generatePrivadoShortenedUrl();
+      if (url) {
+        window.open(url, '_blank');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Modal {...props} title='Account Verication'>
@@ -34,7 +46,7 @@ export const PrivadoVerificationModal: FC<ConnectModalProps> = ({
         <div className='font-redHatText flex justify-center'>
           <Button
             type='button'
-            loading={isLoading || isPrivadoLoading}
+            loading={isLoading}
             onClick={verifyAccount}
             className='p-4 rounded-full shadow-baseShadow text-sm font-bold w-[200px] justify-center'
           >

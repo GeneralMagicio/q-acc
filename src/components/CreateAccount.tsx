@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import React from 'react';
+import { usePrivado } from '@/hooks/usePrivado';
+import links from '@/lib/constants/links';
 
 const CreateAccount = () => {
+  const { isVerified } = usePrivado();
   return (
     <div className='bg-white'>
       <div className='container p-6'>
@@ -14,7 +17,7 @@ const CreateAccount = () => {
             <ul className='list-disc text-[24px] font-redHatText px-4'>
               <li className='text-[#4F576A]'>
                 <strong className='font-bold text-[#4F576A]'>
-                  Create your q/acc account .
+                  Create and verify your q/acc account.
                 </strong>{' '}
                 <span className='text-[#4F576A] leading-9'>
                   Get your KYC credentials using Privado ID. Zero-knowledge ID
@@ -23,16 +26,13 @@ const CreateAccount = () => {
                   mitigates Sybil attacks during the q/acc rounds and protects
                   the projects and their supporters. Refer to the{' '}
                   <span className='text-[#E1458D] font-bold'>
-                    <a
-                      href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
-                      target='_blank'
-                    >
+                    <a href={links.PRIVADO_GUIDE_LINK} target='_blank'>
                       Complete zkID guide{' '}
                     </a>
                   </span>
                   and contact{' '}
                   <span className='text-[#E1458D] font-bold'>
-                    <a href='https://t.me/qaccsupport' target='_blank'>
+                    <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                       q/acc Support Telegram channel
                     </a>
                   </span>{' '}
@@ -60,11 +60,19 @@ const CreateAccount = () => {
           </div>
 
           <div className='flex justify-center p-6'>
-            <Link href={'/create/profile'}>
-              <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
-                Create Account
-              </div>
-            </Link>
+            {isVerified ? (
+              <Link href={'/projects'}>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                  View Projects
+                </div>
+              </Link>
+            ) : (
+              <Link href={'/create/profile'}>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                  Get Verified
+                </div>
+              </Link>
+            )}
           </div>
 
           <div className='flex  text-center '>
@@ -72,7 +80,7 @@ const CreateAccount = () => {
               Got stuck somewhere in the zkID process? If you’re having trouble
               or received an error, don’t hesitate to contact{' '}
               <span className='text-[#E1458D] font-bold'>
-                <a href='https://t.me/qaccsupport' target='_blank'>
+                <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                   q/acc Support Telegram channel
                 </a>
               </span>{' '}

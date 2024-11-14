@@ -116,7 +116,7 @@ const KycLanding = () => {
             Got stuck somewhere in the process? If you’re having trouble or
             received an error, contact the{' '}
             <a
-              href='https://t.me/qaccsupport'
+              href={links.TELEGRAM_SUPPORT}
               target='_blank'
               className='font-bold text-pink-500'
             >
