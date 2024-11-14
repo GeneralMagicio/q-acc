@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { usePrivado } from '@/hooks/usePrivado';
 
@@ -35,7 +36,7 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
           </div> */}
         </div>
 
-        {/* {page === 'project' ? (
+        {page === 'project' ? (
           ''
         ) : (
           <>
@@ -47,7 +48,7 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
               </Link>
             )}
           </>
-        )} */}
+        )}
       </div>
     </div>
   );
