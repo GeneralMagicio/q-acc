@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { usePrivado } from '@/hooks/usePrivado';
 import links from '@/lib/constants/links';
+import { customButtonClass } from './QaccRoundCounter';
 
 const CreateAccount = () => {
   const { isVerified } = usePrivado();
@@ -62,15 +63,11 @@ const CreateAccount = () => {
           <div className='flex justify-center p-6'>
             {isVerified ? (
               <Link href={'/projects'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
-                  View Projects
-                </div>
+                <div className={customButtonClass}>View Projects</div>
               </Link>
             ) : (
               <Link href={'/create/profile'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
-                  Get Verified.
-                </div>
+                <div className={customButtonClass}>Get Verified.</div>
               </Link>
             )}
           </div>

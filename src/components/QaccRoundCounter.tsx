@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { type HTMLAttributes } from 'react';
 import Link from 'next/link';
 import useRemainingTime from '@/hooks/useRemainingTime';
 import { usePrivado } from '@/hooks/usePrivado';
 
+export const customButtonClass: HTMLAttributes<HTMLDivElement>['className'] =
+  'font-redHatText px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm';
 interface QaccRoundCounterProps {
   page?: string;
 }
@@ -14,7 +16,7 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
     '2024-11-25T12:00:00.000Z', // Currently set to start at 25th November
   );
   return (
-    <div className='px-10 py-6 rounded-2xl  font-redHatText z-40'>
+    <div className='px-10 py-6 rounded-2xl font-redHatText z-40'>
       <div
         className={`flex  flex-col gap-6 md:flex-row justify-center items-center`}
       >
@@ -42,15 +44,11 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
           <>
             {isVerified ? (
               <Link href={'/create/profile'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
-                  View Projects
-                </div>
+                <div className={customButtonClass}>View Projects</div>
               </Link>
             ) : (
               <Link href={'/create/profile'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
-                  Get Verified.
-                </div>
+                <div className={customButtonClass}>Get Verified.</div>
               </Link>
             )}
           </>
