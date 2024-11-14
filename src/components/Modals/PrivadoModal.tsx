@@ -1,4 +1,5 @@
 import { useEffect, useState, type FC } from 'react';
+import Image from 'next/image';
 import Modal, { BaseModalProps } from '../Modal';
 import { Button } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
@@ -38,6 +39,27 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
       showCloseButton
       className='max-w-2xl mt-12'
     >
+      <Image
+        src='/images/particles/trazado1.png'
+        alt='Illustration'
+        width={20}
+        height={100}
+        className='bottom-0 right-1/2 absolute'
+      />
+      <Image
+        src='/images/particles/cominho1.png'
+        alt='Illustration'
+        width={100}
+        height={100}
+        className='top-0 right-0 absolute'
+      />
+      <Image
+        src='/images/particles/trazado2.png'
+        alt='Illustration'
+        width={50}
+        height={10}
+        className='top-5 left-0 absolute'
+      />
       <p className='mt-4 mb-4'>Before proceeding, you should know that:</p>
       <div className='max-h-[100vh] md:max-h-[50vh] overflow-y-auto'>
         <ul className='flex flex-col gap-4 list-disc px-10'>
