@@ -1,15 +1,29 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import Modal, { BaseModalProps } from '../Modal';
+import { Button } from '../Button';
+import { IconArrowRight } from '../Icons/IconArrowRight';
 
 interface PrivadoModalProps extends BaseModalProps {}
 
 export const PrivadoModal: FC<PrivadoModalProps> = props => {
+  const [understood, setUnderstood] = useState(false);
+
+  const handleUnderstood = (_event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = _event.target.checked;
+    setUnderstood(isChecked);
+  };
+
   return (
-    <Modal {...props} title='🛂 Hold Up!' showCloseButton>
+    <Modal
+      {...props}
+      title='🛂 Hold Up!'
+      showCloseButton
+      className='max-w-2xl mt-12'
+    >
       <p className='mt-4 mb-4'>
         Before proceeding, make sure you’ve read and understand the following:
       </p>
-      <div className='max-h-[40vh] overflow-y-auto'>
+      <div className='max-h-[100vh] md:max-h-[50vh] overflow-y-auto'>
         <ul className='flex flex-col gap-4 list-disc px-10'>
           <li>
             The q/acc protocol prohibits persons from the{' '}
@@ -52,6 +66,34 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
             verification. Do not select that.
           </li>
         </ul>
+      </div>
+      <div className='flex gap-2 my-6'>
+        <input
+          type='checkbox'
+          checked={understood}
+          name='understood'
+          id='understood'
+          onChange={event => handleUnderstood(event)}
+        />
+        <label htmlFor='understood'>I’ve read and understood the above.</label>
+      </div>
+      <div>
+        <Button
+          type='button'
+          // loading={isLoading || isPrivadoLoading}
+          // onClick={verifyAccount}
+          className='p-4 rounded-full shadow-baseShadow text-sm font-bold min-w-[200px] justify-center'
+          disabled={!understood}
+        >
+          {/* {isLoading ? ( */}
+          {/* 'Loading' */}
+          {/* ) : ( */}
+          <>
+            Go to Privado ID
+            <IconArrowRight size={16} />
+          </>
+          {/* )} */}
+        </Button>
       </div>
     </Modal>
   );
