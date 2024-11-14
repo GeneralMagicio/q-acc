@@ -53,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({
       }}
     >
       <div
-        className={`bg-white rounded-xl shadow-lg max-w-lg w-full p-6 relative ${className}`}
+        className={`bg-white top-[20px] rounded-xl shadow-lg max-w-lg w-full pt-80 pb-6 md:p-6 md:pt-6 relative ${className}`}
         onClick={e => e.stopPropagation()} // Prevent modal content clicks from propagating
       >
         {showCloseButton && (
