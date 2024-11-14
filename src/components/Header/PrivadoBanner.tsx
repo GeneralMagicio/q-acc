@@ -1,9 +1,12 @@
 import Image from 'next/image';
+import { useState } from 'react';
 import { usePrivado } from '@/hooks/usePrivado';
 import { IconExternalLink } from '../Icons/IconExternalLink';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { PrivadoModal } from '../Modals/PrivadoModal';
 
 export const PrivadoBanner = () => {
+  const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, isLoading, verifyAccount, isPrivadoLoading } =
     usePrivado();
   const { data: user } = useFetchUser();
@@ -30,12 +33,20 @@ export const PrivadoBanner = () => {
           </div>
           <div
             className='flex flex-row gap-2 w-1/2 justify-start cursor-pointer center items-center'
-            onClick={verifyAccount}
+            onClick={() => setShowPrivadoModal(true)}
           >
             <p className='text-giv-500'>Check status with Privado ID</p>
             <IconExternalLink size={12} />
           </div>
         </div>
+      )}
+      {showPrivadoModal && (
+        <PrivadoModal
+          isOpen={showPrivadoModal}
+          onClose={() => {
+            setShowPrivadoModal(false);
+          }}
+        />
       )}
     </>
   );
