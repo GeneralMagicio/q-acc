@@ -7,8 +7,7 @@ import { PrivadoModal } from '../Modals/PrivadoModal';
 
 export const PrivadoBanner = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
-  const { isVerified, isLoading, verifyAccount, isPrivadoLoading } =
-    usePrivado();
+  const { isVerified, isLoading } = usePrivado();
   const { data: user } = useFetchUser();
   const isUserProfileCreated = user?.fullName != null && user?.email != null;
   const showPrivadoBanner = !isVerified && !isLoading && isUserProfileCreated;
