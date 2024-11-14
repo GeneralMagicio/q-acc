@@ -119,7 +119,7 @@ export default function Home() {
                     {' '}
                     In the meantime, you can explore q/acc projects’ tokens
                     available on{' '}
-                    <span className='text-[#E1458D] font-bold'>Quickswap</span>.
+                    <span className='text-pink-500 font-bold'>Quickswap</span>.
                   </p>
                   <br />
                   <p> Stay tuned for the next q/acc season!</p>

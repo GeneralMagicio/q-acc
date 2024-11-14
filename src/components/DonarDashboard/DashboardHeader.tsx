@@ -26,7 +26,7 @@ const DashboardHeader = () => {
           </h1>
           <h3 className='text-xl leading-8 font-redHatText'>{user?.email}</h3>
           <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
-            <div className='flex gap-8 text-[#E1458D] flex-col md:flex-row '>
+            <div className='flex gap-8 text-pink-500 flex-col md:flex-row '>
               <Link href={`edit/${user?.id}/profile`}>
                 <span>Edit Profile</span>
               </Link>

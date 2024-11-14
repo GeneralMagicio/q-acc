@@ -25,13 +25,13 @@ const CreateAccount = () => {
                   to restrict the US and UK for regulatory reasons. It also
                   mitigates Sybil attacks during the q/acc rounds and protects
                   the projects and their supporters. Refer to the{' '}
-                  <span className='text-[#E1458D] font-bold'>
+                  <span className='text-pink-500 font-bold'>
                     <a href={links.PRIVADO_GUIDE_LINK} target='_blank'>
                       Complete zkID guide{' '}
                     </a>
                   </span>
                   and contact{' '}
-                  <span className='text-[#E1458D] font-bold'>
+                  <span className='text-pink-500 font-bold'>
                     <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                       q/acc Support Telegram channel
                     </a>
@@ -47,7 +47,7 @@ const CreateAccount = () => {
                 Make sure you have everything set up on Polygon zkEVM. You can
                 only support projects with $POL, and you will also need a little
                 $ETH for gas on Polygon zkEVM. For assistance, read this{' '}
-                <span className='text-[#E1458D] font-bold'>
+                <span className='text-pink-500 font-bold'>
                   <a
                     href='https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
                     target='_blank'
@@ -62,13 +62,13 @@ const CreateAccount = () => {
           <div className='flex justify-center p-6'>
             {isVerified ? (
               <Link href={'/projects'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow'>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
                   View Projects
                 </div>
               </Link>
             ) : (
               <Link href={'/create/profile'}>
-                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-[#E1458D] rounded-full shadow-tabShadow text-sm'>
+                <div className='px-10 py-6 flex justify-center items-center text-[white] font-bold bg-pink-500 rounded-full shadow-tabShadow text-sm'>
                   Get Verified.
                 </div>
               </Link>
@@ -79,13 +79,13 @@ const CreateAccount = () => {
             <p className='text-[32px] font-bold text-[#4F576A] tracking-[-0.32px]'>
               Got stuck somewhere in the zkID process? If you’re having trouble
               or received an error, don’t hesitate to contact{' '}
-              <span className='text-[#E1458D] font-bold'>
+              <span className='text-pink-500 font-bold'>
                 <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                   q/acc Support Telegram channel
                 </a>
               </span>{' '}
               or email{' '}
-              <span className='text-[#E1458D] font-bold'>
+              <span className='text-pink-500 font-bold'>
                 <a href='mailto:qacc@giveth.io'>qacc@giveth.io.</a>
               </span>{' '}
               We’ll help you get back on track right away.

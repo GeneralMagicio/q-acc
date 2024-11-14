@@ -105,7 +105,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             }}
           >
             {shortAddress}
-            <span className='text-[#E1458D] '>Change Wallet</span>
+            <span className='text-pink-500 '>Change Wallet</span>
           </div>
           <div className='flex flex-col gap-4'>
             {isProductReleased && (

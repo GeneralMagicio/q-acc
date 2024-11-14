@@ -709,7 +709,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   I have read and agree to the{' '}
                   <Link
                     href='https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5'
-                    className='text-[#E1458D] font-semibold'
+                    className='text-pink-500 font-semibold'
                     target='_blank'
                   >
                     Terms of Service.
@@ -919,7 +919,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           </h1>
           <span
             onClick={handleShare}
-            className='text-xs cursor-pointer flex gap-2 font-medium text-[#E1458D] px-[15px] py-2 bg-white w-[220px] h-[48px] justify-center items-center rounded-full'
+            className='text-xs cursor-pointer flex gap-2 font-medium text-pink-500 px-[15px] py-2 bg-white w-[220px] h-[48px] justify-center items-center rounded-full'
           >
             <IconShare size={16} />
             Share

@@ -32,7 +32,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/akarun1x.png 1x, /Icons/akarun2x.png 2x'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold  '>
+            <h1 className='text-pink-500 font-bold  '>
               <a href='https://q-acc.giveth.io/project/akarun'>Akarun</a>{' '}
             </h1>
             <p className='leading-9 text-[#4F576A] text-left'>
@@ -51,7 +51,7 @@ export const QaccProjects = () => {
                 alt='The Grand Timeline logo'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>
+            <h1 className='text-pink-500 font-bold '>
               <a href='https://q-acc.giveth.io/project/ancient-beast'>
                 Ancient Beast{' '}
               </a>
@@ -71,7 +71,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/citizen1x.png 1x, /Icons/citizen2x.png 2x'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>
+            <h1 className='text-pink-500 font-bold '>
               <a href='https://q-acc.giveth.io/project/citizen-wallet'>
                 Citizen Wallet
               </a>{' '}
@@ -92,7 +92,7 @@ export const QaccProjects = () => {
                 alt='The Grand Timeline logo'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>
+            <h1 className='text-pink-500 font-bold '>
               <a href='https://q-acc.giveth.io/project/the-grand-timeline'>
                 The Grand Timeline
               </a>{' '}
@@ -111,7 +111,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/melodex1x.png 1x, /Icons/melodex2x.png 2x'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>
+            <h1 className='text-pink-500 font-bold '>
               <a href='https://q-acc.giveth.io/project/melodex'>Melodex</a>{' '}
             </h1>
             <p className='leading-9 text-[#4F576A]'>
@@ -129,7 +129,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/prismo1x.png 1x, /Icons/prismo2x.png 2x'
               />{' '}
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Prismo Technology</h1>
+            <h1 className='text-pink-500 font-bold '>Prismo Technology</h1>
             <p className='leading-9 text-[#4F576A]'>
               Prismo Technology is a layer-2 hybrid public-private blockchain
               platform designed to enable secure and scalable solutions for
@@ -147,7 +147,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/x231x.png 1x, /Icons/x232x.png 2x'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>
+            <h1 className='text-pink-500 font-bold '>
               <a href='https://q-acc.giveth.io/project/x23ai'>x23.ai </a>
             </h1>
             <p className='leading-9 text-[#4F576A]'>
@@ -164,7 +164,7 @@ export const QaccProjects = () => {
                 srcSet='/Icons/xade1x.png 1x, /Icons/xade2x.png 2x'
               />
             </div>
-            <h1 className='text-[#E1458D] font-bold '>Xade Finance</h1>
+            <h1 className='text-pink-500 font-bold '>Xade Finance</h1>
             <p className='leading-9 text-[#4F576A]'>
               Xade Finance is building the AI-powered Robinhood of DeFi. It is a
               decentralized platform driven by AI insights and tools that offers

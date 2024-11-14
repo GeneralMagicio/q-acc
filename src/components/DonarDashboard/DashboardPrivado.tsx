@@ -25,7 +25,7 @@ const DashboardPrivado = () => {
                   q/acc rounds and protects the projects and their supporters.
                   Refer to the{' '}
                   <a
-                    className='text-[#E1458D] font-bold'
+                    className='text-pink-500 font-bold'
                     href={links.PRIVADO_GUIDE_LINK}
                     target='_blank'
                   >

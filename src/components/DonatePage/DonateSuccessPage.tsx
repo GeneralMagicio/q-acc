@@ -88,7 +88,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                 <h1 className='text-[#121B4B] text-lg  font-bold'>
                   {projectData?.title}
                 </h1>
-                <h3 className='font-redHatText text-[#E1458D]'>
+                <h3 className='font-redHatText text-pink-500'>
                   {projectData?.adminUser.name}
                 </h3>
               </div>
@@ -193,7 +193,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                 href={`${config.SCAN_URL}/tx/${transactionHash}`}
                 target='_blank'
               >
-                <span className='text-[#E1458D] text-xl flex gap-2'>
+                <span className='text-pink-500 text-xl flex gap-2'>
                   {' '}
                   View the transaction <IconViewTransaction size={25} />
                 </span>
