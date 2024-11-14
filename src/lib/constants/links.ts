@@ -26,6 +26,7 @@ const links = {
   PASSPORT: 'https://passport.gitcoin.co',
   PRIVADO_GUIDE_LINK:
     'https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494',
+  TELEGRAM_SUPPORT: 'https://t.me/qaccsupport',
 };
 
 export default links;

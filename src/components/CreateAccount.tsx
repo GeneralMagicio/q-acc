@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { usePrivado } from '@/hooks/usePrivado';
+import links from '@/lib/constants/links';
 
 const CreateAccount = () => {
   const { isVerified } = usePrivado();
@@ -25,16 +26,13 @@ const CreateAccount = () => {
                   mitigates Sybil attacks during the q/acc rounds and protects
                   the projects and their supporters. Refer to the{' '}
                   <span className='text-[#E1458D] font-bold'>
-                    <a
-                      href='https://giveth.notion.site/Complete-zkID-via-Privado-ID-1223ab28d48c80458699d18cb0f54494'
-                      target='_blank'
-                    >
+                    <a href={links.PRIVADO_GUIDE_LINK} target='_blank'>
                       Complete zkID guide{' '}
                     </a>
                   </span>
                   and contact{' '}
                   <span className='text-[#E1458D] font-bold'>
-                    <a href='https://t.me/qaccsupport' target='_blank'>
+                    <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                       q/acc Support Telegram channel
                     </a>
                   </span>{' '}
@@ -82,7 +80,7 @@ const CreateAccount = () => {
               Got stuck somewhere in the zkID process? If you’re having trouble
               or received an error, don’t hesitate to contact{' '}
               <span className='text-[#E1458D] font-bold'>
-                <a href='https://t.me/qaccsupport' target='_blank'>
+                <a href={links.TELEGRAM_SUPPORT} target='_blank'>
                   q/acc Support Telegram channel
                 </a>
               </span>{' '}

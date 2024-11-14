@@ -158,12 +158,12 @@ const VerifyPrivado = () => {
                 Got stuck somewhere in the process? If you’re having trouble or
                 received an error, don’t hesitate to contact us at{' '}
                 <a
-                  href='https://t.me/qaccsupport'
+                  href={links.TELEGRAM_SUPPORT}
                   target='_blank'
                   className='font-bold text-pink-500'
                 >
-                  q/acc Support Telegram channel{' '}
-                </a>
+                  q/acc Support Telegram channel
+                </a>{' '}
                 or send an email to qacc@giveth.io We’ll help you get back on
                 track!
               </p>
