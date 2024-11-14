@@ -38,9 +38,7 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
       showCloseButton
       className='max-w-2xl mt-12'
     >
-      <p className='mt-4 mb-4'>
-        Before proceeding, make sure you’ve read and understand the following:
-      </p>
+      <p className='mt-4 mb-4'>Before proceeding, you should know that:</p>
       <div className='max-h-[100vh] md:max-h-[50vh] overflow-y-auto'>
         <ul className='flex flex-col gap-4 list-disc px-10'>
           <li>
@@ -75,11 +73,14 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
             <span className='text-gray-800 font-bold'>
               We strongly encourage you to use MetaMask at this time.
             </span>{' '}
-            We have had issues reported from those using WalletConnect. 
+            We have had issues reported from those using WalletConnect.
           </li>
           <li>
-            We encourage you not to use the{' '}
-            <span className='text-gray-800 font-bold'>Privado mobile app</span>{' '}
+            We encourage you{' '}
+            <span className='text-gray-800 font-bold'>
+              {' '}
+              not to use the Privado mobile app{' '}
+            </span>{' '}
             at this time. You will see an option to  “Continue via app” during
             verification. Do not select that.
           </li>
