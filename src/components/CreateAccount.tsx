@@ -3,6 +3,7 @@ import React from 'react';
 import { usePrivado } from '@/hooks/usePrivado';
 import links from '@/lib/constants/links';
 import { customButtonClass } from './QaccRoundCounter';
+import Routes from '@/lib/constants/Routes';
 
 const CreateAccount = () => {
   const { isVerified } = usePrivado();
@@ -62,11 +63,11 @@ const CreateAccount = () => {
 
           <div className='flex justify-center p-6'>
             {isVerified ? (
-              <Link href={'/projects'}>
+              <Link href={Routes.Projects}>
                 <div className={customButtonClass}>View Projects</div>
               </Link>
             ) : (
-              <Link href={'/create/profile'}>
+              <Link href={Routes.CreateProfile}>
                 <div className={customButtonClass}>Get Verified.</div>
               </Link>
             )}
