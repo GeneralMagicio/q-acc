@@ -19,7 +19,7 @@ const CreateAccount = () => {
             <ul className='list-disc text-[24px] font-redHatText px-4'>
               <li className='text-[#4F576A]'>
                 <strong className='font-bold text-[#4F576A]'>
-                  Get verified
+                  Get verified.
                 </strong>{' '}
                 <span className='text-[#4F576A] leading-9'>
                   Get your KYC credentials using Privado ID. Zero-knowledge ID
@@ -68,7 +68,7 @@ const CreateAccount = () => {
               </Link>
             ) : (
               <Link href={Routes.CreateProfile}>
-                <div className={customButtonClass}>Get Verified.</div>
+                <div className={customButtonClass}>Get Verified</div>
               </Link>
             )}
           </div>

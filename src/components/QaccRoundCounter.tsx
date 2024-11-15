@@ -49,7 +49,7 @@ const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
               </Link>
             ) : (
               <Link href={Routes.CreateProfile}>
-                <div className={customButtonClass}>Get Verified.</div>
+                <div className={customButtonClass}>Get Verified</div>
               </Link>
             )}
           </>
