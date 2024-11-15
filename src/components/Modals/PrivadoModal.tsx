@@ -22,7 +22,7 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
       {...props}
       title='🛂 Hold Up!'
       showCloseButton
-      className='max-w-2xl mt-12'
+      className='md:max-w-3xl'
     >
       <Image
         src='/images/particles/trazado1.png'
@@ -45,8 +45,8 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
         height={10}
         className='top-5 left-0 absolute'
       />
-      <p className='mt-4 mb-4'>Before proceeding, you should know that:</p>
-      <div className='max-h-[100vh] md:max-h-[50vh] overflow-y-auto'>
+      <p className='mb-4'>Before proceeding, you should know that:</p>
+      <div className=''>
         <PrivadoHoldUp />
       </div>
       <div className='flex gap-2 my-6'>
