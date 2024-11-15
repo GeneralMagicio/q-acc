@@ -1,37 +1,21 @@
-import { useEffect, useState, type FC } from 'react';
+import { useState, type FC } from 'react';
 import Image from 'next/image';
 import Modal, { BaseModalProps } from '../Modal';
 import { Button } from '../Button';
 import { IconArrowRight } from '../Icons/IconArrowRight';
-import { generatePrivadoShortenedUrl } from '@/services/privado.service';
 import { PrivadoHoldUp } from '../PrivadoHoldUp';
+import { usePrivadoUrl } from '@/hooks/usePrivadoUrl';
 
 interface PrivadoModalProps extends BaseModalProps {}
 
 export const PrivadoModal: FC<PrivadoModalProps> = props => {
-  const [isPrivadoLoading, setIsPrivadoLoading] = useState(false);
+  const { url, isLoading: isPrivadoLoading } = usePrivadoUrl();
   const [understood, setUnderstood] = useState(false);
-  const [url, setUrl] = useState<string | null>(null);
 
   const handleUnderstood = (_event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = _event.target.checked;
     setUnderstood(isChecked);
   };
-
-  useEffect(() => {
-    const verifyAccount = async () => {
-      try {
-        setIsPrivadoLoading(true);
-        const url = await generatePrivadoShortenedUrl();
-        if (url) setUrl(url);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsPrivadoLoading(false);
-      }
-    };
-    verifyAccount();
-  }, []);
 
   return (
     <Modal
