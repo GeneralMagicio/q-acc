@@ -22,7 +22,7 @@ export const PrivadoModal: FC<PrivadoModalProps> = props => {
       {...props}
       title='🛂 Hold Up!'
       showCloseButton
-      className='md:max-w-3xl pb-24 md:pb-6'
+      className='md:!max-w-3xl pb-24 md:pb-6'
     >
       <Image
         src='/images/particles/trazado1.png'
