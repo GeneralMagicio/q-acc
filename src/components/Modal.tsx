@@ -46,14 +46,14 @@ const Modal: React.FC<ModalProps> = ({
 
   return createPortal(
     <div
-      className='fixed inset-0 z-40 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'
+      className='fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'
       onClick={e => {
         e.stopPropagation();
         onClose();
       }}
     >
       <div
-        className={`bg-white w-full max-h-[100vh] overflow-x-hidden overflow-y-auto relative p-4 md:rounded-xl md:shadow-lg md:max-w-lg md:p-6 ${className}`}
+        className={`bg-white w-full max-h-[100vh] overflow-x-hidden overflow-y-auto relative p-4 md:max-h-[90vh] md:rounded-xl md:shadow-lg md:max-w-lg md:p-6 ${className}`}
         onClick={e => e.stopPropagation()} // Prevent modal content clicks from propagating
       >
         {showCloseButton && (
