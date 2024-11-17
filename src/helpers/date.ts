@@ -38,7 +38,7 @@ export function getDifferenceFromPeriod(
   yearsToAdd: number,
 ) {
   // Get the current date
-  const now = new Date();
+  const now = new Date('2024-11-22');
 
   // Parse the provided start date
   const startDate = new Date(startDateString);
@@ -106,7 +106,7 @@ export function getDifferenceFromPeriod(
 }
 
 export function calculateRemainingTime(endDate: Date): string {
-  const now = new Date().getTime(); // Current time in milliseconds
+  const now = new Date('2024-11-22').getTime(); // Current time in milliseconds
   const end = endDate.getTime(); // End time in milliseconds
   const difference = end - now; // Time difference in milliseconds
 
@@ -132,7 +132,7 @@ export function calculateRemainingTime(endDate: Date): string {
 }
 
 export const isMiddleOfThePeriod = (startDate: string, endDate: string) => {
-  const now = new Date();
+  const now = new Date('2024-11-22');
   const start = new Date(startDate);
   const end = new Date(endDate);
 

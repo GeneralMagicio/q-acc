@@ -56,7 +56,7 @@ export const calculateCapAmount = async (
 
 export const getMostRecentEndRound = async () => {
   const allRounds = await fetchAllRoundDetails();
-  const now = new Date();
+  const now = new Date('2024-11-22');
   const endedRounds = allRounds?.filter(round => new Date(round.endDate) < now);
   endedRounds?.sort(
     (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),

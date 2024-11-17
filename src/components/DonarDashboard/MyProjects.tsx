@@ -96,7 +96,7 @@ const MyProjects = () => {
 
   // Check if Round 1 has started
   const round1Started = round1
-    ? new Date().toISOString().split('T')[0] >=
+    ? new Date('2024-11-22').toISOString().split('T')[0] >=
       new Date(round1.startDate).toISOString().split('T')[0]
     : false;
 
@@ -156,7 +156,7 @@ const MyProjects = () => {
       }
 
       // Push past EarlyAccessRounds to pastRounds
-      const hasEnded = new Date(endDate) < new Date();
+      const hasEnded = new Date(endDate) < new Date('2024-11-22');
       if (__typename === 'EarlyAccessRound' && (hasEnded || isActive)) {
         pastRounds.push(round);
         pastRoundNumber = round.roundNumber;

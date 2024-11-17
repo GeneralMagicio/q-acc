@@ -11,7 +11,7 @@ interface QaccRoundCounterProps {
 }
 const QaccRoundCounter: React.FC<QaccRoundCounterProps> = ({ page }) => {
   const { isVerified } = usePrivado();
-  const now = new Date();
+  const now = new Date('2024-11-22');
   const remainingTime = useRemainingTime(
     now.toISOString(),
     '2024-11-25T12:00:00.000Z', // Currently set to start at 25th November
