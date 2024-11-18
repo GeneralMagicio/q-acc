@@ -29,7 +29,7 @@ export async function generatePrivadoUuid(data: object) {
     await collection.insertOne({
       _id: uuid,
       data: data,
-      createdAt: new Date('2024-11-22'),
+      createdAt: new Date(),
     });
 
     return uuid;

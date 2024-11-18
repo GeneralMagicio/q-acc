@@ -38,7 +38,7 @@ export const calculateLockedRewardTokenAmount = (
   rewardStreamEnd: Date,
   cliff: number,
 ) => {
-  const now = new Date('2024-11-22');
+  const now = new Date();
   const streamStart = new Date(rewardStreamStart);
   const streamEnd = new Date(rewardStreamEnd);
 

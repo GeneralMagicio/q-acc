@@ -22,7 +22,7 @@ export const RoundInfoBanner = () => {
     setTotalRounds(eaRoundCount);
   }, [allRounds]);
 
-  const now = new Date('2024-11-22');
+  const now = new Date();
   const isRoundActive =
     activeRoundDetails?.startDate && activeRoundDetails?.endDate
       ? new Date(activeRoundDetails.startDate) < now &&

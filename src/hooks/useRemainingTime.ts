@@ -9,7 +9,7 @@ function useRemainingTime(startDate?: string, endDate?: string) {
     if (!startDate || !endDate) return;
     const _startDate = new Date(startDate);
     const _endDate = new Date(endDate);
-    const now = new Date('2024-11-22');
+    const now = new Date();
 
     // If current time is before the start date, don't display remaining time
     if (now < _startDate) {
