@@ -22,10 +22,17 @@ export const RoundInfoBanner = () => {
     setTotalRounds(eaRoundCount);
   }, [allRounds]);
 
+  const now = new Date();
+  const isRoundActive =
+    activeRoundDetails?.startDate && activeRoundDetails?.endDate
+      ? new Date(activeRoundDetails.startDate) < now &&
+        new Date(activeRoundDetails.endDate) > now
+      : false;
+
   return (
     <>
-      {activeRoundDetails ? (
-        <div className='py-6 px-8 rounded-2xl shadow-GIV400 flex items-center justify-between bg-white z-1 relative'>
+      {activeRoundDetails && isRoundActive ? (
+        <div className='py-6 px-8 rounded-2xl shadow-GIV400 flex justify-center md:items-center md:justify-between bg-white z-1 relative flex-wrap gap-5 '>
           <span className='text-[#1D1E1F] font-medium text-lg font-redHatText'>
             {activeRoundDetails?.__typename === 'EarlyAccessRound'
               ? 'Early access - Round ' +
