@@ -4,9 +4,12 @@ import { usePrivado } from '@/hooks/usePrivado';
 import links from '@/lib/constants/links';
 import { customButtonClass } from './QaccRoundCounter';
 import Routes from '@/lib/constants/Routes';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 const CreateAccount = () => {
   const { isVerified } = usePrivado();
+  const { data: user } = useFetchUser();
+
   return (
     <div className='bg-white'>
       <div className='container p-6'>
@@ -67,7 +70,11 @@ const CreateAccount = () => {
                 <div className={customButtonClass}>View Projects</div>
               </Link>
             ) : (
-              <Link href={Routes.CreateProfile}>
+              <Link
+                href={
+                  user?.fullName ? Routes.VerifyPrivado : Routes.CreateProfile
+                }
+              >
                 <div className={customButtonClass}>Get Verified</div>
               </Link>
             )}
