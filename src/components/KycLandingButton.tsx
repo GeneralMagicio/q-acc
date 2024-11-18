@@ -9,10 +9,12 @@ import { IconArrowRight } from './Icons/IconArrowRight';
 import { fetchGivethUserInfo } from '@/services/user.service';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import Routes from '@/lib/constants/Routes';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 export const KycLandingButton = () => {
   const { address } = useAccount();
   const { mutateAsync: updateUser } = useUpdateUser();
+  const { data: user } = useFetchUser();
   const route = useRouter();
   const { open } = useWeb3Modal();
 
@@ -46,7 +48,11 @@ export const KycLandingButton = () => {
       color={ButtonColor.Pink}
       className={'mx-auto'}
       onClick={() => {
-        handleStartKyc();
+        if (user?.fullName) {
+          route.push(Routes.VerifyPrivado);
+        } else {
+          handleStartKyc();
+        }
       }}
     >
       <div className='flex gap-2'>
