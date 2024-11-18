@@ -10,7 +10,7 @@ const projects = [
       'Akarun is a mobile game where players race custom runners tied to live market assets. The fastest runner linked to the top-performing asset wins.',
     image: (
       <Image
-        src='/Icons/akarun1x.png'
+        src='/images/projects/akarun.png'
         width={48}
         height={48}
         alt='Akarun'
@@ -25,7 +25,7 @@ const projects = [
       'Ancient Beast is an open-source, match-based (1v1 or 2v2) eSports strategy game played against other people or AI. It has no chance-based elements and is designed to be easy to learn, fun to play, and hard to master.',
     image: (
       <Image
-        src='/Icons/beast.png'
+        src='/images/projects/beast.png'
         width={60}
         height={60}
         alt='Ancient Beast'
@@ -40,7 +40,7 @@ const projects = [
       'Citizen Wallet empowers communities and events with Web3 tools to easily launch, use, and manage community tokens via a mobile app and NFC wallets.',
     image: (
       <Image
-        src='/Icons/citizen1x.png'
+        src='/images/projects/citizen.png'
         width={50}
         height={60}
         alt='Citizen Wallet'
@@ -55,7 +55,7 @@ const projects = [
       'The Grand Timeline is a historical research and data visualization project about the entire history of blockchains and Web3. It will be the first interactive and collectible story of its kind.',
     image: (
       <Image
-        src='/Icons/grand.png'
+        src='/images/projects/grand.png'
         width={60}
         height={60}
         alt='The Grand Timeline'
@@ -70,7 +70,7 @@ const projects = [
       'Melodex is a decentralized exchange focused on listing asset-backed music tokens that represent shares in song royalty rights. These tokens enable passive income from music monetization.',
     image: (
       <Image
-        src='/Icons/melodex1x.png'
+        src='/images/projects/melodex.png'
         width={180}
         height={60}
         alt='Melodex'
@@ -85,7 +85,7 @@ const projects = [
       'Prismo Technology is a layer-2 hybrid public-private blockchain platform designed to enable secure and scalable solutions for enterprises and government organizations, facilitating the transition of traditional technologies to blockchain.',
     image: (
       <Image
-        src='/Icons/prismo1x.png'
+        src='/images/projects/prismo.png'
         width={62}
         height={60}
         alt='Prismo Technology'
@@ -100,7 +100,7 @@ const projects = [
       'x23 is automating the future of decentralized organizations by integrating AI tools to streamline the operation and governance of DAOs, making them more efficient and autonomous.',
     image: (
       <Image
-        src='/Icons/x231x.png'
+        src='/images/projects/x23.png'
         width={71}
         height={60}
         alt='x23.ai'
@@ -115,7 +115,7 @@ const projects = [
       'Xade Finance is building the AI-powered Robinhood of DeFi. It is a decentralized platform driven by AI insights and tools that offers a seamless experience for trading and managing digital assets.',
     image: (
       <Image
-        src='/Icons/xade1x.png'
+        src='/images/projects/xade.svg'
         width={86}
         height={60}
         alt='Xade Finance'
@@ -145,7 +145,9 @@ export const QaccProjects = () => {
               key={index}
               className='flex flex-col gap-3 text-[24px] sm:text-left'
             >
-              <div>{project.image}</div>
+              <div className='h-[60px] flex flex-col justify-center'>
+                {project.image}
+              </div>
               <h1 className='text-gray-900 font-bold'>{project.name}</h1>
               <p className='leading-9 text-[#4F576A]'>{project.description}</p>
               <Link
