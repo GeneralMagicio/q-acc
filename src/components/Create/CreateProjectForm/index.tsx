@@ -22,6 +22,7 @@ import { IconExternalLink } from '@/components/Icons/IconExternalLink';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchProjectsCountByUserId } from '@/hooks/useFetchProjectsCountByUserId';
 import ProjectDetailPreview from '@/components/ProjectPreview/ProjectDetailPreview';
+import Routes from '@/lib/constants/Routes';
 
 export interface ProjectFormData {
   projectName: string;
@@ -153,7 +154,7 @@ const CreateProjectForm: FC = () => {
   const onSubmit = async (data: ProjectFormData) => {
     if (!user?.id || !address) return;
     setFormData({ project: data });
-    router.push('/create/team');
+    router.push(Routes.CreateTeam);
   };
 
   const handlePreview = () => {
