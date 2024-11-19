@@ -9,6 +9,7 @@ import CreateNavbar from '../CreateNavbar';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { validators } from '@/components/SocialMediaInput/vaildators';
+import Routes from '@/lib/constants/Routes';
 
 export interface ProfileFormData {
   fullName: string;
@@ -63,7 +64,7 @@ const CreateProjectForm: FC = () => {
       // const dest = isUserWhiteListed
       //   ? '/create/project'
       //   : '/create/verify-privado';
-      router.push('/create/verify-privado');
+      router.push(Routes.VerifyPrivado + '?b=cp');
     }
     console.log('res', res);
   };

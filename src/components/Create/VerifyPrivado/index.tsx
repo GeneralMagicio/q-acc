@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CreateNavbar from '../CreateNavbar';
 import { Button, ButtonColor } from '@/components/Button';
 import Routes from '@/lib/constants/Routes';
@@ -21,8 +21,11 @@ const VerifyPrivado = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const router = useRouter();
   const { isVerified, error, isLoading } = usePrivado();
+  const searchParams = useSearchParams();
 
   const verified: IVerified = { isVerified, error: !!error };
+
+  const showBackButton = searchParams.get('b');
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -36,10 +39,14 @@ const VerifyPrivado = () => {
       >
         <CreateNavbar
           title='Identity verification'
-          onBack={e => {
-            e.preventDefault();
-            router.push(Routes.CreateProfile);
-          }}
+          onBack={
+            showBackButton
+              ? e => {
+                  e.preventDefault();
+                  router.push(Routes.CreateProfile);
+                }
+              : undefined
+          }
           submitLabel='Save'
           disabled={!verified.isVerified}
         />
