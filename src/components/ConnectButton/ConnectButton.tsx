@@ -99,13 +99,15 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
       >
         <div className='flex flex-col gap-2 font-redHatText cursor-pointer'>
           <div
-            className='flex  text-xs  gap-3 hover:bg-[#F7F7F9] rounded-lg p-3'
+            className='flex flex-col  text-xs  gap-0 hover:bg-[#F7F7F9] rounded-lg p-3'
             onClick={() => {
               open();
             }}
           >
-            {shortAddress}
-            <span className='text-pink-500 '>Change Wallet</span>
+            <span className='text-gray-600 font-semibold text-sm'>WALLET</span>
+            <span className='text-gray-900 font-semibold text-base uppercase'>
+              {shortAddress}
+            </span>
           </div>
           <div className='flex flex-col gap-4'>
             {isProductReleased && (
