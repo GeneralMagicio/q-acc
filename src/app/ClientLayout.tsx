@@ -4,6 +4,7 @@ import Web3ModalProvider from '@/context/wagmi';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UserController } from '@/components/Controllers/UserController';
+import { GeoController } from '@/components/Controllers/GeoController';
 // Import usePathname
 
 export default function ClientLayout({
@@ -22,6 +23,7 @@ export default function ClientLayout({
     <Web3ModalProvider initialState={initialState}>
       {showHeader && <Header />}
       <UserController />
+      <GeoController />
       <div className='flex-1'>{children}</div>
       <Footer />
     </Web3ModalProvider>
