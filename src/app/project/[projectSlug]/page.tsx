@@ -2,7 +2,10 @@ import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
-import { fetchProjectBySlug } from '@/services/project.service';
+import {
+  fetchProjectBySlug,
+  fetchProjectMetadata,
+} from '@/services/project.service';
 import { ProjectView } from '@/components/ProjectDetail/ProjectView';
 
 interface ProjectPageProps {
@@ -18,7 +21,7 @@ export async function generateMetadata({
     ? params.projectSlug[0]
     : params.projectSlug;
 
-  const project = await fetchProjectBySlug(slug);
+  const project = await fetchProjectMetadata(slug);
 
   const defaultTitle = 'Quadratic Acceleration';
   const defaultDesc =
