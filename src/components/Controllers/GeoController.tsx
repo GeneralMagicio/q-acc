@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchGeoData } from '@/services/geo.service';
 import { RestrictModal } from '../Modals/RestrictModal';
 import { restrictedCountries } from '@/lib/constants/countries';
+import { isCountryRestrictionEnabled } from '@/config/configuration';
 
 export const GeoController = () => {
   const [showRestrictModal, setShowRestrictModal] = useState(false);
@@ -19,7 +20,7 @@ export const GeoController = () => {
       }
     }
 
-    fetchUserLocation();
+    isCountryRestrictionEnabled && fetchUserLocation();
   }, []);
   return showRestrictModal ? (
     <RestrictModal

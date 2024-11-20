@@ -6,6 +6,8 @@ export const isProductReleased =
   process.env.NEXT_PUBLIC_IS_PRODUCT_RELEASE === 'true';
 export const isEarlyAccessBranch =
   process.env.NEXT_PUBLIC_EARLY_ACCESS_BRANCH === 'true';
+export const isCountryRestrictionEnabled =
+  process.env.NEXT_PUBLIC_RESTRICT_FEATURE_FLAG === 'true';
 
 console.log('config-isProductReleased', isProductReleased);
 console.log('config-isProduction', isProduction);
