@@ -13,6 +13,7 @@ interface ModalProps extends BaseModalProps {
   titleIcon?: React.ReactNode;
   children: React.ReactNode;
   showCloseButton?: boolean;
+  closeable?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -23,6 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   showCloseButton = false,
   children,
   className,
+  closeable = true,
 }) => {
   const [mounted, setMounted] = useState(false);
 
@@ -49,7 +51,7 @@ const Modal: React.FC<ModalProps> = ({
       className='fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur'
       onClick={e => {
         e.stopPropagation();
-        onClose();
+        closeable && onClose();
       }}
     >
       <div
