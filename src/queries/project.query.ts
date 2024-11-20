@@ -347,6 +347,24 @@ export const GET_PROJECT_BY_SLUG = `
 	}
 `;
 
+export const GET_PROJECT_METADATA_BY_SLUG = `
+ query 
+      (
+      $slug:String!, 
+      ) 
+{ 
+		projectBySlug(
+			slug: $slug
+		) {
+			__typename
+			title
+			image
+			slug
+      teaser
+    }
+	}
+`;
+
 export const SAVE_DONATION = `mutation (
   $transactionId: String
   $transactionNetworkId: Float!
