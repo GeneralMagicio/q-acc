@@ -157,3 +157,5 @@ export const getAdjustedEndDate = (endDate?: string): string | undefined => {
   );
   return adjustedDate.toISOString();
 };
+
+export const OneYearInMilliSecs = 31536000 * 1000;

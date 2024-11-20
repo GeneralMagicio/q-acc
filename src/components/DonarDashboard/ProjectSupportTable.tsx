@@ -9,6 +9,7 @@ import { useFetchProjectById } from '@/hooks/useFetchProjectById';
 import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
+  OneYearInMilliSecs,
 } from '@/helpers/date';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import config from '@/config/configuration';
@@ -202,7 +203,10 @@ const ProjectSupportTable = ({
                 </div>
                 <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
                   {donation.rewardStreamStart
-                    ? getDifferenceFromPeriod(donation.rewardStreamStart, 1)
+                    ? getDifferenceFromPeriod(
+                        donation.rewardStreamStart,
+                        donation.cliff / OneYearInMilliSecs,
+                      )
                     : '-'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
