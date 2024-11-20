@@ -3,9 +3,11 @@ import { Nunito_Sans } from 'next/font/google';
 import './globals.css';
 import { cookieToInitialState } from 'wagmi';
 import { headers } from 'next/headers';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { wagmiConfig } from '@/config/wagmi';
 import ClientLayout from './ClientLayout';
 
+import { GTM_ID } from '@/config/configuration';
 import type { Metadata } from 'next';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
@@ -48,6 +50,7 @@ export default function RootLayout({
 
   return (
     <html lang='en'>
+      {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <head>
         <link rel='icon' href='/favicon.ico' />
         <link rel='manifest' href='/site.webmanifest' />
