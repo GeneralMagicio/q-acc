@@ -24,6 +24,7 @@ interface Donation {
   amount: number;
   createdAt: string;
   rewardTokenAmount: number;
+  cliff: number;
   rewardStreamStart: string;
   rewardStreamEnd: string;
   transactionId: string;
