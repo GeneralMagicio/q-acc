@@ -51,7 +51,6 @@ export default function RootLayout({
   return (
     <html lang='en'>
       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
-      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       <head>
         <link rel='icon' href='/favicon.ico' />
         <link rel='manifest' href='/site.webmanifest' />
@@ -61,6 +60,7 @@ export default function RootLayout({
           <ClientLayout initialState={initialState}>{children}</ClientLayout>
         </div>
       </body>
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }
