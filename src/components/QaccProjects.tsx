@@ -18,6 +18,7 @@ const projects = [
       />
     ),
     slug: 'akarun',
+    isLinkEnabled: true,
   },
   {
     name: 'Ancient Beast',
@@ -33,6 +34,7 @@ const projects = [
       />
     ),
     slug: 'ancient-beast',
+    isLinkEnabled: true,
   },
   {
     name: 'Citizen Wallet',
@@ -48,6 +50,7 @@ const projects = [
       />
     ),
     slug: 'citizen-wallet',
+    isLinkEnabled: true,
   },
   {
     name: 'The Grand Timeline',
@@ -63,6 +66,7 @@ const projects = [
       />
     ),
     slug: 'the-grand-timeline',
+    isLinkEnabled: true,
   },
   {
     name: 'Melodex',
@@ -78,6 +82,7 @@ const projects = [
       />
     ),
     slug: 'melodex',
+    isLinkEnabled: true,
   },
   {
     name: 'Prismo Technology',
@@ -93,6 +98,7 @@ const projects = [
       />
     ),
     slug: 'prismo-technology',
+    isLinkEnabled: false,
   },
   {
     name: 'x23.ai',
@@ -108,6 +114,7 @@ const projects = [
       />
     ),
     slug: 'x23ai',
+    isLinkEnabled: true,
   },
   {
     name: 'Xade Finance',
@@ -123,6 +130,7 @@ const projects = [
       />
     ),
     slug: 'xade-finance',
+    isLinkEnabled: false,
   },
 ];
 
@@ -150,12 +158,14 @@ export const QaccProjects = () => {
               </div>
               <h1 className='text-gray-900 font-bold'>{project.name}</h1>
               <p className='leading-9 text-[#4F576A]'>{project.description}</p>
-              <Link
-                className='text-pink-500 font-bold'
-                href={Routes.Project + `/${project.slug}`}
-              >
-                View Project {'>'}
-              </Link>
+              {project.isLinkEnabled && (
+                <Link
+                  className='text-pink-500 font-bold'
+                  href={Routes.Project + `/${project.slug}`}
+                >
+                  View Project {'>'}
+                </Link>
+              )}
             </div>
           ))}
         </div>
