@@ -8,6 +8,8 @@ export const isEarlyAccessBranch =
   process.env.NEXT_PUBLIC_EARLY_ACCESS_BRANCH === 'true';
 export const isCountryRestrictionEnabled =
   process.env.NEXT_PUBLIC_RESTRICT_FEATURE_FLAG === 'true';
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 console.log('config-isProductReleased', isProductReleased);
 console.log('config-isProduction', isProduction);
