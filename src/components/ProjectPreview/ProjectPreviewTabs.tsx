@@ -19,7 +19,7 @@ const ProjectPreviewTabs = (props: IProjectTabs) => {
   const tabsArray = [
     { title: 'About' },
     {
-      title: 'Supporters',
+      title: 'Transactions',
       badge: totalDonationsCount,
       query: EProjectPageTabs.DONATIONS,
     },
