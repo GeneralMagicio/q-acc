@@ -21,7 +21,7 @@ export const GitcoinEligibilityModal: FC<
   return (
     <Modal {...props} title='Eligibility Check' showCloseButton>
       <div className=''>
-        <p className='mt-4 mb-10'>
+        <p className='mt-4 mb-10 text-xl'>
           Verify your eligibility to contribute up to $1,000 to this project by
           completing a quick on-chain activity check.
         </p>
@@ -40,7 +40,7 @@ export const GitcoinEligibilityModal: FC<
               status={EligibilityBadgeStatus.NOT_ELIGIBLE}
               className='block ml-auto'
             />
-            <div className='mt-4'>
+            <div className='bg-gray-50 my-2 rounded-xl px-4 py-6 text-base'>
               You didn’t pass the check. Please connect your Gitcoin Passport.
             </div>
             <Button
@@ -48,7 +48,7 @@ export const GitcoinEligibilityModal: FC<
               styleType={ButtonStyle.Solid}
               color={ButtonColor.Pink}
             >
-              Check Eligibility
+              Connect Gitcoin Passport
             </Button>
           </div>
         )}
