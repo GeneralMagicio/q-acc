@@ -100,12 +100,6 @@ const ProjectDonationTable = () => {
   return (
     <div className='bg-white'>
       <div className=' container flex  flex-col py-10 gap-10'>
-        <div>
-          <h1 className='text-[#1D1E1F] text-[25px] font-bold border-b-2 pb-3'>
-            All supporters
-          </h1>
-        </div>
-
         <div className='flex gap-10 lg:flex-row flex-col'>
           {totalCount === 0 ? (
             <div className='bg-white w-full h-[400px] flex items-center justify-center text-[25px] text-[#82899A] font-bold'>
