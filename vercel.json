@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "https://early.q-acc.giveth.io/:path*",
+      "destination": "https://q-acc.giveth.io/:path*",
+      "permanent": true
+    }
+  ]
+}
