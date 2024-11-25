@@ -51,6 +51,8 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
 import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 
+const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
+
 interface ITokenSchedule {
   message: string;
   toolTip: string;
@@ -371,9 +373,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setShowGitcoinModal(true);
       return;
     }
-    if (chain?.id !== 1101) {
+    if (chain?.id !== SUPPORTED_CHAIN.id) {
       {
-        switchChain({ chainId: 1101 });
+        switchChain({ chainId: SUPPORTED_CHAIN.id });
       }
       console.log('chain', chain?.id);
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
@@ -623,7 +625,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   fromChain: 137,
                   fee: 0.006,
                   fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
-                  toChain: 1101,
+                  toChain: SUPPORTED_CHAIN.id,
                   toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
                 }}
                 integrator='general-magic'
