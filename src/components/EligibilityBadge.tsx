@@ -30,7 +30,7 @@ export const EligibilityBadge: FC<EligibilityBadgeProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold ${data[status].color} ${data[status].bgColor} ${className}`}
+      className={`flex items-center justify-center rounded-full px-6 py-2 text-xs font-semibold ${data[status].color} ${data[status].bgColor} ${className}`}
     >
       {data[status].label}
     </div>

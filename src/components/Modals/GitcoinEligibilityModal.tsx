@@ -1,6 +1,7 @@
 import { useState, type FC } from 'react';
 import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
+import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
 
 interface GitcoinEligibilityModalProps extends BaseModalProps {}
 
@@ -14,7 +15,9 @@ enum GitcoinEligibilityModalState {
 export const GitcoinEligibilityModal: FC<
   GitcoinEligibilityModalProps
 > = props => {
-  const [state, setState] = useState(GitcoinEligibilityModalState.CHECK);
+  const [state, setState] = useState(
+    GitcoinEligibilityModalState.NOT_CONNECTED,
+  );
   return (
     <Modal {...props} title='Eligibility Check' showCloseButton>
       <div className=''>
@@ -33,7 +36,10 @@ export const GitcoinEligibilityModal: FC<
         )}
         {state === GitcoinEligibilityModalState.NOT_CONNECTED && (
           <div className='flex flex-col'>
-            <div>Not Eligible</div>
+            <EligibilityBadge
+              status={EligibilityBadgeStatus.NOT_ELIGIBLE}
+              className='block ml-auto'
+            />
             <div className='mt-4'>
               You didn’t pass the check. Please connect your Gitcoin Passport.
             </div>
