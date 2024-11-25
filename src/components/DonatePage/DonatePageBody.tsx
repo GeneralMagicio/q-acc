@@ -127,10 +127,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(false);
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
-  const openPrivadoModal = () => setPrivadoModalOpen(true);
-  const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
 
@@ -491,11 +488,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   return (
     <div className='bg-[#F7F7F9] w-full my-10'>
-      {/* <PrivadoVerificationModal
-        isOpen={isPrivadoModalOpen}
-        onClose={closePrivadoModal}
-        showCloseButton={false}
-      /> */}
       <GitcoinEligibilityModal
         isOpen={showGitcoinModal}
         onClose={() => setShowGitcoinModal(false)}
