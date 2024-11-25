@@ -49,6 +49,7 @@ import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { EligibilityCheckToast } from './EligibilityCheckToast';
 
 interface ITokenSchedule {
   message: string;
@@ -493,15 +494,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       }
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
-          <div className='flex p-4 rounded-lg border-[1px] border-[#8668FC] bg-[#F6F3FF] gap-2 font-redHatText text-[#8668FC] flex-col'>
-            <h1 className='font-medium'>Caps enable a fair launch!</h1>
-            <p className='pb-2 '>
-              Individual caps allow more people to participate in the important
-              early stage of this project’s token economy. Everyone has the same
-              cap for each round. The cap per round is subject to change.
-            </p>
-          </div>
-
+          <EligibilityCheckToast />
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
