@@ -29,6 +29,7 @@ const config: EnvConfig = {
       'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
     method: PrivadoContractMethodV1,
   },
+  GITCOIN_SCORE_THRESHOLD: 50,
 };
 
 export default config;

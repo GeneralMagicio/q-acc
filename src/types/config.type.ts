@@ -24,4 +24,5 @@ export type EnvConfig = {
     verifierDid: string;
     method: typeof PrivadoContractMethodV1 | typeof PrivadoContractMethodV2;
   };
+  GITCOIN_SCORE_THRESHOLD: number;
 };
