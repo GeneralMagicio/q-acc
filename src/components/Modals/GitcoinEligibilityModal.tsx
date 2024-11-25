@@ -31,6 +31,21 @@ export const GitcoinEligibilityModal: FC<
             Check Eligibility
           </Button>
         )}
+        {state === GitcoinEligibilityModalState.NOT_CONNECTED && (
+          <div className='flex flex-col'>
+            <div>Not Eligible</div>
+            <div className='mt-4'>
+              You didn’t pass the check. Please connect your Gitcoin Passport.
+            </div>
+            <Button
+              className='mx-auto'
+              styleType={ButtonStyle.Solid}
+              color={ButtonColor.Pink}
+            >
+              Check Eligibility
+            </Button>
+          </div>
+        )}
       </div>
     </Modal>
   );
