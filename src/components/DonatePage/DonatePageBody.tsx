@@ -675,11 +675,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               disabled={!isConnected || donateDisabled}
               loading={isConfirming}
               color={ButtonColor.Giv}
-              className={`text-white justify-center ${
-                !donateDisabled
-                  ? 'opacity-100'
-                  : 'opacity-50 cursor-not-allowed'
-              }`}
+              className='text-white justify-center'
             >
               {isConnected ? 'Support This Project' : 'Connect Wallet'}
             </Button>
