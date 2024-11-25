@@ -47,9 +47,9 @@ import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
-import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
+import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 
 interface ITokenSchedule {
   message: string;
@@ -128,10 +128,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const closeShareModal = () => setIsShareModalOpen(false);
 
   const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(false);
+  const [showGitcoinModal, setShowGitcoinModal] = useState(false);
   const openPrivadoModal = () => setPrivadoModalOpen(true);
   const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const router = useRouter();
 
   const handleShare = () => {
@@ -336,12 +336,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setFlashMessage('Error saving  donation : ' + error);
       setHash(undefined);
       setHasSavedDonation(false);
-      setButtonDisabled(false);
+      setDonateDisabled(false);
     }
   };
 
   const handleDonate = async () => {
-    setButtonDisabled(true);
+    setDonateDisabled(true);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -362,12 +362,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
-      setButtonDisabled(false);
+      setDonateDisabled(false);
     }
   };
 
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
+    const _usdAmount =
+      Number(activeRoundDetails?.tokenPrice || 1) * parseFloat(inputAmount);
+    if (_usdAmount <= 1000) {
+      setShowGitcoinModal(true);
+      return;
+    }
     if (chain?.id !== 1101) {
       {
         switchChain({ chainId: 1101 });
@@ -485,13 +491,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   return (
     <div className='bg-[#F7F7F9] w-full my-10'>
-      {
-        <PrivadoVerificationModal
-          isOpen={isPrivadoModalOpen}
-          onClose={closePrivadoModal}
-          showCloseButton={false}
-        />
-      }
+      {/* <PrivadoVerificationModal
+        isOpen={isPrivadoModalOpen}
+        onClose={closePrivadoModal}
+        showCloseButton={false}
+      /> */}
+      <GitcoinEligibilityModal
+        isOpen={showGitcoinModal}
+        onClose={() => setShowGitcoinModal(false)}
+      />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <EligibilityCheckToast />
@@ -552,7 +560,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   : formatAmount(
                       round(
                         parseFloat(inputAmount) *
-                          Number(activeRoundDetails?.tokenPrice),
+                          Number(activeRoundDetails?.tokenPrice || 1),
                       ),
                     )}
               </span>
@@ -670,7 +678,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected || buttonDisabled}
+              disabled={!isConnected || donateDisabled}
               loading={isConfirming}
               color={ButtonColor.Giv}
               className={`text-white justify-center ${
