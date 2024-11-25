@@ -126,7 +126,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(!isVerified);
+  const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(false);
   const openPrivadoModal = () => setPrivadoModalOpen(true);
   const closePrivadoModal = () => setPrivadoModalOpen(false);
   const [donationId, setDonationId] = useState<number>(0);
@@ -375,12 +375,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
       return;
     }
-    if (!isVerified) {
-      openPrivadoModal();
-
-      console.log('User is not verified with Privado ID');
-      return;
-    }
+    // if (!isVerified) {
+    //   openPrivadoModal();
+    //   console.log('User is not verified with Privado ID');
+    //   return;
+    // }
 
     if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
       console.log('The minimum donation amount is 5.');
