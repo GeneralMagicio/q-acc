@@ -27,9 +27,9 @@ export interface IGivethUser {
 export interface IProjectUserDonationCapKyc {
   qAccCap: number;
   gitcoinPassport: {
-    unusedCapped: number;
+    unusedCap: number;
   };
   zkId: {
-    unusedCapped: number;
+    unusedCap: number;
   };
 }
