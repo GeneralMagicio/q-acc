@@ -42,7 +42,6 @@ import {
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
@@ -50,6 +49,7 @@ import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
 import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
+import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -140,13 +140,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   useEffect(() => {
     const getDonationCap: any = async () => {
       if (projectData?.id) {
-        const cap = await fetchProjectUserDonationCap(Number(projectData?.id));
+        const userCapp = await fetchProjectUserDonationCapKyc(
+          Number(projectData?.id),
+        );
+        const { qAccCap } = userCapp || {};
         const res = remainingDonationAmount / 2 - 1;
         if (progress >= 90) {
           console.log('Res', res, progress);
-          setUserDonationCap(Math.min(res, Number(cap)));
+          setUserDonationCap(Math.min(res, Number(qAccCap)));
         } else {
-          setUserDonationCap(floor(Number(cap)) || 0);
+          setUserDonationCap(floor(Number(qAccCap)) || 0);
         }
       }
     };
