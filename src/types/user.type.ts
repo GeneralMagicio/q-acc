@@ -23,3 +23,13 @@ export interface IGivethUser {
   email: string;
   avatar: string;
 }
+
+export interface IProjectUserDonationCapKyc {
+  qAccCap: number;
+  gitcoinPassport: {
+    unusedCapped: number;
+  };
+  zkId: {
+    unusedCapped: number;
+  };
+}
