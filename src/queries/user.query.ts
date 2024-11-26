@@ -140,3 +140,17 @@ export const PROJECT_USER_DONATION_CAP = `
     projectUserDonationCap(projectId: $projectId)   
   }
 `;
+
+export const PROJECT_USER_DONATION_CAP_KYC = `
+  query UserCaps($projectId: Int!) {
+    userCaps(projectId: $projectId) {
+      qAccCap
+      gitcoinPassport {
+        unusedCap
+      }
+      zkId {
+        unusedCap
+      }
+    }
+  }
+`;
