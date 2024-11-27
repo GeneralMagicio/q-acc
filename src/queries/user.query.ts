@@ -154,3 +154,23 @@ export const PROJECT_USER_DONATION_CAP_KYC = `
     }
   }
 `;
+
+export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
+    refreshUserScores(address: $address) {
+      id
+      firstName
+      lastName
+      name
+      email
+      avatar
+      walletAddress
+      url
+      location
+      likedProjectsCount
+      donationsCount
+      projectsCount
+      passportScore
+      passportStamps
+      analysisScore
+    }
+  }`;
