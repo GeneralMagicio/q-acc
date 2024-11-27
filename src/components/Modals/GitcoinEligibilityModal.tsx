@@ -50,7 +50,7 @@ export const GitcoinEligibilityModal: FC<
               setUserGitcoinScore(_score || 0);
               if (_score !== undefined) {
                 setState(
-                  _score > config.GITCOIN_SCORE_THRESHOLD
+                  _score > config.GP_ANALYSIS_SCORE_THRESHOLD
                     ? GitcoinEligibilityModalState.ELIGIBLE
                     : GitcoinEligibilityModalState.NOT_ELIGIBLE,
                 );
@@ -85,7 +85,7 @@ export const GitcoinEligibilityModal: FC<
           <div className='flex flex-col'>
             <EligibilityBadge
               status={
-                userGitcoinScore > config.GITCOIN_SCORE_THRESHOLD
+                userGitcoinScore > config.GP_ANALYSIS_SCORE_THRESHOLD
                   ? EligibilityBadgeStatus.ELIGIBLE
                   : EligibilityBadgeStatus.NOT_ELIGIBLE
               }
@@ -97,7 +97,7 @@ export const GitcoinEligibilityModal: FC<
                 <div>Required Passport score to be eligible</div>
                 <div>
                   {' >'}
-                  {config.GITCOIN_SCORE_THRESHOLD}
+                  {config.GP_ANALYSIS_SCORE_THRESHOLD}
                 </div>
               </div>
               <div className='bg-gray-50 mt-2 rounded-xl p-4 text-base text-black flex items-center justify-between'>
