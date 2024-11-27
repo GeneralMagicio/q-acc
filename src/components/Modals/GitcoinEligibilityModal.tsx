@@ -20,7 +20,6 @@ export const GitcoinEligibilityModal: FC<
   GitcoinEligibilityModalProps
 > = props => {
   const [state, setState] = useState(GitcoinEligibilityModalState.CHECK);
-  const userGitcoinScore = 7.0;
   const {
     data: userScore,
     refetch,
@@ -70,7 +69,7 @@ export const GitcoinEligibilityModal: FC<
           <div className='flex flex-col'>
             <EligibilityBadge
               status={
-                userGitcoinScore > config.GITCOIN_SCORE_THRESHOLD
+                userScore. > config.GITCOIN_SCORE_THRESHOLD
                   ? EligibilityBadgeStatus.ELIGIBLE
                   : EligibilityBadgeStatus.NOT_ELIGIBLE
               }
@@ -88,7 +87,7 @@ export const GitcoinEligibilityModal: FC<
               <div className='bg-gray-50 mt-2 rounded-xl p-4 text-base text-black flex items-center justify-between'>
                 Your Passport Score
                 <div className='bg-black text-white py-2 px-6 rounded-full'>
-                  {userGitcoinScore}
+                  {userScore.}
                 </div>
               </div>
             </div>
