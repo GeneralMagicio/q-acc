@@ -6,6 +6,7 @@ import Routes from '@/lib/constants/Routes';
 import { usePrivado } from '@/hooks/usePrivado';
 import { PrivadoModal } from '@/components/Modals/PrivadoModal';
 import { GitcoinVerifySection } from './GitcoinVerifySection';
+import { ZkidVerifySection } from './ZkidVerifySection';
 
 interface IVerified {
   isVerified: boolean;
@@ -77,6 +78,7 @@ const GetVerified = () => {
             per-person and per-project.
           </p>
           <GitcoinVerifySection />
+          <ZkidVerifySection />
         </div>
       </form>
       {showPrivadoModal && (
