@@ -50,6 +50,7 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
 import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
+import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -102,6 +103,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
+  const [userUnusedCapOnGP, setUserUnusedCapOnGP] = useState(0);
   const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
     null,
   );
@@ -130,6 +132,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const closeShareModal = () => setIsShareModalOpen(false);
 
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
+  const [showZkidModal, setShowZkidModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
 
@@ -143,7 +146,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         const userCapp = await fetchProjectUserDonationCapKyc(
           Number(projectData?.id),
         );
-        const { qAccCap } = userCapp || {};
+        const { qAccCap, gitcoinPassport } = userCapp || {};
+        setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
         const res = remainingDonationAmount / 2 - 1;
         if (progress >= 90) {
           console.log('Res', res, progress);
@@ -370,11 +374,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
-    const _usdAmount =
-      Number(activeRoundDetails?.tokenPrice || 1) * parseFloat(inputAmount);
-    if (_usdAmount <= 1000) {
-      setShowGitcoinModal(true);
-      return;
+    console.log('isVerified', isVerified);
+    if (!isVerified) {
+      if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        setShowZkidModal(true);
+      } else {
+        setShowGitcoinModal(true);
+      }
     }
     if (chain?.id !== SUPPORTED_CHAIN.id) {
       {
@@ -496,6 +502,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       <GitcoinEligibilityModal
         isOpen={showGitcoinModal}
         onClose={() => setShowGitcoinModal(false)}
+      />
+      <ZkidEligibilityModal
+        isOpen={showZkidModal}
+        onClose={() => setShowZkidModal(false)}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
