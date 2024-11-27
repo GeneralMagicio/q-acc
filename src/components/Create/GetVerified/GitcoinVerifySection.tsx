@@ -1,33 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import links from '@/lib/constants/links';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
-import { useFetchUser } from '@/hooks/useFetchUser';
-import { useFetchUserGitcoinPassportScore } from '@/hooks/userFetchUserGitcoinPassportScore';
-import config from '@/config/configuration';
+
 import {
   EligibilityBadge,
   EligibilityBadgeStatus,
 } from '@/components/EligibilityBadge';
-
-enum GitcoinVerificationStatus {
-  NOT_CHECKED,
-  ANALYSIS_PASS,
-  SCORER_PASS,
-  LOW_SCORE,
-}
+import {
+  GitcoinVerificationStatus,
+  useGitcoinScore,
+} from '@/hooks/useGitcoinScore';
 
 export const GitcoinVerifySection = () => {
-  const [status, setStatus] = useState(GitcoinVerificationStatus.NOT_CHECKED);
-  const { data: user, isLoading: isUserLoading, isSuccess } = useFetchUser();
-  const { refetch: refetchScore, isLoading: isLoadingScore } =
-    useFetchUserGitcoinPassportScore();
-
-  useEffect(() => {
-    if (!isSuccess) return;
-    if ((user?.analysisScore || 0) > config.GP_ANALYSIS_SCORE_THRESHOLD) {
-      setStatus(GitcoinVerificationStatus.ANALYSIS_PASS);
-    }
-  }, [isSuccess, user?.analysisScore, user?.passportScore]);
+  const { status, onCheckScore, isUserLoading, isScoreLoading } =
+    useGitcoinScore();
 
   return status === GitcoinVerificationStatus.ANALYSIS_PASS ? (
     <section className='bg-gray-100 rounded-2xl p-6 flex gap-4 justify-between'>
@@ -53,6 +38,7 @@ export const GitcoinVerifySection = () => {
         color={ButtonColor.Pink}
         className='mr-auto px-16'
         loading={isUserLoading}
+        onClick={onCheckScore}
       >
         Check Score
       </Button>
