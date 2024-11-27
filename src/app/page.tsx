@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation';
 import { Banner } from '@/components/Banner';
 import Collaborator from '@/components/Collaborator';
 import { FeaturedProjects } from '@/components/FeaturedProjects';
-import About from '@/components/About';
 import { RoundInfoBanner } from '@/components/RoundInfoBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
@@ -423,7 +422,7 @@ export default function Home() {
         </>
       )}
 
-      <About />
+      {/* <About /> */}
       <br />
       {isEarlyAccessBranch ? <FeaturedProjects /> : ''}
       <Collaborator />
