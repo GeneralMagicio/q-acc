@@ -33,3 +33,15 @@ export interface IProjectUserDonationCapKyc {
     unusedCap: number;
   };
 }
+
+export interface IUserFullInfo extends IGivethUser {
+  walletAddress: string;
+  url: string;
+  location: string;
+  likedProjectsCount: number;
+  donationsCount: number;
+  projectsCount: number;
+  passportScore: number;
+  passportStamps: number;
+  analysisScore: number;
+}
