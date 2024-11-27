@@ -17,7 +17,7 @@ interface IVerified {
   isVerified: boolean;
   error: boolean;
 }
-const VerifyPrivado = () => {
+const GetVerified = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const router = useRouter();
   const { isVerified, error, isLoading } = usePrivado();
@@ -276,4 +276,4 @@ const VerifyPrivado = () => {
   );
 };
 
-export default VerifyPrivado;
+export default GetVerified;
