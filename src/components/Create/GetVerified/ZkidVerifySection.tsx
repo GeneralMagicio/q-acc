@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import links from '@/lib/constants/links';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
+import { IconArrowRight } from '@/components/Icons/IconArrowRight';
+import { usePrivado } from '@/hooks/usePrivado';
+import { PrivadoModal } from '@/components/Modals/PrivadoModal';
 
 export const ZkidVerifySection = () => {
+  const [showPrivadoModal, setShowPrivadoModal] = useState(false);
+  const { isVerified, error, isLoading } = usePrivado();
   return (
     <section className='bg-gray-100 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Privado zkID</h1>
@@ -20,11 +25,24 @@ export const ZkidVerifySection = () => {
       </p>
       <Button
         styleType={ButtonStyle.Solid}
-        color={ButtonColor.Pink}
+        color={ButtonColor.Base}
         className='mr-auto px-16'
+        loading={isLoading}
+        onClick={() => {
+          setShowPrivadoModal(true);
+        }}
       >
-        Check Score
+        Go to Privado
+        <IconArrowRight size={16} />
       </Button>
+      {showPrivadoModal && (
+        <PrivadoModal
+          isOpen={showPrivadoModal}
+          onClose={() => {
+            setShowPrivadoModal(false);
+          }}
+        />
+      )}
     </section>
   );
 };
