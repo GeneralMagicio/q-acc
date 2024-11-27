@@ -15,7 +15,8 @@ import { getMostRecentEndRound } from '@/helpers/round';
 import links from '@/lib/constants/links';
 import { QaccProjects } from '@/components/QaccProjects';
 import CreateAccount from '@/components/CreateAccount';
-import QaccRoundCounter from '@/components/QaccRoundCounter';
+import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
+import { OnBoardButton } from '@/components/OnBoardButton';
 
 const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -355,89 +356,58 @@ export default function Home() {
           </div>
         ) : (
           <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-            {/* Heading */}
+            <NotStartedRoundBanner />
             <div className='flex flex-col gap-6'>
               <h1 className='text-5xl text-gray-900 font-bold mt-10'>
-                The q/acc round is starting soon, and you’ll want IN!
+                Welcome to q/acc Season 1
               </h1>
               <div className='leading-9 text-[#4F576A]'>
                 <p>
-                  Get involved with these innovative web3 projects at the
-                  earliest stage of their token economies.
+                  The Web3 frontier is advancing rapidly, led by innovators
+                  rewriting the rules of the digital world. Among them, the
+                  <b className='font-extrabold'>
+                    {' '}
+                    Season 1 Quadratic Accelerator Cohort{' '}
+                  </b>
+                  stands out—featuring startups with visionary founders, real
+                  token utility, and product market fit. These are the
+                  trailblazers of tomorrow, building the foundation for Web3’s
+                  inevitable mainstream adoption.
                 </p>
+                <br />
                 <p>
-                  Create an account now - zkID verification can take up to 24
-                  hours.
+                  Inaccessible opportunities dominated by insiders, costly
+                  exchange listings, and token allocations that favor a select
+                  few is still the dominant playbook. These barriers make it
+                  difficult for everyday supporters to participate meaningfully.
+                  Quadratic Acceleration challenges this status quo.
+                </p>
+                <br />
+                <p>
+                  This is your chance to support these rising stars from the
+                  ground floor—at the very start of their token economies. It
+                  empowers you to align with bold, forward-thinking startups at
+                  the critical early stage, where your support can make the
+                  greatest impact. 
+                </p>
+                <br />
+                <p>
+                  Step into the future with Quadratic Accelerator and seize your
+                  opportunity to support Web3’s most innovative projects.
                 </p>
               </div>
-
-              <QaccRoundCounter />
-            </div>
-
-            {/* Why qacc */}
-
-            <div className='flex flex-col p-6 gap-6 rounded-2xl bg-[#F7F7F9] z-40'>
-              <h1 className='text-gray-800 text-2xl font-bold'>
-                🙋 Why q/acc?
-              </h1>
-              <div>
-                <p>
-                  The current approach to token launches often sidelines the
-                  community, leaving you out of the action. With the q/acc
-                  protocol, that changes. Now, you can participate at the very
-                  earliest stage of a web3 startup’s token economy, gaining a
-                  stake in these projects’ success and direct access to their
-                  teams. 
-                </p>
-                <p>
-                  It’s a win for you, a win for web3 builders, and a boost for
-                  the Polygon zkEVM ecosystem.
-                </p>
-              </div>
-
-              <div className='flex justify-center rounded-md  mx-auto w-[90%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
-                <iframe
-                  className='w-full'
-                  src='https://www.youtube.com/embed/m30ElzaR--4'
-                  title='Quadratic Acceleration (q/acc): The Future of Tokenization'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                  allowFullScreen={true}
-                ></iframe>
+              <div className='flex flex-col gap-6 md:flex-row justify-center items-center mt-10'>
+                <OnBoardButton />
               </div>
             </div>
-
-            {/* Whats a Qacc Round */}
-
-            <div className='flex flex-col p-6 gap-6 rounded-2xl bg-[#F7F7F9] z-40 '>
-              <h1 className='text-gray-800 text-2xl font-bold'>
-                ⌛ What’s a q/acc round?
-              </h1>
-              <div className='text-[#4F576A] font-redHatText'>
-                <p>
-                  The q/acc round is open for only two weeks, giving you the
-                  chance to support these projects at the very start of their
-                  token economies. At the end of the round, you receive tokens
-                  for the projects you have supported.
-                </p>
-                <p className='mb-10'>
-                  Additionally, your support provides a signal for the Quadratic
-                  Funding (QF) allocation of a Matching Pool. The funds from
-                  this pool are then used to provision liquidity for these
-                  projects on our partner DEX, QuickSwap. After the q/acc round
-                  ends, anyone can acquire the project’s tokens on QuickSwap.
-                </p>
-                <p className=' italic'>
-                  * If you are from an Anti-Money Laundering (AML) listed
-                  country or from the US or UK, you will not be able to
-                  participate in the q/acc round. Zero-knowledge ID (zkID) is
-                  used to comply with AML, and to restrict the US and UK for
-                  regulatory reasons. It also mitigates Sybil attacks during the
-                  q/acc rounds, ensuring a fair launch, as well as protecting
-                  the projects and their supporters. When you create your q/acc
-                  account, you will be prompted to complete zkID with our
-                  identity partner, Privado.
-                </p>
-              </div>
+            <div className='flex justify-center rounded-md  mx-auto w-[90%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
+              <iframe
+                className='w-full'
+                src='https://www.youtube.com/embed/m30ElzaR--4'
+                title='Quadratic Acceleration (q/acc): The Future of Tokenization'
+                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                allowFullScreen={true}
+              ></iframe>
             </div>
           </div>
         )}
