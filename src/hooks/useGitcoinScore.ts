@@ -12,6 +12,7 @@ export enum GitcoinVerificationStatus {
 
 export const useGitcoinScore = () => {
   const [status, setStatus] = useState(GitcoinVerificationStatus.NOT_CHECKED);
+  const [userGitcoinScore, setUserGitcoinScore] = useState(0);
   const { data: user, isLoading: isUserLoading, isSuccess } = useFetchUser();
   const { refetch: refetchScore, isFetching: isScoreFetching } =
     useFetchUserGitcoinPassportScore();
@@ -20,6 +21,7 @@ export const useGitcoinScore = () => {
     if (!isSuccess) return;
     const _analysisScore = user?.analysisScore || 0;
     const _passportScore = user?.passportScore || 0;
+    setUserGitcoinScore(_passportScore);
     if (_analysisScore >= config.GP_ANALYSIS_SCORE_THRESHOLD) {
       setStatus(GitcoinVerificationStatus.ANALYSIS_PASS);
       return;
@@ -33,6 +35,7 @@ export const useGitcoinScore = () => {
     const res = await refetchScore();
     const _analysisScore = res.data?.analysisScore || 0;
     const _passportScore = res.data?.passportScore || 0;
+    setUserGitcoinScore(_passportScore);
     if (_analysisScore >= config.GP_ANALYSIS_SCORE_THRESHOLD) {
       setStatus(GitcoinVerificationStatus.ANALYSIS_PASS);
       return;
@@ -44,5 +47,11 @@ export const useGitcoinScore = () => {
     }
   };
 
-  return { status, onCheckScore, isUserLoading, isScoreFetching };
+  return {
+    status,
+    userGitcoinScore,
+    onCheckScore,
+    isUserLoading,
+    isScoreFetching,
+  };
 };
