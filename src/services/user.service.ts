@@ -12,7 +12,6 @@ import type {
   IUser,
   IGivethUser,
   IProjectUserDonationCapKyc,
-  IUserFullInfo,
 } from '@/types/user.type';
 
 export const fetchUserInfo = async (address: Address) => {
@@ -70,7 +69,7 @@ export const fetchProjectUserDonationCapKyc = async (projectId: Number) => {
 
 export const refreshUserGitcoinPassportScore = async (address: Address) => {
   try {
-    const res = await requestGraphQL<{ refreshUserScores: IUserFullInfo }>(
+    const res = await requestGraphQL<{ refreshUserScores: IUser }>(
       REFRESH_USER_GITCOIN_PASSPORT_SCORE,
       { address },
       {
