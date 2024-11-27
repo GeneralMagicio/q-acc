@@ -13,12 +13,12 @@ export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, error, isLoading } = usePrivado();
   return isVerified ? (
-    <section className='bg-gray-100 rounded-2xl p-6 flex gap-4 justify-between'>
+    <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <h1 className='text-lg font-bold'>Privado zkID</h1>
       <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
     </section>
   ) : (
-    <section className='bg-gray-100 rounded-2xl p-6 flex flex-col gap-4'>
+    <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Privado zkID</h1>
       <p>
         Get your credentials and check your status. Read the&nbsp;
