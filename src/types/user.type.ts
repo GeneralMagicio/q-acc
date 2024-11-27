@@ -13,6 +13,15 @@ export interface IUser {
   isSignedIn: boolean;
   privadoVerified: boolean;
   acceptedToS: boolean;
+  walletAddress?: string;
+  url?: string;
+  location?: string;
+  likedProjectsCount?: number;
+  donationsCount?: number;
+  projectsCount?: number;
+  passportScore?: number;
+  passportStamps?: number;
+  analysisScore?: number;
 }
 
 export interface IGivethUser {
