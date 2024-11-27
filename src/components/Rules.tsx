@@ -1,46 +1,70 @@
 import React from 'react';
 
+// const boldClass: HTMLAttributes<HTMLDivElement>['className'] = 'font-';
+
 const Rules = () => {
   return (
     <div className='bg-white py-12'>
       <div className='container'>
         <h1 className='text-2xl text-black font-bold'>What you need to know</h1>
         <ol className='list-decimal text-lg text-gray-600 px-4'>
-          <li>The q/acc round lasts only two weeks.</li>
+          <li>
+            The q/acc round lasts{' '}
+            <b className='font-extrabold'>only two weeks</b>.
+          </li>
           <li>
             At the end of the round, you will receive tokens from the projects
-            you supported. These tokens have a 1 year unlock schedule with a
-            6-month cliff.
+            you supported. These tokens have a
+            <b className='font-extrabold'>
+              {' '}
+              1 year unlock schedule with a 6-month cliff
+            </b>
+            .
           </li>
           <li>
             The q/acc protocol prohibits citizens of the United States and
-            United Kingdom from participating due to regulatory reasons.
+            <b className='font-extrabold'>
+              {' '}
+              United Kingdom from participating due to regulatory reasons.
+            </b>
           </li>
           <li>
-            The q/acc protocol prohibits citizens from Afghanistan, American
-            Samoa, Anguilla, Antigua and Barbuda, Belarus, Bosnia Herzegovina,
-            Central African Republic, Cuba, DR Congo, Ethiopia, Fiji, Guam, Hong
-            Kong, Iran, Iraq, Kosovo, Lebanon, Libya, Mali, Montenegro, Myanmar,
-            Nicaragua, North Korea, North Macedonia, Palau, Panama, Russia,
-            Samoa, Serbia, Somalia, South Sudan, Sudan, Syria, Ukraine, US
-            Virgin Islands, Vanuatu, Venezuela, Yemen from participating due to
-            AML compliance.
-          </li>
-          <li>The q/acc protocol uses Privado zkID and Gitcoin Passport.</li>
-          <li>
-            There is a low cap and a high cap. The low cap is approximately 1K
-            USD denominated in POL and requires Gitcoin Passport. Above that
-            amount, zkID is required up until the high cap, which is
-            approximately 15K USD denominated in POL. Caps are per-person and
-            per-project.
+            The q/acc protocol prohibits citizens from{' '}
+            <b className='font-extrabold'>
+              Afghanistan, American Samoa, Anguilla, Antigua and Barbuda,
+              Belarus, Bosnia Herzegovina, Central African Republic, Cuba, DR
+              Congo, Ethiopia, Fiji, Guam, Hong Kong, Iran, Iraq, Kosovo,
+              Lebanon, Libya, Mali, Montenegro, Myanmar, Nicaragua, North Korea,
+              North Macedonia, Palau, Panama, Russia, Samoa, Serbia, Somalia,
+              South Sudan, Sudan, Syria, Ukraine, US Virgin Islands, Vanuatu,
+              Venezuela, Yemen
+            </b>{' '}
+            from participating due to AML compliance.
           </li>
           <li>
-            To check and improve your Gitcoin Passport score, go to
+            The q/acc protocol uses{' '}
+            <b className='font-extrabold'>Privado zkID and Gitcoin Passport</b>.
+          </li>
+          <li>
+            There is a low cap and a high cap. The low cap is approximately{' '}
+            <b className='font-extrabold'>1K USD denominated in POL</b> and
+            requires <b className='font-extrabold'>Gitcoin Passport</b>. Above
+            that amount, <b className='font-extrabold'>zkID is required up</b>{' '}
+            until the high cap, which is{' '}
+            <b className='font-extrabold'>
+              approximately 15K USD denominated in POL
+            </b>
+            . Caps are per-person and per-project.
+          </li>
+          <li>
+            To check and improve your{' '}
+            <b className='font-extrabold'>Gitcoin Passport score</b>, go to
             passport.xyz.
           </li>
           <li>
-            To get credentials with Privado zkID, read the Privado zkID how-to
-            guide.
+            To get credentials with{' '}
+            <b className='font-extrabold'>Privado zkID</b>, read the Privado
+            zkID how-to guide.
           </li>
           <li>
             There is also a how-to guide on getting your Polygon zkEVM wallet
