@@ -29,7 +29,7 @@ const config: EnvConfig = {
       'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
     method: PrivadoContractMethodV1,
   },
-  GP_ANALYSIS_SCORE_THRESHOLD: 50,
+  GP_ANALYSIS_SCORE_THRESHOLD: 500,
   GP_SCORER_SCORE_THRESHOLD: 15,
 };
 

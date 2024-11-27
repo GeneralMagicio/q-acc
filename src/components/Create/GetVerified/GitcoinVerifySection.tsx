@@ -11,7 +11,7 @@ import {
 } from '@/hooks/useGitcoinScore';
 
 export const GitcoinVerifySection = () => {
-  const { status, onCheckScore, isUserLoading, isScoreLoading } =
+  const { status, onCheckScore, isUserLoading, isScoreFetching } =
     useGitcoinScore();
 
   return status === GitcoinVerificationStatus.ANALYSIS_PASS ? (
@@ -37,7 +37,7 @@ export const GitcoinVerifySection = () => {
         styleType={ButtonStyle.Solid}
         color={ButtonColor.Pink}
         className='mr-auto px-16'
-        loading={isUserLoading}
+        loading={isUserLoading || isScoreFetching}
         onClick={onCheckScore}
       >
         Check Score

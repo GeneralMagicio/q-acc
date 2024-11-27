@@ -13,7 +13,7 @@ export enum GitcoinVerificationStatus {
 export const useGitcoinScore = () => {
   const [status, setStatus] = useState(GitcoinVerificationStatus.NOT_CHECKED);
   const { data: user, isLoading: isUserLoading, isSuccess } = useFetchUser();
-  const { refetch: refetchScore, isLoading: isScoreLoading } =
+  const { refetch: refetchScore, isFetching: isScoreFetching } =
     useFetchUserGitcoinPassportScore();
 
   useEffect(() => {
@@ -44,5 +44,5 @@ export const useGitcoinScore = () => {
     }
   };
 
-  return { status, onCheckScore, isUserLoading, isScoreLoading };
+  return { status, onCheckScore, isUserLoading, isScoreFetching };
 };
