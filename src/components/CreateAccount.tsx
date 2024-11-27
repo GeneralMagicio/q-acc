@@ -1,15 +1,8 @@
-import Link from 'next/link';
 import React from 'react';
-import { usePrivado } from '@/hooks/usePrivado';
 import links from '@/lib/constants/links';
-import { customButtonClass } from './QaccRoundCounter';
-import Routes from '@/lib/constants/Routes';
-import { useFetchUser } from '@/hooks/useFetchUser';
+import { OnBoardButton } from './OnBoardButton';
 
 const CreateAccount = () => {
-  const { isVerified } = usePrivado();
-  const { data: user } = useFetchUser();
-
   return (
     <div className='bg-white'>
       <div className='container p-6'>
@@ -49,7 +42,7 @@ const CreateAccount = () => {
                 <strong className='font-bold text-[#4F576A]'>
                   Get ready on Polygon zkEVM. 
                 </strong>{' '}
-                Make sure you have everything set up on Polygon zkEVM. You can
+                Make sure you have everything set up on Polygon zkEVM. You csan
                 only support projects with $POL, and you will also need a little
                 $ETH for gas on Polygon zkEVM. For assistance, read this{' '}
                 <span className='text-pink-500 font-bold'>
@@ -65,19 +58,7 @@ const CreateAccount = () => {
           </div>
 
           <div className='flex justify-center p-6'>
-            {isVerified ? (
-              <Link href={Routes.Projects}>
-                <div className={customButtonClass}>View Projects</div>
-              </Link>
-            ) : (
-              <Link
-                href={
-                  user?.fullName ? Routes.VerifyPrivado : Routes.CreateProfile
-                }
-              >
-                <div className={customButtonClass}>Get Verified</div>
-              </Link>
-            )}
+            <OnBoardButton />
           </div>
 
           <div className='flex  text-center '>
