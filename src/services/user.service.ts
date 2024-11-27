@@ -5,6 +5,7 @@ import {
   GET_GIVETH_USER_BY_ADDRESS,
   PROJECT_USER_DONATION_CAP,
   PROJECT_USER_DONATION_CAP_KYC,
+  REFRESH_USER_GITCOIN_PASSPORT_SCORE,
 } from '../queries/user.query';
 import config from '@/config/configuration';
 import type {
@@ -61,6 +62,21 @@ export const fetchProjectUserDonationCapKyc = async (projectId: Number) => {
       userCaps: IProjectUserDonationCapKyc;
     }>(PROJECT_USER_DONATION_CAP_KYC, { projectId }, { auth: true });
     return res?.userCaps;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const refreshUserGitcoinPassportScore = async (address: Address) => {
+  try {
+    const res = await requestGraphQL<{ refreshUserScores: IGivethUser }>(
+      REFRESH_USER_GITCOIN_PASSPORT_SCORE,
+      { address },
+      {
+        auth: true,
+      },
+    );
+    return res?.refreshUserScores;
   } catch (error) {
     console.error(error);
   }
