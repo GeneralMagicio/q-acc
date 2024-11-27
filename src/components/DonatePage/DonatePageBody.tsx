@@ -377,9 +377,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     console.log('isVerified', isVerified);
     if (!isVerified) {
       if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        console.log('User is not verified with Privado ID');
         setShowZkidModal(true);
-      } else {
+        return;
+      } else if (
+        (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
+        (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+      ) {
         setShowGitcoinModal(true);
+        console.log('User is not verified with Gitcoin passport');
+        return;
       }
     }
     if (chain?.id !== SUPPORTED_CHAIN.id) {
