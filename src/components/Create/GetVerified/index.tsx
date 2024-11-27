@@ -38,7 +38,7 @@ const GetVerified = () => {
         className=' mb-[60px] md:mb-[200px] mt-[60px]'
       >
         <CreateNavbar
-          title='Identity verification'
+          title='Get Verified'
           onBack={
             showBackButton
               ? e => {
