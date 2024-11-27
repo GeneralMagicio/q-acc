@@ -14,7 +14,7 @@ import Routes from '@/lib/constants/Routes';
 import { getMostRecentEndRound } from '@/helpers/round';
 import links from '@/lib/constants/links';
 import { QaccProjects } from '@/components/QaccProjects';
-import CreateAccount from '@/components/CreateAccount';
+import Rules from '@/components/Rules';
 import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 
@@ -417,7 +417,7 @@ export default function Home() {
           <div className='w-full h-8 bg-orange-300'></div>
           <QaccProjects />
           <br></br>
-          <CreateAccount />
+          <Rules />
           <div className='w-full h-8 bg-orange-300'></div>
           <br></br>
         </>
