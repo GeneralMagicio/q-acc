@@ -5,6 +5,7 @@ import CreateNavbar from '../CreateNavbar';
 import Routes from '@/lib/constants/Routes';
 import { usePrivado } from '@/hooks/usePrivado';
 import { PrivadoModal } from '@/components/Modals/PrivadoModal';
+import { GitcoinVerifySection } from './GitcoinVerifySection';
 
 interface IVerified {
   isVerified: boolean;
@@ -75,6 +76,7 @@ const GetVerified = () => {
             <b className='font-bold'>15K USD denominated in POL</b>. Caps are
             per-person and per-project.
           </p>
+          <GitcoinVerifySection />
         </div>
       </form>
       {showPrivadoModal && (
