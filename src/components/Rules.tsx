@@ -1,12 +1,15 @@
 import React from 'react';
 import links from '@/lib/constants/links';
+import { OnBoardButton } from './OnBoardButton';
 
 const Rules = () => {
   return (
     <div className='bg-white py-12'>
       <div className='container'>
-        <h1 className='text-2xl text-black font-bold'>What you need to know</h1>
-        <ol className='list-decimal text-lg text-gray-600 px-4'>
+        <h1 className='text-2xl text-black font-bold mb-8'>
+          What you need to know
+        </h1>
+        <ol className='list-decimal text-lg text-slate-600 px-4 space-y-3'>
           <li>
             The q/acc round lasts{' '}
             <b className='font-extrabold'>only two weeks</b>.
@@ -91,6 +94,9 @@ const Rules = () => {
             </a>
           </li>
         </ol>
+        <div className='flex flex-col gap-6 md:flex-row justify-center items-center mt-12'>
+          <OnBoardButton />
+        </div>
       </div>
     </div>
   );
