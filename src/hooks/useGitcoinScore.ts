@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useFetchUser } from './useFetchUser';
 import { useFetchUserGitcoinPassportScore } from './userFetchUserGitcoinPassportScore';
 import config from '@/config/configuration';
@@ -31,7 +31,7 @@ export const useGitcoinScore = () => {
     }
   }, [isSuccess, user?.analysisScore, user?.passportScore]);
 
-  const onCheckScore = async () => {
+  const onCheckScore = useCallback(async () => {
     const res = await refetchScore();
     const _analysisScore = res.data?.analysisScore || 0;
     const _passportScore = res.data?.passportScore || 0;
@@ -45,7 +45,7 @@ export const useGitcoinScore = () => {
     } else {
       setStatus(GitcoinVerificationStatus.LOW_SCORE);
     }
-  };
+  }, []);
 
   return {
     status,
