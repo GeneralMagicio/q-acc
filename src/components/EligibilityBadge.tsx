@@ -26,7 +26,7 @@ const data: {
     icon: <IconCheckCircleFilled />,
   },
   [EligibilityBadgeStatus.NOT_ELIGIBLE]: {
-    label: 'Not Eligible',
+    label: 'Score Too Low',
     color: 'text-amber-500',
     bgColor: 'bg-orange-100',
   },
