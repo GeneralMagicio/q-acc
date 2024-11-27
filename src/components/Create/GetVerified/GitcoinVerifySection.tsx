@@ -4,6 +4,10 @@ import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchUserGitcoinPassportScore } from '@/hooks/userFetchUserGitcoinPassportScore';
 import config from '@/config/configuration';
+import {
+  EligibilityBadge,
+  EligibilityBadgeStatus,
+} from '@/components/EligibilityBadge';
 
 enum GitcoinVerificationStatus {
   NOT_CHECKED,
@@ -25,7 +29,12 @@ export const GitcoinVerifySection = () => {
     }
   }, [isSuccess, user?.analysisScore, user?.passportScore]);
 
-  return (
+  return status === GitcoinVerificationStatus.ANALYSIS_PASS ? (
+    <section className='bg-gray-100 rounded-2xl p-6 flex gap-4 justify-between'>
+      <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+      <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
+    </section>
+  ) : (
     <section className='bg-gray-100 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
       <p>
