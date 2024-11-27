@@ -5,6 +5,7 @@ import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
 import { IconInfoCircle } from '../Icons/IconInfoCircle';
 import { IconGitcoin } from '../Icons/IconGitcoin';
 import config from '@/config/configuration';
+import { useFetchUserGitcoinPassportScore } from '@/hooks/userFetchUserGitcoinPassportScore';
 
 interface GitcoinEligibilityModalProps extends BaseModalProps {}
 
@@ -18,8 +19,13 @@ enum GitcoinEligibilityModalState {
 export const GitcoinEligibilityModal: FC<
   GitcoinEligibilityModalProps
 > = props => {
-  const [state, setState] = useState(GitcoinEligibilityModalState.ELIGIBLE);
+  const [state, setState] = useState(GitcoinEligibilityModalState.CHECK);
   const userGitcoinScore = 7.0;
+  const {
+    data: userScore,
+    refetch,
+    isFetching,
+  } = useFetchUserGitcoinPassportScore();
   return (
     <Modal {...props} title='Eligibility Check' showCloseButton>
       <div className=''>
@@ -32,6 +38,11 @@ export const GitcoinEligibilityModal: FC<
             className='mx-auto'
             styleType={ButtonStyle.Solid}
             color={ButtonColor.Pink}
+            loading={isFetching}
+            onClick={async () => {
+              console.log('refetch');
+              await refetch();
+            }}
           >
             Check Eligibility
           </Button>
