@@ -412,15 +412,13 @@ export default function Home() {
           </div>
         )}
       </div>
-      {isEarlyAccessBranch ? (
-        ''
-      ) : (
+      {isEarlyAccessBranch ? null : (
         <>
-          <div className='w-full  h-[30px] bg-[#FBBA80]'></div>
+          <div className='w-full h-8 bg-orange-300'></div>
           <QaccProjects />
           <br></br>
           <CreateAccount />
-          <div className='w-full  h-[30px] bg-[#FBBA80]'></div>
+          <div className='w-full h-8 bg-orange-300'></div>
           <br></br>
         </>
       )}
