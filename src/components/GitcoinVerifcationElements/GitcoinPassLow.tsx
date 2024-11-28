@@ -4,6 +4,8 @@ import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
 import { IconGitcoin } from '../Icons/IconGitcoin';
 import { IconInfoCircle } from '../Icons/IconInfoCircle';
 import config from '@/config/configuration';
+import links from '@/lib/constants/links';
+import { IconExternalLink } from '../Icons/IconExternalLink';
 
 interface IGitcoinPassLowProps {
   userGitcoinScore: number;
@@ -39,6 +41,20 @@ export const GitcoinPassLow: FC<IGitcoinPassLowProps> = ({
             {userGitcoinScore}
           </div>
         </div>
+        {EligibilityBadgeStatus.NOT_ELIGIBLE && (
+          <a href={links.PASSPORT} target='_blank' referrerPolicy='no-referrer'>
+            <Button
+              styleType={ButtonStyle.Solid}
+              color={ButtonColor.Pink}
+              className='ml-auto mt-2'
+            >
+              <div className='flex items-center gap-1'>
+                Increase Score
+                <IconExternalLink size={16} />
+              </div>
+            </Button>
+          </a>
+        )}
       </div>
       <div className='flex justify-between items-center'>
         <div className='text-gray-800'>Passport connected</div>
