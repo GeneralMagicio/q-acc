@@ -90,7 +90,7 @@ export default function Home() {
             {isRoundEnded ? '' : <RoundInfoBanner />}
 
             <h1 className='text-5xl text-gray-900 font-bold my-6'>
-              Welcome to q/acc Season 1
+              Welcome to Quadratic Acceleration
             </h1>
             <div>
               {isRoundEnded ? (
@@ -359,7 +359,7 @@ export default function Home() {
             <NotStartedRoundBanner />
             <div className='flex flex-col gap-6'>
               <h1 className='text-5xl text-gray-900 font-bold mt-10'>
-                Welcome to q/acc Season 1
+                Welcome to Quadratic Acceleration
               </h1>
               <div className='leading-9 text-[#4F576A]'>
                 <p>
