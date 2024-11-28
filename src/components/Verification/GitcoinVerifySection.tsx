@@ -1,4 +1,3 @@
-import links from '@/lib/constants/links';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 
 import {
@@ -10,6 +9,7 @@ import {
   useGitcoinScore,
 } from '@/hooks/useGitcoinScore';
 import { GitcoinPassLow } from '@/components/GitcoinVerifcationElements/GitcoinPassLow';
+import { usePrivado } from '@/hooks/usePrivado';
 
 export const GitcoinVerifySection = () => {
   const {
@@ -19,44 +19,44 @@ export const GitcoinVerifySection = () => {
     isUserLoading,
     isScoreFetching,
   } = useGitcoinScore();
+  const { isVerified } = usePrivado();
 
   return status === GitcoinVerificationStatus.ANALYSIS_PASS ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
-      <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
+      {!isVerified && (
+        <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
+      )}
     </section>
   ) : (
-    <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
+    <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
       <p>
-        Check and improve your <b>Gitcoin Passport score</b> at{' '}
-        <a
-          href={links.PASSPORT}
-          target='_blank'
-          className='font-bold text-pink-500'
-          referrerPolicy='no-referrer'
-        >
-          &nbsp;app.passport.xyz
-        </a>
+        Verify your uniqueness with Gitcoin Passport to support each project
+        with up to $1000 USD denominated in POL.
       </p>
-      {status === GitcoinVerificationStatus.NOT_CHECKED ? (
-        <Button
-          styleType={ButtonStyle.Solid}
-          color={ButtonColor.Pink}
-          className='mr-auto px-16'
-          loading={isUserLoading || isScoreFetching}
-          onClick={onCheckScore}
-        >
-          Check Score
-        </Button>
-      ) : status === GitcoinVerificationStatus.SCORER_PASS ||
-        status === GitcoinVerificationStatus.LOW_SCORE ? (
-        <GitcoinPassLow
-          onCheckScore={onCheckScore}
-          userGitcoinScore={userGitcoinScore}
-          isScoreFetching={isScoreFetching}
-        />
-      ) : null}
+      {!isVerified &&
+        (status === GitcoinVerificationStatus.NOT_CHECKED ? (
+          <Button
+            styleType={ButtonStyle.Solid}
+            color={ButtonColor.Pink}
+            className='ml-auto px-16'
+            loading={isUserLoading || isScoreFetching}
+            onClick={onCheckScore}
+          >
+            Check Score
+          </Button>
+        ) : status === GitcoinVerificationStatus.SCORER_PASS ||
+          status === GitcoinVerificationStatus.LOW_SCORE ? (
+          <GitcoinPassLow
+            onCheckScore={onCheckScore}
+            userGitcoinScore={userGitcoinScore}
+            isScoreFetching={isScoreFetching}
+          />
+        ) : null)}
+      {isVerified && (
+        <div className='absolute top-0 left-0 right-0 bottom-0 z-10 bg-gray-50 opacity-60'></div>
+      )}
     </section>
   );
 };
