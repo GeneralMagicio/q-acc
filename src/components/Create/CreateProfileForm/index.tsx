@@ -50,8 +50,6 @@ const CreateProjectForm: FC = () => {
 
   const handleDrop = (name: string, file: File, ipfsHash: string) => {};
 
-  const verifyEmail = (e: any) => {};
-
   const onSubmit = async (data: ProfileFormData) => {
     const _user = {
       email: data.emailAddress,
@@ -76,7 +74,7 @@ const CreateProjectForm: FC = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          title='Create Your Profile'
+          title='Tell me about yourself'
           nextLabel={nextLabel}
           submitLabel={submitLabel}
           loading={isPending}
@@ -99,7 +97,7 @@ const CreateProjectForm: FC = () => {
               <div></div>
               <Input
                 name='emailAddress'
-                label='Email Address'
+                label='What is your email address?'
                 placeholder='Enter your email address'
                 // rules={{
                 //   required: 'Email Address is required',
