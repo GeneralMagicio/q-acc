@@ -161,7 +161,7 @@ export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
       id
       firstName
       lastName
-      name
+      fullName: name
       email
       avatar
       walletAddress
