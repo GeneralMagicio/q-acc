@@ -76,6 +76,9 @@ export const refreshUserGitcoinPassportScore = async (address: Address) => {
         auth: true,
       },
     );
+    if (res?.refreshUserScores) {
+      res.refreshUserScores.isSignedIn = true;
+    }
     return res?.refreshUserScores;
   } catch (error) {
     console.error(error);

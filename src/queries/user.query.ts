@@ -173,5 +173,7 @@ export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
       passportScore
       passportStamps
       analysisScore
+			privadoVerified
+      acceptedToS
     }
   }`;
