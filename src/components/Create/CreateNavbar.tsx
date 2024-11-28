@@ -11,6 +11,7 @@ interface CreateNavbarProps {
   submitLabel?: string;
   disabled?: boolean;
   loading?: boolean;
+  hideSubmit?: boolean;
 }
 const CreateNavbar: FC<CreateNavbarProps> = (props: CreateNavbarProps) => {
   const { isIntersecting, elementRef } = useIntersectionObserver(() => {}, {
@@ -53,6 +54,7 @@ const InnerCreateNavbar: FC<CreateNavbarProps> = ({
   submitLabel,
   disabled,
   loading,
+  hideSubmit = false,
 }) => {
   return (
     <>
@@ -85,18 +87,20 @@ const InnerCreateNavbar: FC<CreateNavbarProps> = ({
       </div>
       <div className='flex text-xs md:text-lg md:flex-row flex-col items-center gap-4'>
         {nextLabel && <span className='font-bold '>Next: {nextLabel}</span>}
-        <Button
-          className='p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center'
-          color={ButtonColor.Pink}
-          type='submit'
-          disabled={disabled ? true : false}
-          loading={loading}
-        >
-          {submitLabel}
-          {submitLabel == 'Save & continue' && (
-            <IconArrowRight color='#FFFFFF' />
-          )}
-        </Button>
+        {!hideSubmit && (
+          <Button
+            className='p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center'
+            color={ButtonColor.Pink}
+            type='submit'
+            disabled={disabled ? true : false}
+            loading={loading}
+          >
+            {submitLabel}
+            {submitLabel == 'Save & continue' && (
+              <IconArrowRight color='#FFFFFF' />
+            )}
+          </Button>
+        )}
       </div>
     </>
   );
