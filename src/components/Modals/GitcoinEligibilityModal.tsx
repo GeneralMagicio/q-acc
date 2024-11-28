@@ -48,6 +48,7 @@ export const GitcoinEligibilityModal: FC<
           <GitcoinPassLow
             onCheckScore={onCheckScore}
             userGitcoinScore={userGitcoinScore}
+            isScoreFetching={isScoreFetching}
           />
         )}
       </div>

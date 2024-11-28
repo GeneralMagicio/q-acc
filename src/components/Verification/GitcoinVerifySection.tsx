@@ -54,6 +54,7 @@ export const GitcoinVerifySection = () => {
         <GitcoinPassLow
           onCheckScore={onCheckScore}
           userGitcoinScore={userGitcoinScore}
+          isScoreFetching={isScoreFetching}
         />
       ) : null}
     </section>

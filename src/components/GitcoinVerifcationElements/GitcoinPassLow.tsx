@@ -9,11 +9,13 @@ import { IconExternalLink } from '../Icons/IconExternalLink';
 
 interface IGitcoinPassLowProps {
   userGitcoinScore: number;
+  isScoreFetching: boolean;
   onCheckScore: () => void;
 }
 
 export const GitcoinPassLow: FC<IGitcoinPassLowProps> = ({
   userGitcoinScore,
+  isScoreFetching,
   onCheckScore,
 }) => {
   return (
@@ -63,6 +65,7 @@ export const GitcoinPassLow: FC<IGitcoinPassLowProps> = ({
           color={ButtonColor.Pink}
           className='shadow-GIV400'
           onClick={onCheckScore}
+          loading={isScoreFetching}
         >
           <div className='flex gap-2'>
             <IconGitcoin size={16} />
