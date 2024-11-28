@@ -59,7 +59,7 @@ export const UserController = () => {
     // Check if user is whitelisted
 
     if (!!useWhitelist.data) {
-      const isUserCreatedProject = false;
+      const isUserCreatedProject = true;
       if (!isUserCreatedProject) {
         route.push(Routes.Create); //TODO: should we redirect or not
       }
