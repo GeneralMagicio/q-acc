@@ -98,7 +98,7 @@ const projects = [
       />
     ),
     slug: 'prismo-technology',
-    isLinkEnabled: false,
+    isLinkEnabled: true,
   },
   {
     name: 'x23.ai',
