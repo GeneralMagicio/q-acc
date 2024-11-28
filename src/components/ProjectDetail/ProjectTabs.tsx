@@ -24,7 +24,7 @@ const ProjectTabs = (props: IProjectTabs) => {
     ...(isEarlyAccessBranch
       ? [
           {
-            title: 'Supporters',
+            title: 'Transactions',
             badge: totalDonationsCount,
             query: EProjectPageTabs.DONATIONS,
           },

@@ -14,7 +14,7 @@ export const SignModal: FC<SignModalProps> = props => {
   const { refetch, isFetching } = useSignUser(props.onSign);
 
   return (
-    <Modal {...props} className='max-w-xl'>
+    <Modal {...props} className='max-w-xl' closeable={false}>
       <div className='p-10'>
         <h1 className='font-bold text-xl'>Connecting wallet</h1>
         <p className='mt-4 mb-10'>

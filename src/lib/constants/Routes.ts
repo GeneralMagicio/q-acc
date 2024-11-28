@@ -5,6 +5,7 @@ const Routes = {
   CreateProject: '/create/project',
   CreateTeam: '/create/team',
   VerifyPrivado: '/create/verify-privado',
+  GetVerified: '/create/get-verified',
   DashBoard: '/dashboard',
   AllProjects: '/projects',
   Projects: '/projects',

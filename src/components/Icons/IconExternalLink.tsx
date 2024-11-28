@@ -3,7 +3,7 @@ import { IIcon } from './type';
 
 export const IconExternalLink: FC<IIcon> = ({
   size = 12,
-  color = '#5326EC',
+  color = 'currentColor',
 }) => {
   return (
     <svg

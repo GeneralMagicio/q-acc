@@ -24,6 +24,11 @@ const nextConfig = {
         destination: '/zkid',
         permanent: true,
       },
+      {
+        source: '/create/verify-privado',
+        destination: '/create/get-verified',
+        permanent: true,
+      },
     ];
   },
   webpack: config => {

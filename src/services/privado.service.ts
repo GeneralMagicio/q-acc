@@ -68,8 +68,8 @@ export const generatePrivadoShortenedUrl = async () => {
     console.log('verificationRequest', verificationRequest);
 
     // Define the URLs for redirection
-    const backUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
-    const finishUrl = encodeURIComponent(`${baseUrl}/create/verify-privado`);
+    const backUrl = encodeURIComponent(`${baseUrl}/create/get-verified`);
+    const finishUrl = encodeURIComponent(`${baseUrl}/create/get-verified`);
 
     // Configure the Wallet URL (universal link)
     const walletUrlWithMessage = `${webWalletBaseUrl}/#request_uri=${shortenedUrl}&back_url=${backUrl}&finish_url=${finishUrl}`;

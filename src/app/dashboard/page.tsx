@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import DashboardIndex from '@/components/DonarDashboard/DashboardIndex';
 import { ConnectModal } from '@/components/ConnectModal';
 import { isProductReleased } from '@/config/configuration';
+
 import Routes from '@/lib/constants/Routes';
 
 const Dashboard = () => {

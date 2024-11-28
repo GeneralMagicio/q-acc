@@ -8,6 +8,7 @@ import {
   GET_PROJECT_BY_ID,
   GET_PROJECT_BY_SLUG,
   GET_PROJECT_BY_USER_ID,
+  GET_PROJECT_METADATA_BY_SLUG,
   GET_PROJECTS_COUNT_BY_USER_ID,
   UPDATE_PROJECT_BY_ID,
 } from '@/queries/project.query';
@@ -144,6 +145,24 @@ export const fetchProjectsCountByUserId = async (userId: number) => {
       },
     );
     return res?.projectsByUserId.totalCount;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProjectMetadata = async (slug: string, address?: Address) => {
+  try {
+    const res = await requestGraphQL<{ projectBySlug: any }>(
+      GET_PROJECT_METADATA_BY_SLUG,
+      {
+        slug,
+        address,
+      },
+      {
+        auth: true,
+      },
+    );
+    return res?.projectBySlug;
   } catch (error) {
     console.error(error);
   }

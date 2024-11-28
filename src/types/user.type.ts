@@ -13,6 +13,15 @@ export interface IUser {
   isSignedIn: boolean;
   privadoVerified: boolean;
   acceptedToS: boolean;
+  walletAddress?: string;
+  url?: string;
+  location?: string;
+  likedProjectsCount?: number;
+  donationsCount?: number;
+  projectsCount?: number;
+  passportScore?: number;
+  passportStamps?: number;
+  analysisScore?: number;
 }
 
 export interface IGivethUser {
@@ -22,4 +31,26 @@ export interface IGivethUser {
   name: string;
   email: string;
   avatar: string;
+}
+
+export interface IProjectUserDonationCapKyc {
+  qAccCap: number;
+  gitcoinPassport: {
+    unusedCap: number;
+  };
+  zkId: {
+    unusedCap: number;
+  };
+}
+
+export interface IUserFullInfo extends IGivethUser {
+  walletAddress: string;
+  url: string;
+  location: string;
+  likedProjectsCount: number;
+  donationsCount: number;
+  projectsCount: number;
+  passportScore: number;
+  passportStamps: number;
+  analysisScore: number;
 }

@@ -42,13 +42,17 @@ import {
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { fetchProjectUserDonationCap } from '@/services/user.service';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
-import { PrivadoVerificationModal } from '../Modals/PrivadoVerificationModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { EligibilityCheckToast } from './EligibilityCheckToast';
+import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
+import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
+import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
+
+const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
 interface ITokenSchedule {
   message: string;
@@ -99,6 +103,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [donateDisabled, setDonateDisabled] = useState(true);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
+  const [userUnusedCapOnGP, setUserUnusedCapOnGP] = useState(0);
   const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(
     null,
   );
@@ -126,11 +131,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  const [isPrivadoModalOpen, setPrivadoModalOpen] = useState(!isVerified);
-  const openPrivadoModal = () => setPrivadoModalOpen(true);
-  const closePrivadoModal = () => setPrivadoModalOpen(false);
+  const [showGitcoinModal, setShowGitcoinModal] = useState(false);
+  const [showZkidModal, setShowZkidModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const router = useRouter();
 
   const handleShare = () => {
@@ -140,13 +143,17 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   useEffect(() => {
     const getDonationCap: any = async () => {
       if (projectData?.id) {
-        const cap = await fetchProjectUserDonationCap(Number(projectData?.id));
+        const userCapp = await fetchProjectUserDonationCapKyc(
+          Number(projectData?.id),
+        );
+        const { qAccCap, gitcoinPassport } = userCapp || {};
+        setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
         const res = remainingDonationAmount / 2 - 1;
         if (progress >= 90) {
           console.log('Res', res, progress);
-          setUserDonationCap(Math.min(res, Number(cap)));
+          setUserDonationCap(Math.min(res, Number(qAccCap)));
         } else {
-          setUserDonationCap(floor(Number(cap)) || 0);
+          setUserDonationCap(floor(Number(qAccCap)) || 0);
         }
       }
     };
@@ -335,12 +342,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setFlashMessage('Error saving  donation : ' + error);
       setHash(undefined);
       setHasSavedDonation(false);
-      setButtonDisabled(false);
+      setDonateDisabled(false);
     }
   };
 
   const handleDonate = async () => {
-    setButtonDisabled(true);
+    setDonateDisabled(true);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -361,26 +368,40 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('Error creating donation');
       console.log(ContractFunctionExecutionError);
-      setButtonDisabled(false);
+      setDonateDisabled(false);
     }
   };
 
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
-    if (chain?.id !== 1101) {
+    console.log('isVerified', isVerified);
+    if (!isVerified) {
+      if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        console.log('User is not verified with Privado ID');
+        setShowZkidModal(true);
+        return;
+      } else if (
+        (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
+        (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+      ) {
+        setShowGitcoinModal(true);
+        console.log('User is not verified with Gitcoin passport');
+        return;
+      }
+    }
+    if (chain?.id !== SUPPORTED_CHAIN.id) {
       {
-        switchChain({ chainId: 1101 });
+        switchChain({ chainId: SUPPORTED_CHAIN.id });
       }
       console.log('chain', chain?.id);
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
       return;
     }
-    if (!isVerified) {
-      openPrivadoModal();
-
-      console.log('User is not verified with Privado ID');
-      return;
-    }
+    // if (!isVerified) {
+    //   openPrivadoModal();
+    //   console.log('User is not verified with Privado ID');
+    //   return;
+    // }
 
     if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
       console.log('The minimum donation amount is 5.');
@@ -485,24 +506,17 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   return (
     <div className='bg-[#F7F7F9] w-full my-10'>
-      {
-        <PrivadoVerificationModal
-          isOpen={isPrivadoModalOpen}
-          onClose={closePrivadoModal}
-          showCloseButton={false}
-        />
-      }
+      <GitcoinEligibilityModal
+        isOpen={showGitcoinModal}
+        onClose={() => setShowGitcoinModal(false)}
+      />
+      <ZkidEligibilityModal
+        isOpen={showZkidModal}
+        onClose={() => setShowZkidModal(false)}
+      />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
-          <div className='flex p-4 rounded-lg border-[1px] border-[#8668FC] bg-[#F6F3FF] gap-2 font-redHatText text-[#8668FC] flex-col'>
-            <h1 className='font-medium'>Caps enable a fair launch!</h1>
-            <p className='pb-2 '>
-              Individual caps allow more people to participate in the important
-              early stage of this project’s token economy. Everyone has the same
-              cap for each round. The cap per round is subject to change.
-            </p>
-          </div>
-
+          <EligibilityCheckToast />
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
@@ -560,7 +574,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   : formatAmount(
                       round(
                         parseFloat(inputAmount) *
-                          Number(activeRoundDetails?.tokenPrice),
+                          Number(activeRoundDetails?.tokenPrice || 1),
                       ),
                     )}
               </span>
@@ -631,7 +645,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   fromChain: 137,
                   fee: 0.006,
                   fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
-                  toChain: 1101,
+                  toChain: SUPPORTED_CHAIN.id,
                   toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
                 }}
                 integrator='general-magic'
@@ -678,14 +692,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected || buttonDisabled}
+              disabled={!isConnected || donateDisabled}
               loading={isConfirming}
               color={ButtonColor.Giv}
-              className={`text-white justify-center ${
-                !donateDisabled
-                  ? 'opacity-100'
-                  : 'opacity-50 cursor-not-allowed'
-              }`}
+              className='text-white justify-center'
             >
               {isConnected ? 'Support This Project' : 'Connect Wallet'}
             </Button>

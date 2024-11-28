@@ -1,11 +1,11 @@
 'use client';
 
-import VerifyPrivado from '@/components/Create/VerifyPrivado';
+import GetVerified from '@/components/Create/GetVerified';
 
 export default function CreateProfilePage() {
   return (
     <div className='container'>
-      <VerifyPrivado />
+      <GetVerified />
     </div>
   );
 }

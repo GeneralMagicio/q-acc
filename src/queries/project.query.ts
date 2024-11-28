@@ -223,6 +223,7 @@ query (
         rewardTokenAmount
         rewardStreamStart
         rewardStreamEnd
+        cliff
         earlyAccessRound{
       id
       roundNumber
@@ -344,6 +345,24 @@ export const GET_PROJECT_BY_SLUG = `
 				title
 			}
 		}
+	}
+`;
+
+export const GET_PROJECT_METADATA_BY_SLUG = `
+ query 
+      (
+      $slug:String!, 
+      ) 
+{ 
+		projectBySlug(
+			slug: $slug
+		) {
+			__typename
+			title
+			image
+			slug
+      teaser
+    }
 	}
 `;
 

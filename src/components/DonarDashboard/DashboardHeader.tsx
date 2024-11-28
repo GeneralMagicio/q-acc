@@ -6,6 +6,8 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import config from '@/config/configuration';
 import { IconIdentityVerified } from '../Icons/IconIdentityVerified';
 import { usePrivado } from '@/hooks/usePrivado';
+import { GitcoinVerificationBadge } from '../VerificationBadges/GitcoinVerificationBadge';
+import { PrivadoVerificationBadge } from '../VerificationBadges/PrivadoVerificationBadge';
 
 const DashboardHeader = () => {
   const { address } = useAccount();
@@ -41,10 +43,15 @@ const DashboardHeader = () => {
               </Link>
             </div>
 
-            {isVerified && (
+            {isVerified ? (
               <div className='px-2 py-1 bg-[#5CD3C9] rounded-lg font-medium flex  gap-2 font-redHatText items-center'>
                 <IconIdentityVerified />
                 Identity verified{' '}
+              </div>
+            ) : (
+              <div className='flex flex-col gap-4'>
+                <GitcoinVerificationBadge />
+                <PrivadoVerificationBadge />
               </div>
             )}
           </div>
