@@ -51,7 +51,7 @@ export const GitcoinPassLow: FC<IGitcoinPassLowProps> = ({
               className='ml-auto mt-2'
             >
               <div className='flex items-center gap-1'>
-                Increase Score
+                Increase Score to 15
                 <IconExternalLink size={16} />
               </div>
             </Button>
