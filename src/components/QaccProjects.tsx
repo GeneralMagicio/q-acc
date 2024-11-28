@@ -130,7 +130,7 @@ const projects = [
       />
     ),
     slug: 'xade-finance',
-    isLinkEnabled: false,
+    isLinkEnabled: true,
   },
 ];
 
