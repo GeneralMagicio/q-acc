@@ -9,9 +9,6 @@ import {
   GitcoinVerificationStatus,
   useGitcoinScore,
 } from '@/hooks/useGitcoinScore';
-import { IconGitcoin } from '@/components/Icons/IconGitcoin';
-import config from '@/config/configuration';
-import { IconInfoCircle } from '@/components/Icons/IconInfoCircle';
 import { GitcoinPassLow } from '@/components/GitcoinVerifcationElements/GitcoinPassLow';
 
 export const GitcoinVerifySection = () => {
