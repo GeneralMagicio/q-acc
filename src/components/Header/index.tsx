@@ -5,7 +5,6 @@ import { ConnectButton } from '../ConnectButton/ConnectButton';
 import { IconX } from '../Icons/IconX';
 import Routes from '@/lib/constants/Routes';
 import { HeaderItem } from './HeaderItem';
-import { PrivadoBanner } from './PrivadoBanner';
 import { isProductReleased } from '@/config/configuration';
 
 const HEADER_ITEMS = [
@@ -54,7 +53,7 @@ export const Header = () => {
         <div className='flex-1 order-2 md:order-3'></div>
         <ConnectButton className='order-2 md:order-3' />
       </nav>
-      <PrivadoBanner />
+      {/* <PrivadoBanner /> */}
     </>
   );
 };

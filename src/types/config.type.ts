@@ -24,4 +24,6 @@ export type EnvConfig = {
     verifierDid: string;
     method: typeof PrivadoContractMethodV1 | typeof PrivadoContractMethodV2;
   };
+  GP_ANALYSIS_SCORE_THRESHOLD: number;
+  GP_SCORER_SCORE_THRESHOLD: number;
 };

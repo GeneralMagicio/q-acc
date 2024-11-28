@@ -9,6 +9,8 @@ export const GET_USER_BY_ADDRESS = `
 			isSignedIn
 			privadoVerified
       acceptedToS
+      passportScore
+      analysisScore
 		}
 	}
 `;
@@ -139,3 +141,37 @@ export const PROJECT_USER_DONATION_CAP = `
     projectUserDonationCap(projectId: $projectId)   
   }
 `;
+
+export const PROJECT_USER_DONATION_CAP_KYC = `
+  query UserCaps($projectId: Int!) {
+    userCaps(projectId: $projectId) {
+      qAccCap
+      gitcoinPassport {
+        unusedCap
+      }
+      zkId {
+        unusedCap
+      }
+    }
+  }
+`;
+
+export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
+    refreshUserScores(address: $address) {
+      id
+      firstName
+      lastName
+      name
+      email
+      avatar
+      walletAddress
+      url
+      location
+      likedProjectsCount
+      donationsCount
+      projectsCount
+      passportScore
+      passportStamps
+      analysisScore
+    }
+  }`;

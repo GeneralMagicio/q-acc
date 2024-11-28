@@ -13,7 +13,9 @@ interface IDashboardTabs {
 export enum EDashboardPageTabs {
   PROJECTS = 'projects',
   CONTRIBUTIONS = 'contributions',
+  VERIFICATION = 'verification',
 }
+
 const DashboardTabs = (props: IDashboardTabs) => {
   const { data: addrWhitelist } = useAddressWhitelist();
   const [donationCount, setDonationCount] = useState<number>(0);
@@ -57,6 +59,12 @@ const DashboardTabs = (props: IDashboardTabs) => {
       title: 'My Tokens',
       badge: donationCount,
       query: EDashboardPageTabs.CONTRIBUTIONS,
+    },
+
+    {
+      title: 'My Verifications',
+      badge: 0,
+      query: EDashboardPageTabs.VERIFICATION,
     },
   ];
   return (

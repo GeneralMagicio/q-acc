@@ -136,7 +136,7 @@ const projects = [
 
 export const QaccProjects = () => {
   return (
-    <div className='bg-white relative pb-24'>
+    <div className='bg-white relative pt-8 pb-24'>
       <div className='absolute right-0 top-10'>
         <Image
           src={'/images/particles/trazado3.svg'}
@@ -145,9 +145,9 @@ export const QaccProjects = () => {
           alt='Trazado'
         />
       </div>
-      <div className='flex flex-col gap-12 container p-7'>
-        <h1 className='text-5xl text-gray-900 font-bold'>Who can I support?</h1>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9 justify-center'>
+      <div className='flex flex-col gap-16 container p-7'>
+        <h1 className='text-5xl text-gray-900 font-bold'>Cohort 1 startups?</h1>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-center'>
           {projects.map((project, index) => (
             <div
               key={index}
