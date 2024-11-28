@@ -8,7 +8,7 @@ const Rules = () => {
         <h1 className='text-2xl text-black font-bold mb-8'>
           What you need to know
         </h1>
-        <ol className='list-decimal text-2xl text-slate-600 px-4 space-y-4 leading-normal'>
+        <ol className='list-decimal text-2xl font-light text-slate-600 px-4 space-y-4 leading-normal'>
           <li>
             The q/acc round lasts{' '}
             <b className='font-extrabold'>only two weeks</b>.
