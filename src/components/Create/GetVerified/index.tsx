@@ -3,7 +3,6 @@ import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CreateNavbar from '../CreateNavbar';
 import Routes from '@/lib/constants/Routes';
-import { usePrivado } from '@/hooks/usePrivado';
 import { Verification } from '@/components/Verification';
 
 interface IVerified {
@@ -12,10 +11,8 @@ interface IVerified {
 }
 const GetVerified = () => {
   const router = useRouter();
-  const { isVerified, error, isLoading } = usePrivado();
-  const searchParams = useSearchParams();
 
-  const verified: IVerified = { isVerified, error: !!error };
+  const searchParams = useSearchParams();
 
   const showBackButton = searchParams.get('b');
 
@@ -37,7 +34,6 @@ const GetVerified = () => {
               : undefined
           }
           submitLabel='Save'
-          disabled={!verified.isVerified}
         />
       </form>
       <Verification />
