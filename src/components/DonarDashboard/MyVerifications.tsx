@@ -1,5 +1,10 @@
 import React from 'react';
+import { Verification } from '../Verification';
 
 export const MyVerifications = () => {
-  return <div>MyVerifications</div>;
+  return (
+    <div className='container'>
+      <Verification />
+    </div>
+  );
 };
