@@ -6,7 +6,6 @@ import DashboardTabs, { EDashboardPageTabs } from './DashboardTabs';
 
 import DonarSupports from './DonarSupports';
 import MyProjects from './MyProjects';
-import DashboardPrivado from './DashboardPrivado';
 import { MyVerifications } from './MyVerifications';
 
 const DashboardIndex = () => {
@@ -29,7 +28,6 @@ const DashboardIndex = () => {
   return (
     <div>
       <DashboardHeader />
-      <DashboardPrivado />
       <DashboardTabs activeTab={activeTab} slug={'slug'} />
 
       {activeTab === 0 && <MyProjects />}
