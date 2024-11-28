@@ -55,26 +55,15 @@ const Rules = () => {
             <b className='font-extrabold'>$15,000 USD-equivalent of POL.</b>
           </li>
           <li>
-            To learn how to verify your identity, check
+            Learn how to verify your identity and move POL and ETH to Polygon
+            zkEVM in our
             <a
-              href={links.PRIVADO_GUIDE_LINK}
+              href={links.How_To_Guides}
               target='_blank'
               className='font-bold text-pink-500'
               referrerPolicy='no-referrer'
             >
-              &nbsp;our docs.
-            </a>
-          </li>
-          <li>
-            All contributions made in the q/acc round need to be in POL on
-            Polygon zkEVM. Learn how to get your wallet{' '}
-            <a
-              href={links.POLYGON_ZKEVM_GUIDE_LINK}
-              target='_blank'
-              className='font-bold text-pink-500'
-              referrerPolicy='no-referrer'
-            >
-              Polygon zkEVM ready here.
+              &nbsp;how-to guides.
             </a>
           </li>
         </ol>
