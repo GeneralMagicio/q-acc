@@ -16,26 +16,20 @@ const GetVerified = () => {
 
   const showBackButton = searchParams.get('b');
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    router.push(Routes.Home);
-  };
   return (
     <>
-      <form onSubmit={handleSubmit} className=''>
-        <CreateNavbar
-          title='Get Verified'
-          onBack={
-            showBackButton
-              ? e => {
-                  e.preventDefault();
-                  router.push(Routes.CreateProfile);
-                }
-              : undefined
-          }
-          submitLabel='Save'
-        />
-      </form>
+      <CreateNavbar
+        title='Get Verified'
+        onBack={
+          showBackButton
+            ? e => {
+                e.preventDefault();
+                router.push(Routes.CreateProfile);
+              }
+            : undefined
+        }
+        hideSubmit={true}
+      />
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         <CountryRegulatory />
         <QaccCappDesc />
