@@ -14,6 +14,7 @@ export const PrivadoHoldUp = () => {
         <li>
           Additionally, to comply with AML requirements, the q/acc protocol
           restricts participation from individuals in the following countries:
+          &nbsp;
           <span className='text-gray-800 font-bold'>
             Afghanistan, American Samoa, Anguilla, Antigua and Barbuda, Belarus,
             Bosnia Herzegovina, Central African Republic, Cuba, DR Congo,

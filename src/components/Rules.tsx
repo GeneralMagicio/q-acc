@@ -23,11 +23,9 @@ const Rules = () => {
             .
           </li>
           <li>
-            The q/acc protocol prohibits citizens of the United States and
-            <b className='font-extrabold'>
-              {' '}
-              United Kingdom from participating due to regulatory reasons.
-            </b>
+            The q/acc protocol prohibits citizens of the
+            <b className='font-extrabold'> United States and United Kingdom </b>
+            from participating due to regulatory reasons.
           </li>
           <li>
             The q/acc protocol prohibits citizens from{' '}
