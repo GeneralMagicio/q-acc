@@ -7,6 +7,7 @@ import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySec
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import { QaccCappDesc } from '@/components/Verification/QaccCappDesc';
 import { CountryRegulatory } from '@/components/Verification/CountryRegulatory';
+import links from '@/lib/constants/links';
 
 const GetVerified = () => {
   const router = useRouter();
@@ -40,6 +41,26 @@ const GetVerified = () => {
         <QaccCappDesc />
         <GitcoinVerifySection />
         <ZkidVerifySection />
+        <div className='text-xl border-gray-100 border-t-2 pt-4'>
+          Need help? Hop onto the{' '}
+          <a
+            href={links.TELEGRAM_SUPPORT}
+            target='_blank'
+            className='font-bold text-pink-500'
+            referrerPolicy='no-referrer'
+          >
+            q/acc support channel{' '}
+          </a>
+          on Telegram or email{' '}
+          <a
+            href='mailto:qacc@giveth.io'
+            target='_blank'
+            className='font-bold text-pink-500'
+            referrerPolicy='no-referrer'
+          >
+            qacc@giveth.io.
+          </a>
+        </div>
       </div>
     </>
   );
