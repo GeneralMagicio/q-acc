@@ -45,49 +45,36 @@ const Rules = () => {
             <b className='font-extrabold'>Privado zkID and Gitcoin Passport</b>.
           </li>
           <li>
-            There is a low cap and a high cap. The low cap is approximately{' '}
-            <b className='font-extrabold'>1K USD denominated in POL</b> and
-            requires <b className='font-extrabold'>Gitcoin Passport</b>. Above
-            that amount, <b className='font-extrabold'>zkID is required up</b>{' '}
-            until the high cap, which is{' '}
-            <b className='font-extrabold'>
-              approximately 15K USD denominated in POL
-            </b>
-            . Caps are per-person and per-project.
+            With <b className='font-extrabold'>Gitcoin Passport</b> you are
+            eligible to support each project with up to approximately{' '}
+            <b className='font-extrabold'>$1,000 USD-equivalent of POL.</b>
           </li>
           <li>
-            To check and improve your{' '}
-            <b className='font-extrabold'>Gitcoin Passport score</b>, go to
-            <a
-              href={links.PASSPORT}
-              target='_blank'
-              className='font-bold text-pink-500'
-              referrerPolicy='no-referrer'
-            >
-              &nbsp;passport.xyz.
-            </a>
+            With <b className='font-extrabold'>Privado zkID credentials</b>, you
+            are eligible to support each project with up to{' '}
+            <b className='font-extrabold'>$15,000 USD-equivalent of POL.</b>
           </li>
           <li>
-            To get credentials with{' '}
-            <b className='font-extrabold'>Privado zkID</b>, read the{' '}
+            To learn how to verify your identity, check
             <a
               href={links.PRIVADO_GUIDE_LINK}
               target='_blank'
               className='font-bold text-pink-500'
               referrerPolicy='no-referrer'
             >
-              Privado zkID how-to guide.
+              &nbsp;our docs.
             </a>
           </li>
           <li>
-            There is also a how-to guide on getting your{' '}
+            All contributions made in the q/acc round need to be in POL on
+            Polygon zkEVM. Learn how to get your wallet{' '}
             <a
-              href='https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
+              href={links.POLYGON_ZKEVM_GUIDE_LINK}
               target='_blank'
               className='font-bold text-pink-500'
               referrerPolicy='no-referrer'
             >
-              Polygon zkEVM wallet ready.
+              Polygon zkEVM ready here.
             </a>
           </li>
         </ol>
