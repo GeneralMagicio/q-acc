@@ -7,7 +7,7 @@ import {
   GitcoinVerificationStatus,
   useGitcoinScore,
 } from '@/hooks/useGitcoinScore';
-import { GitcoinPassLow } from '../GitcoinVerifcationElements/GitcoinPassLow';
+import { GitcoinLow } from '../GitcoinVerifcationElements/GitcoinLow';
 
 interface GitcoinEligibilityModalProps extends BaseModalProps {}
 
@@ -37,15 +37,15 @@ export const GitcoinEligibilityModal: FC<
             Check Score
           </Button>
         )}
-        {status === GitcoinVerificationStatus.ANALYSIS_PASS && (
+        {(status === GitcoinVerificationStatus.ANALYSIS_PASS ||
+          status === GitcoinVerificationStatus.SCORER_PASS) && (
           <EligibilityBadge
             className='ml-auto w-fit'
             status={EligibilityBadgeStatus.ELIGIBLE}
           />
         )}
-        {(status === GitcoinVerificationStatus.SCORER_PASS ||
-          status === GitcoinVerificationStatus.LOW_SCORE) && (
-          <GitcoinPassLow
+        {status === GitcoinVerificationStatus.LOW_SCORE && (
+          <GitcoinLow
             onCheckScore={onCheckScore}
             userGitcoinScore={userGitcoinScore}
             isScoreFetching={isScoreFetching}
