@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ProjectsBanner } from './ProjectsBanner';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { getMostRecentEndRound } from '@/helpers/round';
 import { isEarlyAccessBranch } from '@/config/configuration';
 import { ProjectsSection } from './ProjectsSection';
+import { Banner } from '../Banner';
 
 export const ProjectsView = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
@@ -27,7 +27,12 @@ export const ProjectsView = () => {
   }, [activeRoundDetails, isRoundEnded]);
   return (
     <>
-      <ProjectsBanner />
+      {/* <ProjectsBanner /> */}
+      <Banner
+        title1='the future of'
+        title2='tokenization'
+        subTitle='q/acc = QF*ABC'
+      />
       <div className='container'>
         <div className='my-[60px]'>
           {isEarlyAccessBranch ? !isRoundEnded && <RoundCountBanner /> : null}
