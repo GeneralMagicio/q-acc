@@ -21,8 +21,8 @@ if (!isProduction) {
 
 const envConfig = isProduction ? production : development;
 const config = {
-  LOW_CAP_TEXT: '$1000 USD denominated in POL',
-  HIGH_CAP_TEXT: '$15,000 USD',
+  LOW_CAP_TEXT: 'approximately $1,000 denominated in POL',
+  HIGH_CAP_TEXT: 'approximately $15,000 denominated in POL',
   ...envConfig,
 };
 
