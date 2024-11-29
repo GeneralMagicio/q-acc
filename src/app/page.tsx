@@ -12,11 +12,11 @@ import Routes from '@/lib/constants/Routes';
 
 import { getMostRecentEndRound } from '@/helpers/round';
 import links from '@/lib/constants/links';
-import { QaccProjects } from '@/components/QaccProjects';
 import Rules from '@/components/Rules';
 import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
+import { QaccProjectsCard } from '@/components/QaccProjectsCard';
 
 const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -415,7 +415,7 @@ export default function Home() {
       {isEarlyAccessBranch ? null : (
         <>
           <div className='w-full h-8 bg-orange-300'></div>
-          <QaccProjects />
+          <QaccProjectsCard />
           <br></br>
           <Rules />
           <div className='flex flex-col gap-6 md:flex-row justify-center items-center  bg-white'>
