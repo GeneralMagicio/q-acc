@@ -22,7 +22,19 @@ export const GitcoinVerifySection = () => {
   } = useGitcoinScore();
   const { isVerified } = usePrivado();
 
-  return status === GitcoinVerificationStatus.ANALYSIS_PASS ||
+  return isVerified ? (
+    <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6'>
+      <div>
+        <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+        <p>
+          Verify your uniqueness with Gitcoin Passport to support each project
+          with up to &nbsp;
+          {config.LOW_CAP_TEXT}.
+        </p>
+      </div>
+      <div className='absolute top-0 left-0 right-0 bottom-0 z-10 bg-gray-50 opacity-60'></div>
+    </section>
+  ) : status === GitcoinVerificationStatus.ANALYSIS_PASS ||
     status === GitcoinVerificationStatus.SCORER_PASS ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <div>
