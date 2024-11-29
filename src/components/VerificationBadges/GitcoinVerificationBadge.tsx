@@ -6,6 +6,7 @@ import {
   useGitcoinScore,
 } from '@/hooks/useGitcoinScore';
 import Routes from '@/lib/constants/Routes';
+import { getBadgeClasses } from './common';
 
 export const GitcoinVerificationBadge = () => {
   const { status } = useGitcoinScore();
@@ -15,9 +16,7 @@ export const GitcoinVerificationBadge = () => {
 
   return (
     <Link href={Routes.DashBoard + '?tab=verification'}>
-      <div
-        className={`flex gap-1 ${isVerified ? 'bg-teal-500' : 'bg-amber-500'} text-white py-1 px-2 rounded-lg`}
-      >
+      <div className={getBadgeClasses(isVerified)}>
         <IconGitcoinPassport size={24} />
         <span>Gitcoin Passport {isVerified ? 'Verified' : 'Not Verified'}</span>
       </div>
