@@ -12,11 +12,11 @@ import Routes from '@/lib/constants/Routes';
 
 import { getMostRecentEndRound } from '@/helpers/round';
 import links from '@/lib/constants/links';
-import { QaccProjects } from '@/components/QaccProjects';
 import Rules from '@/components/Rules';
 import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
+import { QaccProjectsCard } from '@/components/QaccProjectsCard';
 
 const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -89,7 +89,7 @@ export default function Home() {
           <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
             {isRoundEnded ? '' : <RoundInfoBanner />}
 
-            <h1 className='text-5xl text-gray-900 font-bold my-6'>
+            <h1 className='text-4xl text-gray-900 font-bold my-6'>
               Welcome to Quadratic Acceleration
             </h1>
             <div>
@@ -358,7 +358,7 @@ export default function Home() {
           <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
             <NotStartedRoundBanner />
             <div className='flex flex-col gap-6'>
-              <h1 className='text-5xl text-gray-900 font-bold mt-10'>
+              <h1 className='text-4xl text-gray-900 font-bold mt-10'>
                 Welcome to Quadratic Acceleration
               </h1>
               <div className='leading-9 text-[#4F576A]'>
@@ -396,9 +396,6 @@ export default function Home() {
                   opportunity to support Web3’s most innovative projects.
                 </p>
               </div>
-              <div className='flex flex-col gap-6 md:flex-row justify-center items-center mt-10'>
-                <OnBoardButton />
-              </div>
             </div>
             <div className='flex justify-center rounded-md  mx-auto w-[90%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
               <iframe
@@ -415,7 +412,7 @@ export default function Home() {
       {isEarlyAccessBranch ? null : (
         <>
           <div className='w-full h-8 bg-orange-300'></div>
-          <QaccProjects />
+          <QaccProjectsCard />
           <br></br>
           <Rules />
           <div className='flex flex-col gap-6 md:flex-row justify-center items-center  bg-white'>

@@ -5,7 +5,6 @@ import CreateNavbar from '../CreateNavbar';
 import Routes from '@/lib/constants/Routes';
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
-import { QaccCappDesc } from '@/components/Verification/QaccCappDesc';
 import { CountryRegulatory } from '@/components/Verification/CountryRegulatory';
 import links from '@/lib/constants/links';
 
@@ -32,7 +31,7 @@ const GetVerified = () => {
       />
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         <CountryRegulatory />
-        <QaccCappDesc />
+        {/* <QaccCappDesc /> */}
         <GitcoinVerifySection />
         <ZkidVerifySection />
         <div className='text-xl border-gray-100 border-t-2 pt-4'>

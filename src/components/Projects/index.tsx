@@ -1,18 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ProjectsBanner } from './ProjectsBanner';
-import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
-import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { getMostRecentEndRound } from '@/helpers/round';
 import { isEarlyAccessBranch } from '@/config/configuration';
-import { Spinner } from '../Loading/Spinner';
-
-const projectCardStyle = '';
+import { ProjectsSection } from './ProjectsSection';
+import { Banner } from '../Banner';
 
 export const ProjectsView = () => {
-  const { data: allProjects, isLoading } = useFetchAllProjects();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [isRoundEnded, setIsRoundEnded] = useState(false);
 
@@ -32,32 +27,17 @@ export const ProjectsView = () => {
   }, [activeRoundDetails, isRoundEnded]);
   return (
     <>
-      <ProjectsBanner />
-      <div className='container mx-auto'>
+      {/* <ProjectsBanner /> */}
+      <Banner
+        title1='the future of'
+        title2='tokenization'
+        subTitle='q/acc = QF*ABC'
+      />
+      <div className='container'>
         <div className='my-[60px]'>
-          {isEarlyAccessBranch
-            ? !isRoundEnded && <RoundCountBanner />
-            : // <QaccRoundCounter page='project' />
-              null}
+          {isEarlyAccessBranch ? !isRoundEnded && <RoundCountBanner /> : null}
         </div>
-
-        {isLoading ? (
-          <div className='min-h-80 flex items-center justify-center '>
-            <Spinner />
-          </div>
-        ) : (
-          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10'>
-            {allProjects?.projects?.map(project => (
-              // <Link href={`/project/${project.slug}`} key={project.id}>
-              <ProjectHoverCard
-                key={project.id}
-                project={project}
-                className={projectCardStyle}
-              />
-              // </Link>
-            ))}
-          </div>
-        )}
+        <ProjectsSection />
       </div>
     </>
   );

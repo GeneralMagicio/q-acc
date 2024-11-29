@@ -14,6 +14,7 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 console.log('config-isProductReleased', isProductReleased);
 console.log('config-isProduction', isProduction);
 console.log('config-isEarlyAccessBranch', isEarlyAccessBranch);
+console.log('isCountryRestrictionEnabled', isCountryRestrictionEnabled);
 
 if (!isProduction) {
   console.log('Running in development mode');
@@ -21,6 +22,8 @@ if (!isProduction) {
 
 const envConfig = isProduction ? production : development;
 const config = {
+  LOW_CAP_TEXT: 'approximately $1,000 denominated in POL',
+  HIGH_CAP_TEXT: 'approximately $15,000 denominated in POL',
   ...envConfig,
 };
 
