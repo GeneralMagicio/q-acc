@@ -396,9 +396,6 @@ export default function Home() {
                   opportunity to support Web3’s most innovative projects.
                 </p>
               </div>
-              <div className='flex flex-col gap-6 md:flex-row justify-center items-center mt-10'>
-                <OnBoardButton />
-              </div>
             </div>
             <div className='flex justify-center rounded-md  mx-auto w-[90%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
               <iframe

@@ -2,6 +2,7 @@ import React from 'react';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { RemainingTimeBox } from './RemainingTimeBox';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
+import { OnBoardButton } from '../OnBoardButton';
 
 export const NotStartedRoundBanner: React.FC = () => {
   const { data: allRounds } = useFetchAllRound();
@@ -30,11 +31,12 @@ export const NotStartedRoundBanner: React.FC = () => {
   }, [allRounds]);
 
   return (
-    <div className='bg-white rounded-2xl shadow-xl shadow-giv-50 py-6 px-8 flex flex-wrap justify-center lg:justify-between items-center z-0'>
+    <div className=' rounded-2xl   py-6 px-8 flex flex-wrap justify-center  items-center z-0'>
       <div className='text-2xl font-medium text-gray-800'>
         q/acc round starts in
       </div>
       <RemainingTimeBox targetDate={soonestRound?.startDate} />
+      <OnBoardButton />
     </div>
   );
 };
