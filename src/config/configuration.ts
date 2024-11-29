@@ -14,6 +14,7 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 console.log('config-isProductReleased', isProductReleased);
 console.log('config-isProduction', isProduction);
 console.log('config-isEarlyAccessBranch', isEarlyAccessBranch);
+console.log('isCountryRestrictionEnabled', isCountryRestrictionEnabled);
 
 if (!isProduction) {
   console.log('Running in development mode');
