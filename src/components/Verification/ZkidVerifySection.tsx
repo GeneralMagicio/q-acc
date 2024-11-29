@@ -21,7 +21,9 @@ export const ZkidVerifySection = () => {
           {config.HIGH_CAP_TEXT}.
         </p>
       </div>
-      <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
+      <div>
+        <EligibilityBadge status={EligibilityBadgeStatus.ELIGIBLE} />
+      </div>
     </section>
   ) : (
     <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
