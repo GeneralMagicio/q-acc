@@ -42,7 +42,8 @@ export const GitcoinVerifySection = () => {
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
       <p>
-        You are eligible to support each project with up to&nbsp;
+        Verify your uniqueness with Gitcoin Passport to support each project
+        with up to &nbsp;
         {config.LOW_CAP_TEXT}.
       </p>
       <Button
