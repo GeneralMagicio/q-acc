@@ -18,11 +18,10 @@ export const GitcoinEligibilityModal: FC<
     useGitcoinScore();
 
   return (
-    <Modal {...props} title='Eligibility Check' showCloseButton>
+    <Modal {...props} title='Gitcoin Passport' showCloseButton>
       <div className=''>
         <p className='mt-4 mb-10 text-xl'>
-          Verify your eligibility to contribute up to $1,000 to this project by
-          completing a quick on-chain activity check.
+          The amount you want to submit requires Gitcoin Passport verification.
         </p>
         {status === GitcoinVerificationStatus.NOT_CHECKED && (
           <Button
@@ -34,7 +33,7 @@ export const GitcoinEligibilityModal: FC<
               await onCheckScore();
             }}
           >
-            Check Score
+            Check Eligibility
           </Button>
         )}
         {(status === GitcoinVerificationStatus.ANALYSIS_PASS ||
