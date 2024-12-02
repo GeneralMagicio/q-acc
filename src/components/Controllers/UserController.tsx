@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { redirect, useRouter } from 'next/navigation';
-import {
-  fetchGivethUserInfo,
-  isWalletSanctioned,
-} from '@/services/user.service';
+import { fetchGivethUserInfo } from '@/services/user.service';
 import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
@@ -17,6 +14,7 @@ import { IUser } from '@/types/user.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
+import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -28,6 +26,7 @@ export const UserController = () => {
   const { mutateAsync: updateUser } = useUpdateUser();
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
+  const { data: isSanctioned } = useFetchSanctionStatus(address as string);
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -96,21 +95,10 @@ export const UserController = () => {
   }, []);
 
   useEffect(() => {
-    // Check if the address is in the sanction list
-    const checkSanctionStatus = async () => {
-      try {
-        if (!address) return;
-        const isSanctioned = await isWalletSanctioned(address as string);
-        if (isSanctioned) {
-          setShowSanctionModal(true);
-        }
-      } catch (error) {
-        console.error('Error checking sanction status:', error);
-      }
-    };
-
-    checkSanctionStatus();
-  }, [address]);
+    if (isSanctioned) {
+      setShowSanctionModal(true);
+    }
+  }, [isSanctioned]);
 
   return showSanctionModal ? (
     <SanctionModal
