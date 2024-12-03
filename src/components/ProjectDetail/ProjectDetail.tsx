@@ -13,7 +13,7 @@ import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
-import config, { isEarlyAccessBranch } from '@/config/configuration';
+import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
@@ -31,6 +31,8 @@ const ProjectDetail = () => {
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
   const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+
+  const isRoundActive = !!activeRoundDetails;
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -57,7 +59,7 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (isEarlyAccessBranch) {
+    if (isRoundActive) {
       switch (tab) {
         case EProjectPageTabs.DONATIONS:
           setActiveTab(1);
@@ -89,11 +91,11 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner />
 
-          {isEarlyAccessBranch ? <DonateSection /> : ''}
+          {isRoundActive ? <DonateSection /> : ''}
         </div>
         {!isRoundEnded && (
           <div className='my-6'>
-            {isEarlyAccessBranch ? (
+            {activeRoundDetails ? (
               <RoundCountBanner projectMaxedOut={progress >= 100} />
             ) : (
               ''
@@ -127,7 +129,7 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {isEarlyAccessBranch
+      {isRoundActive
         ? activeTab === 1 && <ProjectDonationTable />
         : activeTab === 1 && (
             <ProjectTeamMembers teamMembers={projectData?.teamMembers} />
