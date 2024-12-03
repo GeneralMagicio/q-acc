@@ -18,6 +18,7 @@ export const ProjectsView = () => {
         subTitle='q/acc = QF*ABC'
       />
       <div className='container'>
+        <div className='my-[60px]'></div>
         <ProjectsSection />
       </div>
     </>
