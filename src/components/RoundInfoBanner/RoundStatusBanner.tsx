@@ -4,10 +4,11 @@ import { RemainingTimeBox } from './RemainingTimeBox';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { OnBoardButton } from '../OnBoardButton';
 
-export const NotStartedRoundBanner: React.FC = () => {
+export const RoundStatusBanner: React.FC = () => {
+  // Renamed the component
   const { data: allRounds } = useFetchAllRound();
 
-  // Find the soonest not-started round
+  // Find the soonest round
   const soonestRound = React.useMemo<
     IEarlyAccessRound | IQfRound | null
   >(() => {
@@ -15,11 +16,13 @@ export const NotStartedRoundBanner: React.FC = () => {
 
     const now = new Date();
 
-    // Explicitly define the type of the accumulator
     return allRounds.reduce<IEarlyAccessRound | IQfRound | null>(
       (soonest, round) => {
         const roundStartDate = new Date(round.startDate);
-        if (roundStartDate <= now) return soonest; // Skip already started rounds
+        const roundEndDate = new Date(round.endDate);
+
+        // Skip rounds that are already finished
+        if (roundEndDate <= now) return soonest;
 
         // If no soonest round or the current round starts sooner
         return !soonest || roundStartDate < new Date(soonest.startDate)
@@ -30,12 +33,23 @@ export const NotStartedRoundBanner: React.FC = () => {
     );
   }, [allRounds]);
 
+  // Determine the status text and target date for the RemainingTimeBox
+  const isRoundStarted = soonestRound
+    ? new Date(soonestRound.startDate) <= new Date()
+    : false;
+  const roundStatusText = isRoundStarted
+    ? 'q/acc round ends in'
+    : 'q/acc round starts in';
+  const targetDate = isRoundStarted
+    ? soonestRound?.endDate
+    : soonestRound?.startDate;
+
   return (
-    <div className=' rounded-2xl   py-6 px-8 flex flex-wrap justify-center  items-center z-0'>
+    <div className='rounded-2xl py-6 px-8 flex flex-wrap justify-center items-center z-0'>
       <div className='text-2xl font-medium text-gray-800'>
-        q/acc round starts in
+        {roundStatusText}
       </div>
-      <RemainingTimeBox targetDate={soonestRound?.startDate} />
+      {targetDate && <RemainingTimeBox targetDate={targetDate} />}
       <OnBoardButton />
     </div>
   );
