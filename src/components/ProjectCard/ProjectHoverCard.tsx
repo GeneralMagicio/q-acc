@@ -98,7 +98,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   });
 
   const polPriceNumber = Number(POLPrice);
-  const totalHeightClass = !isRoundEnded
+  const totalHeightClass = activeRoundDetails
     ? 'h-project-card-full'
     : 'h-project-card';
 
@@ -157,7 +157,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {!isRoundEnded && (
+            {activeRoundDetails && (
               <>
                 {/* Percentage Bar */}
                 <div className='flex flex-col gap-2'>
