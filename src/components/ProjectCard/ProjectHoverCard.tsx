@@ -14,10 +14,10 @@ import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
-import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
+import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
-import { isEarlyAccessBranch } from '@/config/configuration';
 import { SupportButton } from './SupportButton';
+import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -29,33 +29,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
-
-  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
+  const [progress, setProgress] = useState(0);
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
+  const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
-
-  const [progress, setProgress] = useState(0);
-  const [isRoundEnded, setIsRoundEnded] = useState(false);
-
-  useEffect(() => {
-    const fetchMostRecentEndRound = async () => {
-      const res = await getMostRecentEndRound();
-
-      return res?.__typename === 'QfRound';
-    };
-
-    const getData = async () => {
-      const data = await fetchMostRecentEndRound();
-      setIsRoundEnded(data);
-    };
-
-    getData();
-  }, [activeRoundDetails, isRoundEnded]);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   useEffect(() => {
     console.log(
@@ -116,8 +98,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   });
 
   const polPriceNumber = Number(POLPrice);
-  const isActionsActive = isEarlyAccessBranch && !isRoundEnded;
-  const totalHeightClass = isActionsActive
+  const totalHeightClass = !isRoundEnded
     ? 'h-project-card-full'
     : 'h-project-card';
 
@@ -176,7 +157,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {isActionsActive && (
+            {!isRoundEnded && (
               <>
                 {/* Percentage Bar */}
                 <div className='flex flex-col gap-2'>

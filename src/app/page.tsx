@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Banner } from '@/components/Banner';
@@ -10,13 +10,13 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { isEarlyAccessBranch, isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
-import { getMostRecentEndRound } from '@/helpers/round';
 import links from '@/lib/constants/links';
 import Rules from '@/components/Rules';
 import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
+import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
 
 const eaRoundsData = [
   { round: 1, cap: '$5K', limit: '$100K' },
@@ -46,28 +46,7 @@ export default function Home() {
   const isEarlyAccess = activeRoundDetails?.__typename === 'EarlyAccessRound';
   // const isQaccRound = activeRoundDetails?.__typename === 'QfRound';
 
-  const [isRoundEnded, setIsRoundEnded] = useState(false);
-
-  useEffect(() => {
-    const fetchMostRecentEndRound = async () => {
-      const res = await getMostRecentEndRound();
-      if (
-        res?.roundNumber === 3 ||
-        activeRoundDetails?.__typename === 'QfRound'
-      ) {
-        setIsQaccRound(true);
-      }
-      return res?.__typename === 'QfRound';
-    };
-
-    const getData = async () => {
-      const data = await fetchMostRecentEndRound();
-
-      setIsRoundEnded(data);
-    };
-
-    getData();
-  }, [activeRoundDetails, isRoundEnded]);
+  const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   return isProductReleased ? (
     <main className='flex flex-col '>
