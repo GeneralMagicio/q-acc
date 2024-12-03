@@ -148,14 +148,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         const userCapp = await fetchProjectUserDonationCapKyc(
           Number(projectData?.id),
         );
-        const { qAccCap, gitcoinPassport } = userCapp || {};
+        const { gitcoinPassport, zkId } = userCapp || {};
         setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
+        const userCap =
+          floor(Number(zkId?.unusedCap)) ||
+          floor(Number(gitcoinPassport?.unusedCap)) ||
+          0;
         const res = remainingDonationAmount / 2 - 1;
         if (progress >= 90) {
           console.log('Res', res, progress);
-          setUserDonationCap(Math.min(res, Number(qAccCap)));
+          setUserDonationCap(Math.min(res, Number(userCap)));
         } else {
-          setUserDonationCap(floor(Number(qAccCap)) || 0);
+          setUserDonationCap(userCap);
         }
       }
     };
