@@ -409,8 +409,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     //   return;
     // }
 
-    if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
-      console.log('The minimum donation amount is 5.');
+    if (
+      parseFloat(inputAmount) < config.MINIMUM_DONATION_AMOUNT ||
+      isNaN(parseFloat(inputAmount))
+    ) {
+      console.log(
+        `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
+      );
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
@@ -465,8 +470,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setInputAmount(value);
       const inputAmount = parseFloat(value);
 
-      if (inputAmount < 5) {
-        setInputErrorMessage('Minimum contribution: 5 POL');
+      if (inputAmount < config.MINIMUM_DONATION_AMOUNT) {
+        setInputErrorMessage(
+          `Minimum contribution: ${config.MINIMUM_DONATION_AMOUNT} POL`,
+        );
       }
       // else if (inputAmount > userDonationCap) {
       //   setInputErrorMessage('Amount should be less than the remaining cap');
@@ -626,7 +633,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   <span
                     className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                   >
-                    5 POL
+                    {config.MINIMUM_DONATION_AMOUNT} POL
                   </span>
                 </h2>
               </div>
