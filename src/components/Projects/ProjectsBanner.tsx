@@ -3,13 +3,6 @@ import React from 'react';
 export const ProjectsBanner = () => {
   return (
     <div className='relative bg-particle-pattern py-10 flex flex-col justify-center items-center'>
-      {/* <Image
-        className='p-16'
-        src='/images/home/banner-vector.svg'
-        alt='Banner Vector'
-        fill
-      /> */}
-
       <div
         className='min-w-full min-h-full  bg-repeat-x absolute bg-center'
         style={{
