@@ -2,7 +2,7 @@ import React from 'react';
 
 export const ProjectsBanner = () => {
   return (
-    <div className='relative bg-particle-pattern py-32 flex flex-col justify-center items-center'>
+    <div className='relative bg-particle-pattern py-10 flex flex-col justify-center items-center'>
       {/* <Image
         className='p-16'
         src='/images/home/banner-vector.svg'
@@ -18,11 +18,11 @@ export const ProjectsBanner = () => {
       ></div>
 
       <h1 className='uppercase text-white text-center text-nowrap relative font-tusker-grotesk'>
-        <div className='text-4xl sm:text-7xl md:text-8xl lg:text-9xl xl:tracking-[-4px]'>
-          <div className='text-4xl sm:text-7xl md:text-8xl lg:text-9xl xl:tracking-[-4px]'>
+        <div className='text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:tracking-[-4px]'>
+          <div className='text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:tracking-[-4px]'>
             the future of
           </div>
-          <div className='text-4xl sm:text-7xl md:text-8xl lg:text-9xl xl:tracking-[-2px] font-black text-peach '>
+          <div className='text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:tracking-[-2px] font-black text-peach '>
             tokenization
           </div>
         </div>
