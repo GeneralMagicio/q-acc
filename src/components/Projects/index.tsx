@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { ProjectsSection } from './ProjectsSection';
 import { Banner } from '../Banner';
@@ -19,9 +18,6 @@ export const ProjectsView = () => {
         subTitle='q/acc = QF*ABC'
       />
       <div className='container'>
-        <div className='my-[60px]'>
-          {isRoundActive ? !isRoundEnded && <RoundCountBanner /> : null}
-        </div>
         <ProjectsSection />
       </div>
     </>

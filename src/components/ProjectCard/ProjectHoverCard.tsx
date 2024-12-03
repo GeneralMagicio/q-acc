@@ -17,7 +17,6 @@ import {
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { SupportButton } from './SupportButton';
-import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -37,7 +36,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-  const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   useEffect(() => {
     console.log(

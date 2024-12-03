@@ -17,7 +17,6 @@ import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
-import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -30,7 +29,6 @@ const ProjectDetail = () => {
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
-  const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   const isRoundActive = !!activeRoundDetails;
 
@@ -93,7 +91,7 @@ const ProjectDetail = () => {
 
           {isRoundActive ? <DonateSection /> : ''}
         </div>
-        {!isRoundEnded && (
+        {isRoundActive && (
           <div className='my-6'>
             {activeRoundDetails ? (
               <RoundCountBanner projectMaxedOut={progress >= 100} />
