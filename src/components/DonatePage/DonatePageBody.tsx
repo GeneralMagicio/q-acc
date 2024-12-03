@@ -261,11 +261,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   }, [address, tokenAddress, chain]);
 
   // if user allready accepted terms and conditions set it to true
-  useEffect(() => {
-    if (user && user.acceptedToS) {
-      setTerms(true);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.acceptedToS) {
+  //     setTerms(true);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     // Update donateDisabled based on conditions
@@ -550,6 +550,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       <TermsConditionModal
         isOpen={showTermsConditionModal}
+        setTerms={setTerms}
+        terms={terms}
+        onContinue={handleDonateClick}
         onClose={() => setShowTermsConditionModal(false)}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>

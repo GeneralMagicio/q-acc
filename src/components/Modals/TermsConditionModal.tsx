@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
 import Link from 'next/link';
 import Modal, { BaseModalProps } from '../Modal';
 import { useFetchUser } from '@/hooks/useFetchUser';
@@ -8,10 +8,16 @@ import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 interface ConnectModalProps extends BaseModalProps {
   showCloseButton?: boolean;
   onClose: () => void;
+  onContinue: () => void;
+  setTerms: React.Dispatch<React.SetStateAction<boolean>>;
+  terms: boolean;
 }
 
 export const TermsConditionModal: FC<ConnectModalProps> = ({
   onClose,
+  onContinue,
+  setTerms,
+  terms,
   ...props
 }) => {
   const { data: user } = useFetchUser();
@@ -21,7 +27,16 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
   const [isProhibitedCountriesChecked, setIsProhibitedCountriesChecked] =
     useState<boolean>(false);
 
-  const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
+  const [istermsChecked, setIstermsChecked] = useState<boolean>(
+    user?.acceptedToS || false,
+  );
+
+  useEffect(() => {
+    if (terms) {
+      onContinue();
+      onClose();
+    }
+  }, [terms]);
 
   const handleUsUkTermsChange = (
     _event: React.ChangeEvent<HTMLInputElement>,
@@ -39,7 +54,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
 
   const handleAcceptTerms = (_event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = _event.target.checked;
-    setTerms(isChecked);
+    setIstermsChecked(isChecked);
   };
 
   const handleSaveTerms = () => {
@@ -47,7 +62,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
     if (!user?.acceptedToS) {
       updateAcceptedTerms(true, {
         onSuccess: () => {
-          onClose();
+          setTerms(true);
+          // onContinue();
+          // onClose();
         },
       });
     }
@@ -124,7 +141,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
             <div>
               <input
                 type='checkbox'
-                checked={terms}
+                checked={istermsChecked}
                 onChange={event => handleAcceptTerms(event)}
               />
             </div>
@@ -144,7 +161,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
         </div>
         <div className='flex justify-center items-center'>
           <Button
-            disabled={!isUsUkChecked || !isProhibitedCountriesChecked || !terms}
+            disabled={
+              !isUsUkChecked || !isProhibitedCountriesChecked || !istermsChecked
+            }
             color={ButtonColor.Pink}
             className='w-[200px] flex justify-center '
             onClick={handleSaveTerms}
