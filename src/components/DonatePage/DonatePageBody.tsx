@@ -381,17 +381,32 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     console.log('isVerified', isVerified);
+    // if (!isVerified) {
+    //   if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+    //     console.log('User is not verified with Privado ID');
+    //     setShowZkidModal(true);
+    //     return;
+    //   } else if (
+    //     (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
+    //     (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+    //   ) {
+    //     setShowGitcoinModal(true);
+    //     console.log('User is not verified with Gitcoin passport');
+    //     return;
+    //   }
+    // }
+
     if (!isVerified) {
-      if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-        console.log('User is not verified with Privado ID');
-        setShowZkidModal(true);
-        return;
-      } else if (
-        (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
-        (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+      if (
+        !user?.hasEnoughGitcoinPassportScore &&
+        !user?.hasEnoughGitcoinAnalysisScore
       ) {
         setShowGitcoinModal(true);
         console.log('User is not verified with Gitcoin passport');
+        return;
+      } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        console.log('User is not verified with Privado ID');
+        setShowZkidModal(true);
         return;
       }
     }

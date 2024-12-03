@@ -22,6 +22,8 @@ export interface IUser {
   passportScore?: number;
   passportStamps?: number;
   analysisScore?: number;
+  hasEnoughGitcoinPassportScore?: boolean;
+  hasEnoughGitcoinAnalysisScore?: boolean;
 }
 
 export interface IGivethUser {
