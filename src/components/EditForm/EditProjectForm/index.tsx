@@ -130,7 +130,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
     projectDescription: '',
     WEBSITE: '',
     FACEBOOK: '',
-    TWITTER: '',
+    X: '',
     LINKEDIN: '',
     DISCORD: '',
     TELEGRAM: '',
@@ -171,9 +171,7 @@ const EditProjectForm = ({ projectId }: { projectId: number }) => {
           FACEBOOK:
             data?.socialMedia?.find((sm: any) => sm.type === 'FACEBOOK')
               ?.link || '',
-          TWITTER:
-            data?.socialMedia?.find((sm: any) => sm.type === 'TWITTER')?.link ||
-            '',
+          X: data?.socialMedia?.find((sm: any) => sm.type === 'X')?.link || '',
           LINKEDIN:
             data?.socialMedia?.find((sm: any) => sm.type === 'LINKEDIN')
               ?.link || '',
