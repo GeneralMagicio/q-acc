@@ -2,18 +2,18 @@ import React from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { useProjectContext } from '@/context/project.context';
-import { isEarlyAccessBranch } from '@/config/configuration';
 
 interface IProjectTabs {
   activeTab: number;
   slug: string;
+  isRoundActive: boolean;
 }
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
 }
 const ProjectTabs = (props: IProjectTabs) => {
-  const { activeTab, slug } = props;
+  const { activeTab, slug, isRoundActive } = props;
   const { totalDonationsCount } = useProjectContext();
   console.log('total', totalDonationsCount);
   const badgeCount = (count?: number) => {
@@ -21,7 +21,7 @@ const ProjectTabs = (props: IProjectTabs) => {
   };
   const tabsArray = [
     { title: 'About' },
-    ...(isEarlyAccessBranch
+    ...(isRoundActive
       ? [
           {
             title: 'Transactions',

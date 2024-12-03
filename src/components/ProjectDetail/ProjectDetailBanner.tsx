@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useProjectContext } from '@/context/project.context';
-import { isEarlyAccessBranch } from '@/config/configuration';
-const ProjectDetailBanner = () => {
+
+interface IProjectDetailBannerProps {
+  isRoundActive: boolean;
+}
+
+const ProjectDetailBanner: FC<IProjectDetailBannerProps> = ({
+  isRoundActive,
+}) => {
   const { projectData } = useProjectContext();
 
   const bgSrc =
@@ -10,7 +16,7 @@ const ProjectDetailBanner = () => {
       : '/images/project-card/card-image.jpeg';
   return (
     <div
-      className={`w-full h-[440px] lg:h-[546px] ${isEarlyAccessBranch ? 'lg:w-[80%]' : 'lg:w-[100%] '}  bg-cover bg-center rounded-3xl relative`}
+      className={`w-full h-[440px] lg:h-[546px] ${isRoundActive ? 'lg:w-[80%]' : 'lg:w-[100%] '}  bg-cover bg-center rounded-3xl relative`}
       style={{
         backgroundImage: `url(${bgSrc})`,
       }}

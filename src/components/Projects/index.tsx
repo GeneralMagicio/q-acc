@@ -2,7 +2,6 @@
 import React from 'react';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { isEarlyAccessBranch } from '@/config/configuration';
 import { ProjectsSection } from './ProjectsSection';
 import { Banner } from '../Banner';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
@@ -10,6 +9,7 @@ import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentE
 export const ProjectsView = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const isRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+  const isRoundActive = !!activeRoundDetails;
   return (
     <>
       {/* <ProjectsBanner /> */}
@@ -20,7 +20,7 @@ export const ProjectsView = () => {
       />
       <div className='container'>
         <div className='my-[60px]'>
-          {isEarlyAccessBranch ? !isRoundEnded && <RoundCountBanner /> : null}
+          {isRoundActive ? !isRoundEnded && <RoundCountBanner /> : null}
         </div>
         <ProjectsSection />
       </div>

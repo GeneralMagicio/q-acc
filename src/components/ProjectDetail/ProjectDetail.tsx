@@ -89,7 +89,7 @@ const ProjectDetail = () => {
     <div className=''>
       <div className='container'>
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
-          <ProjectDetailBanner />
+          <ProjectDetailBanner isRoundActive={isRoundActive} />
 
           {isRoundActive ? <DonateSection /> : ''}
         </div>
@@ -104,7 +104,11 @@ const ProjectDetail = () => {
         )}
       </div>
 
-      <ProjectTabs activeTab={activeTab} slug={projectData?.slug} />
+      <ProjectTabs
+        activeTab={activeTab}
+        slug={projectData?.slug}
+        isRoundActive={isRoundActive}
+      />
 
       {activeTab === 0 && (
         <div className='flex flex-col gap-10 bg-white py-10'>
