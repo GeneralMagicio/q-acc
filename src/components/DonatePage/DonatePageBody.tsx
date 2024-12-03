@@ -273,8 +273,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       // !terms ||
       !isConnected ||
       !(
-        parseFloat(inputAmount) >= 5 &&
-        parseFloat(inputAmount) <= userDonationCap
+        (parseFloat(inputAmount) >= config.MINIMUM_DONATION_AMOUNT)
+        // &&
+        // parseFloat(inputAmount) <= userDonationCap
       ) ||
       parseFloat(inputAmount) > remainingDonationAmount ||
       parseFloat(inputAmount) > tokenDetails?.formattedBalance
