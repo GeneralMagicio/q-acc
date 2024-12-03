@@ -7,7 +7,7 @@ import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
 import Rules from '@/components/Rules';
-import { NotStartedRoundBanner } from '@/components/RoundInfoBanner/NotStartedRoundBanner';
+import { RoundStatusBanner } from '@/components/RoundInfoBanner/RoundStatusBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
@@ -29,7 +29,7 @@ export default function Home() {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-          <NotStartedRoundBanner />
+          <RoundStatusBanner />
           <div className='flex flex-col gap-6'>
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>
               Welcome to Quadratic Acceleration
