@@ -51,6 +51,7 @@ import { EligibilityCheckToast } from './EligibilityCheckToast';
 import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
 import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
+import { TermsConditionModal } from '../Modals/TermsConditionModal';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -133,6 +134,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
   const [showZkidModal, setShowZkidModal] = useState(false);
+  const [showTermsConditionModal, setShowTermsConditionModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
 
@@ -264,7 +266,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   useEffect(() => {
     // Update donateDisabled based on conditions
     if (
-      !terms ||
+      // !terms ||
       !isConnected ||
       !(
         parseFloat(inputAmount) >= 5 &&
@@ -388,6 +390,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         console.log('User is not verified with Gitcoin passport');
         return;
       }
+    }
+    if (!terms) {
+      setShowTermsConditionModal(true);
+      return;
     }
     if (chain?.id !== SUPPORTED_CHAIN.id) {
       {
@@ -513,6 +519,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       <ZkidEligibilityModal
         isOpen={showZkidModal}
         onClose={() => setShowZkidModal(false)}
+      />
+
+      <TermsConditionModal
+        isOpen={showTermsConditionModal}
+        onClose={() => setShowTermsConditionModal(false)}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
@@ -706,7 +717,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           </div>
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
-            <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
+            {/* <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
               <div>
                 <input
                   type='checkbox'
@@ -726,7 +737,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   </Link>
                 </h2>
               </div>
-            </label>
+            </label> */}
 
             {/* Make it Anoynmous */}
             <div
