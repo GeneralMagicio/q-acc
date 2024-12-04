@@ -154,11 +154,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       {description && (
         <p className='text-sm text-gray-500 mt-1'>{description}</p>
       )}
-      {maxLength && (
+      {/* {maxLength && (
         <div className='text-right text-sm text-gray-500 mt-1'>
           {charCount}/{maxLength} characters
         </div>
-      )}
+      )} */}
       {errors[name] && (
         <p className='text-red-500 text-xs mt-1'>
           {(errors[name]?.message as string) || 'Error'}
