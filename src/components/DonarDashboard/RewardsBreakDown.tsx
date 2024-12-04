@@ -19,6 +19,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 
 import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
@@ -187,6 +188,18 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                 <span className='text-[#4F576A] font-medium'>
                   Locked tokens
                 </span>
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    Your tokens are locked as part of the q/acc protocol’s token
+                    lock mechanism. This lock is designed to ensure the
+                    project’s and supporter’s long-term commitment to the
+                    project. Tokens begin to unlock gradually after a set period
+                    called the "cliff." This system helps prevent token holders
+                    from dumping tokens at the end of each round following the
+                    token price increase.
+                  </div>
+                </div>
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
@@ -208,6 +221,13 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
                 <span className='font-medium text-[#1D1E1F] text-2xl'>
                   Available to claim
                 </span>
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    The tokens have been unlocked and are now available for you
+                    to claim
+                  </div>
+                </div>
               </div>
               <div className='flex gap-1 items-center font-medium text-[#1D1E1F]'>
                 <span className='text-2xl'>
@@ -221,7 +241,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
             </div>
 
             <Button
-              color={ButtonColor.Giv}
+              color={ButtonColor.Gray}
               className='flex justify-center'
               disabled={availableToClaim <= 0} // Disable if 0 or null
             >
