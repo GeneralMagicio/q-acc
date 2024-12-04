@@ -260,6 +260,13 @@ const DonarSupportedProjects = ({
             <span className='font-medium text-[#1D1E1F]'>
               Available to claim
             </span>
+            <div className='relative group'>
+              <IconTokenSchedule />
+              <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                The tokens have been unlocked and are now available for you to
+                claim. Once claimed, they will be transferred to your wallet.
+              </div>
+            </div>
           </div>
           <div className='flex gap-1 font-medium text-[#1D1E1F]'>
             <span>
@@ -280,7 +287,7 @@ const DonarSupportedProjects = ({
 
         {/* Claim Rewards */}
         <Button
-          color={ButtonColor.Giv}
+          color={ButtonColor.Gray}
           className='flex justify-center'
           disabled={
             totalClaimableRewardTokens === null ||
