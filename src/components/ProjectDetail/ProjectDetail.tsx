@@ -17,6 +17,7 @@ import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
+import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -31,6 +32,7 @@ const ProjectDetail = () => {
   const { projectData } = useProjectContext();
 
   const isRoundActive = !!activeRoundDetails;
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -57,7 +59,7 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (isRoundActive) {
+    if (isRoundActive || isQaccRoundEnded) {
       switch (tab) {
         case EProjectPageTabs.DONATIONS:
           setActiveTab(1);
@@ -131,7 +133,7 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {isRoundActive
+      {isRoundActive || isQaccRoundEnded
         ? activeTab === 1 && <ProjectDonationTable />
         : activeTab === 1 && (
             <ProjectTeamMembers teamMembers={projectData?.teamMembers} />
