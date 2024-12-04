@@ -5,7 +5,6 @@ import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 
 import { getIpfsAddress } from '@/helpers/image';
-import ProgressBar from '../ProgressBar';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
