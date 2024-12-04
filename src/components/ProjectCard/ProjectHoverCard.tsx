@@ -5,7 +5,6 @@ import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 
 import { getIpfsAddress } from '@/helpers/image';
-import ProgressBar from '../ProgressBar';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -161,7 +160,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             {activeRoundDetails && (
               <>
                 {/* Percentage Bar */}
-                <div className='flex flex-col gap-2'>
+                {/* <div className='flex flex-col gap-2'>
                   <div
                     className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
                   >
@@ -172,7 +171,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         : 'Maxed out this round!'}
                   </div>
                   <ProgressBar progress={progress} isStarted={false} />
-                </div>
+                </div> */}
 
                 <div>
                   <div className='flex gap-2 items-center pb-1'>
