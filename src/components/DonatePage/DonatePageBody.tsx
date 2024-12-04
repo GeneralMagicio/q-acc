@@ -373,7 +373,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       setHash(hash);
     } catch (ContractFunctionExecutionError) {
-      setFlashMessage('Error creating donation');
+      setFlashMessage('An error occurred.');
       console.log(ContractFunctionExecutionError);
       setDonateDisabled(false);
     }
@@ -699,7 +699,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 }
               >
                 <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                  <span className='text-[#5326EC]'>Need help!</span>
+                  <span className='text-[#5326EC]'>Read Guide</span>
                   <IconArrowRight color='#5326EC' />
                 </div>
               </Link>

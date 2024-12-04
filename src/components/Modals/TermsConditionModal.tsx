@@ -79,17 +79,12 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
     >
       <div className='flex flex-col gap-5 text-lg  font-redHatText'>
         <p className=''>
-          The q/acc protocol prohibits citizens of the{' '}
-          <span className='font-bold'>United States and United Kingdom</span>{' '}
-          from participating due to regulatory reasons.
+          Access to the protocol is prohibited for citizens and residents of the
+          United States and individuals from other jurisdictions outlined in the
+          Terms of Service, as well as companies, entities, and other
+          organizations based in the United States or those operating from
+          jurisdictions specified in the Terms of Service.
         </p>
-        <div className=''>
-          The q/acc protocol prohibits citizens from the{' '}
-          <span className='font-bold'>
-            internationally recognized list of prohibited countries
-          </span>{' '}
-          from participating due to AML compliance.
-        </div>
 
         {/* Terms of Service */}
         <div className='flex flex-col gap-4'>
