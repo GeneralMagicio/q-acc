@@ -49,11 +49,15 @@ const DashboardTabs = (props: IDashboardTabs) => {
   });
 
   const tabsArray = [
-    {
-      title: 'My Projects',
-      badge: !addrWhitelist || !projectData ? 0 : 1,
-      query: EDashboardPageTabs.PROJECTS,
-    },
+    ...(!addrWhitelist
+      ? []
+      : [
+          {
+            title: 'My Projects',
+            badge: !addrWhitelist || !projectData ? 0 : 1,
+            query: EDashboardPageTabs.PROJECTS,
+          },
+        ]),
 
     {
       title: 'My Tokens',
