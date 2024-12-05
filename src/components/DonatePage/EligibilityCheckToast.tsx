@@ -1,6 +1,6 @@
 import React from 'react';
+import floor from 'lodash/floor';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { floor } from 'lodash';
 import { formatAmount } from '@/helpers/donation';
 
 export const EligibilityCheckToast = () => {
