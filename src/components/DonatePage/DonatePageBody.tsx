@@ -399,6 +399,24 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
     if (!isVerified) {
       if (
+        activeRoundDetails &&
+        'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in
+          activeRoundDetails &&
+        parseFloat(inputAmount) >
+          activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly /
+            Number(activeRoundDetails?.tokenPrice)
+      ) {
+        {
+          console.log(
+            'User is not verified with Privado ID',
+            activeRoundDetails?.tokenPrice,
+          );
+          setShowZkidModal(true);
+          return;
+        }
+      }
+
+      if (
         !user?.hasEnoughGitcoinPassportScore &&
         !user?.hasEnoughGitcoinAnalysisScore
       ) {
@@ -571,7 +589,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
-                Your remaining cap for this project is :
+                Your remaining cap for this project is:
                 <span className='font-medium text-[#4F576A]'>
                   {userDonationCap !== null && userDonationCap !== undefined
                     ? formatAmount(Math.floor(userDonationCap * 100) / 100)

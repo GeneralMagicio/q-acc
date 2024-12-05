@@ -38,7 +38,7 @@ export const EligibilityCheckToast = () => {
           </li>
           <li>
             With <span className='font-bold'>Privado zkID credentials</span>,
-            you are eligible to support each project with up{' '}
+            you are eligible to support each project with up to{' '}
             {formatAmount(floor(Number(high_cap)))} POL .
           </li>
         </ul>
