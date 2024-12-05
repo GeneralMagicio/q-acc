@@ -34,7 +34,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = project.title ? `Q/ACC | ${project.title}` : defaultTitle;
+  const title = project.title ? `q/acc | ${project.title}` : defaultTitle;
 
   return {
     title,
