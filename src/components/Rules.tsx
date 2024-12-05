@@ -55,6 +55,13 @@ const Rules = () => {
             <b className='font-extrabold'>$15,000 USD-equivalent of POL.</b>
           </li>
           <li>
+            The above caps are set at the start of the round and may be changed
+            during the round in the event of{' '}
+            <b className='font-extrabold'>
+              significant fluctuation in POL-USD rate over a 48 hour period.
+            </b>
+          </li>
+          <li>
             Learn how to verify your identity and move POL and ETH to Polygon
             zkEVM in our
             <a
