@@ -17,7 +17,7 @@ export const EligibilityCheckToast = () => {
     }
 
     high_cap =
-      activeRoundDetails?.roundUSDCapPerUserPerProject /
+      (activeRoundDetails?.roundUSDCapPerUserPerProject || 15000) /
       activeRoundDetails?.tokenPrice;
   }
 
