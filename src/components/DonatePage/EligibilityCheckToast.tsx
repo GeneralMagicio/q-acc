@@ -12,8 +12,8 @@ export const EligibilityCheckToast = () => {
       'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
     ) {
       low_cap =
-        activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly ||
-        1000 / activeRoundDetails?.tokenPrice;
+        (activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly ||
+          1000) / activeRoundDetails?.tokenPrice;
     }
 
     high_cap =
