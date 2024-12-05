@@ -14,6 +14,7 @@ import { GitcoinLow } from '../GitcoinVerifcationElements/GitcoinLow';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 import { formatAmount } from '@/helpers/donation';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export const GitcoinVerifySection = () => {
   const {
@@ -25,6 +26,7 @@ export const GitcoinVerifySection = () => {
   } = useGitcoinScore();
   const { isVerified } = usePrivado();
   const { data: allRounds } = useFetchAllRound();
+  const { data: POLPrice } = useFetchTokenPrice();
 
   const qaccRound: IQfRound | undefined = allRounds?.filter(
     round => round.__typename === 'QfRound',
@@ -36,7 +38,7 @@ export const GitcoinVerifySection = () => {
     if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
       low_cap =
         (qaccRound?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly || 1000) /
-        qaccRound?.tokenPrice;
+        (qaccRound?.tokenPrice || Number(POLPrice));
     }
   }
 
@@ -59,7 +61,7 @@ export const GitcoinVerifySection = () => {
         <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
         <p>
           You are eligible to support each project with up to&nbsp;
-          {low_cap} POL.
+          {formatAmount(low_cap)} POL.
         </p>
       </div>
       <div>

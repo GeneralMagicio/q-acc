@@ -705,7 +705,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
                 onClick={toggleWidget}
               >
-                <span className='text-[#5326EC]'>Use Li.FI</span>
+                <span className='text-[#5326EC]'>Use LI.FI</span>
               </button>
               <LiFiWidget
                 ref={drawerRef}

@@ -9,7 +9,7 @@ const config: EnvConfig = {
   SCAN_URL: 'https://zkevm.polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
-    'https://staging.qacc-be.generalmagic.io/graphql',
+    'https://qacc-be.generalmagic.io/graphql',
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     'https://auth.serve.giveth.io/v1',
