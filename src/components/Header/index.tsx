@@ -6,6 +6,7 @@ import { IconX } from '../Icons/IconX';
 import Routes from '@/lib/constants/Routes';
 import { HeaderItem } from './HeaderItem';
 import { isProductReleased } from '@/config/configuration';
+import { VerificationBanner } from './VerificationBanner';
 
 const HEADER_ITEMS = [
   {
@@ -54,6 +55,7 @@ export const Header = () => {
         <ConnectButton className='order-2 md:order-3' />
       </nav>
       {/* <PrivadoBanner /> */}
+      <VerificationBanner />
     </>
   );
 };
