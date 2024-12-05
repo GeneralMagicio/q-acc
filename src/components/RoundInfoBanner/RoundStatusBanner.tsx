@@ -3,6 +3,8 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { RemainingTimeBox } from './RemainingTimeBox';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { OnBoardButton } from '../OnBoardButton';
+import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 export const RoundStatusBanner: React.FC = () => {
   // Renamed the component
@@ -32,21 +34,30 @@ export const RoundStatusBanner: React.FC = () => {
       null,
     );
   }, [allRounds]);
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   // Determine the status text and target date for the RemainingTimeBox
   const isRoundStarted = soonestRound
     ? new Date(soonestRound.startDate) <= new Date()
     : false;
-  const roundStatusText = isRoundStarted
-    ? 'q/acc round ends in'
-    : 'q/acc round starts in';
+  let roundStatusText;
+
+  if (isQaccRoundEnded) {
+    roundStatusText = 'No active round';
+  } else {
+    roundStatusText = isRoundStarted
+      ? 'q/acc round ends in'
+      : 'q/acc round starts in';
+  }
+
   const targetDate = isRoundStarted
     ? soonestRound?.endDate
     : soonestRound?.startDate;
 
   return (
     <div className='rounded-2xl py-6 px-8 flex flex-wrap justify-center items-center z-0'>
-      <div className='text-2xl font-medium text-gray-800'>
+      <div className='text-2xl font-medium text-gray-800 mx-4'>
         {roundStatusText}
       </div>
       {targetDate && <RemainingTimeBox targetDate={targetDate} />}

@@ -261,11 +261,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   }, [address, tokenAddress, chain]);
 
   // if user allready accepted terms and conditions set it to true
-  useEffect(() => {
-    if (user && user.acceptedToS) {
-      setTerms(true);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.acceptedToS) {
+  //     setTerms(true);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     // Update donateDisabled based on conditions
@@ -373,7 +373,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       setHash(hash);
     } catch (ContractFunctionExecutionError) {
-      setFlashMessage('Error creating donation');
+      setFlashMessage('An error occurred.');
       console.log(ContractFunctionExecutionError);
       setDonateDisabled(false);
     }
@@ -550,6 +550,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       <TermsConditionModal
         isOpen={showTermsConditionModal}
+        setTerms={setTerms}
+        terms={terms}
+        onContinue={handleDonateClick}
         onClose={() => setShowTermsConditionModal(false)}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
@@ -696,7 +699,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 }
               >
                 <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                  <span className='text-[#5326EC]'>Need help!</span>
+                  <span className='text-[#5326EC]'>Read Guide</span>
                   <IconArrowRight color='#5326EC' />
                 </div>
               </Link>

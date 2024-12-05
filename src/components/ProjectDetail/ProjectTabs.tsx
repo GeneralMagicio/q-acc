@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { useProjectContext } from '@/context/project.context';
+import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 interface IProjectTabs {
   activeTab: number;
@@ -15,13 +17,17 @@ export enum EProjectPageTabs {
 const ProjectTabs = (props: IProjectTabs) => {
   const { activeTab, slug, isRoundActive } = props;
   const { totalDonationsCount } = useProjectContext();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+
   console.log('total', totalDonationsCount);
   const badgeCount = (count?: number) => {
     return count || null;
   };
   const tabsArray = [
     { title: 'About' },
-    ...(isRoundActive
+    ...(isRoundActive || isQaccRoundEnded
       ? [
           {
             title: 'Transactions',
