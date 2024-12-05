@@ -487,8 +487,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     const regex = /^\d*\.?\d{0,2}$/;
 
     if (regex.test(value)) {
-      setInputAmount(value);
       const inputAmount = parseFloat(value);
+      if (activeRoundDetails) {
+        if (
+          inputAmount >
+          activeRoundDetails?.cumulativeUSDCapPerUserPerProject /
+            activeRoundDetails?.tokenPrice
+        ) {
+          return; // Exit without updating the input
+        }
+      }
+
+      setInputAmount(value);
 
       if (inputAmount < config.MINIMUM_DONATION_AMOUNT) {
         setInputErrorMessage(
