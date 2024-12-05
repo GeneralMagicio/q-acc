@@ -107,7 +107,7 @@ export const useTokenPriceRange = ({
   //   // console.log('max price:', maxPrice);
   // }
 
-  const maxPrice = minPrice + 0.786; // hardcode max price with a delta of 0.786
+  const maxPrice = minPrice + 0.806; // hardcode max price with a delta of 0.786
 
   return { min: minPrice, max: maxPrice };
 };
