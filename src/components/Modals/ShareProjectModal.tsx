@@ -26,7 +26,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
 
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
-  const copyLink = `${url.protocol}//${url.host}/${projectSlug}`;
+  const copyLink = `${url.protocol}//${url.host}/project/${projectSlug}`;
 
   const handleCopy = () => {
     navigator.clipboard

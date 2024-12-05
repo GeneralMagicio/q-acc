@@ -5,7 +5,6 @@ import { IProject } from '@/types/project.type';
 import ProjectCardImage from './ProjectCardImage';
 
 import { getIpfsAddress } from '@/helpers/image';
-import ProgressBar from '../ProgressBar';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -14,10 +13,10 @@ import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
-import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
+import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
-import { isEarlyAccessBranch } from '@/config/configuration';
 import { SupportButton } from './SupportButton';
+import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -29,33 +28,16 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
-
-  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
+  const [progress, setProgress] = useState(0);
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
+  const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
-  const [progress, setProgress] = useState(0);
-  const [isRoundEnded, setIsRoundEnded] = useState(false);
-
-  useEffect(() => {
-    const fetchMostRecentEndRound = async () => {
-      const res = await getMostRecentEndRound();
-
-      return res?.__typename === 'QfRound';
-    };
-
-    const getData = async () => {
-      const data = await fetchMostRecentEndRound();
-      setIsRoundEnded(data);
-    };
-
-    getData();
-  }, [activeRoundDetails, isRoundEnded]);
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   useEffect(() => {
     console.log(
@@ -116,8 +98,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   });
 
   const polPriceNumber = Number(POLPrice);
-  const isActionsActive = isEarlyAccessBranch && !isRoundEnded;
-  const totalHeightClass = isActionsActive
+  const totalHeightClass = activeRoundDetails
     ? 'h-project-card-full'
     : 'h-project-card';
 
@@ -176,10 +157,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               </p>
             </div>
 
-            {isActionsActive && (
+            {activeRoundDetails && (
               <>
                 {/* Percentage Bar */}
-                <div className='flex flex-col gap-2'>
+                {/* <div className='flex flex-col gap-2'>
                   <div
                     className={`px-2 py-[2px] rounded-md  w-fit  font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
                   >
@@ -190,7 +171,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         : 'Maxed out this round!'}
                   </div>
                   <ProgressBar progress={progress} isStarted={false} />
-                </div>
+                </div> */}
 
                 <div>
                   <div className='flex gap-2 items-center pb-1'>
@@ -256,6 +237,70 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   disabled={maxPOLCap === amountDonatedInRound}
                 />
               </>
+            )}
+
+            {isQaccRoundEnded && (
+              <div>
+                <div className='flex gap-2 items-center pb-1'>
+                  {/* {getIpfsAddress(project.abc?.icon!)} */}
+                  <div className='w-6 h-6 relative rounded-full overflow-hidden'>
+                    <Image
+                      src={getIpfsAddress(
+                        project.abc?.icon! ||
+                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                      )}
+                      alt=''
+                      width={48}
+                      height={48}
+                    />
+                  </div>
+
+                  {/* <IconABC /> */}
+                  <p className='text-gray-800 font-medium'>
+                    {project?.abc?.tokenTicker} range
+                    {tokenPriceRangeStatus.isSuccess &&
+                    tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                      ' '
+                    ) : (
+                      <span> (Calculating) </span>
+                    )}
+                  </p>
+                </div>
+                <div className='mt-1 flex justify-between'>
+                  {tokenPriceRangeStatus.isSuccess &&
+                  tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                    <>
+                      <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                        <p className='font-bold text-gray-800'>
+                          {tokenPriceRange.min.toFixed(2)} -{' '}
+                          {tokenPriceRange.max.toFixed(2)}
+                        </p>
+                        <p className='text-xs text-gray-400'>POL</p>
+                      </div>
+                      <div className='flex gap-1 items-center'>
+                        <p className='text-sm text-[#4F576A] font-medium'>
+                          ~$
+                          {polPriceNumber
+                            ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                            : ''}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                        <p className='font-bold text-gray-800'>---</p>
+                        <p className='text-xs text-gray-400'>POL</p>
+                      </div>
+                      <div className='flex gap-1 items-center'>
+                        <p className='text-sm text-[#4F576A] font-medium'>
+                          ~$ ---
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>

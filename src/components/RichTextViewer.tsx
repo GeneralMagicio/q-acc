@@ -13,6 +13,7 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
           word-break: break-word;
           font-family: "Red Hat Text", sans-serif;
           font-size: 16px;
+          max-width:700px;
         }
 
         .ql-container > .ql-editor p,

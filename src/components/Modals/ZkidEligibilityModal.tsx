@@ -6,11 +6,10 @@ interface ZkidEligibilityModal extends BaseModalProps {}
 
 export const ZkidEligibilityModal: FC<ZkidEligibilityModal> = props => {
   return (
-    <Modal {...props} title='zkID Verification Required' showCloseButton>
+    <Modal {...props} title='Privado zkID' showCloseButton>
       <div className=''>
         <p className='mt-4 mb-10 text-xl'>
-          To contribute more than $1,000 to this project, you need to complete
-          KYC verification through Privado.
+          The amount you want to submit requires Privado zkID credentials.
         </p>
         <Button
           className='mx-auto'

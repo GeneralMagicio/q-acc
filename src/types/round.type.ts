@@ -28,4 +28,5 @@ export interface IQfRound {
   cumulativeUSDCapPerUserPerProject: number;
   roundUSDCloseCapPerProject: number;
   isBatchMintingExecuted: boolean;
+  roundUSDCapPerUserPerProjectWithGitcoinScoreOnly: number;
 }

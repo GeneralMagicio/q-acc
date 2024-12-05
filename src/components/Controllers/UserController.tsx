@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { redirect, useRouter } from 'next/navigation';
-import { fetchGivethUserInfo } from '../../services/user.service';
+import { fetchGivethUserInfo } from '@/services/user.service';
 import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
+import { SanctionModal } from '../Modals/SanctionModal';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import Routes from '@/lib/constants/Routes';
 import { getLocalStorageToken } from '@/helpers/generateJWT';
@@ -13,16 +14,19 @@ import { IUser } from '@/types/user.type';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
+import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
     useState(false);
   const [showSignModal, setShowSignModal] = useState(false);
+  const [showSanctionModal, setShowSanctionModal] = useState(false);
   const { address } = useAccount();
-  const route = useRouter();
+  const router = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
+  const { data: isSanctioned } = useFetchSanctionStatus(address as string);
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -44,7 +48,7 @@ export const UserController = () => {
         };
 
         await updateUser(_user);
-        route.push(Routes.VerifyPrivado);
+        router.push(Routes.VerifyPrivado);
         console.log('saved');
       } else {
         console.log('No user in giveth data');
@@ -57,11 +61,10 @@ export const UserController = () => {
     }
 
     // Check if user is whitelisted
-
     if (!!useWhitelist.data) {
       const isUserCreatedProject = true;
       if (!isUserCreatedProject) {
-        route.push(Routes.Create); //TODO: should we redirect or not
+        router.push(Routes.Create); //TODO: should we redirect or not
       }
     }
   };
@@ -91,7 +94,18 @@ export const UserController = () => {
     };
   }, []);
 
-  return showSignModal ? (
+  useEffect(() => {
+    if (isSanctioned) {
+      setShowSanctionModal(true);
+    }
+  }, [isSanctioned]);
+
+  return showSanctionModal ? (
+    <SanctionModal
+      isOpen={showSanctionModal}
+      onClose={() => setShowSanctionModal(false)}
+    />
+  ) : showSignModal ? (
     <SignModal
       isOpen={showSignModal}
       onClose={() => setShowSignModal(false)}

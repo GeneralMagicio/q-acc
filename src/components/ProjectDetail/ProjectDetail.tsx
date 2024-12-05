@@ -13,10 +13,11 @@ import ProjectTeamMembers from './ProjectTeamMember';
 import { useProjectContext } from '@/context/project.context';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
-import config, { isEarlyAccessBranch } from '@/config/configuration';
+import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { calculateCapAmount, getMostRecentEndRound } from '@/helpers/round';
+import { calculateCapAmount } from '@/helpers/round';
+import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -29,21 +30,9 @@ const ProjectDetail = () => {
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
-  const [isRoundEnded, setIsRoundEnded] = useState(false);
-  useEffect(() => {
-    const fetchMostRecentEndRound = async () => {
-      const res = await getMostRecentEndRound();
 
-      return res?.__typename === 'QfRound';
-    };
-
-    const getData = async () => {
-      const data = await fetchMostRecentEndRound();
-      setIsRoundEnded(data);
-    };
-
-    getData();
-  }, [activeRoundDetails, isRoundEnded]);
+  const isRoundActive = !!activeRoundDetails;
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -70,7 +59,7 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (isEarlyAccessBranch) {
+    if (isRoundActive || isQaccRoundEnded) {
       switch (tab) {
         case EProjectPageTabs.DONATIONS:
           setActiveTab(1);
@@ -100,13 +89,13 @@ const ProjectDetail = () => {
     <div className=''>
       <div className='container'>
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
-          <ProjectDetailBanner />
+          <ProjectDetailBanner isRoundActive={isRoundActive} />
 
-          {isEarlyAccessBranch ? <DonateSection /> : ''}
+          {isRoundActive ? <DonateSection /> : ''}
         </div>
-        {!isRoundEnded && (
+        {isRoundActive && (
           <div className='my-6'>
-            {isEarlyAccessBranch ? (
+            {activeRoundDetails ? (
               <RoundCountBanner projectMaxedOut={progress >= 100} />
             ) : (
               ''
@@ -115,7 +104,11 @@ const ProjectDetail = () => {
         )}
       </div>
 
-      <ProjectTabs activeTab={activeTab} slug={projectData?.slug} />
+      <ProjectTabs
+        activeTab={activeTab}
+        slug={projectData?.slug}
+        isRoundActive={isRoundActive}
+      />
 
       {activeTab === 0 && (
         <div className='flex flex-col gap-10 bg-white py-10'>
@@ -140,7 +133,7 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      {isEarlyAccessBranch
+      {isRoundActive || isQaccRoundEnded
         ? activeTab === 1 && <ProjectDonationTable />
         : activeTab === 1 && (
             <ProjectTeamMembers teamMembers={projectData?.teamMembers} />

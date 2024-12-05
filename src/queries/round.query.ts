@@ -29,6 +29,7 @@ export const GET_ALL_ROUNDS = `
         cumulativeUSDCapPerUserPerProject
         roundUSDCloseCapPerProject
         isBatchMintingExecuted
+        roundUSDCapPerUserPerProjectWithGitcoinScoreOnly
       }
     }
   }
@@ -66,6 +67,7 @@ export const GET_ACTIVE_ROUND = `
           cumulativeUSDCapPerUserPerProject
           roundUSDCloseCapPerProject
           isBatchMintingExecuted
+          roundUSDCapPerUserPerProjectWithGitcoinScoreOnly
         }
       }
     }

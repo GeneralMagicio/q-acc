@@ -51,6 +51,7 @@ import { EligibilityCheckToast } from './EligibilityCheckToast';
 import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
 import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
+import { TermsConditionModal } from '../Modals/TermsConditionModal';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -133,6 +134,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
   const [showZkidModal, setShowZkidModal] = useState(false);
+  const [showTermsConditionModal, setShowTermsConditionModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
 
@@ -146,14 +148,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         const userCapp = await fetchProjectUserDonationCapKyc(
           Number(projectData?.id),
         );
-        const { qAccCap, gitcoinPassport } = userCapp || {};
+        const { gitcoinPassport, zkId } = userCapp || {};
         setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
+        const userCap =
+          floor(Number(zkId?.unusedCap)) ||
+          floor(Number(gitcoinPassport?.unusedCap)) ||
+          0;
         const res = remainingDonationAmount / 2 - 1;
         if (progress >= 90) {
           console.log('Res', res, progress);
-          setUserDonationCap(Math.min(res, Number(qAccCap)));
+          setUserDonationCap(Math.min(res, Number(userCap)));
         } else {
-          setUserDonationCap(floor(Number(qAccCap)) || 0);
+          setUserDonationCap(userCap);
         }
       }
     };
@@ -255,20 +261,21 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   }, [address, tokenAddress, chain]);
 
   // if user allready accepted terms and conditions set it to true
-  useEffect(() => {
-    if (user && user.acceptedToS) {
-      setTerms(true);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.acceptedToS) {
+  //     setTerms(true);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     // Update donateDisabled based on conditions
     if (
-      !terms ||
+      // !terms ||
       !isConnected ||
       !(
-        parseFloat(inputAmount) >= 5 &&
-        parseFloat(inputAmount) <= userDonationCap
+        (parseFloat(inputAmount) >= config.MINIMUM_DONATION_AMOUNT)
+        // &&
+        // parseFloat(inputAmount) <= userDonationCap
       ) ||
       parseFloat(inputAmount) > remainingDonationAmount ||
       parseFloat(inputAmount) > tokenDetails?.formattedBalance
@@ -366,7 +373,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       setHash(hash);
     } catch (ContractFunctionExecutionError) {
-      setFlashMessage('Error creating donation');
+      setFlashMessage('An error occurred.');
       console.log(ContractFunctionExecutionError);
       setDonateDisabled(false);
     }
@@ -375,19 +382,56 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleDonateClick = () => {
     console.log(parseFloat(inputAmount));
     console.log('isVerified', isVerified);
+    // if (!isVerified) {
+    //   if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+    //     console.log('User is not verified with Privado ID');
+    //     setShowZkidModal(true);
+    //     return;
+    //   } else if (
+    //     (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
+    //     (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+    //   ) {
+    //     setShowGitcoinModal(true);
+    //     console.log('User is not verified with Gitcoin passport');
+    //     return;
+    //   }
+    // }
+
     if (!isVerified) {
-      if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-        console.log('User is not verified with Privado ID');
-        setShowZkidModal(true);
-        return;
-      } else if (
-        (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
-        (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
+      if (
+        activeRoundDetails &&
+        'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in
+          activeRoundDetails &&
+        parseFloat(inputAmount) >
+          activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly /
+            Number(activeRoundDetails?.tokenPrice)
+      ) {
+        {
+          console.log(
+            'User is not verified with Privado ID',
+            activeRoundDetails?.tokenPrice,
+          );
+          setShowZkidModal(true);
+          return;
+        }
+      }
+
+      if (
+        !user?.hasEnoughGitcoinPassportScore &&
+        !user?.hasEnoughGitcoinAnalysisScore
       ) {
         setShowGitcoinModal(true);
         console.log('User is not verified with Gitcoin passport');
         return;
+      } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        console.log('User is not verified with Privado ID');
+        setShowZkidModal(true);
+        return;
       }
+    }
+    if (!terms) {
+      setShowTermsConditionModal(true);
+      return;
     }
     if (chain?.id !== SUPPORTED_CHAIN.id) {
       {
@@ -403,8 +447,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     //   return;
     // }
 
-    if (parseFloat(inputAmount) < 5 || isNaN(parseFloat(inputAmount))) {
-      console.log('The minimum donation amount is 5.');
+    if (
+      parseFloat(inputAmount) < config.MINIMUM_DONATION_AMOUNT ||
+      isNaN(parseFloat(inputAmount))
+    ) {
+      console.log(
+        `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
+      );
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
@@ -456,11 +505,23 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     const regex = /^\d*\.?\d{0,2}$/;
 
     if (regex.test(value)) {
-      setInputAmount(value);
       const inputAmount = parseFloat(value);
+      if (activeRoundDetails) {
+        if (
+          inputAmount >
+          activeRoundDetails?.cumulativeUSDCapPerUserPerProject /
+            activeRoundDetails?.tokenPrice
+        ) {
+          return; // Exit without updating the input
+        }
+      }
 
-      if (inputAmount < 5) {
-        setInputErrorMessage('Minimum contribution: 5 POL');
+      setInputAmount(value);
+
+      if (inputAmount < config.MINIMUM_DONATION_AMOUNT) {
+        setInputErrorMessage(
+          `Minimum contribution: ${config.MINIMUM_DONATION_AMOUNT} POL`,
+        );
       }
       // else if (inputAmount > userDonationCap) {
       //   setInputErrorMessage('Amount should be less than the remaining cap');
@@ -514,13 +575,21 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         isOpen={showZkidModal}
         onClose={() => setShowZkidModal(false)}
       />
+
+      <TermsConditionModal
+        isOpen={showTermsConditionModal}
+        setTerms={setTerms}
+        terms={terms}
+        onContinue={handleDonateClick}
+        onClose={() => setShowTermsConditionModal(false)}
+      />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <EligibilityCheckToast />
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
-                Your remaining cap
+                Your remaining cap for this project is:
                 <span className='font-medium text-[#4F576A]'>
                   {userDonationCap !== null && userDonationCap !== undefined
                     ? formatAmount(Math.floor(userDonationCap * 100) / 100)
@@ -532,9 +601,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               <div className='relative group'>
                 <IconTokenSchedule />
                 <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  This is the amount of POL that you have remaining from the
-                  individual cap for this round. It takes into account any
-                  funding that you have previously sent in this round.
+                  Caps are set at the start of the round and may be changed
+                  during the round in the event of significant fluctuation in
+                  POL-USD rate over a 48 hour period.
                 </div>
               </div>
             </div>
@@ -615,7 +684,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   <span
                     className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                   >
-                    5 POL
+                    {config.MINIMUM_DONATION_AMOUNT} POL
                   </span>
                 </h2>
               </div>
@@ -658,7 +727,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 }
               >
                 <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                  <span className='text-[#5326EC]'>Need help!</span>
+                  <span className='text-[#5326EC]'>Read Guide</span>
                   <IconArrowRight color='#5326EC' />
                 </div>
               </Link>
@@ -706,7 +775,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           </div>
           <div className='flex flex-col gap-4'>
             {/* Terms of Service */}
-            <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
+            {/* <label className='flex gap-2 items-center p-4 bg-[#EBECF2] rounded-2xl w-full cursor-pointer'>
               <div>
                 <input
                   type='checkbox'
@@ -726,7 +795,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   </Link>
                 </h2>
               </div>
-            </label>
+            </label> */}
 
             {/* Make it Anoynmous */}
             <div
