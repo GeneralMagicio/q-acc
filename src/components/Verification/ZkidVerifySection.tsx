@@ -7,18 +7,37 @@ import {
   EligibilityBadge,
   EligibilityBadgeStatus,
 } from '@/components/EligibilityBadge';
-import config from '@/config/configuration';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { IQfRound } from '@/types/round.type';
+import { formatAmount } from '@/helpers/donation';
 
 export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, error, isLoading } = usePrivado();
+
+  const { data: allRounds } = useFetchAllRound();
+
+  const qaccRound: IQfRound | undefined = allRounds?.filter(
+    round => round.__typename === 'QfRound',
+  )[0];
+
+  let high_cap;
+
+  if (qaccRound) {
+    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
+      high_cap =
+        (qaccRound?.roundUSDCapPerUserPerProject || 15000) /
+        qaccRound?.tokenPrice;
+    }
+  }
+
   return isVerified ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <div>
         <h1 className='text-lg font-bold'>Privado zkID</h1>
         <p>
           You are eligible to support each project with up to{' '}
-          {config.HIGH_CAP_TEXT}.
+          {formatAmount(high_cap)} POL.
         </p>
       </div>
       <div>
@@ -30,7 +49,7 @@ export const ZkidVerifySection = () => {
       <h1 className='text-lg font-bold'>Privado zkID</h1>
       <p>
         Get your credentials with Privado zkID to support each project with up
-        to {config.HIGH_CAP_TEXT}.
+        to {formatAmount(high_cap)} POL.
       </p>
       <Button
         styleType={ButtonStyle.Solid}
