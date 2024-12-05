@@ -27,7 +27,7 @@ export const VerificationBanner = () => {
         className='w-full h-14 bg-[#FFEAB5] px-8 py-4 flex flex-row justify-center gap-2 items-center relative'
         hidden={!showVerificationBanner}
       >
-        <div className='w-1/2 flex justify-end gap-2'>
+        <div className='flex justify-end gap-2'>
           <Image
             src='/images/icons/info.svg'
             alt='info'
@@ -39,7 +39,7 @@ export const VerificationBanner = () => {
           </p>
         </div>
         <div
-          className='flex flex-row gap-2 w-1/2 justify-start cursor-pointer center items-center'
+          className='flex flex-row gap-2  justify-start cursor-pointer center items-center'
           onClick={() => window.open('/create/get-verified')}
         >
           <p className='text-giv-500'>Get Verified</p>
