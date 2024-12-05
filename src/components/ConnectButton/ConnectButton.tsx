@@ -127,7 +127,9 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             <div
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
               onClick={() => {
-                localStorage.getItem('token');
+                // localStorage.getItem('token');
+                // remove jwt token once user signs out
+                localStorage.removeItem('token');
                 disconnect();
               }}
             >
