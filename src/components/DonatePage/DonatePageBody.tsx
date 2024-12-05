@@ -584,28 +584,27 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         onClose={() => setShowTermsConditionModal(false)}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
-        <div className='p-6 lg:w-1/2 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
+        <div className='p-6 lg:w-2/3 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <EligibilityCheckToast />
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
-            <div className='flex  justify-between p-2 w-full md:w-2/3 bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
+            <div className='flex  justify-between p-2 w-fit md:w-2/3 lg:w-fit bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
               <span className='flex gap-2 items-center  '>
                 Your remaining cap for this project is:
-                <span className='font-medium text-[#4F576A]'>
+                <span className='font-medium text-[#4F576A] flex gap-2'>
                   {userDonationCap !== null && userDonationCap !== undefined
                     ? formatAmount(Math.floor(userDonationCap * 100) / 100)
                     : '---'}{' '}
                   POL
+                  <div className='relative group'>
+                    <IconTokenSchedule />
+                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                      Caps are set at the start of the round and may be changed
+                      during the round in the event of significant fluctuation
+                      in POL-USD rate over a 48 hour period.
+                    </div>
+                  </div>
                 </span>
               </span>
-
-              <div className='relative group'>
-                <IconTokenSchedule />
-                <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                  Caps are set at the start of the round and may be changed
-                  during the round in the event of significant fluctuation in
-                  POL-USD rate over a 48 hour period.
-                </div>
-              </div>
             </div>
 
             <div className='flex gap-2 items-center'>
