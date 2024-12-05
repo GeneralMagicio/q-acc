@@ -1,11 +1,5 @@
 import { useMemo } from 'react';
-import {
-  ethers,
-  BigNumberish,
-  Contract,
-  formatUnits,
-  parseUnits,
-} from 'ethers';
+import { ethers, BigNumberish, Contract } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import config from '@/config/configuration';
@@ -72,46 +66,48 @@ export const useTokenPriceRange = ({
   const minPrice =
     parseFloat((staticPriceForBuying.data || '0').toString()) / 1_000_000; // convert PPM to price in POL
 
-  // Fetch `getVirtualCollateralSupply` (total contributed so far)
-  const virtualCollateralSupply = useQuery<BigNumberish, Error>({
-    queryKey: ['getVirtualCollateralSupply', contractAddress],
-    queryFn: async () => {
-      if (!contract) throw new Error('Contract not loaded');
-      const result: BigNumberish = await contract.getVirtualCollateralSupply();
-      return result;
-    },
-    enabled: !!contract,
-    select: data => Number(formatUnits(data, 18)),
-  });
+  // // Fetch `getVirtualCollateralSupply` (total contributed so far)
+  // const virtualCollateralSupply = useQuery<BigNumberish, Error>({
+  //   queryKey: ['getVirtualCollateralSupply', contractAddress],
+  //   queryFn: async () => {
+  //     if (!contract) throw new Error('Contract not loaded');
+  //     const result: BigNumberish = await contract.getVirtualCollateralSupply();
+  //     return result;
+  //   },
+  //   enabled: !!contract,
+  //   select: data => Number(formatUnits(data, 18)),
+  // });
+  //
+  // const contributedSoFar = parseFloat(
+  //   (virtualCollateralSupply.data || '0').toString(),
+  // ); // todo: we need to deduct the initial supply from that
+  // // Calculate the upper limit (X)
+  // const X = contributionLimit - contributedSoFar;
+  //
+  // // Fetch `calculatePurchaseReturn` using X
+  // const calculatePurchaseReturn = useQuery<BigNumberish, Error>({
+  //   queryKey: ['calculatePurchaseReturn', X.toString(), contractAddress],
+  //   queryFn: async () => {
+  //     if (!contract) throw new Error('Contract not loaded');
+  //     const result: BigNumberish = await contract.calculatePurchaseReturn(
+  //       parseUnits(X.toString(), 18),
+  //     );
+  //     return result;
+  //   },
+  //   enabled: !!contract && !!X,
+  //   select: data => Number(formatUnits(data, 18)),
+  // });
+  //
+  // let maxPrice = minPrice;
+  // if (calculatePurchaseReturn.data) {
+  //   const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
+  //   // Calculate the max token price (P = X / Y)
+  //   // console.log('X:', X, 'Y:', Y);
+  //   maxPrice = X / Y;
+  //   // console.log('max price:', maxPrice);
+  // }
 
-  const contributedSoFar = parseFloat(
-    (virtualCollateralSupply.data || '0').toString(),
-  );
-  // Calculate the upper limit (X)
-  const X = contributionLimit - contributedSoFar;
-
-  // Fetch `calculatePurchaseReturn` using X
-  const calculatePurchaseReturn = useQuery<BigNumberish, Error>({
-    queryKey: ['calculatePurchaseReturn', X.toString(), contractAddress],
-    queryFn: async () => {
-      if (!contract) throw new Error('Contract not loaded');
-      const result: BigNumberish = await contract.calculatePurchaseReturn(
-        parseUnits(X.toString(), 18),
-      );
-      return result;
-    },
-    enabled: !!contract && !!X,
-    select: data => Number(formatUnits(data, 18)),
-  });
-
-  let maxPrice = minPrice;
-  if (calculatePurchaseReturn.data) {
-    const Y = parseFloat((calculatePurchaseReturn.data || 1).toString()); // Prevent division by zero
-    // Calculate the max token price (P = X / Y)
-    // console.log('X:', X, 'Y:', Y);
-    maxPrice = X / Y;
-    // console.log('max price:', maxPrice);
-  }
+  const maxPrice = minPrice + 0.786; // hardcode max price with a delta of 0.786
 
   return { min: minPrice, max: maxPrice };
 };
