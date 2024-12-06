@@ -212,7 +212,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
     message:
-      'Tokens are locked for 1 year with a 6 month cliff. This means that after 6 months, tokens are locked for 6 months and unlocked in a 6 month stream.',
+      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
     toolTip:
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
@@ -380,6 +380,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handleDonateClick = () => {
+    setDonateDisabled(true);
     console.log(parseFloat(inputAmount));
     console.log('isVerified', isVerified);
     // if (!isVerified) {
@@ -412,6 +413,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             activeRoundDetails?.tokenPrice,
           );
           setShowZkidModal(true);
+          setDonateDisabled(false);
           return;
         }
       }
@@ -420,16 +422,19 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         !user?.hasEnoughGitcoinPassportScore &&
         !user?.hasEnoughGitcoinAnalysisScore
       ) {
+        setDonateDisabled(false);
         setShowGitcoinModal(true);
         console.log('User is not verified with Gitcoin passport');
         return;
       } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
         console.log('User is not verified with Privado ID');
+        setDonateDisabled(false);
         setShowZkidModal(true);
         return;
       }
     }
     if (!terms) {
+      setDonateDisabled(false);
       setShowTermsConditionModal(true);
       return;
     }
@@ -439,6 +444,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       }
       console.log('chain', chain?.id);
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
+      setDonateDisabled(false);
       return;
     }
     // if (!isVerified) {
@@ -454,22 +460,28 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log(
         `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
       );
+      setDonateDisabled(false);
+
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
       console.log('The donation amount exceeds the cap limit.');
+      setDonateDisabled(false);
       return;
     }
     if (!terms) {
       console.log('Please accept the terms and conditions.');
+      setDonateDisabled(false);
       return;
     }
     if (parseFloat(inputAmount) > remainingDonationAmount) {
       console.log('Input amount will exceed the round cap');
+      setDonateDisabled(false);
       return;
     }
     if (parseFloat(inputAmount) > tokenDetails.formattedBalance) {
       console.log('Input amount is more than available balance');
+      setDonateDisabled(false);
       return;
     }
     handleDonate();
@@ -811,9 +823,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               <div className='flex flex-col text-[#1D1E1F]'>
                 <h2 className='text-base'>Make it anonymous</h2>
                 <p className='text-xs'>
-                  By checking this, we won&apos;t consider your profile
-                  information as a donor for this donation and won&apos;t show
-                  it on public pages.
+                  By checking this, we won't show your name and profile
+                  information associated with this contribution on public pages.
                 </p>
               </div>
             </div>
