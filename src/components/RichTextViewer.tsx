@@ -78,6 +78,10 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
         .ql-container > .ql-editor img {
           max-width: 100%;
         }
+        .ql-video {
+        width:100%;
+        min-height:300px
+        }
         
         .ql-container > .ql-editor a {
           color: #007bff !important;
