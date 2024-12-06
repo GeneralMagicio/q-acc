@@ -212,7 +212,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
     message:
-      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
+      'Tokens are locked for 1 year with a 6 months cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 months stream.',
     toolTip:
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
