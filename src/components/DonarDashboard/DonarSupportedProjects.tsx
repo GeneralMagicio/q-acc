@@ -207,7 +207,7 @@ const DonarSupportedProjects = ({
         <hr />
 
         <h1 className='flex p-[4px_16px] bg-[#EBECF2] w-fit rounded-md'>
-          You support this project{' '}
+          You supported this project{' '}
           {projectDonations.length > 1 && (
             <span className='font-medium'>
               &nbsp;{projectDonations.length}&nbsp;
