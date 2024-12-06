@@ -50,7 +50,7 @@ const Rules = () => {
               className='font-bold text-pink-500'
               referrerPolicy='no-referrer'
             >
-              Quick Swap DEX
+              QuickSwap DEX
             </a>
           </li>
           <li>
