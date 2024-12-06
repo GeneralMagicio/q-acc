@@ -36,7 +36,7 @@ const Rules = () => {
         </h1>
         <ol className='list-decimal text-2xl font-light text-slate-600 px-4 space-y-4 leading-normal'>
           <li>
-            The q/acc round lasts f
+            The q/acc round lasts{' '}
             <b className='font-extrabold'>only two weeks</b>.
           </li>
           <li>
