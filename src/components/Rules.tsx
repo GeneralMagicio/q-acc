@@ -36,14 +36,22 @@ const Rules = () => {
         </h1>
         <ol className='list-decimal text-2xl font-light text-slate-600 px-4 space-y-4 leading-normal'>
           <li>
-            The q/acc round lasts{' '}
+            The q/acc round lasts f
             <b className='font-extrabold'>only two weeks</b>.
           </li>
           <li>
             There is a <b className='font-extrabold'>250K matching pool</b> for
             this round. Your support boosts a project’s matching allocation,
             which will be determined following Sybil analysis and used for their
-            token’s liquidity on the QuickSwap DEX
+            token’s liquidity on the{' '}
+            <a
+              href={'https://quickswap.exchange/#/'}
+              target='_blank'
+              className='font-bold text-pink-500'
+              referrerPolicy='no-referrer'
+            >
+              Quick Swap DEX
+            </a>
           </li>
           <li>
             At the end of the round, you will receive tokens from the projects
