@@ -98,10 +98,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   });
 
   const capitalizeFirstLetter = (str: string) => {
-    if (!str) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str
+      .toLowerCase() // Make the whole string lowercase first
+      .replace(/(?:^|\.\s*)([a-z])/g, match => match.toUpperCase()); // Capitalize first letter of each sentence
   };
-
   const polPriceNumber = Number(POLPrice);
   const totalHeightClass = activeRoundDetails
     ? 'h-project-card-full'
