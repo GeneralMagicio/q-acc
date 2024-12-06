@@ -97,6 +97,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     allRounds,
   });
 
+  const capitalizeFirstLetter = (str: string) => {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const polPriceNumber = Number(POLPrice);
   const totalHeightClass = activeRoundDetails
     ? 'h-project-card-full'
@@ -152,7 +157,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </div>
             <div className='min-h-[100px] text-ellipsis  pb-3  '>
               <p className='text-gray-500  overflow-hidden    font-redHatText  line-clamp-4 leading-6'>
-                {project.descriptionSummary}
+                {project.descriptionSummary &&
+                  capitalizeFirstLetter(project.descriptionSummary)}
                 {/* {project.teaser ? project.teaser : '\u00A0'} */}
               </p>
             </div>
