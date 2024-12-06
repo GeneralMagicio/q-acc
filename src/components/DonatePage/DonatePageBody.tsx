@@ -380,6 +380,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handleDonateClick = () => {
+    setDonateDisabled(true);
     console.log(parseFloat(inputAmount));
     console.log('isVerified', isVerified);
     // if (!isVerified) {
@@ -412,6 +413,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             activeRoundDetails?.tokenPrice,
           );
           setShowZkidModal(true);
+          setDonateDisabled(false);
           return;
         }
       }
@@ -420,16 +422,19 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         !user?.hasEnoughGitcoinPassportScore &&
         !user?.hasEnoughGitcoinAnalysisScore
       ) {
+        setDonateDisabled(false);
         setShowGitcoinModal(true);
         console.log('User is not verified with Gitcoin passport');
         return;
       } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
         console.log('User is not verified with Privado ID');
+        setDonateDisabled(false);
         setShowZkidModal(true);
         return;
       }
     }
     if (!terms) {
+      setDonateDisabled(false);
       setShowTermsConditionModal(true);
       return;
     }
@@ -439,6 +444,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       }
       console.log('chain', chain?.id);
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
+      setDonateDisabled(false);
       return;
     }
     // if (!isVerified) {
@@ -454,22 +460,28 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log(
         `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
       );
+      setDonateDisabled(false);
+
       return;
     }
     if (parseFloat(inputAmount) > userDonationCap) {
       console.log('The donation amount exceeds the cap limit.');
+      setDonateDisabled(false);
       return;
     }
     if (!terms) {
       console.log('Please accept the terms and conditions.');
+      setDonateDisabled(false);
       return;
     }
     if (parseFloat(inputAmount) > remainingDonationAmount) {
       console.log('Input amount will exceed the round cap');
+      setDonateDisabled(false);
       return;
     }
     if (parseFloat(inputAmount) > tokenDetails.formattedBalance) {
       console.log('Input amount is more than available balance');
+      setDonateDisabled(false);
       return;
     }
     handleDonate();
