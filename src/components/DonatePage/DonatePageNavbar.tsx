@@ -28,7 +28,7 @@ const DonateNavbar: React.FC<DonateNavbarProps> = ({ isConfirming }) => {
 
         <div className='flex flex-col'>
           <span className='font-redHatText text-sm font-medium leading-5 text-[#82899A]'>
-            Supporting to
+            Supporting
           </span>
           <p className='font-redHatText text-base font-medium text-[#1D1E1F]'>
             {projectData?.title}
