@@ -30,7 +30,7 @@ export default function Home() {
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
           <RoundStatusBanner />
-          <div className='flex flex-col gap-6'>
+          <div className='flex flex-col gap-6 mx-auto w-[80%]'>
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>
               Welcome to Quadratic Acceleration
             </h1>
@@ -70,7 +70,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className='flex justify-center rounded-md  mx-auto w-[90%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
+          <div className='flex justify-center rounded-md  mx-auto w-[80%] sm:h-[300px] md:h-[500px] lg:h-[720px]'>
             <iframe
               className='w-full'
               src='https://www.youtube.com/embed/m30ElzaR--4'

@@ -5,6 +5,7 @@ import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { OnBoardButton } from '../OnBoardButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { MatchingRoundCard } from './MatchingRoundCard';
 
 export const RoundStatusBanner: React.FC = () => {
   // Renamed the component
@@ -56,12 +57,17 @@ export const RoundStatusBanner: React.FC = () => {
     : soonestRound?.startDate;
 
   return (
-    <div className='rounded-2xl py-6 px-8 flex flex-wrap justify-center items-center z-0'>
-      <div className='text-2xl font-medium text-gray-800 mx-4'>
-        {roundStatusText}
+    <div className='flex flex-col lg:flex-row gap-4 items-stretch justify-center mx-auto w-[80%] mt-[48px]'>
+      <div className='flex-1'>
+        <MatchingRoundCard />
       </div>
-      {targetDate && <RemainingTimeBox targetDate={targetDate} />}
-      <OnBoardButton />
+      <div className='flex-1 rounded-xl flex flex-col md:flex-row justify-between gap-6 border p-4 items-center z-40 bg-white min-h-[130px]'>
+        <div className='flex flex-col gap-4 items-start font-medium text-gray-800 text-xl'>
+          {roundStatusText}
+          {targetDate && <RemainingTimeBox targetDate={targetDate} />}
+        </div>
+        <OnBoardButton />
+      </div>
     </div>
   );
 };
