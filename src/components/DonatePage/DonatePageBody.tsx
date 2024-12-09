@@ -109,6 +109,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     null,
   );
   const [inputBalanceError, setInputBalanceError] = useState<boolean>(false);
+  const [userDonationCapError, setUserDonationCapError] =
+    useState<boolean>(false);
 
   const drawerRef = useRef<WidgetDrawer>(null);
 
@@ -499,16 +501,36 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         setInputBalanceError(false);
         return null;
       } else {
-        const amount = floor((userDonationCap * percentage) / 100);
-        setInputAmount(amount.toString());
-        if (amount > parseFloat(tokenDetails.formattedBalance)) {
+        const remainingBalance = floor(tokenDetails?.formattedBalance);
+        const amount = floor((remainingBalance * percentage) / 100);
+        if (amount <= userDonationCap) {
+          setInputAmount(amount.toString());
+        } else if (amount > userDonationCap) {
+          setInputAmount(userDonationCap.toString());
+        }
+        if (userDonationCap === 0) {
+          setUserDonationCapError(true);
+        } else {
+          setUserDonationCapError(false);
+        }
+        if (remainingBalance === 0) {
           setInputBalanceError(true);
         } else {
           setInputBalanceError(false);
         }
+
         return percentage;
       }
     });
+  };
+
+  const handleRemainingCapClick = () => {
+    const remainingBalance = floor(tokenDetails?.formattedBalance);
+    if (remainingBalance >= userDonationCap) {
+      setInputAmount(userDonationCap.toString());
+    } else {
+      setInputAmount(remainingBalance.toString());
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -600,22 +622,18 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <EligibilityCheckToast />
           <div className='flex flex-col md:flex-row  font-redHatText gap-4'>
             <div className='flex  justify-between p-2 w-fit md:w-2/3 lg:w-fit bg-[#EBECF2]  rounded-lg text-[#1D1E1F] items-center'>
-              <span className='flex gap-2 items-center  '>
-                Your remaining cap for this project is:
-                <span className='font-medium text-[#4F576A] flex gap-2'>
-                  {userDonationCap !== null && userDonationCap !== undefined
-                    ? formatAmount(Math.floor(userDonationCap * 100) / 100)
-                    : '---'}{' '}
-                  POL
-                  <div className='relative group'>
-                    <IconTokenSchedule />
-                    <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                      Caps are set at the start of the round and may be changed
-                      during the round in the event of significant fluctuation
-                      in POL-USD rate over a 48 hour period.
-                    </div>
-                  </div>
+              <span
+                className={`flex gap-2 items-center  ${inputBalanceError ? 'text-[#E6492D]' : 'text-black'} `}
+              >
+                Available in your wallet:
+                <span className='font-medium'>
+                  {!tokenDetails
+                    ? 'Loading...'
+                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
                 </span>
+                <button onClick={handleRefetch}>
+                  <IconRefresh size={16} />
+                </button>
               </span>
             </div>
 
@@ -664,18 +682,27 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               <div className='flex gap-1'>
                 {/* <span className='text-sm'>Available: 85000 MATIC</span> */}
                 <div
-                  onClick={() => setInputAmount(tokenDetails?.formattedBalance)}
-                  className={`cursor-pointer hover:underline ${inputBalanceError ? 'text-[#E6492D]' : 'text-black'}`}
+                  className={` flex  font-redHatText     ${userDonationCapError ? 'text-[#E6492D]' : 'text-black'}`}
                 >
-                  Available in your wallet:{' '}
-                  {!tokenDetails
-                    ? 'Loading...'
-                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+                  Your remaining cap for this project:&nbsp;
+                  <span
+                    onClick={handleRemainingCapClick}
+                    className='font-medium cursor-pointer  flex gap-2 hover:underline'
+                  >
+                    {userDonationCap !== null && userDonationCap !== undefined
+                      ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                      : '---'}{' '}
+                    POL
+                    <div className='relative group'>
+                      <IconTokenSchedule />
+                      <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                        Caps are set at the start of the round and may be
+                        changed during the round in the event of significant
+                        fluctuation in POL-USD rate over a 48 hour period.
+                      </div>
+                    </div>
+                  </span>
                 </div>
-
-                <button onClick={handleRefetch}>
-                  <IconRefresh size={16} />
-                </button>
               </div>
 
               <div>
