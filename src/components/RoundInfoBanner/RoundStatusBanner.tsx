@@ -57,14 +57,15 @@ export const RoundStatusBanner: React.FC = () => {
     : soonestRound?.startDate;
 
   return (
-    <div className='flex flex-col lg:flex-row gap-4 items-center justify-center'>
-      <MatchingRoundCard />
-      <div className='rounded-xl  flex  gap-6 border p-4 items-center z-40 bg-white'>
-        <div className=' flex flex-col  gap-4 font-medium text-gray-800 text-xl'>
+    <div className='flex flex-col lg:flex-row gap-4 items-stretch justify-center mx-auto w-[80%] mt-[48px]'>
+      <div className='flex-1'>
+        <MatchingRoundCard />
+      </div>
+      <div className='flex-1 rounded-xl flex flex-col md:flex-row justify-between gap-6 border p-4 items-center z-40 bg-white min-h-[130px]'>
+        <div className='flex flex-col gap-4 items-start font-medium text-gray-800 text-xl'>
           {roundStatusText}
           {targetDate && <RemainingTimeBox targetDate={targetDate} />}
         </div>
-
         <OnBoardButton />
       </div>
     </div>
