@@ -214,7 +214,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
     message:
-      'Tokens are locked for 1 year with a 6 months cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 months stream.',
+      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
     toolTip:
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
@@ -502,7 +502,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return null;
       } else {
         const remainingBalance = floor(tokenDetails?.formattedBalance);
-        const amount = floor((remainingBalance * percentage) / 100);
+        const amount = floor(
+          (Math.min(remainingBalance, userDonationCap) * percentage) / 100,
+        );
+
         setInputAmount(Math.min(amount, userDonationCap).toString());
         setUserDonationCapError(userDonationCap === 0);
         setInputBalanceError(remainingBalance === 0);
