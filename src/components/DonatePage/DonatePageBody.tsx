@@ -503,21 +503,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       } else {
         const remainingBalance = floor(tokenDetails?.formattedBalance);
         const amount = floor((remainingBalance * percentage) / 100);
-        if (amount <= userDonationCap) {
-          setInputAmount(amount.toString());
-        } else if (amount > userDonationCap) {
-          setInputAmount(userDonationCap.toString());
-        }
-        if (userDonationCap === 0) {
-          setUserDonationCapError(true);
-        } else {
-          setUserDonationCapError(false);
-        }
-        if (remainingBalance === 0) {
-          setInputBalanceError(true);
-        } else {
-          setInputBalanceError(false);
-        }
+        setInputAmount(Math.min(amount, userDonationCap).toString());
+        setUserDonationCapError(userDonationCap === 0);
+        setInputBalanceError(remainingBalance === 0);
 
         return percentage;
       }
@@ -526,11 +514,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const handleRemainingCapClick = () => {
     const remainingBalance = floor(tokenDetails?.formattedBalance);
-    if (remainingBalance >= userDonationCap) {
-      setInputAmount(userDonationCap.toString());
-    } else {
-      setInputAmount(remainingBalance.toString());
-    }
+    setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
