@@ -48,7 +48,7 @@ const config: Config = {
         GIV400: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
       },
       height: {
-        'project-card-full': '572px',
+        'project-card-full': '500px',
         'project-card': '370px',
       },
     },

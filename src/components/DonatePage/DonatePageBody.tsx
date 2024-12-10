@@ -1032,6 +1032,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             onClose={closeShareModal}
             showCloseButton={true}
             projectSlug={projectData?.slug || ''}
+            projectTitle={projectData?.title}
           />
         </div>
       )}
