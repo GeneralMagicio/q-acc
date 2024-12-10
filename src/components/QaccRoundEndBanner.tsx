@@ -1,6 +1,4 @@
 import React from 'react';
-import useRemainingTime from '@/hooks/useRemainingTime';
-import { OnBoardButton } from './OnBoardButton';
 import config from '@/config/configuration';
 
 interface QaccRoundEndBannerProps {}
