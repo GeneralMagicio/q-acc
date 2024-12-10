@@ -13,7 +13,9 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
           word-break: break-word;
           font-family: "Red Hat Text", sans-serif;
           font-size: 16px;
-          max-width:700px;
+          max-width:800px;
+          margin: 0 auto;
+          
         }
 
         .ql-container > .ql-editor p,
@@ -76,7 +78,11 @@ const RichTextViewer: React.FC<RichTextViewerProps> = ({ description }) => {
         .ql-container > .ql-editor img {
           max-width: 100%;
         }
-        
+
+        .ql-video {
+        width: 100%;
+        min-height: 50vh;
+        }
         .ql-container > .ql-editor a {
           color: #007bff !important;
           cursor:pointer
