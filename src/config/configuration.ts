@@ -24,6 +24,7 @@ const envConfig = isProduction ? production : development;
 const config = {
   LOW_CAP_TEXT: '1,356 POL',
   HIGH_CAP_TEXT: '20,341 POL',
+  isAllocationDone: false,
   ...envConfig,
 };
 
