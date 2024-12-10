@@ -367,6 +367,7 @@ const MyProjects = () => {
                 onClose={closeShareModal}
                 showCloseButton={true}
                 projectSlug={projectData?.slug || ''}
+                projectTitle={projectData?.title}
               />
             </div>
           </div>

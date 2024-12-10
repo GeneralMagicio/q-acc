@@ -15,11 +15,17 @@ import { IconFarcaster } from '../Icons/IconFarcaster';
 interface ShareProjectModalProps extends BaseModalProps {
   showCloseButton?: boolean;
   projectSlug: string;
+  projectTitle?: string;
+  shareMessage?: string;
 }
 
 export const ShareProjectModal: FC<ShareProjectModalProps> = ({
+  projectTitle,
   projectSlug,
   onClose,
+  shareMessage = 'Let’s show some love and support to ' +
+    projectTitle +
+    ' on q/acc',
   ...props
 }) => {
   const [copied, setCopied] = useState(false);
@@ -58,7 +64,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
         <div className='flex justify-center gap-3'>
           <div className='border rounded-lg p-2 flex items-center'>
             <TwitterShareButton
-              title={projectSlug || ''}
+              title={shareMessage || ''}
               url={copyLink || ''}
               hashtags={['Qacc']}
             >
@@ -66,22 +72,26 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
             </TwitterShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
-            <LinkedinShareButton title={projectSlug} url={copyLink || ''}>
+            <LinkedinShareButton
+              summary={shareMessage}
+              title={shareMessage}
+              url={copyLink || ''}
+            >
               <IconLinkedin size={24} />
             </LinkedinShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <FacebookShareButton
-              title={projectSlug || ''}
+              title={shareMessage || ''}
               url={copyLink || ''}
-              hashtag='#Qacc'
+              hashtag={shareMessage}
             >
               <IconFacebook size={24} />
             </FacebookShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <Link
-              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${projectSlug}`}
+              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${shareMessage}`}
               target='_blank'
             >
               <IconFarcaster size={24} />

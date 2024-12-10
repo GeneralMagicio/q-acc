@@ -8,6 +8,8 @@ import config from '@/config/configuration';
 import { IconTransactionVerified } from '../Icons/IconTransactionVerified';
 import { IconPendingSpinner } from '../Icons/IconPendingSpinner';
 import { updateDonation } from '@/services/donation.services';
+import { ShareProjectModal } from '../Modals/ShareProjectModal';
+import { IconShare } from '../Icons/IconShare';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -53,6 +55,9 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   //     return () => clearInterval(interval);
   //   }
   // }, [transactionHash]);
+
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
 
   useEffect(() => {
     // TODO: It should be changed!!! I think we need to make this better
@@ -201,14 +206,35 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             </h3>
           </div>
 
-          <Link href={'/projects'}>
-            <Button
-              color={ButtonColor.Giv}
-              className={`text-white justify-center w-[242px] text-sm`}
+          <div className='flex gap-4'>
+            <Link href={'/projects'}>
+              <Button
+                color={ButtonColor.Giv}
+                className={`text-white justify-center w-[242px] text-sm`}
+              >
+                See More Projects
+              </Button>
+            </Link>
+            <span
+              onClick={() => setIsShareModalOpen(true)}
+              className='text-xs cursor-pointer flex gap-2 font-medium text-pink-500 px-[15px] py-2 bg-white w-[220px] h-[48px] justify-center items-center rounded-full'
             >
-              See More Projects
-            </Button>
-          </Link>
+              <IconShare size={16} />
+              Share
+            </span>
+
+            <ShareProjectModal
+              isOpen={isShareModalOpen}
+              // onClose={closeShareModal}
+              onClose={() => toggleShareModal(false)}
+              showCloseButton={true}
+              projectSlug={projectData?.slug || ''}
+              projectTitle={projectData?.title || ''}
+              shareMessage={
+                'I just supported ' + projectData?.title + ' on q/acc'
+              }
+            />
+          </div>
         </div>
       </div>
     </div>
