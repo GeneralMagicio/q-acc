@@ -161,25 +161,36 @@ async function getTokenPriceRangeStatus({
       const expectedTransactionsNumber =
         project.batchNumbersWithSafeTransactions?.length;
       if (expectedTransactionsNumber) {
-        const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
-          query: getBondingCurveSwapsQuery,
-          variables: {
-            orchestratorAddress: project.abc?.orchestratorAddress,
-          },
-        });
-        const swaps = result.data.data.BondingCurve[0]?.swaps;
-        const numberOfExecutedTransactions: number = swaps.filter(
-          (swap: { swapType: string; initiator: string; recipient: string }) =>
-            swap.swapType === 'BUY' &&
-            swap.initiator.toLowerCase() === swap.recipient.toLowerCase() &&
-            (project.abc?.projectAddress
-              ? swap.recipient.toLowerCase() ===
-                project.abc?.projectAddress.toLowerCase()
-              : true),
-        ).length;
-        if (numberOfExecutedTransactions < expectedTransactionsNumber) {
+        try {
+          const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
+            query: getBondingCurveSwapsQuery,
+            variables: {
+              orchestratorAddress: project.abc?.orchestratorAddress,
+            },
+          });
+          const swaps = result.data.data.BondingCurve[0]?.swaps;
+          const numberOfExecutedTransactions: number = swaps.filter(
+            (swap: {
+              swapType: string;
+              initiator: string;
+              recipient: string;
+            }) =>
+              swap.swapType === 'BUY' &&
+              swap.initiator.toLowerCase() === swap.recipient.toLowerCase() &&
+              (project.abc?.projectAddress
+                ? swap.recipient.toLowerCase() ===
+                  project.abc?.projectAddress.toLowerCase()
+                : true),
+          ).length;
+          if (numberOfExecutedTransactions < expectedTransactionsNumber) {
+            return {
+              isPriceUpToDate: false,
+            };
+          }
+        } catch (error) {
+          console.error('Error fetching data from the endpoint:', error);
           return {
-            isPriceUpToDate: false,
+            isPriceUpToDate: true,
           };
         }
       }
