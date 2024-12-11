@@ -23,9 +23,9 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   projectTitle,
   projectSlug,
   onClose,
-  shareMessage = 'Let’s show some love and support to ' +
+  shareMessage = 'Check out ' +
     projectTitle +
-    ' on q/acc',
+    ' on q/acc! Be part of its success story. ',
   ...props
 }) => {
   const [copied, setCopied] = useState(false);
@@ -63,11 +63,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
         </h1>
         <div className='flex justify-center gap-3'>
           <div className='border rounded-lg p-2 flex items-center'>
-            <TwitterShareButton
-              title={shareMessage || ''}
-              url={copyLink || ''}
-              hashtags={['Qacc']}
-            >
+            <TwitterShareButton title={shareMessage || ''} url={copyLink || ''}>
               <IconXSocial size={24} />
             </TwitterShareButton>
           </div>
