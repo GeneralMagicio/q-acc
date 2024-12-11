@@ -11,8 +11,14 @@ import { RoundStatusBanner } from '@/components/RoundInfoBanner/RoundStatusBanne
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
+import QaccRoundEndBanner from '@/components/QaccRoundEndBanner';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
 
 export default function Home() {
+  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+
+  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   return isProductReleased ? (
     <main className='flex flex-col '>
       <Banner
@@ -29,7 +35,8 @@ export default function Home() {
           style={{ position: 'absolute', top: '0', right: '0', opacity: 0.3 }}
         />
         <div className='container flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-          <RoundStatusBanner />
+          {isQaccRoundEnded ? <QaccRoundEndBanner /> : <RoundStatusBanner />}
+
           <div className='flex flex-col gap-6 mx-auto w-[80%]'>
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>
               Welcome to Quadratic Acceleration
