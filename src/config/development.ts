@@ -15,7 +15,7 @@ const config: EnvConfig = {
     'https://auth.serve.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://impact-graph.serve.giveth.io/graphql',
   NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com	',
-  INDEXER_GRAPHQL_URL: 'https://indexer.bigdevenergy.link/a414bf3/v1/graphql',
+  INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
     chain: polygonZkEvmCardona,
     chainName: 'zkevm_cardona',

@@ -15,7 +15,7 @@ const config: EnvConfig = {
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
   NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com',
-  INDEXER_GRAPHQL_URL: 'https://indexer.bigdevenergy.link/a414bf3/v1/graphql',
+  INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
     chain: polygonZkEvm,
     chainName: 'zkevm',
