@@ -1,9 +1,8 @@
 import React from 'react';
-import config from '@/config/configuration';
+import { isAllocationDone } from '@/config/configuration';
 
 interface QaccRoundEndBannerProps {}
 const QaccRoundEndBanner: React.FC<QaccRoundEndBannerProps> = ({}) => {
-  let isAllocationDone = config.isAllocationDone;
   return (
     <div className='flex px-10 py-4  mx-auto w-[80%]  border-4 bg-white  rounded-2xl justify-center z-40 mt-12'>
       <div className='flex flex-col gap-2 justify-center font-redHatText'>

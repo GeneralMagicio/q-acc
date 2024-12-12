@@ -18,7 +18,7 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { SupportButton } from './SupportButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
-import config from '@/config/configuration';
+import { isAllocationDone } from '@/config/configuration';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -106,7 +106,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   };
   const polPriceNumber = Number(POLPrice);
   const totalHeightClass =
-    activeRoundDetails || config.isAllocationDone
+    activeRoundDetails || isAllocationDone
       ? 'h-project-card-full'
       : 'h-project-card';
 
@@ -130,7 +130,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || config.isAllocationDone ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isAllocationDone ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
           <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
@@ -312,7 +312,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </>
                   )}
                 </div> */}
-                {config.isAllocationDone ? (
+                {isAllocationDone ? (
                   <div className='mt-4'>
                     <Button
                       color={ButtonColor.Pink}
