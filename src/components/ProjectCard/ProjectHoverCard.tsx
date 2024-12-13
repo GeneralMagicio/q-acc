@@ -19,6 +19,7 @@ import { SupportButton } from './SupportButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
 import { isAllocationDone } from '@/config/configuration';
+import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -198,8 +199,16 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </div>
 
                     {/* <IconABC /> */}
-                    <p className='text-gray-800 font-medium'>
+                    <p className='text-gray-800 font-medium flex gap-1 items-center'>
                       {project?.abc?.tokenTicker} range
+                      <div className='relative group '>
+                        <IconTokenSchedule />
+                        <div className='absolute w-[200px] z-50 mb-2 left-[-60px] top-[-80px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                          The mint value of the ABC token will be within this
+                          range, based on the amount of POL this project
+                          receives.
+                        </div>
+                      </div>
                       {tokenPriceRangeStatus.isSuccess &&
                       tokenPriceRangeStatus.data?.isPriceUpToDate
                         ? ' '
@@ -265,8 +274,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   </div>
 
                   {/* <IconABC /> */}
-                  <p className='text-gray-800 font-medium'>
+                  <p className='text-gray-800 font-medium flex items-center gap-1'>
                     {project?.abc?.tokenTicker} Price
+                    <div className='relative group '>
+                      <IconTokenSchedule />
+                      <div className='absolute w-[200px] z-50 mb-2 left-[-60px] top-[-80px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                        The mint value of the ABC token will be within this
+                        range, based on the amount of POL this project receives.
+                      </div>
+                    </div>
                     {isAllocationDone ? (
                       ' '
                     ) : (
