@@ -266,9 +266,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
                   {/* <IconABC /> */}
                   <p className='text-gray-800 font-medium'>
-                    {project?.abc?.tokenTicker} range
-                    {!tokenPriceRangeStatus.isSuccess &&
-                    !tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                    {project?.abc?.tokenTicker} Price
+                    {isAllocationDone ? (
                       ' '
                     ) : (
                       <span className='bg-[#5326EC] mx-2 p-1 text-xs text-white rounded-md'>
@@ -278,40 +277,42 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     )}
                   </p>
                 </div>
-                {/* <div className='mt-1 flex justify-between'>
-                  {!tokenPriceRangeStatus.isSuccess &&
-                  !tokenPriceRangeStatus.data?.isPriceUpToDate ? (
-                    <>
-                      <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                        <p className='font-bold text-gray-800'>
-                          {tokenPriceRange.min.toFixed(2)} -{' '}
-                          {tokenPriceRange.max.toFixed(2)}
-                        </p>
-                        <p className='text-xs text-gray-400'>POL</p>
-                      </div>
-                      <div className='flex gap-1 items-center'>
-                        <p className='text-sm text-[#4F576A] font-medium'>
-                          ~$
-                          {polPriceNumber
-                            ? `${formatNumber(polPriceNumber * tokenPriceRange.min)} - ${formatNumber(polPriceNumber * tokenPriceRange.max)}`
-                            : ''}
-                        </p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
-                        <p className='font-bold text-gray-800'>---</p>
-                        <p className='text-xs text-gray-400'>POL</p>
-                      </div>
-                      <div className='flex gap-1 items-center'>
-                        <p className='text-sm text-[#4F576A] font-medium'>
-                          ~$ ---
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </div> */}
+                {isAllocationDone && (
+                  <div className='mt-1 flex justify-between'>
+                    {tokenPriceRangeStatus.isSuccess &&
+                    tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>
+                            {tokenPriceRange.max.toFixed(2)}
+                          </p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$
+                            {polPriceNumber
+                              ? `${' ' + formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                              : ''}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                          <p className='font-bold text-gray-800'>---</p>
+                          <p className='text-xs text-gray-400'>POL</p>
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                          <p className='text-sm text-[#4F576A] font-medium'>
+                            ~$ ---
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
                 {isAllocationDone ? (
                   <div className='mt-4'>
                     <Button
