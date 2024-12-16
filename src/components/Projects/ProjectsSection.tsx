@@ -11,9 +11,11 @@ export const ProjectsSection = () => {
     </div>
   ) : (
     <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10'>
-      {allProjects?.projects?.map(project => (
-        <ProjectHoverCard key={project.id} project={project} />
-      ))}
+      {allProjects?.projects
+        ?.sort(() => Math.random() - 0.5)
+        .map(project => (
+          <ProjectHoverCard key={project.id} project={project} />
+        ))}
     </div>
   );
 };
