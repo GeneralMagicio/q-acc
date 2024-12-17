@@ -18,7 +18,15 @@ const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
   const [donations, setDonations] = useState<any[]>([]);
   const [projectDonorData, setProjectDonorData] = useState<
-    Record<number, { uniqueDonors: number; totalContributions: number }>
+    Record<
+      number,
+      {
+        uniqueDonors: number;
+        totalContributions: number;
+        donationCount: number;
+        userProjectContributionSum: number;
+      }
+    >
   >({});
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,9 +35,16 @@ const DonarSupports = () => {
   const { data: user } = useFetchUser();
 
   const [projectDonorDataForBreakDown, setProjectDonorDataForBreakDown] =
-    useState<{ uniqueDonors: number; donarContributions: number }>({
+    useState<{
+      uniqueDonors: number;
+      donarContributions: number;
+      donationCount: number;
+      userProjectContributionSum: number;
+    }>({
       uniqueDonors: 0,
       donarContributions: 0,
+      donationCount: 0,
+      userProjectContributionSum: 0,
     });
   const [projectDonationsForBreakDown, setProjectDonationsForBreakDown] =
     useState<any[]>([]);
@@ -67,7 +82,12 @@ const DonarSupports = () => {
     const fetchProjectDonations = async () => {
       const donorData: Record<
         number,
-        { uniqueDonors: number; totalContributions: number }
+        {
+          uniqueDonors: number;
+          totalContributions: number;
+          donationCount: number;
+          userProjectContributionSum: number;
+        }
       > = {};
 
       const projectIds = Object.keys(donationsGroupedByProject).map(Number);
@@ -78,8 +98,16 @@ const DonarSupports = () => {
             projectId,
             1000,
           );
-          console.log(donationsByProjectId, '==================');
+          console.log(donationsByProjectId, '==================', projectId);
           if (donationsByProjectId?.donations) {
+            const userDonationCount = donationsByProjectId?.donations.filter(
+              (donation: any) => donation.user.id === user?.id,
+            ).length;
+
+            const userDonation = donationsByProjectId?.donations.filter(
+              (donation: any) => donation.user.id === user?.id,
+            );
+
             donorData[projectId] = {
               uniqueDonors: calculateUniqueDonors(
                 donationsByProjectId.donations,
@@ -87,6 +115,9 @@ const DonarSupports = () => {
               totalContributions: calculateTotalContributions(
                 donationsByProjectId.donations,
               ),
+              donationCount: userDonationCount,
+              userProjectContributionSum:
+                calculateTotalContributions(userDonation),
             };
           }
         } catch (err) {
@@ -138,6 +169,13 @@ const DonarSupports = () => {
             const totalContributions =
               projectDonorData[Number(projectId)]?.totalContributions || 0;
 
+            const donationCount =
+              projectDonorData[Number(projectId)]?.donationCount || 0;
+
+            const userProjectContributionSum =
+              projectDonorData[Number(projectId)]?.userProjectContributionSum ||
+              0;
+
             // Sum up locked and claimable amounts for all donations
             let totalLockedRewardTokens = 0;
             let totalClaimableRewardTokens = 0;
@@ -167,14 +205,16 @@ const DonarSupports = () => {
                   uniqueDonors={uniqueDonors}
                   totalClaimableRewardTokens={totalClaimableRewardTokens}
                   totalContributions={totalContributions}
-                  projectDonations={projectDonations}
-                  totalContribution={totalContribution}
+                  projectDonations={donationCount}
+                  totalContribution={userProjectContributionSum}
                   totalRewardTokens={totalRewardTokens}
                   onClickBreakdown={() => {
                     setShowBreakDown(true);
                     setProjectDonorDataForBreakDown({
                       uniqueDonors,
                       donarContributions: totalContribution,
+                      donationCount: donationCount,
+                      userProjectContributionSum: userProjectContributionSum,
                     });
                     setProjectDonationsForBreakDown(projectDonations);
                   }}

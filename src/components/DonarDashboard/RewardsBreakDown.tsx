@@ -23,7 +23,11 @@ import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
-  projectDonorData: { uniqueDonors: number; donarContributions: number };
+  projectDonorData: {
+    uniqueDonors: number;
+    donarContributions: number;
+    userProjectContributionSum: number;
+  };
 }
 
 const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
@@ -36,7 +40,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
   const totalSupply = project?.abc?.totalSupply || '---';
 
   const totalSupporters = projectDonorData.uniqueDonors;
-  const totalContributions = projectDonorData.donarContributions;
+  const totalContributions = projectDonorData.userProjectContributionSum;
   const totalTokensReceived = projectDonations.reduce(
     (sum, donation) => sum + (donation.rewardTokenAmount || 0),
     0,
