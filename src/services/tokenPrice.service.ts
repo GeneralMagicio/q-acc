@@ -218,3 +218,15 @@ export const useTokenPriceRangeStatus = ({
     enabled: !!allRounds && !!project, // Run only if allRounds and project is provided
   });
 };
+
+export async function checkAllProjectsStatus(
+  allProjects: IProject[],
+  allRounds: (IEarlyAccessRound | IQfRound)[],
+) {
+  const results = [];
+  for (const project of allProjects) {
+    const result = await getTokenPriceRangeStatus({ allRounds, project });
+    results.push(result.isPriceUpToDate);
+  }
+  return results.every(status => status);
+}

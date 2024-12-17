@@ -1,8 +1,29 @@
-import React from 'react';
-import { isAllocationDone } from '@/config/configuration';
+import React, { useEffect, useState } from 'react';
+// import { isAllocationDone } from '@/config/configuration';
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { checkAllProjectsStatus } from '@/services/tokenPrice.service';
 
 interface QaccRoundEndBannerProps {}
 const QaccRoundEndBanner: React.FC<QaccRoundEndBannerProps> = ({}) => {
+  const { data: allProjects } = useFetchAllProjects();
+  const { data: allRounds } = useFetchAllRound();
+  const [isAllocationDone, setIsAllocationDone] = useState(false);
+
+  useEffect(() => {
+    const cheakAllProjectStatus = async () => {
+      if (allProjects && allRounds) {
+        const allProjectsReady = await checkAllProjectsStatus(
+          allProjects?.projects,
+          allRounds,
+        );
+        setIsAllocationDone(allProjectsReady);
+      }
+    };
+
+    cheakAllProjectStatus();
+  }, [allProjects, allRounds]);
+
   return (
     <div className='flex px-10 py-4  mx-auto w-[80%]  border-4 bg-white  rounded-2xl justify-center z-40 mt-12'>
       <div className='flex flex-col gap-2 justify-center font-redHatText'>
