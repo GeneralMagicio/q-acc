@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Pagination from '../Pagination';
 import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
-import { fetchUserDonations } from '@/services/donation.services';
+import { fetchProjectDonors } from '@/services/donation.services';
 import {
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
@@ -72,17 +72,25 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
 
   useEffect(() => {
     const fetchUserDonationData = async () => {
-      const data = await fetchUserDonations(userId);
-      if (data) {
-        const { donations } = data;
+      // const data = await fetchUserDonations(userId);
+      const donationsByProjectId = await fetchProjectDonors(
+        Number(projectId),
+        1000,
+      );
+      const userDonations = donationsByProjectId?.donations.filter(
+        (donation: any) => donation.user.id == userId,
+      );
+      if (userDonations) {
+        // const { donations } = data;
 
         // Filter donations for the specified projectId
-        const filteredDonations = donations.filter(
-          (donation: Donation) => donation.project.id === projectId,
-        );
+
+        // const filteredDonations = donations.filter(
+        //   (donation: Donation) => donation.project.id === projectId,
+        // );
 
         // Sort the donations based on the order state
-        const sortedDonations = filteredDonations.sort(
+        const sortedDonations = userDonations.sort(
           (
             a: {
               createdAt: string | number | Date;

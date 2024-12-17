@@ -651,16 +651,39 @@ query (
       projectId: $projectId
       take:$take
     ) {
-      donations {
+            donations {
         id
+        transactionId
+        transactionNetworkId
+        toWalletAddress
+        fromWalletAddress
+        currency
+        anonymous
+        valueUsd
+        amount
+        rewardTokenAmount
+        rewardStreamStart
+        rewardStreamEnd
+       
+        earlyAccessRound{
+      id
+      roundNumber
+          
+      endDate
+      startDate
+    }
+        qfRound {
+          id
+        }
+        status
         user {
           id
           walletAddress
           firstName
+          lastName
           email
         }
         createdAt
-        amount
       }
       totalCount
       totalUsdBalance
