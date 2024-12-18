@@ -1,7 +1,7 @@
+import React from 'react';
 import { formatAmount } from '@/helpers/donation';
 import { useFetchQaccStats } from '@/hooks/useFetchQaccStats';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
-import React from 'react';
 
 interface QaccRoundStatsProps {}
 
