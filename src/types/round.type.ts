@@ -30,3 +30,9 @@ export interface IQfRound {
   isBatchMintingExecuted: boolean;
   roundUSDCapPerUserPerProjectWithGitcoinScoreOnly: number;
 }
+
+export interface IQaccStats {
+  totalCollected: number;
+  qfTotalCollected: number;
+  contributorsCount: number;
+}
