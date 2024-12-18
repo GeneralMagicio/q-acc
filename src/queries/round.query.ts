@@ -100,3 +100,13 @@ query(
   }
 }
 `;
+
+export const GET_QACC_ROUND_STATS = `
+query {
+    qAccStat {
+      totalCollected
+      qfTotalCollected
+      contributorsCount
+    }
+  }
+`;
