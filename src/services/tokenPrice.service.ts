@@ -223,10 +223,11 @@ export async function checkAllProjectsStatus(
   allProjects: IProject[],
   allRounds: (IEarlyAccessRound | IQfRound)[],
 ) {
-  const results = [];
   for (const project of allProjects) {
     const result = await getTokenPriceRangeStatus({ allRounds, project });
-    results.push(result.isPriceUpToDate);
+    if (!result.isPriceUpToDate) {
+      return false;
+    }
   }
-  return results.every(status => status);
+  return true;
 }
