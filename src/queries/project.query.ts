@@ -556,6 +556,7 @@ export const GET_PROJECT_BY_USER_ID = `
         mintedAmount
         fundingManagerAddress
       }
+      tributeClaimModuleAddress
       projectVerificationForm {
         id
         isTermAndConditionsAccepted
@@ -664,6 +665,7 @@ query (
         rewardTokenAmount
         rewardStreamStart
         rewardStreamEnd
+        cliff
        
         earlyAccessRound{
       id
