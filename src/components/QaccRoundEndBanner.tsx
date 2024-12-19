@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-// import { isAllocationDone } from '@/config/configuration';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
-import { checkAllProjectsStatus } from '@/services/tokenPrice.service';
 import QaccRoundStats from './QaccRoundStats';
+import { useCheckProjectPriceStatus } from '@/hooks/useCheckProjectPriceStatus ';
 
 interface QaccRoundEndBannerProps {}
 const QaccRoundEndBanner: React.FC<QaccRoundEndBannerProps> = ({}) => {
@@ -11,19 +10,15 @@ const QaccRoundEndBanner: React.FC<QaccRoundEndBannerProps> = ({}) => {
   const { data: allRounds } = useFetchAllRound();
   const [isAllocationDone, setIsAllocationDone] = useState(false);
 
-  useEffect(() => {
-    const cheakAllProjectStatus = async () => {
-      if (allProjects && allRounds) {
-        const allProjectsReady = await checkAllProjectsStatus(
-          allProjects?.projects,
-          allRounds,
-        );
-        setIsAllocationDone(allProjectsReady);
-      }
-    };
+  const { data: projectPriceUpdated } = useCheckProjectPriceStatus(
+    allProjects,
+    allRounds,
+  );
 
-    cheakAllProjectStatus();
-  }, [allProjects, allRounds]);
+  useEffect(() => {
+    console.log('IsAllocation Done', projectPriceUpdated);
+    setIsAllocationDone(!!projectPriceUpdated);
+  }, [projectPriceUpdated]);
 
   return (
     <div className='flex  flex-col p-9 gap-9 mx-auto w-[80%] bg-[#F6F3FF] rounded-xl  justify-center z-40 mt-12'>
