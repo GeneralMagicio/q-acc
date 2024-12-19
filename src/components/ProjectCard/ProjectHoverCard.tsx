@@ -10,6 +10,7 @@ import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import {
+  checkAllProjectsStatus,
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
@@ -18,8 +19,9 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { SupportButton } from './SupportButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
-import { isAllocationDone } from '@/config/configuration';
+// import { isAllocationDone } from '@/config/configuration';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -39,8 +41,25 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const { data: allProjects, isLoading } = useFetchAllProjects();
 
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+  const { data: allRounds } = useFetchAllRound();
+  const [isAllocationDone, setIsAllocationDone] = useState(false);
+
+  useEffect(() => {
+    const cheakAllProjectStatus = async () => {
+      if (allProjects && allRounds) {
+        const allProjectsReady = await checkAllProjectsStatus(
+          allProjects?.projects,
+          allRounds,
+        );
+        setIsAllocationDone(allProjectsReady);
+      }
+    };
+
+    cheakAllProjectStatus();
+  }, [allProjects, allRounds]);
 
   useEffect(() => {
     console.log(
@@ -94,7 +113,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
-  const { data: allRounds } = useFetchAllRound();
   const tokenPriceRangeStatus = useTokenPriceRangeStatus({
     project,
     allRounds,
