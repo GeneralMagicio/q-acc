@@ -13,10 +13,11 @@ import { formatAmount } from '@/helpers/donation';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import config from '@/config/configuration';
+import { IProject } from '@/types/project.type';
 
 interface ProjectUserDonationTableProps {
   userId: number;
-  projectId: number;
+  project: IProject;
   totalContributions: number;
 }
 
@@ -57,7 +58,7 @@ enum EDirection {
 
 const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
   userId,
-  projectId,
+  project,
   totalContributions,
 }) => {
   const [page, setPage] = useState<number>(0);
@@ -74,7 +75,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     const fetchUserDonationData = async () => {
       // const data = await fetchUserDonations(userId);
       const donationsByProjectId = await fetchProjectDonors(
-        Number(projectId),
+        Number(project.id),
         1000,
       );
       const userDonations = donationsByProjectId?.donations.filter(
@@ -130,7 +131,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     };
 
     fetchUserDonationData();
-  }, [userId, projectId, page, order]);
+  }, [userId, project.id, page, order]);
 
   // Function to handle sorting
   const handleSort = (sortBy: EOrderBy) => {
@@ -238,7 +239,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                         Math.round(donation.rewardTokenAmount * 100) / 100,
                       ) +
                       ' ' +
-                      donation.project.abc.tokenTicker
+                      project?.abc?.tokenTicker
                     : '-'}
                 </div>
                 <div className='p-[18px_4px] text-[#1D1E1F] flex gap-2 text-start border-b w-full min-w-[150px]'>

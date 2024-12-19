@@ -157,7 +157,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
             {/* Include ProjectUserDonationTable */}
             <ProjectUserDonationTable
               userId={parseInt(userId as string)}
-              projectId={project.id}
+              project={project}
               totalContributions={totalContributions}
             />
           </div>
