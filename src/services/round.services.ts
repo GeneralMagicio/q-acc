@@ -3,8 +3,9 @@ import {
   GET_ACTIVE_ROUND,
   GET_ALL_ROUNDS,
   GET_PROJECT_ROUND_RECORDS,
+  GET_QACC_ROUND_STATS,
 } from '@/queries/round.query';
-import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
+import { IEarlyAccessRound, IQaccStats, IQfRound } from '@/types/round.type';
 
 export const fetchActiveRoundDetails = async () => {
   try {
@@ -44,6 +45,17 @@ export const fetchProjectRoundRecords = async (
       earlyAccessRoundNumber,
     });
     return res?.getProjectRoundRecords;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchQaccRoundStats = async () => {
+  try {
+    const res = await requestGraphQL<{
+      qAccStat: IQaccStats;
+    }>(GET_QACC_ROUND_STATS, {});
+    return res?.qAccStat;
   } catch (error) {
     console.error(error);
   }

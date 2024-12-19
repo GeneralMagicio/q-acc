@@ -25,7 +25,7 @@ export const OnBoardButton = () => {
 
   return !address ? (
     <div className={customButtonClass} onClick={() => open()}>
-      Get Verified
+      Get Started
     </div>
   ) : isVerified ? (
     <Link href={Routes.Projects}>
@@ -33,7 +33,7 @@ export const OnBoardButton = () => {
     </Link>
   ) : (
     <Link href={user?.fullName ? Routes.VerifyPrivado : Routes.CreateProfile}>
-      <div className={customButtonClass}>Get Verified</div>
+      <div className={customButtonClass}>Get Started</div>
     </Link>
   );
 };

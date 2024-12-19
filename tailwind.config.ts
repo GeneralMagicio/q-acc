@@ -15,6 +15,7 @@ const config: Config = {
       fontFamily: {
         'tusker-grotesk': ['TuskerGrotesk', 'sans-serif'],
         redHatText: 'Red Hat Text',
+        adventor: ['TeXGyreAdventor', 'sans-serif'],
       },
       colors: {
         giv: {
