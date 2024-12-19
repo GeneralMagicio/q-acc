@@ -556,6 +556,7 @@ export const GET_PROJECT_BY_USER_ID = `
         mintedAmount
         fundingManagerAddress
       }
+      tributeClaimModuleAddress
       projectVerificationForm {
         id
         isTermAndConditionsAccepted
