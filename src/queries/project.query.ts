@@ -664,6 +664,7 @@ query (
         rewardTokenAmount
         rewardStreamStart
         rewardStreamEnd
+        cliff
        
         earlyAccessRound{
       id
