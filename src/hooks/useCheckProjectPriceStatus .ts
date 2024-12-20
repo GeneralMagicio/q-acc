@@ -7,7 +7,7 @@ export const useCheckProjectPriceStatus = (
 ) => {
   return useQuery({
     enabled: !!allProjects && !!allRounds,
-    queryKey: ['projectPriceStatus', allProjects, allRounds],
+    queryKey: ['projectPriceStatus'],
     queryFn: async () => {
       for (const project of allProjects.projects) {
         const { isPriceUpToDate } = await getTokenPriceRangeStatus({

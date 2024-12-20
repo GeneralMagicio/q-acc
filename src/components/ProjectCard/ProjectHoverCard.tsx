@@ -44,16 +44,13 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
 
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   const { data: allRounds } = useFetchAllRound();
-  const [isAllocationDone, setIsAllocationDone] = useState(false);
 
   const { data: projectPriceUpdated } = useCheckProjectPriceStatus(
     allProjects,
     allRounds,
   );
 
-  useEffect(() => {
-    setIsAllocationDone(!!projectPriceUpdated);
-  }, [projectPriceUpdated]);
+  const isAllocationDone = !!projectPriceUpdated;
   useEffect(() => {
     console.log(
       project?.title,

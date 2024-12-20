@@ -8,18 +8,13 @@ interface QaccRoundEndBannerProps {}
 const QaccRoundEndBanner: React.FC<QaccRoundEndBannerProps> = ({}) => {
   const { data: allProjects } = useFetchAllProjects();
   const { data: allRounds } = useFetchAllRound();
-  const [isAllocationDone, setIsAllocationDone] = useState(false);
 
   const { data: projectPriceUpdated } = useCheckProjectPriceStatus(
     allProjects,
     allRounds,
   );
 
-  useEffect(() => {
-    console.log('IsAllocation Done', projectPriceUpdated);
-    setIsAllocationDone(!!projectPriceUpdated);
-  }, [projectPriceUpdated]);
-
+  const isAllocationDone = !!projectPriceUpdated;
   return (
     <div className='flex  flex-col p-9 gap-9 mx-auto w-[80%] bg-[#F6F3FF] rounded-xl  justify-center z-40 mt-12'>
       <div className='flex flex-col gap-2 justify-center font-sans'>
