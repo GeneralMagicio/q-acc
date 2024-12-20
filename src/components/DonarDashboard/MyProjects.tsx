@@ -572,6 +572,7 @@ const MyProjects = () => {
                 disabled={!enableClaimButton}
                 className='flex justify-center'
                 onClick={() => claim.mutateAsync()}
+                loading={claim.isPending}
               >
                 {enableClaimButton ? 'Claim Tributes' : 'No Tributes to Claim'}
               </Button>
