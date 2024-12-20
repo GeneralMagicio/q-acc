@@ -137,7 +137,7 @@ const getBondingCurveSwapsQuery = `
     }
 `;
 
-async function getTokenPriceRangeStatus({
+export async function getTokenPriceRangeStatus({
   allRounds,
   project,
 }: UseTokenPriceRangeStatusProps): Promise<TokenPriceRangeStatusResult> {
