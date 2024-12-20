@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import QaccRoundStats from './QaccRoundStats';
