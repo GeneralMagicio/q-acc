@@ -144,46 +144,50 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     openShareModal();
   };
 
-  useEffect(() => {
-    const getDonationCap: any = async () => {
-      if (projectData?.id) {
-        const userCapp = await fetchProjectUserDonationCapKyc(
-          Number(projectData?.id),
-        );
-        const { gitcoinPassport, zkId } = userCapp || {};
-        setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
-        const userCap =
-          floor(Number(zkId?.unusedCap)) ||
-          floor(Number(gitcoinPassport?.unusedCap)) ||
-          0;
-        const res = remainingDonationAmount / 2 - 1;
-        if (progress >= 90) {
-          console.log('Res', res, progress);
-          setUserDonationCap(Math.min(res, Number(userCap)));
-        } else {
-          setUserDonationCap(userCap);
-        }
+  const getDonationCap: any = async () => {
+    if (projectData?.id) {
+      const userCapp = await fetchProjectUserDonationCapKyc(
+        Number(projectData?.id),
+      );
+      const { gitcoinPassport, zkId } = userCapp || {};
+      setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
+      const userCap =
+        floor(Number(zkId?.unusedCap)) ||
+        floor(Number(gitcoinPassport?.unusedCap)) ||
+        0;
+      const res = remainingDonationAmount / 2 - 1;
+      if (progress >= 90) {
+        console.log('Res', res, progress);
+        setUserDonationCap(Math.min(res, Number(userCap)));
+      } else {
+        setUserDonationCap(userCap);
       }
-    };
-
-    const updatePOLCap = async () => {
-      const { capAmount, totalDonationAmountInRound }: any =
-        await calculateCapAmount(activeRoundDetails, Number(projectData.id));
-
-      setMaxPOLCap(capAmount);
-      setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
-      console.log('Remaining Donation Limit', remainingDonationAmount);
-      let tempprogress = 0;
-      if (maxPOLCap > 0) {
-        tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
-        setProgress(tempprogress);
-      }
-    };
-
-    if (projectData) {
-      getDonationCap();
-      updatePOLCap();
     }
+  };
+
+  const updatePOLCap = async () => {
+    const { capAmount, totalDonationAmountInRound }: any =
+      await calculateCapAmount(activeRoundDetails, Number(projectData.id));
+
+    setMaxPOLCap(capAmount);
+    setRemainingDonationAmount(capAmount - totalDonationAmountInRound);
+    console.log('Remaining Donation Limit', remainingDonationAmount);
+    let tempprogress = 0;
+    if (maxPOLCap > 0) {
+      tempprogress = round((totalDonationAmountInRound / capAmount) * 100, 2); // Round to 2 decimal places
+      setProgress(tempprogress);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (projectData) {
+        await updatePOLCap();
+        await getDonationCap();
+      }
+    };
+
+    fetchData();
   }, [
     projectData,
     activeRoundDetails,
