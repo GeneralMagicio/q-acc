@@ -9,7 +9,7 @@ import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 
-import { formatAmount } from '@/helpers/donation';
+import { checkMatchingFundAddress, formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { calculateCapAmount } from '@/helpers/round';
@@ -169,11 +169,13 @@ const ProjectDonationTable = () => {
                       )}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                      {donation.earlyAccessRound
-                        ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
-                        : donation.qfRound
-                          ? 'q/acc round'
-                          : '---'}
+                      {checkMatchingFundAddress(donation.fromWalletAddress)
+                        ? 'q/acc matching pool'
+                        : donation.earlyAccessRound
+                          ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
+                          : donation.qfRound
+                            ? 'q/acc round'
+                            : `---`}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>
