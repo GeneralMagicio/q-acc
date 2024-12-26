@@ -35,3 +35,14 @@ export async function checkWhitelist(
       }
     : null;
 }
+
+export async function checkSafeAddress(userAddress?: string) {
+  if (!userAddress) {
+    return null;
+  }
+  const safeAddress = ['0xc15AE74679F1E4498B758B97a4f25563c2F4761a'];
+  if (safeAddress.includes(userAddress)) {
+    return true;
+  }
+  return false;
+}

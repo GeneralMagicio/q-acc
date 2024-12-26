@@ -15,6 +15,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
+import { useIsAddressSafe } from '@/hooks/useIsAddressSafe';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -27,6 +28,8 @@ export const UserController = () => {
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
+
+  const { data: isSafeAddress } = useIsAddressSafe(address as string);
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -99,6 +102,12 @@ export const UserController = () => {
       setShowSanctionModal(true);
     }
   }, [isSanctioned]);
+
+  useEffect(() => {
+    if (isSafeAddress) {
+      setShowSignModal(false);
+    }
+  }, [isSafeAddress]);
 
   return showSanctionModal ? (
     <SanctionModal
