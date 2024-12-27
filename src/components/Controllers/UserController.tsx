@@ -15,7 +15,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
-import { useIsAddressSafe } from '@/hooks/useIsAddressSafe';
+import { isContractAddress } from '@/helpers/token';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -28,8 +28,6 @@ export const UserController = () => {
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
-
-  const { data: isSafeAddress } = useIsAddressSafe(address as string);
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -74,15 +72,24 @@ export const UserController = () => {
 
   useEffect(() => {
     if (!address) return;
-    const localStorageToken = getLocalStorageToken(address);
+    const handleAddressCheck = async () => {
+      const localStorageToken = getLocalStorageToken(address);
 
-    if (localStorageToken) {
-      refetch();
-      return;
-    }
-    // Show sign modal if token is not present in local storage
-    localStorage.removeItem('token');
-    setShowSignModal(true);
+      // If token exists in local storage, refetch and skip modal
+      if (localStorageToken) {
+        refetch();
+        return;
+      }
+
+      // Remove stale token if any
+      localStorage.removeItem('token');
+
+      // Check if the address is a contract
+      const isContract = await isContractAddress(address as string);
+      setShowSignModal(!isContract);
+    };
+
+    handleAddressCheck();
   }, [address, refetch]);
 
   useEffect(() => {
@@ -102,12 +109,6 @@ export const UserController = () => {
       setShowSanctionModal(true);
     }
   }, [isSanctioned]);
-
-  useEffect(() => {
-    if (isSafeAddress) {
-      setShowSignModal(false);
-    }
-  }, [isSafeAddress]);
 
   return showSanctionModal ? (
     <SanctionModal

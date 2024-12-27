@@ -8,21 +8,23 @@ import { IconIdentityVerified } from '../Icons/IconIdentityVerified';
 import { usePrivado } from '@/hooks/usePrivado';
 import { GitcoinVerificationBadge } from '../VerificationBadges/GitcoinVerificationBadge';
 import { PrivadoVerificationBadge } from '../VerificationBadges/PrivadoVerificationBadge';
-import { useIsAddressSafe } from '@/hooks/useIsAddressSafe';
-
+import { isContractAddress } from '@/helpers/token';
 const DashboardHeader = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
   const { isVerified } = usePrivado();
-  const { data: isSafeAddress } = useIsAddressSafe(address as string);
 
-  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(true);
 
   useEffect(() => {
-    if (isSafeAddress) {
-      setShowEditProfile(false);
-    }
-  }, [isSafeAddress]);
+    const checkAddress = async () => {
+      if (await isContractAddress(address as string)) {
+        setShowEditProfile(false);
+      }
+    };
+
+    checkAddress();
+  }, [address]);
 
   return (
     <div className='bg-white  w-ful pb-6 pt-8'>
