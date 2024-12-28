@@ -152,11 +152,13 @@ const ProjectDonationTable = () => {
                 {pageDonations?.map((donation: any) => (
                   <div key={donation.id} className=' flex justify-between '>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                      {!donation.anonymous
-                        ? donation?.user?.firstName +
-                          ' ' +
-                          donation?.user?.lastName
-                        : 'Anoynomous'}
+                      {checkMatchingFundAddress(donation.fromWalletAddress)
+                        ? 'Matching pool allocation'
+                        : donation.user.firstName
+                          ? donation.user.firstName +
+                            ' ' +
+                            donation.user.lastName
+                          : 'Anoynomous'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                       {new Date(donation.createdAt).toLocaleDateString(
@@ -170,7 +172,7 @@ const ProjectDonationTable = () => {
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       {checkMatchingFundAddress(donation.fromWalletAddress)
-                        ? 'q/acc matching pool'
+                        ? 'q/acc round'
                         : donation.earlyAccessRound
                           ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
                           : donation.qfRound
