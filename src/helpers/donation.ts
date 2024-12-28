@@ -1,3 +1,4 @@
+import config from '@/config/configuration';
 import { fetchUserDonations } from '@/services/donation.services';
 
 // Helper to group donations by project
@@ -131,4 +132,11 @@ export const fetchDonationStatus = async (
     console.error('Error fetching donation status:', error);
     return null;
   }
+};
+
+export const checkMatchingFundAddress = (address: string) => {
+  if (config.MATCHING_FUND_ADDRESS.includes(address.toLowerCase())) {
+    return true;
+  }
+  return false;
 };

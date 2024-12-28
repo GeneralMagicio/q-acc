@@ -27,4 +27,5 @@ export type EnvConfig = {
   GP_ANALYSIS_SCORE_THRESHOLD: number;
   GP_SCORER_SCORE_THRESHOLD: number;
   MINIMUM_DONATION_AMOUNT: number;
+  MATCHING_FUND_ADDRESS: string[];
 };

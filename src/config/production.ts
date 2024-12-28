@@ -32,6 +32,7 @@ const config: EnvConfig = {
   GP_ANALYSIS_SCORE_THRESHOLD: 50,
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
+  MATCHING_FUND_ADDRESS: [],
 };
 
 export default config;
