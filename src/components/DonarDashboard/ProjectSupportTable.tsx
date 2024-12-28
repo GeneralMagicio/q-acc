@@ -13,7 +13,7 @@ import {
 } from '@/helpers/date';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import config from '@/config/configuration';
-import { formatAmount } from '@/helpers/donation';
+import { checkMatchingFundAddress, formatAmount } from '@/helpers/donation';
 
 const itemPerPage = 5;
 
@@ -153,9 +153,11 @@ const ProjectSupportTable = ({
             {pageDonations?.map((donation: any) => (
               <div key={donation.id} className=' flex justify-between '>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                  {donation.user.firstName
-                    ? donation.user.firstName + ' ' + donation.user.lastName
-                    : 'Anoynomous'}
+                  {checkMatchingFundAddress(donation.fromWalletAddress)
+                    ? 'Matching pool allocation'
+                    : donation.user.firstName
+                      ? donation.user.firstName + ' ' + donation.user.lastName
+                      : 'Anoynomous'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                   {new Date(donation.createdAt).toLocaleDateString('en-US', {
@@ -165,11 +167,13 @@ const ProjectSupportTable = ({
                   })}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[180px]'>
-                  {donation.earlyAccessRound
-                    ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
-                    : donation.qfRound
-                      ? 'q/acc round'
-                      : '---'}
+                  {checkMatchingFundAddress(donation.fromWalletAddress)
+                    ? 'q/acc round'
+                    : donation.earlyAccessRound
+                      ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
+                      : donation.qfRound
+                        ? 'q/acc round'
+                        : `---`}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>
