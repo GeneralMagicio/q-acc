@@ -1,6 +1,6 @@
-import { isContractAddress } from '@/helpers/token';
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
+import { isContractAddress } from '@/helpers/token';
 
 export const useCheckSafeAccount = () => {
   const { address } = useAccount();
