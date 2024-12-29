@@ -15,7 +15,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
-import { isContractAddress } from '@/helpers/token';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -28,6 +28,7 @@ export const UserController = () => {
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
+  const { data: isSafeAccount } = useCheckSafeAccount();
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -84,13 +85,11 @@ export const UserController = () => {
       // Remove stale token if any
       localStorage.removeItem('token');
 
-      // Check if the address is a contract
-      const isContract = await isContractAddress(address as string);
-      setShowSignModal(!isContract);
+      setShowSignModal(!isSafeAccount);
     };
 
     handleAddressCheck();
-  }, [address, refetch]);
+  }, [address, refetch, isSafeAccount]);
 
   useEffect(() => {
     const handleShowSignInModal = () => {

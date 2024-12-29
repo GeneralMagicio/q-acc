@@ -8,23 +8,12 @@ import { IconIdentityVerified } from '../Icons/IconIdentityVerified';
 import { usePrivado } from '@/hooks/usePrivado';
 import { GitcoinVerificationBadge } from '../VerificationBadges/GitcoinVerificationBadge';
 import { PrivadoVerificationBadge } from '../VerificationBadges/PrivadoVerificationBadge';
-import { isContractAddress } from '@/helpers/token';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 const DashboardHeader = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
   const { isVerified } = usePrivado();
-
-  const [showEditProfile, setShowEditProfile] = useState(true);
-
-  useEffect(() => {
-    const checkAddress = async () => {
-      if (await isContractAddress(address as string)) {
-        setShowEditProfile(false);
-      }
-    };
-
-    checkAddress();
-  }, [address]);
+  const { data: isSafeAccount } = useCheckSafeAccount();
 
   return (
     <div className='bg-white  w-ful pb-6 pt-8'>
@@ -42,7 +31,7 @@ const DashboardHeader = () => {
           <h3 className='text-xl leading-8 font-redHatText'>{user?.email}</h3>
           <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
             <div className='flex gap-8 text-pink-500 flex-col md:flex-row '>
-              {showEditProfile && (
+              {!isSafeAccount && (
                 <Link href={`edit/${user?.id}/profile`}>
                   <span>Edit Profile</span>
                 </Link>
