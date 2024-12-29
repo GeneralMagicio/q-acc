@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAccount } from 'wagmi';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useFetchUser } from '@/hooks/useFetchUser';
