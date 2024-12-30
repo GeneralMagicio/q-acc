@@ -108,3 +108,17 @@ export const checkUserOwnsNFT = async (
     return false;
   }
 };
+
+export async function isContractAddress(address: string): Promise<boolean> {
+  if (!address) {
+    return false;
+  }
+  try {
+    const provider = new ethers.JsonRpcProvider(config.NETWORK_RPC_ADDRESS);
+    const code = await provider.getCode(address);
+    return code !== '0x';
+  } catch (error) {
+    console.error('Error checking contract:', error);
+    return false;
+  }
+}

@@ -199,7 +199,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     </div>
 
                     {/* <IconABC /> */}
-                    <p className='text-gray-800 font-medium flex gap-1 items-center'>
+                    <div className='text-gray-800 font-medium flex gap-1 items-center'>
                       {project?.abc?.tokenTicker} range
                       <div className='relative group '>
                         <IconTokenSchedule />
@@ -213,7 +213,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                       tokenPriceRangeStatus.data?.isPriceUpToDate
                         ? ' '
                         : ' (Calculating) '}
-                    </p>
+                    </div>
                   </div>
                   <div className='mt-1 flex justify-between'>
                     {tokenPriceRangeStatus.isSuccess &&
@@ -274,7 +274,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   </div>
 
                   {/* <IconABC /> */}
-                  <p className='text-gray-800 font-medium flex items-center gap-1'>
+                  <div className='text-gray-800 font-medium flex items-center gap-1'>
                     {project?.abc?.tokenTicker} Price
                     <div className='relative group '>
                       <IconTokenSchedule />
@@ -291,7 +291,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         Pending LP Launch{' '}
                       </span>
                     )}
-                  </p>
+                  </div>
                 </div>
                 {isAllocationDone && (
                   <div className='mt-1 flex justify-between'>

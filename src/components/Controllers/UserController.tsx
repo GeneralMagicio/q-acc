@@ -15,6 +15,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -27,6 +28,7 @@ export const UserController = () => {
   const { refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
+  const { data: isSafeAccount } = useCheckSafeAccount();
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -71,16 +73,23 @@ export const UserController = () => {
 
   useEffect(() => {
     if (!address) return;
-    const localStorageToken = getLocalStorageToken(address);
+    const handleAddressCheck = async () => {
+      const localStorageToken = getLocalStorageToken(address);
 
-    if (localStorageToken) {
-      refetch();
-      return;
-    }
-    // Show sign modal if token is not present in local storage
-    localStorage.removeItem('token');
-    setShowSignModal(true);
-  }, [address, refetch]);
+      // If token exists in local storage, refetch and skip modal
+      if (localStorageToken) {
+        refetch();
+        return;
+      }
+
+      // Remove stale token if any
+      localStorage.removeItem('token');
+
+      setShowSignModal(!isSafeAccount);
+    };
+
+    handleAddressCheck();
+  }, [address, refetch, isSafeAccount]);
 
   useEffect(() => {
     const handleShowSignInModal = () => {
