@@ -9,7 +9,7 @@ import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { useProjectContext } from '@/context/project.context';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 
-import { formatAmount } from '@/helpers/donation';
+import { checkMatchingFundAddress, formatAmount } from '@/helpers/donation';
 import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { calculateCapAmount } from '@/helpers/round';
@@ -152,11 +152,13 @@ const ProjectDonationTable = () => {
                 {pageDonations?.map((donation: any) => (
                   <div key={donation.id} className=' flex justify-between '>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
-                      {!donation.anonymous
-                        ? donation?.user?.firstName +
-                          ' ' +
-                          donation?.user?.lastName
-                        : 'Anoynomous'}
+                      {checkMatchingFundAddress(donation.fromWalletAddress)
+                        ? 'Matching pool allocation'
+                        : donation.user.firstName
+                          ? donation.user.firstName +
+                            ' ' +
+                            donation.user.lastName
+                          : 'Anoynomous'}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                       {new Date(donation.createdAt).toLocaleDateString(
@@ -169,11 +171,13 @@ const ProjectDonationTable = () => {
                       )}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
-                      {donation.earlyAccessRound
-                        ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
-                        : donation.qfRound
-                          ? 'q/acc round'
-                          : '---'}
+                      {checkMatchingFundAddress(donation.fromWalletAddress)
+                        ? 'q/acc round'
+                        : donation.earlyAccessRound
+                          ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
+                          : donation.qfRound
+                            ? 'q/acc round'
+                            : `---`}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>

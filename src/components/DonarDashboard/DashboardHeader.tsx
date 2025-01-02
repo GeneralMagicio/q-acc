@@ -8,11 +8,13 @@ import { IconIdentityVerified } from '../Icons/IconIdentityVerified';
 import { usePrivado } from '@/hooks/usePrivado';
 import { GitcoinVerificationBadge } from '../VerificationBadges/GitcoinVerificationBadge';
 import { PrivadoVerificationBadge } from '../VerificationBadges/PrivadoVerificationBadge';
-
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 const DashboardHeader = () => {
   const { address } = useAccount();
   const { data: user } = useFetchUser();
   const { isVerified } = usePrivado();
+  const { data: isSafeAccount } = useCheckSafeAccount();
+
   return (
     <div className='bg-white  w-ful pb-6 pt-8'>
       <div className='container flex md:flex-row flex-col gap-6   items-center md:text-left text-center'>
@@ -29,9 +31,12 @@ const DashboardHeader = () => {
           <h3 className='text-xl leading-8 font-redHatText'>{user?.email}</h3>
           <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
             <div className='flex gap-8 text-pink-500 flex-col md:flex-row '>
-              <Link href={`edit/${user?.id}/profile`}>
-                <span>Edit Profile</span>
-              </Link>
+              {!isSafeAccount && (
+                <Link href={`edit/${user?.id}/profile`}>
+                  <span>Edit Profile</span>
+                </Link>
+              )}
+
               <Link
                 target='_blank'
                 href={`${config.SCAN_URL}/address/${address}`}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { formatUnits } from 'viem';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
@@ -38,15 +39,17 @@ import {
 } from '@/services/tokenPrice.service';
 import { RoundCollectHeader } from './RoundCollectHeader';
 import {
+  useClaimCollectedFee,
   useClaimedTributesAndMintedTokenAmounts,
   useProjectCollateralFeeCollected,
-} from '@/services/tributeCollected.service';
+} from '@/hooks/useTribute';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { IconShare } from '../Icons/IconShare';
 import { IconUnlock } from '../Icons/IconUnlock';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { calculateCapAmount } from '@/helpers/round';
+import { Button, ButtonColor } from '../Button';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -229,15 +232,42 @@ const MyProjects = () => {
     }
   };
 
-  const claimableFees = useProjectCollateralFeeCollected({
-    contractAddress: projectData?.abc?.fundingManagerAddress,
-  }).collectedFees;
+  const projectCollateralFeeCollected = useProjectCollateralFeeCollected({
+    contractAddress: projectData?.abc?.fundingManagerAddress!,
+  });
 
-  const { claimedTributes, mintedTokenAmounts } =
+  const claimableFees = BigInt(
+    (projectCollateralFeeCollected.data || '0').toString(),
+  );
+  const claimableFeesFormated = Number(formatUnits(claimableFees, 18));
+  const enableClaimButton = claimableFeesFormated > 0;
+  const tributeModuleAvailable: boolean =
+    !!projectData?.tributeClaimModuleAddress;
+
+  const claimedTributesAndMintedTokenAmounts =
     useClaimedTributesAndMintedTokenAmounts(
       projectData?.abc?.orchestratorAddress,
       projectData?.abc?.projectAddress,
     );
+
+  const { claimedTributes, mintedTokenAmounts } =
+    claimedTributesAndMintedTokenAmounts.data || {
+      claimedTributes: 0,
+      mintedTokenAmounts: 0,
+    };
+
+  const { claim } = useClaimCollectedFee({
+    fundingManagerAddress: projectData?.abc?.fundingManagerAddress!,
+    tributeModule: projectData?.tributeClaimModuleAddress!,
+    amount: claimableFees,
+    onSuccess: () => {
+      // do after 5 seconds
+      setTimeout(() => {
+        claimedTributesAndMintedTokenAmounts.refetch();
+      }, 5000);
+      projectCollateralFeeCollected.refetch();
+    },
+  });
 
   if (!addrWhitelist || !projectData) {
     return (
@@ -524,20 +554,29 @@ const MyProjects = () => {
               </div>
               <div className='flex gap-1'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimableFees)} POL
+                  {formatAmount(claimableFeesFormated)} POL
                 </span>
                 <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
-                    Math.round(claimableFees * Number(POLPrice) * 100) / 100,
+                    Math.round(claimableFeesFormated * Number(POLPrice) * 100) /
+                      100,
                   )}
                 </span>
               </div>
             </div>
 
-            {/* <Button color={ButtonColor.Giv} className='flex justify-center'>
-              Claim Tributes
-            </Button> */}
+            {tributeModuleAvailable && (
+              <Button
+                color={enableClaimButton ? ButtonColor.Giv : ButtonColor.Gray}
+                disabled={!enableClaimButton}
+                className='flex justify-center'
+                onClick={() => claim.mutateAsync()}
+                loading={claim.isPending}
+              >
+                {enableClaimButton ? 'Claim Tributes' : 'No Tributes to Claim'}
+              </Button>
+            )}
           </div>
         </div>
       </div>

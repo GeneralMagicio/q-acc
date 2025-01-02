@@ -106,7 +106,9 @@ export const updateProjectById = async (
   }
 };
 
-export const fetchProjectByUserId = async (userId: number) => {
+export const fetchProjectByUserId = async (
+  userId: number,
+): Promise<IProject | undefined> => {
   try {
     const res = await requestGraphQL<{
       projectsByUserId: {

@@ -27,6 +27,9 @@ const config = {
   LOW_CAP_TEXT: '1,356 POL',
   HIGH_CAP_TEXT: '20,341 POL',
   ...envConfig,
+  MATCHING_FUND_ADDRESS: envConfig.MATCHING_FUND_ADDRESS.map(address =>
+    address.toLowerCase(),
+  ),
 };
 
 export default config;
