@@ -20,6 +20,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 
 interface RewardsBreakDownProps {
   projectDonations: any[];
@@ -46,6 +47,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
     0,
   );
   const { data: POLPrice } = useFetchTokenPrice();
+  const { data: isSafeAccount } = useCheckSafeAccount();
 
   // Calculate locked tokens and available to claim tokens
   let lockedTokens = 0;
@@ -117,22 +119,25 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
               </span>
             </div>
 
-            <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
-              <div className='flex gap-2'>
-                <IconTotalDonations size={24} />
-                <span className='font-medium text-[#1D1E1F]'>
-                  Total contributions
-                </span>
+            {!isSafeAccount && (
+              <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
+                <div className='flex gap-2'>
+                  <IconTotalDonations size={24} />
+                  <span className='font-medium text-[#1D1E1F]'>
+                    Total contributions
+                  </span>
+                </div>
+                <div className='flex gap-1'>
+                  <span className='font-medium text-[#1D1E1F]'>
+                    {formatAmount(totalContributions)} POL
+                  </span>
+                  <span className='font-medium text-[#82899A]'>
+                    ~ ${' '}
+                    {formatAmount(totalContributions * Number(POLPrice)) || 0}
+                  </span>
+                </div>
               </div>
-              <div className='flex gap-1'>
-                <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(totalContributions)} POL
-                </span>
-                <span className='font-medium text-[#82899A]'>
-                  ~ $ {formatAmount(totalContributions * Number(POLPrice)) || 0}
-                </span>
-              </div>
-            </div>
+            )}
 
             <Link
               target='_blank'

@@ -14,6 +14,7 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import config from '@/config/configuration';
 import { IProject } from '@/types/project.type';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 
 interface ProjectUserDonationTableProps {
   userId: number;
@@ -70,6 +71,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     by: EOrderBy.Date,
     direction: EDirection.DESC,
   });
+  const { data: isSafeAccount } = useCheckSafeAccount();
 
   useEffect(() => {
     const fetchUserDonationData = async () => {
@@ -211,9 +213,11 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                   {formatDateMonthDayYear(donation.createdAt)}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
-                  {donation.earlyAccessRound
-                    ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
-                    : 'q/acc round'}
+                  {isSafeAccount
+                    ? 'Early access'
+                    : donation.earlyAccessRound
+                      ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
+                      : 'q/acc round'}
                 </div>
                 <div className='p-[18px_4px] flex gap-2 text-start border-b w-full min-w-[150px]'>
                   <div className='flex flex-col'>

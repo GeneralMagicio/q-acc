@@ -21,6 +21,7 @@ import {
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -51,6 +52,8 @@ const DonarSupportedProjects = ({
   }, [activeRoundDetails, projectId, maxPOLCap]);
 
   const { data: allRounds } = useFetchAllRound();
+  const { data: isSafeAccount } = useCheckSafeAccount();
+
   const tokenPriceRangeStatus = useTokenPriceRangeStatus({
     project,
     allRounds,
@@ -206,30 +209,35 @@ const DonarSupportedProjects = ({
         )}
         <hr />
 
-        <h1 className='flex p-[4px_16px] bg-[#EBECF2] w-fit rounded-md'>
-          You supported this project{' '}
-          {projectDonations > 1 && (
-            <span className='font-medium'>&nbsp;{projectDonations}&nbsp;</span>
-          )}
-          {projectDonations === 1 ? (
-            <span className='font-bold'>&nbsp;once</span>
-          ) : (
-            'times'
-          )}
-          .
-        </h1>
-
-        <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg'>
-          <div className='flex gap-2'>
-            <IconTotalDonations size={24} />
-            <span className='text-[#4F576A] font-medium '>
-              Your contribution
-            </span>
-          </div>
-          <span className='font-medium text-[#1D1E1F]'>
-            {formatAmount(totalContribution)} POL
-          </span>
-        </div>
+        {!isSafeAccount && (
+          <>
+            <h1 className='flex p-[4px_16px] bg-[#EBECF2] w-fit rounded-md'>
+              You supported this project{' '}
+              {projectDonations > 1 && (
+                <span className='font-medium'>
+                  &nbsp;{projectDonations}&nbsp;
+                </span>
+              )}
+              {projectDonations === 1 ? (
+                <span className='font-bold'>&nbsp;once</span>
+              ) : (
+                'times'
+              )}
+              .
+            </h1>
+            <div className='flex justify-between p-2 bg-[#F7F7F9] rounded-lg'>
+              <div className='flex gap-2'>
+                <IconTotalDonations size={24} />
+                <span className='text-[#4F576A] font-medium '>
+                  Your contribution
+                </span>
+              </div>
+              <span className='font-medium text-[#1D1E1F]'>
+                {formatAmount(totalContribution)} POL
+              </span>
+            </div>
+          </>
+        )}
 
         <div className='flex justify-between p-2'>
           <div className='flex gap-2'>
