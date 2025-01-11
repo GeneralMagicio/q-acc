@@ -14,6 +14,7 @@ import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { isContractAddress } from '@/helpers/token';
 
 const itemPerPage = 5;
 
@@ -49,6 +50,9 @@ const ProjectDonationTable = () => {
 
   const [pageDonations, setPageDonations] = useState<any>();
   const [totalAmountDonated, setTotalAmountDonated] = useState(0);
+  const [safeAddresses, setSafeAddresses] = useState<Record<string, boolean>>(
+    {},
+  );
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -74,6 +78,17 @@ const ProjectDonationTable = () => {
         const { donations, totalCount } = data;
         setTotalCount(totalCount);
         setPageDonations(donations);
+        const addressChecks: Record<string, boolean> = {};
+        await Promise.all(
+          donations.map(async (donation: any) => {
+            const address = donation.user?.walletAddress;
+            if (address && !safeAddresses[address]) {
+              const isSafe = await isContractAddress(address);
+              addressChecks[address] = isSafe;
+            }
+          }),
+        );
+        setSafeAddresses(prev => ({ ...prev, ...addressChecks }));
       }
 
       console.log(pageDonations, 'donations');
@@ -173,11 +188,13 @@ const ProjectDonationTable = () => {
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       {checkMatchingFundAddress(donation.fromWalletAddress)
                         ? 'q/acc round'
-                        : donation.earlyAccessRound
-                          ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
-                          : donation.qfRound
-                            ? 'q/acc round'
-                            : `---`}
+                        : safeAddresses[donation.user?.walletAddress]
+                          ? 'Early Access'
+                          : donation.earlyAccessRound
+                            ? `Early access - Round ${donation.earlyAccessRound.roundNumber}`
+                            : donation.qfRound
+                              ? 'q/acc round'
+                              : `---`}
                     </div>
                     <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[150px]'>
                       <div className='flex flex-col'>
