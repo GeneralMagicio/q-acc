@@ -129,8 +129,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               onClick={() => {
                 // localStorage.getItem('token');
                 // remove jwt token once user signs out
-                //   localStorage.removeItem('token');
-                sessionStorage.removeItem('session-token');
+                localStorage.removeItem('token');
                 disconnect();
               }}
             >

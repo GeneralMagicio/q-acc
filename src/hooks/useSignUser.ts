@@ -29,8 +29,7 @@ export const useSignUser = (onSigned?: (user: IUser) => void) => {
       try {
         const newToken = await signWithEVM(address, chain?.id, connector);
         if (newToken) {
-          sessionStorage.setItem('session-token', JSON.stringify(newToken));
-          // localStorage.setItem('token', JSON.stringify(newToken));
+          localStorage.setItem('token', JSON.stringify(newToken));
           const { data: newUser } = await refetch();
           if (newUser) {
             onSigned?.(newUser as IUser); // Pass the latest user data to the callback

@@ -83,7 +83,7 @@ export const UserController = () => {
       }
 
       // Remove stale token if any
-      sessionStorage.removeItem('session-token');
+      localStorage.removeItem('token');
 
       setShowSignModal(!isSafeAccount);
     };

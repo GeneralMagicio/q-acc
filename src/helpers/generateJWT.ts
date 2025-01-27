@@ -97,23 +97,23 @@ export const signWithEVM = async (
 
 export const getLocalStorageToken = (address: string) => {
   try {
-    const storedToken = sessionStorage.getItem('session-token');
+    const storedToken = localStorage.getItem('token');
     if (storedToken) {
       const tokenObj = JSON.parse(storedToken);
       if (tokenObj.publicAddress.toLowerCase() === address.toLowerCase()) {
         return storedToken;
       }
-      sessionStorage.removeItem('session-token');
+      localStorage.removeItem('token');
     }
   } catch (error) {
-    sessionStorage.removeItem('session-token');
+    localStorage.removeItem('token');
     console.error(error);
   }
 };
 
 export const getCurrentUserToken = () => {
   try {
-    const storedToken = sessionStorage.getItem('session-token');
+    const storedToken = localStorage.getItem('token');
     if (storedToken) {
       const tokenObj = JSON.parse(storedToken);
       return tokenObj.jwt;
