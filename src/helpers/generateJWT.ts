@@ -101,6 +101,15 @@ export const getLocalStorageToken = (address: string) => {
     if (storedToken) {
       const tokenObj = JSON.parse(storedToken);
       if (tokenObj.publicAddress.toLowerCase() === address.toLowerCase()) {
+        // Check if the token is expired (if it has an expiration time)
+        if (tokenObj.expiration) {
+          const currentTime = Math.floor(Date.now());
+          if (currentTime > tokenObj.expiration) {
+            localStorage.removeItem('token');
+            console.log('Token has expired and has been removed.');
+            return null;
+          }
+        }
         return storedToken;
       }
       localStorage.removeItem('token');
@@ -116,6 +125,14 @@ export const getCurrentUserToken = () => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       const tokenObj = JSON.parse(storedToken);
+      if (tokenObj.expiration) {
+        const currentTime = Math.floor(Date.now());
+        if (currentTime > tokenObj.expiration) {
+          localStorage.removeItem('token');
+          console.log('Token has expired and has been removed.');
+          return null;
+        }
+      }
       return tokenObj.jwt;
     }
   } catch (error) {
