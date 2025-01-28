@@ -18,8 +18,9 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { SupportButton } from './SupportButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
-import { isAllocationDone } from '@/config/configuration';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
+import { useCheckProjectPriceStatus } from '@/hooks/useCheckProjectPriceStatus ';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -39,9 +40,17 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const { data: allProjects, isLoading } = useFetchAllProjects();
 
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+  const { data: allRounds } = useFetchAllRound();
 
+  const { data: projectPriceUpdated } = useCheckProjectPriceStatus(
+    allProjects,
+    allRounds,
+  );
+
+  const isAllocationDone = !!projectPriceUpdated;
   useEffect(() => {
     console.log(
       project?.title,
@@ -94,7 +103,6 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
-  const { data: allRounds } = useFetchAllRound();
   const tokenPriceRangeStatus = useTokenPriceRangeStatus({
     project,
     allRounds,
