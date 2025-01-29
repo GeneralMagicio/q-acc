@@ -86,9 +86,7 @@ export async function getPoolAddressByPair(
     const currentTick = await getCurrentTickByPoolAddress(poolAddress);
 
     const currentPrice = calculatePriceFromTick(currentTick);
-    console.log('Current Price', currentPrice);
     const formattedPrice = formatUnits(currentPrice, 18);
-    console.log('===================', formatUnits(currentPrice, 18));
 
     return {
       price: formattedPrice,
