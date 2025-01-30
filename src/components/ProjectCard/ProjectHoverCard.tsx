@@ -131,7 +131,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
     };
 
     fetchPoolAddress(); // Call the async function inside useEffect
-  }, [project?.abc?.issuanceTokenAddress]);
+  }, [project?.abc?.issuanceTokenAddress, currentTokenPrice, isTokenListed]);
 
   return (
     <div
@@ -298,13 +298,13 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   {/* <IconABC /> */}
                   <div className='text-gray-800 font-medium flex items-center gap-1'>
                     {project?.abc?.tokenTicker} Price
-                    <div className='relative group '>
+                    {/* <div className='relative group '>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] top-[-80px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                         The mint value of the ABC token will be within this
                         range, based on the amount of POL this project receives.
                       </div>
-                    </div>
+                    </div> */}
                     {isTokenListed ? (
                       ' '
                     ) : (

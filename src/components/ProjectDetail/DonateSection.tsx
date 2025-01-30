@@ -77,7 +77,9 @@ const DonateSection = () => {
             supporters
           </p>
 
-          {!isRoundActive && (
+          <hr />
+
+          {isRoundActive && (
             <>
               {/* Percentage Bar */}
               <div className='flex flex-col gap-2 mt-12'>

@@ -18,6 +18,7 @@ import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -82,6 +83,24 @@ const ProjectDetail = () => {
       }
     }
   }, [searchParams.get('tab')]);
+
+  const [isTokenListed, setIsTokenListed] = useState(false);
+  const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (projectData?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          projectData.abc.issuanceTokenAddress,
+          config.ERC_TOKEN_ADDRESS,
+        );
+        setIsTokenListed(isListed);
+        setCurrentTokenPrice(Number(price));
+      }
+    };
+
+    fetchPoolAddress();
+  }, [projectData?.abc?.issuanceTokenAddress, isTokenListed]);
+
   if (!projectData) {
     return <>Loading</>;
   }
@@ -91,7 +110,7 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner isRoundActive={isRoundActive} />
 
-          {isRoundActive ? <DonateSection /> : ''}
+          {isTokenListed ? <DonateSection /> : ''}
         </div>
         {isRoundActive && (
           <div className='my-6'>
