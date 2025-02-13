@@ -14,6 +14,7 @@ import { QaccProjectsCard } from '@/components/QaccProjectsCard';
 import QaccRoundEndBanner from '@/components/QaccRoundEndBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
+import TestExchange from '@/components/TestExchange';
 
 export default function Home() {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
@@ -42,6 +43,8 @@ export default function Home() {
           ) : (
             <RoundStatusBanner />
           )}
+
+          <TestExchange />
 
           <div className='flex flex-col gap-6 mx-auto w-[80%]'>
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>

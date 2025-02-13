@@ -1,10 +1,51 @@
-import { writeContract } from '@wagmi/core';
+import { readContract, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
-import { erc20Abi, formatUnits, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
 
 import { wagmiConfig } from '@/config/wagmi';
+import { getPublicClient, multicall, getBalance } from 'wagmi/actions';
 
 import config from '@/config/configuration';
+
+export const AddressZero = '0x0000000000000000000000000000000000000000';
+
+export const fetchBalanceWithDecimals = async (
+  tokenAddress: Address,
+  userAddress: Address,
+) => {
+  try {
+    if (tokenAddress === AddressZero) {
+      const client = getPublicClient(wagmiConfig);
+      const balance = await client?.getBalance({ address: userAddress });
+      return {
+        balance,
+        decimals: 18, // Native token always has 18 decimals
+      };
+    } else {
+      const [balance, decimals] = await Promise.all([
+        readContract(wagmiConfig, {
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'balanceOf',
+          args: [userAddress],
+        }),
+        readContract(wagmiConfig, {
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'decimals',
+        }),
+      ]);
+
+      return {
+        balance,
+        decimals,
+      };
+    }
+  } catch (error) {
+    console.error('error on fetchBalanceWithDecimals', { error });
+    return null;
+  }
+};
 
 export const fetchTokenDetails = async ({
   tokenAddress,
