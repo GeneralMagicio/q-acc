@@ -5,6 +5,8 @@ import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers';
 import axios from 'axios';
 import { getConnectorClient, getToken, Transport } from '@wagmi/core';
 import { wagmiConfig } from '@/config/wagmi';
+import { useSendTransaction } from 'wagmi';
+
 import {
   Account,
   Address,
@@ -12,8 +14,13 @@ import {
   Client,
   createPublicClient,
   http,
+  parseEther,
 } from 'viem';
-import { fetchBalanceWithDecimals, fetchTokenDetails } from '@/helpers/token';
+import {
+  fetchBalanceWithDecimals,
+  fetchTokenDetails,
+  handleErc20Transfer,
+} from '@/helpers/token';
 import { useAccount, useSwitchChain } from 'wagmi';
 import config from '@/config/configuration';
 import { getRoute } from '@/components/TestExchange';
@@ -302,6 +309,19 @@ export function SquidDonationForm() {
     }
   };
 
+  const { data: hash, sendTransaction } = useSendTransaction();
+  const handleTokenTransfer = async () => {
+    const hash = await handleErc20Transfer({
+      inputAmount: '1',
+      tokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      projectAddress: '0x9eF71aa2276d1BfceF83F9d7150F5026Ee782789',
+    });
+    // const to = '0x9eF71aa2276d1BfceF83F9d7150F5026Ee782789' as `0x${string}`;
+    // const value = '1';
+    // sendTransaction({ to, value: parseEther(value) });
+    console.log(hash);
+  };
+
   return (
     <div
       style={{
@@ -315,6 +335,9 @@ export function SquidDonationForm() {
       <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
         Donate with Squid
       </h2>
+      <button onClick={handleTokenTransfer} className=' border p-2'>
+        Normal donation
+      </button>
       <form onSubmit={handleDonate}>
         <div className='mb-4'>
           <label
