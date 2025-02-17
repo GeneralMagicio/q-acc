@@ -1,4 +1,4 @@
-import { polygon, polygonZkEvm, polygonZkEvmCardona } from 'wagmi/chains';
+import { polygon, polygonZkEvmCardona } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 
