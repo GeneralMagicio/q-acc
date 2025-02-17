@@ -1,12 +1,12 @@
-import { polygonZkEvm, polygonZkEvmCardona } from 'wagmi/chains';
+import { polygon, polygonZkEvmCardona } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygonZkEvm] as const,
-  ERC_TOKEN_ADDRESS: '0x961bB3932A7efAa9aDcc7409e1fea090479E8312',
+  SUPPORTED_CHAINS: [polygon] as const,
+  ERC_TOKEN_ADDRESS: '0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
   ERC_TOKEN_SYMBOL: 'TPOL',
-  SCAN_URL: 'https://zkevm.polygonscan.com/',
+  SCAN_URL: 'https://polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
     'https://staging.qacc-be.generalmagic.io/graphql',
@@ -14,7 +14,7 @@ const config: EnvConfig = {
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     'https://auth.serve.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://impact-graph.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS: 'https://zkevm-rpc.com	',
+  NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
     chain: polygonZkEvmCardona,
