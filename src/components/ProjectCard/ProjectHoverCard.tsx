@@ -130,7 +130,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       }
     };
 
-    fetchPoolAddress(); // Call the async function inside useEffect
+    // fetchPoolAddress(); // Call the async function inside useEffect
   }, [project?.abc?.issuanceTokenAddress, currentTokenPrice, isTokenListed]);
 
   return (
