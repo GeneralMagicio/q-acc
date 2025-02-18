@@ -52,7 +52,7 @@ const ProjectDonateButton = () => {
       }
     };
 
-    fetchPoolAddress();
+    // fetchPoolAddress();
   }, [
     projectData?.abc?.issuanceTokenAddress,
     currentTokenPrice,
