@@ -98,7 +98,7 @@ const ProjectDetail = () => {
       }
     };
 
-    fetchPoolAddress();
+    // fetchPoolAddress();
   }, [projectData?.abc?.issuanceTokenAddress, isTokenListed]);
 
   if (!projectData) {
@@ -110,7 +110,7 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner isRoundActive={isRoundActive} />
 
-          {isTokenListed ? <DonateSection /> : ''}
+          {!isTokenListed ? <DonateSection /> : ''}
         </div>
         {isRoundActive && (
           <div className='my-6'>
