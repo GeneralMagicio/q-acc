@@ -106,6 +106,7 @@ export interface IProject {
     fundingManagerAddress?: string;
   };
   tributeClaimModuleAddress?: string;
+  tributeRecipientAddress?: string;
   status?: {
     id: string;
     symbol: string;
