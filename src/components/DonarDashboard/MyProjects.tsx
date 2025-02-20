@@ -242,7 +242,8 @@ const MyProjects = () => {
   const claimableFeesFormated = Number(formatUnits(claimableFees, 18));
   const enableClaimButton = claimableFeesFormated > 0;
   const tributeModuleAvailable: boolean =
-    !!projectData?.tributeClaimModuleAddress && !!projectData?.tributeRecipientAddress;
+    !!projectData?.tributeClaimModuleAddress &&
+    !!projectData?.tributeRecipientAddress;
 
   const claimedTributesAndMintedTokenAmounts =
     useClaimedTributesAndMintedTokenAmounts(
