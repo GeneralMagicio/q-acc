@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { ethers, BigNumberish, Contract } from 'ethers';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { usePublicClient, useWalletClient } from 'wagmi';
 import { Address, encodeFunctionData, getContract } from 'viem';
 import config from '@/config/configuration';
 import { fundingManagerAbi, roleModuleAbi } from '@/lib/abi/inverter';
@@ -64,17 +64,18 @@ export const useProjectCollateralFeeCollected = ({
 export const useClaimCollectedFee = ({
   fundingManagerAddress,
   tributeModule,
+  feeRecipient,
   amount,
   onSuccess = () => {},
 }: {
   fundingManagerAddress: string;
   tributeModule: string;
+  feeRecipient: string;
   amount: BigNumberish;
   onSuccess?: () => void;
 }) => {
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
-  const { address } = useAccount();
   const rolesModuleInstance = getContract({
     address: tributeModule as Address,
     abi: roleModuleAbi,
@@ -86,7 +87,7 @@ export const useClaimCollectedFee = ({
       const encoded = encodeFunctionData({
         abi: fundingManagerAbi,
         functionName: 'withdrawProjectCollateralFee',
-        args: [address, amount],
+        args: [feeRecipient, amount],
       });
       const tx = await rolesModuleInstance.write.execTransactionFromModule(
         [fundingManagerAddress, 0, encoded, 0],
