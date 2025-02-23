@@ -32,7 +32,7 @@ export async function getClaimedTributesAndMintedTokenAmounts(
     const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
       query: getClaimedTributesAndMintedTokenAmountsQuery,
       variables: {
-        orchestratorAddress: `${SUPPORTED_CHAIN}-${orchestratorAddress}`,
+        orchestratorAddress: `${SUPPORTED_CHAIN.id}-${orchestratorAddress}`,
       },
     });
 
