@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { IconX } from '../Icons/IconX';
-import { IconGoBack } from '../Icons/IconGoBack';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { Button } from '../Button';
 import { IconSearch } from '../Icons/IconSearch';
 import _ from 'lodash';
+import { fetchEVMTokenBalances } from '@/helpers/token';
+import { useAccount, useSwitchChain } from 'wagmi';
+import { Spinner } from '../Loading/Spinner';
 
 const dummyChains = [
   {
@@ -191,14 +193,17 @@ const dummyTokens = {
 const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [tokenLoading, setTokenLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [chainData, setChainData] = useState<any[]>([]);
-  const [tokenData, setTokenData] = useState<{ [key: string]: any }>({});
+  const [tokenData, setTokenData] = useState<any[]>([]);
   const [selectedChain, setSelectedChain] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [chainSearchTerm, setChainSearchTerm] = useState('');
   const [hideZeroBalance, setHideZeroBalance] = useState(false);
   const [showAllNetworks, setShowAllNetworks] = useState(false);
+  const { address } = useAccount();
+  const { switchChain } = useSwitchChain();
 
   const headers = {
     'x-integrator-id': 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
@@ -231,44 +236,62 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
           setSelectedChain(polygonChain.chainId);
         }
 
-        const tokenPromises = evmChains.map(async (chain: any) => {
-          const tokenResponse = await fetch(
-            'https://v2.api.squidrouter.com/v2/tokens',
-            {
-              headers: headers,
-            },
-          );
-
-          const tokenData = await tokenResponse.json();
-          return {
-            chainId: chain.chainId,
-            tokens: tokenData.tokens.filter(
-              (token: any) => token.chainId === chain.chainId,
-            ),
-          };
-        });
-
-        const allTokens = await Promise.all(tokenPromises);
-        const tokensByChain = _.keyBy(allTokens, 'chainId');
-        setTokenData(tokensByChain);
         setLoading(false);
       } catch (err: any) {
         setError(err.message);
         setLoading(false);
-        setChainData(dummyChains);
-        setTokenData(dummyTokens);
       }
     };
 
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setTokenLoading(true);
+    const fetchToken = async () => {
+      try {
+        setTokenLoading(true);
+
+        // Single API call for the selected chain
+        const tokenResponse = await fetch(
+          `https://v2.api.squidrouter.com/v2/tokens?chainId=${selectedChain}`,
+          {
+            headers: headers,
+          },
+        );
+
+        const tokenData = await tokenResponse.json();
+        // console.log(tokenData.tokens);
+        const tokenWithBalances = await fetchEVMTokenBalances(
+          tokenData.tokens,
+          address!,
+        );
+        console.log(tokenWithBalances);
+
+        const sortedTokens = tokenWithBalances.sort(
+          (a, b) => b.balance - a.balance,
+        );
+
+        // Update state with the token data for selected chain
+        setTokenData(sortedTokens);
+      } catch (error) {
+        console.error('Error fetching tokens:', error);
+      } finally {
+        setTokenLoading(false);
+      }
+    };
+
+    if (selectedChain) {
+      fetchToken();
+    }
+  }, [selectedChain]);
+
   const displayedNetworks = chainData.slice(0, 11);
   const remainingNetworksCount = Math.max(0, chainData.length - 11);
 
   const filteredTokens =
-    selectedChain && tokenData[selectedChain]
-      ? tokenData[selectedChain].tokens.filter(
+    selectedChain && tokenData
+      ? tokenData.filter(
           (token: any) =>
             token.symbol.toLowerCase().includes(searchTerm.toLowerCase()) &&
             (!hideZeroBalance || token.balance > 0),
@@ -278,9 +301,6 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
   const filteredChains = chainData.filter((chain: any) =>
     chain.networkName.toLowerCase().includes(chainSearchTerm.toLowerCase()),
   );
-  if (!loading) {
-    console.log(chainData);
-  }
 
   if (error) {
     return <div className='p-4 text-red-500'>Error: {error}</div>;
@@ -337,9 +357,9 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
         </div>
 
         {!showAllNetworks ? (
-          <div className='flex flex-col gap-5 font-redHatText '>
-            <div className='grid grid-flow-row-dense grid-cols-8 grid-rows-2 gap-3'>
-              <div className='col-span-3 flex py-[3px] px-2 justify-center items-center border rounded-lg gap-2'>
+          <div className=' flex flex-col gap-5 font-redHatText '>
+            <div className='grid grid-flow-row-dense  sm:grid-cols-8 md:grid-cols-8  grid-rows-2 gap-3'>
+              <div className=' col-span-3 flex py-[3px] px-2 justify-center items-center border rounded-lg gap-2'>
                 <img
                   src='https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
                   alt='ETH Logo'
@@ -358,11 +378,15 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
 
               {displayedNetworks.map(chain => (
                 <div
-                  className={`flex p-2 gap-2 items-center border rounded-lg justify-center w-full cursor-pointer ${chain.chainId === selectedChain ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
-                  onClick={() => setSelectedChain(chain.chainId)}
+                  key={chain.chainId}
+                  className={`flex p-2 gap-2 items-center border rounded-lg justify-center   cursor-pointer ${chain.chainId === selectedChain ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
+                  onClick={() => {
+                    switchChain({ chainId: Number(chain.chainId) });
+                    setSelectedChain(chain.chainId);
+                  }}
                 >
                   <img
-                    className='rounded-full w-[32px]  '
+                    className=' sm:w-full rounded-full'
                     src={chain.chainIconURI}
                     alt='ETH Logo'
                     width={32}
@@ -406,39 +430,47 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
                 </span>
               </div>
               <div className='flex flex-col gap-3 max-h-[300px] overflow-y-auto'>
-                {filteredTokens.map((token: any) => (
-                  <div
-                    key={token.address}
-                    onClick={() => console.log(token.address)}
-                    className='flex px-2 py-1  gap-4 items-center cursor-pointer hover:border-2 border-2 border-transparent  hover:border-[#754DFF] rounded-lg hover:bg-[#F6F3FF]'
-                  >
-                    <div className='flex items-center gap-3'>
-                      <img
-                        className='rounded-full'
-                        src={token.logoURI}
-                        alt={token.symbol}
-                        width={32}
-                        height={32}
-                      />
-                    </div>
+                {selectedChain && tokenLoading ? (
+                  <h1 className=' flex justify-center'>
+                    <Spinner />
+                  </h1>
+                ) : (
+                  filteredTokens.map((token: any) => (
+                    <div
+                      key={token.address}
+                      onClick={() => console.log(token.address)}
+                      className='flex px-2 py-1  gap-4 items-center cursor-pointer hover:border-2 border-2 border-transparent  hover:border-[#754DFF] rounded-lg hover:bg-[#F6F3FF]'
+                    >
+                      <div className='flex items-center gap-3'>
+                        <img
+                          className='rounded-full'
+                          src={token.logoURI}
+                          alt={token.symbol}
+                          width={32}
+                          height={32}
+                        />
+                      </div>
 
-                    <div className='flex justify-between flex-[1_0_0] items-center font-redHatText'>
-                      <div className='flex gap-2 items-center'>
-                        <div className='font-medium text-[#4F576A] leading-5 text-sm'>
-                          {token.symbol}
+                      <div className='flex justify-between flex-[1_0_0] items-center font-redHatText'>
+                        <div className='flex gap-2 items-center'>
+                          <div className='font-medium text-[#4F576A] leading-5 text-sm'>
+                            {token.symbol}
+                          </div>
+                          <div className='text-sm text-[#82899A] leading-5'>
+                            {token.name}
+                          </div>
                         </div>
-                        <div className='text-sm text-[#82899A] leading-5'>
-                          {token.name}
+                        <div className='flex px-2 py-[2px] gap-2 bg-[#EBECF2] rounded-lg'>
+                          <span className='text-[#4F576A] font-medium leading-5 text-sm'>
+                            {token.balance?.toFixed(6) || '0.00'}
+
+                            {/* {token.balance} */}
+                          </span>
                         </div>
-                      </div>
-                      <div className='flex px-2 py-[2px] gap-2 bg-[#EBECF2] rounded-lg'>
-                        <span className='text-[#4F576A] font-medium leading-5 text-sm'>
-                          {token.balance?.toFixed(2) || '0.00'}
-                        </span>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -462,6 +494,7 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
                   <div
                     key={chain.chainId}
                     onClick={() => {
+                      switchChain({ chainId: Number(chain.chainId) });
                       setSelectedChain(chain.chainId);
                       setShowAllNetworks(false);
                     }}
