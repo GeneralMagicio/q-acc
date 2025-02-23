@@ -2,24 +2,22 @@ import axios from 'axios';
 import config from '@/config/configuration';
 
 const getClaimedTributesAndMintedTokenAmountsQuery = `
-    query GetTokenTotalSupplyByAddress($orchestratorAddress: String!) {
-      BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
-        id
-        feeClaim {
-          id
-          amount
-          recipient
-        }
-        swaps {
-          blockTimestamp
-          issuanceAmount
-          collateralAmount
-          swapType
-          initiator
-          recipient
-        }
-      }
+query GetTokenTotalSupplyByAddress($orchestratorAddress: String!) {
+  BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}) {
+    id
+    projectFees {
+      id
+      amount
+      recipient
     }
+    swaps {
+      swapType
+      initiator
+      recipient
+      amountISS
+    }
+  }
+}
 `;
 
 export async function getClaimedTributesAndMintedTokenAmounts(
@@ -29,16 +27,17 @@ export async function getClaimedTributesAndMintedTokenAmounts(
   claimedTributes: number;
   mintedTokenAmounts: number;
 }> {
+  const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
   try {
     const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
       query: getClaimedTributesAndMintedTokenAmountsQuery,
       variables: {
-        orchestratorAddress,
+        orchestratorAddress: `${SUPPORTED_CHAIN}-${orchestratorAddress}`,
       },
     });
 
-    const feeClaims = result.data.data.BondingCurve[0]?.feeClaim;
-    const claimedTributes = feeClaims.reduce(
+    const projectFees = result.data.data.BondingCurve[0]?.projectFees || [];
+    const claimedTributes = projectFees.reduce(
       (sum: any, fee: { amount: any }) => sum + (Number(fee.amount) || 0),
       0,
     );
@@ -54,8 +53,8 @@ export async function getClaimedTributesAndMintedTokenAmounts(
             swap.recipient.toLowerCase() === projectAddress?.toLowerCase()),
       )
       .reduce(
-        (sum: any, swap: { issuanceAmount: any }) =>
-          sum + (Number(swap.issuanceAmount) || 0),
+        (sum: any, swap: { amountISS: number }) =>
+          sum + (Number(swap.amountISS) || 0),
         0,
       );
 
