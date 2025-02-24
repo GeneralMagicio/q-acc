@@ -126,9 +126,6 @@ const getBondingCurveSwapsQuery = `
       BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
         id  
         swaps {
-          blockTimestamp
-          issuanceAmount
-          collateralAmount
           swapType
           initiator
           recipient
@@ -165,7 +162,7 @@ async function getTokenPriceRangeStatus({
           const result = await axios.post(config.INDEXER_GRAPHQL_URL, {
             query: getBondingCurveSwapsQuery,
             variables: {
-              orchestratorAddress: project.abc?.orchestratorAddress,
+              orchestratorAddress: `${config.SUPPORTED_CHAINS[0]?.id}-${project.abc?.orchestratorAddress}`,
             },
           });
           const swaps = result.data.data.BondingCurve[0]?.swaps;
