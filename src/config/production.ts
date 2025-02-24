@@ -33,6 +33,7 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
+  SQUID_INTEGRATOR_ID: '',
 };
 
 export default config;

@@ -1,9 +1,46 @@
-import { polygon, polygonZkEvmCardona } from 'wagmi/chains';
+import {
+  arbitrum,
+  avalanche,
+  base,
+  blast,
+  celo,
+  fantom,
+  filecoin,
+  fraxtal,
+  immutableZkEvm,
+  kava,
+  linea,
+  mainnet,
+  mantle,
+  moonbeam,
+  optimism,
+  polygon,
+  polygonZkEvmCardona,
+  scroll,
+} from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygon] as const,
+  SUPPORTED_CHAINS: [
+    polygon,
+    mainnet,
+    arbitrum,
+    avalanche,
+    optimism,
+    base,
+    linea,
+    celo,
+    mantle,
+    moonbeam,
+    fantom,
+    scroll,
+    kava,
+    filecoin,
+    blast,
+    fraxtal,
+    immutableZkEvm,
+  ] as const,
   ERC_TOKEN_ADDRESS: '0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
   ERC_TOKEN_SYMBOL: 'TPOL',
   SCAN_URL: 'https://polygonscan.com/',
@@ -33,6 +70,7 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
+  SQUID_INTEGRATOR_ID: 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
 };
 
 export default config;
