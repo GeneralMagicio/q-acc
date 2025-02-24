@@ -407,16 +407,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     if (!isVerified) {
       if (
         activeRoundDetails &&
-        'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
           activeRoundDetails &&
         parseFloat(inputAmount) >
-          activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly /
-            Number(activeRoundDetails?.tokenPrice)
+          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
       ) {
         {
           console.log(
             'User is not verified with Privado ID',
-            activeRoundDetails?.tokenPrice,
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
           );
           setShowZkidModal(true);
           setDonateDisabled(false);
@@ -533,9 +532,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       const inputAmount = parseFloat(value);
       if (activeRoundDetails) {
         if (
-          inputAmount >
-          activeRoundDetails?.cumulativeUSDCapPerUserPerProject /
-            activeRoundDetails?.tokenPrice
+          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
         ) {
           return; // Exit without updating the input
         }
@@ -661,10 +658,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {inputAmount === ''
                   ? 0
                   : formatAmount(
-                      round(
-                        parseFloat(inputAmount) *
-                          Number(activeRoundDetails?.tokenPrice || 1),
-                      ),
+                      round(parseFloat(inputAmount) * Number(POLPrice || 1)),
                     )}
               </span>
             </div>
