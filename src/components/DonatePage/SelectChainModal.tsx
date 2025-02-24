@@ -6,188 +6,8 @@ import { IconSearch } from '../Icons/IconSearch';
 import { fetchEVMTokenBalances, formatBalance } from '@/helpers/token';
 import { Spinner } from '../Loading/Spinner';
 import { IconArrowLeft } from '../Icons/IconArrowLeft';
+import config from '@/config/configuration';
 
-const dummyChains = [
-  {
-    chainId: 1,
-    chainName: 'Ethereum',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 137,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 56,
-    chainName: 'Binance Smart Chain',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 8002,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 10,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 11,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 12,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 13,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 14,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 15,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 16,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 17,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 18,
-    chainName: 'Polygon',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 19,
-    chainName: 'Deca',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 20,
-    chainName: 'Celo',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 21,
-    chainName: 'Optimsiumn',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  {
-    chainId: 22,
-    chainName: 'Arbitrium',
-    chainIconURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-    type: 'evm',
-  },
-  // Add more chains as needed
-];
-
-const dummyTokens = {
-  tokens: [
-    {
-      address: '0x123...',
-      symbol: 'ETH',
-      name: 'Ethereum',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 10.5,
-      chainId: 1,
-    },
-    {
-      address: '0x456...',
-      symbol: 'DAI',
-      name: 'Dai Stablecoin',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 1000,
-      chainId: 1,
-    },
-    {
-      address: '0x789...',
-      symbol: 'MATIC',
-      name: 'Matic Token',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 500,
-      chainId: 137,
-    },
-    {
-      address: '0xabc...',
-      symbol: 'USDC',
-      name: 'USD Coin',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 200,
-      chainId: 137,
-    },
-    {
-      address: '0xdef...',
-      symbol: 'BNB',
-      name: 'Binance Coin',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 5,
-      chainId: 56,
-    },
-    {
-      address: '0xghi...',
-      symbol: 'BUSD',
-      name: 'Binance USD',
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg',
-      balance: 100,
-      chainId: 56,
-    },
-  ],
-};
 export const POLYGON_POS_CHAIN_ID = '137';
 export const POLYGON_POS_CHAIN_IMAGE =
   'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg';
@@ -209,7 +29,7 @@ const SelectChainModal = ({
     imageUrl: string;
   }>({
     id: POLYGON_POS_CHAIN_ID,
-    imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
+    imageUrl: POLYGON_POS_CHAIN_IMAGE,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [chainSearchTerm, setChainSearchTerm] = useState('');
@@ -219,8 +39,8 @@ const SelectChainModal = ({
   const { switchChain } = useSwitchChain();
 
   const headers = {
-    'x-integrator-id': 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
-  }; // Polygon PoS chain ID
+    'x-integrator-id': config.SQUID_INTEGRATOR_ID,
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -373,11 +193,11 @@ const SelectChainModal = ({
 
         {!showAllNetworks ? (
           <div className=' flex flex-col gap-5 font-redHatText '>
-            <div className='grid grid-flow-row-dense  sm:grid-cols-8 md:grid-cols-8  grid-rows-2 gap-3'>
+            <div className='grid grid-flow-row-dense  grid-cols-6 sm:grid-cols-9  gap-3'>
               <div
-                className={`col-span-3 flex py-[3px] px-2 justify-center cursor-pointer items-center border rounded-lg gap-2 ${POLYGON_POS_CHAIN_ID === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''} `}
+                className={`col-span-1 sm:col-span-4 h-[50px] flex py-[3px] px-2 justify-start cursor-pointer items-center border rounded-lg gap-2 ${POLYGON_POS_CHAIN_ID === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''} `}
                 onClick={() => {
-                  switchChain({ chainId: 137 });
+                  switchChain({ chainId: Number(POLYGON_POS_CHAIN_ID) });
                   setSelectedChain({
                     id: POLYGON_POS_CHAIN_ID,
                     imageUrl: POLYGON_POS_CHAIN_IMAGE,
@@ -391,11 +211,11 @@ const SelectChainModal = ({
                   width='32'
                   height='32'
                 />
-                <div className='flex flex-col gap'>
+                <div className='sm:flex flex-col gap justify-start items-start  hidden'>
                   <span className='font-medium text-[#4F576A] text-sm'>
                     Polygon
                   </span>
-                  <span className='text-[14px] text-[#82899A] text-sm'>
+                  <span className='text-[#82899A] text-sm'>
                     Save more on gas fees!
                   </span>
                 </div>
@@ -404,7 +224,7 @@ const SelectChainModal = ({
               {displayedNetworks.map(chain => (
                 <div
                   key={chain.chainId}
-                  className={`flex p-2 gap-2 items-center border rounded-lg justify-center   cursor-pointer ${chain.chainId === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
+                  className={`flex p-2 gap-2 items-center border w-[50px] h-[50px] rounded-lg justify-center   cursor-pointer ${chain.chainId === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
                   onClick={() => {
                     switchChain({ chainId: Number(chain.chainId) });
                     setSelectedChain({
@@ -414,7 +234,7 @@ const SelectChainModal = ({
                   }}
                 >
                   <img
-                    className='  rounded-full'
+                    className='rounded-full'
                     src={chain.chainIconURI}
                     alt='ETH Logo'
                     width={32}
@@ -425,7 +245,7 @@ const SelectChainModal = ({
 
               {!showAllNetworks && (
                 <div
-                  className='col-span-2 border flex px-3 py-3 items-center justify-center gap-2 rounded-lg cursor-pointer hover:bg-gray-50'
+                  className='col-span-3 border flex px-3 py-3 items-center justify-center gap-2 rounded-lg cursor-pointer hover:bg-gray-50'
                   onClick={() => setShowAllNetworks(true)}
                 >
                   <span className='font-semibold text-[#4F576A] text-sm leading-5'>

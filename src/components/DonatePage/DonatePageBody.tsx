@@ -158,14 +158,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     chainId: '137',
     name: 'POL',
     decimals: 18,
-    usdPrice: 0.2815367662198533,
-    coingeckoId: 'matic-network',
     type: 'evm',
     logoURI:
       'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg',
-    subGraphOnly: false,
-    subGraphIds: ['wmatic-wei'],
-    active: true,
   });
 
   const handleChainTokenSelection = (chain: any, token: any) => {
