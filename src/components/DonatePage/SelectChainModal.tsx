@@ -70,7 +70,10 @@ const SelectChainModal = ({
           (chain: any) => chain.chainId === POLYGON_POS_CHAIN_ID,
         );
         if (polygonChain) {
-          setSelectedChain(polygonChain.chainId);
+          setSelectedChain({
+            id: polygonChain.chainId,
+            imageUrl: polygonChain.chainIconURI,
+          });
         }
 
         setLoading(false);
