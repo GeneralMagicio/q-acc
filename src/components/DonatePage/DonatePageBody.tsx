@@ -407,16 +407,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     if (!isVerified) {
       if (
         activeRoundDetails &&
-        'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
           activeRoundDetails &&
         parseFloat(inputAmount) >
-          activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly /
-            Number(activeRoundDetails?.tokenPrice)
+          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
       ) {
         {
           console.log(
             'User is not verified with Privado ID',
-            activeRoundDetails?.tokenPrice,
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
           );
           setShowZkidModal(true);
           setDonateDisabled(false);
@@ -533,9 +532,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       const inputAmount = parseFloat(value);
       if (activeRoundDetails) {
         if (
-          inputAmount >
-          activeRoundDetails?.cumulativeUSDCapPerUserPerProject /
-            activeRoundDetails?.tokenPrice
+          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
         ) {
           return; // Exit without updating the input
         }
@@ -661,10 +658,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {inputAmount === ''
                   ? 0
                   : formatAmount(
-                      round(
-                        parseFloat(inputAmount) *
-                          Number(activeRoundDetails?.tokenPrice || 1),
-                      ),
+                      round(parseFloat(inputAmount) * Number(POLPrice || 1)),
                     )}
               </span>
             </div>
@@ -687,9 +681,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     <div className='relative group'>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                        Caps are set at the start of the round and may be
-                        changed during the round in the event of significant
-                        fluctuation in POL-USD rate over a 48 hour period.
+                        Caps are set at the start of the round in POL.
                       </div>
                     </div>
                   </span>

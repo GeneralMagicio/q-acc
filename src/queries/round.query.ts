@@ -8,11 +8,10 @@ export const GET_ALL_ROUNDS = `
         endDate
         createdAt
         updatedAt
-        roundUSDCapPerProject
-        roundUSDCapPerUserPerProject
-        tokenPrice
-        cumulativeUSDCapPerProject
-        cumulativeUSDCapPerUserPerProject
+        roundPOLCapPerProject
+        roundPOLCapPerUserPerProject
+        cumulativePOLCapPerProject
+        cumulativePOLCapPerUserPerProject
         isBatchMintingExecuted
       }
       ... on QfRound {
@@ -22,14 +21,13 @@ export const GET_ALL_ROUNDS = `
         allocatedFund
         startDate:beginDate
         endDate
-        roundUSDCapPerProject
-        roundUSDCapPerUserPerProject
-        tokenPrice
-        cumulativeUSDCapPerProject
-        cumulativeUSDCapPerUserPerProject
-        roundUSDCloseCapPerProject
+        roundPOLCapPerProject
+        roundPOLCapPerUserPerProject
+        cumulativePOLCapPerProject
+        cumulativePOLCapPerUserPerProject
+        roundPOLCloseCapPerProject
         isBatchMintingExecuted
-        roundUSDCapPerUserPerProjectWithGitcoinScoreOnly
+        roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
       }
     }
   }
@@ -46,11 +44,10 @@ export const GET_ACTIVE_ROUND = `
           endDate
           createdAt
           updatedAt
-          roundUSDCapPerProject
-          roundUSDCapPerUserPerProject
-          tokenPrice
-          cumulativeUSDCapPerProject
-          cumulativeUSDCapPerUserPerProject
+          roundPOLCapPerProject
+          roundPOLCapPerUserPerProject
+          cumulativePOLCapPerProject
+          cumulativePOLCapPerUserPerProject
           isBatchMintingExecuted
         }
         ... on QfRound {
@@ -60,14 +57,13 @@ export const GET_ACTIVE_ROUND = `
           allocatedFund
           startDate:beginDate
           endDate
-          roundUSDCapPerProject
-          roundUSDCapPerUserPerProject
-          tokenPrice
-          cumulativeUSDCapPerProject
-          cumulativeUSDCapPerUserPerProject
-          roundUSDCloseCapPerProject
+          roundPOLCapPerProject
+          roundPOLCapPerUserPerProject
+          cumulativePOLCapPerProject
+          cumulativePOLCapPerUserPerProject
+          roundPOLCloseCapPerProject
           isBatchMintingExecuted
-          roundUSDCapPerUserPerProjectWithGitcoinScoreOnly
+          roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
         }
       }
     }

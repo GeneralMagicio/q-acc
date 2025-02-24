@@ -1,13 +1,10 @@
 import React from 'react';
 import links from '@/lib/constants/links';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 import { formatAmount } from '@/helpers/donation';
 
 const Rules = () => {
-  const { data: POLPrice } = useFetchTokenPrice();
-
   const { data: allRounds } = useFetchAllRound();
 
   const qaccRound: IQfRound | undefined = allRounds?.filter(
@@ -17,14 +14,11 @@ const Rules = () => {
   let high_cap, low_cap;
 
   if (qaccRound) {
-    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
+    if ('roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
       low_cap =
-        (qaccRound?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly || 1000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+        qaccRound?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly || 1000;
 
-      high_cap =
-        (qaccRound?.roundUSDCapPerUserPerProject || 15000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+      high_cap = qaccRound?.roundPOLCapPerUserPerProject || 15000;
     }
   }
 
@@ -101,11 +95,7 @@ const Rules = () => {
               you are eligible to support each project with up to{' '}
               <b className='font-extrabold'>{formatAmount(high_cap)} POL.</b>
             </li>
-            <li>
-              The above caps are set at the start of the round and may be
-              changed during the round in the event of significant fluctuation
-              in POL-USD rate over a 48 hour period.
-            </li>
+            <li>The above caps are set at the start of the round in POL.</li>
             <li>
               Learn how to verify your identity and move POL and ETH to Polygon
               zkEVM in our
