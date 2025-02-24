@@ -95,11 +95,7 @@ const Rules = () => {
               you are eligible to support each project with up to{' '}
               <b className='font-extrabold'>{formatAmount(high_cap)} POL.</b>
             </li>
-            <li>
-              The above caps are set at the start of the round and may be
-              changed during the round in the event of significant fluctuation
-              in POL-USD rate over a 48 hour period.
-            </li>
+            <li>The above caps are set at the start of the round in POL.</li>
             <li>
               Learn how to verify your identity and move POL and ETH to Polygon
               zkEVM in our
