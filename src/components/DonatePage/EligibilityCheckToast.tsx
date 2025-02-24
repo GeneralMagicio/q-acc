@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import floor from 'lodash/floor';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
@@ -11,7 +12,9 @@ export const EligibilityCheckToast = () => {
     if (
       'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
     ) {
-      low_cap = activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly || 1000;
+      low_cap =
+        activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly ||
+        1000;
     }
 
     high_cap = activeRoundDetails?.roundPOLCapPerUserPerProject || 15000;

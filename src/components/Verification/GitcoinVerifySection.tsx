@@ -14,7 +14,6 @@ import { GitcoinLow } from '../GitcoinVerifcationElements/GitcoinLow';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 import { formatAmount } from '@/helpers/donation';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export const GitcoinVerifySection = () => {
   const {
