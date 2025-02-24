@@ -15,7 +15,7 @@ const DonateRoute = () => {
     ? params.donateSlug[0]
     : params.donateSlug;
   return isProductReleased ? (
-    !isRoundActive ? (
+    isRoundActive ? (
       <DonateProvider slug={slug}>
         <DonateIndex />
       </DonateProvider>

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { IconX } from '../Icons/IconX';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { IconSearch } from '../Icons/IconSearch';
-import _ from 'lodash';
 import { fetchEVMTokenBalances, formatBalance } from '@/helpers/token';
-import { useAccount, useSwitchChain } from 'wagmi';
 import { Spinner } from '../Loading/Spinner';
 import { IconArrowLeft } from '../Icons/IconArrowLeft';
 
@@ -318,10 +317,6 @@ const SelectChainModal = ({
     chain.networkName.toLowerCase().includes(chainSearchTerm.toLowerCase()),
   );
 
-  if (error) {
-    return <div className='p-4 text-red-500'>Error: {error}</div>;
-  }
-
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
@@ -337,6 +332,10 @@ const SelectChainModal = ({
       document.body.style.overflow = 'auto';
     };
   }, [isOpen, mounted]);
+
+  if (error) {
+    return <div className='p-4 text-red-500'>Error: {error}</div>;
+  }
 
   if (!mounted || !isOpen) return null;
 

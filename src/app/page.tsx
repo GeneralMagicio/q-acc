@@ -47,7 +47,6 @@ export default function Home() {
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>
               Welcome to Quadratic Acceleration
             </h1>
-
             <div className='leading-9 text-[#4F576A]'>
               <p>
                 The Web3 frontier is advancing rapidly, led by innovators

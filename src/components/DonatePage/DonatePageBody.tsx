@@ -14,7 +14,6 @@ import round from 'lodash/round';
 import floor from 'lodash/floor';
 
 import { IconRefresh } from '../Icons/IconRefresh';
-import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
 
