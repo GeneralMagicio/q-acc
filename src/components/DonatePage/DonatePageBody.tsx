@@ -52,6 +52,10 @@ import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
 import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
 import { TermsConditionModal } from '../Modals/TermsConditionModal';
+import SelectChainModal, {
+  POLYGON_POS_CHAIN_ID,
+  POLYGON_POS_CHAIN_IMAGE,
+} from './SelectChainModal';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -139,6 +143,38 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [showTermsConditionModal, setShowTermsConditionModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
+
+  const [showChainTokenModal, setShowChainTokenModal] = useState(false);
+
+  const [selectedChain, setSelectedChain] = useState<{
+    id: string | null;
+    imageUrl: string;
+  }>({
+    id: POLYGON_POS_CHAIN_ID,
+    imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
+  });
+  const [selectedToken, setSelectedToken] = useState<any>({
+    symbol: 'POL',
+    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    chainId: '137',
+    name: 'POL',
+    decimals: 18,
+    usdPrice: 0.2815367662198533,
+    coingeckoId: 'matic-network',
+    type: 'evm',
+    logoURI:
+      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg',
+    subGraphOnly: false,
+    subGraphIds: ['wmatic-wei'],
+    active: true,
+  });
+
+  const handleChainTokenSelection = (chain: any, token: any) => {
+    setSelectedChain(chain);
+    setSelectedToken(token);
+    setShowChainTokenModal(false);
+  };
+  console.log(selectedChain, selectedToken);
 
   const handleShare = () => {
     openShareModal();
@@ -608,6 +644,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         onContinue={handleDonateClick}
         onClose={() => setShowTermsConditionModal(false)}
       />
+      <SelectChainModal
+        isOpen={showChainTokenModal}
+        onClose={() => setShowChainTokenModal(false)}
+        onSelection={handleChainTokenSelection}
+      />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-2/3 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <EligibilityCheckToast />
@@ -642,17 +683,60 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           {/* Input Box */}
 
           <div className='flex flex-col gap-2 font-redHatText'>
-            <div className='border rounded-lg flex relative '>
-              <div className='md:w-40 flex gap-4 p-4 border '>
-                <IconMatic size={24} />
-                <h1 className=' font-medium'>POL</h1>
+            <div className='border rounded-lg flex relative  '>
+              <div
+                className='md:w-[40%] flex gap-4 p-4 border  justify-between items-center cursor-pointer'
+                onClick={() => setShowChainTokenModal(true)}
+              >
+                <div className='flex gap-2 items-center'>
+                  <div className='flex relative px-2'>
+                    <div className='flex items-center'>
+                      <div className='w-6 h-6  absolute right-6 p-[2px] bg-[#F7F7F9] rounded-full'>
+                        <img
+                          className='rounded-full  w-full'
+                          src={
+                            selectedChain?.imageUrl || POLYGON_POS_CHAIN_IMAGE
+                          }
+                          alt='Chain Logo'
+                        />
+                      </div>
+                      <div className='w-6 h-6 z-10 p-[2px] bg-[#F7F7F9] rounded-full'>
+                        <img
+                          className='rounded-full  w-full'
+                          src={
+                            selectedToken?.logoURI || POLYGON_POS_CHAIN_IMAGE
+                          }
+                          alt='Token Logo'
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h1 className=' font-medium text-[#1D1E1F] font-redHatText'>
+                    {selectedToken?.symbol}
+                  </h1>
+                </div>
+                <div>
+                  <svg
+                    width='16'
+                    height='16'
+                    viewBox='0 0 16 16'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M4.14279 6.126L7.55548 10.7619C7.61049 10.8366 7.67873 10.8965 7.75551 10.9376C7.8323 10.9787 7.91581 11 8.00032 11C8.08483 11 8.16835 10.9787 8.24513 10.9376C8.32191 10.8965 8.39015 10.8366 8.44516 10.7619L11.8579 6.126C12.1835 5.6835 11.9135 5 11.413 5H4.58665C4.08614 5 3.81612 5.6835 4.14279 6.126Z'
+                      fill='#1D1E1F'
+                    />
+                  </svg>
+                </div>
               </div>
               <input
                 onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
                 disabled={isConfirming}
-                className='w-full  text-sm  md:text-base border rounded-lg  px-4'
+                className='w-full  text-sm  md:text-base border rounded-r-lg  px-4'
                 onWheel={(e: any) => e.target.blur()}
               />
 

@@ -14,13 +14,10 @@ import { QaccProjectsCard } from '@/components/QaccProjectsCard';
 import QaccRoundEndBanner from '@/components/QaccRoundEndBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
-import { useState } from 'react';
-import SelectChainModal from '@/components/DonatePage/SelectChainModal';
 
 export default function Home() {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
 
-  const [showChainTokenModal, setShowChainTokenModal] = useState(false);
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   return isProductReleased ? (
     <main className='flex flex-col '>
@@ -50,11 +47,7 @@ export default function Home() {
             <h1 className='text-4xl text-gray-900 font-bold mt-10'>
               Welcome to Quadratic Acceleration
             </h1>
-            <SelectChainModal
-              isOpen={showChainTokenModal}
-              onClose={() => setShowChainTokenModal(false)}
-            />
-            <h1 onClick={() => setShowChainTokenModal(true)}>Click me</h1>
+
             <div className='leading-9 text-[#4F576A]'>
               <p>
                 The Web3 frontier is advancing rapidly, led by innovators

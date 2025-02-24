@@ -203,3 +203,48 @@ export const fetchEVMTokenBalances = async <T extends { [key: string]: any }>(
     return tokens.map(token => ({ ...token, balance: 0 }));
   }
 };
+
+export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
+  let index = strNum.indexOf('.');
+  if (index === -1 || decimals < 1) {
+    return Number(strNum);
+  }
+  let length = index + 1 + decimals;
+  return Number(strNum.substring(0, length));
+};
+
+export const formatBalance = (balance?: number): string => {
+  if (balance === undefined || balance === null || isNaN(balance)) return '0';
+
+  // Convert the balance to a string with high precision
+  const balanceStr = balance.toFixed(10); // Use a high precision to avoid rounding issues
+
+  // Find the index of the decimal point
+  const decimalIndex = balanceStr.indexOf('.');
+
+  // If there's no decimal point, return the balance as is
+  if (decimalIndex === -1) return balanceStr;
+
+  // Extract the integer and decimal parts
+  const integerPart = balanceStr.slice(0, decimalIndex);
+  const decimalPart = balanceStr.slice(decimalIndex + 1);
+
+  // Find the first two non-zero digits in the decimal part
+  let nonZeroCount = 0;
+  let result = '';
+
+  for (let i = 0; i < decimalPart.length; i++) {
+    if (decimalPart[i] !== '0') {
+      nonZeroCount++;
+    }
+    result += decimalPart[i];
+    if (nonZeroCount === 2) {
+      break;
+    }
+  }
+  // If no non-zero digits are found, return the integer part
+  if (nonZeroCount === 0) return integerPart;
+
+  // Combine the integer part and the formatted decimal part
+  return `${integerPart}.${result}`;
+};

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { IconX } from '../Icons/IconX';
 import { IconArrowRight } from '../Icons/IconArrowRight';
-import { Button } from '../Button';
 import { IconSearch } from '../Icons/IconSearch';
 import _ from 'lodash';
-import { fetchEVMTokenBalances } from '@/helpers/token';
+import { fetchEVMTokenBalances, formatBalance } from '@/helpers/token';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { Spinner } from '../Loading/Spinner';
+import { IconArrowLeft } from '../Icons/IconArrowLeft';
 
 const dummyChains = [
   {
@@ -189,15 +189,29 @@ const dummyTokens = {
     },
   ],
 };
+export const POLYGON_POS_CHAIN_ID = '137';
+export const POLYGON_POS_CHAIN_IMAGE =
+  'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg';
 
-const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
+const SelectChainModal = ({
+  isOpen,
+  onClose,
+  closeable = true,
+  onSelection = (chainId: any, tokenAddress: string) => {},
+}: any) => {
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tokenLoading, setTokenLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [chainData, setChainData] = useState<any[]>([]);
   const [tokenData, setTokenData] = useState<any[]>([]);
-  const [selectedChain, setSelectedChain] = useState<string | null>(null);
+  const [selectedChain, setSelectedChain] = useState<{
+    id: string | null;
+    imageUrl: string;
+  }>({
+    id: POLYGON_POS_CHAIN_ID,
+    imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [chainSearchTerm, setChainSearchTerm] = useState('');
   const [hideZeroBalance, setHideZeroBalance] = useState(false);
@@ -207,9 +221,7 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
 
   const headers = {
     'x-integrator-id': 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
-  };
-
-  const POLYGON_POS_CHAIN_ID = 137; // Polygon PoS chain ID
+  }; // Polygon PoS chain ID
 
   useEffect(() => {
     const fetchData = async () => {
@@ -224,8 +236,14 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
         const chainsData = await chainsResponse.json();
 
         const evmChains = chainsData.chains.filter(
-          (chain: any) => chain.type === 'evm',
+          (chain: any) =>
+            chain.type === 'evm' && chain.chainId !== POLYGON_POS_CHAIN_ID,
         );
+        evmChains.sort((a: any, b: any) => {
+          if (a.chainId === POLYGON_POS_CHAIN_ID) return -1;
+          if (b.chainId === POLYGON_POS_CHAIN_ID) return 1;
+          return 0;
+        });
         setChainData(evmChains);
 
         // Set Polygon PoS as the default selected chain
@@ -254,19 +272,17 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
 
         // Single API call for the selected chain
         const tokenResponse = await fetch(
-          `https://v2.api.squidrouter.com/v2/tokens?chainId=${selectedChain}`,
+          `https://v2.api.squidrouter.com/v2/tokens?chainId=${selectedChain.id}`,
           {
             headers: headers,
           },
         );
 
         const tokenData = await tokenResponse.json();
-        // console.log(tokenData.tokens);
         const tokenWithBalances = await fetchEVMTokenBalances(
           tokenData.tokens,
           address!,
         );
-        console.log(tokenWithBalances);
 
         const sortedTokens = tokenWithBalances.sort(
           (a, b) => b.balance - a.balance,
@@ -340,7 +356,7 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
           <div className=' flex gap-4 items-center'>
             {showAllNetworks && (
               <button onClick={() => setShowAllNetworks(false)}>
-                <IconArrowRight />
+                <IconArrowLeft />
               </button>
             )}
 
@@ -359,9 +375,19 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
         {!showAllNetworks ? (
           <div className=' flex flex-col gap-5 font-redHatText '>
             <div className='grid grid-flow-row-dense  sm:grid-cols-8 md:grid-cols-8  grid-rows-2 gap-3'>
-              <div className=' col-span-3 flex py-[3px] px-2 justify-center items-center border rounded-lg gap-2'>
+              <div
+                className={`col-span-3 flex py-[3px] px-2 justify-center cursor-pointer items-center border rounded-lg gap-2 ${POLYGON_POS_CHAIN_ID === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''} `}
+                onClick={() => {
+                  switchChain({ chainId: 137 });
+                  setSelectedChain({
+                    id: POLYGON_POS_CHAIN_ID,
+                    imageUrl: POLYGON_POS_CHAIN_IMAGE,
+                  });
+                }}
+              >
                 <img
-                  src='https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
+                  className='rounded-full'
+                  src='https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg'
                   alt='ETH Logo'
                   width='32'
                   height='32'
@@ -379,14 +405,17 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
               {displayedNetworks.map(chain => (
                 <div
                   key={chain.chainId}
-                  className={`flex p-2 gap-2 items-center border rounded-lg justify-center   cursor-pointer ${chain.chainId === selectedChain ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
+                  className={`flex p-2 gap-2 items-center border rounded-lg justify-center   cursor-pointer ${chain.chainId === selectedChain.id ? ' border-2 border-[#754DFF] bg-[#F6F3FF]' : ''}  `}
                   onClick={() => {
                     switchChain({ chainId: Number(chain.chainId) });
-                    setSelectedChain(chain.chainId);
+                    setSelectedChain({
+                      id: chain.chainId,
+                      imageUrl: chain.chainIconURI,
+                    });
                   }}
                 >
                   <img
-                    className=' sm:w-full rounded-full'
+                    className='  rounded-full'
                     src={chain.chainIconURI}
                     alt='ETH Logo'
                     width={32}
@@ -438,7 +467,10 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
                   filteredTokens.map((token: any) => (
                     <div
                       key={token.address}
-                      onClick={() => console.log(token.address)}
+                      onClick={() => {
+                        onSelection(selectedChain, token); // Call the callback
+                        onClose();
+                      }}
                       className='flex px-2 py-1  gap-4 items-center cursor-pointer hover:border-2 border-2 border-transparent  hover:border-[#754DFF] rounded-lg hover:bg-[#F6F3FF]'
                     >
                       <div className='flex items-center gap-3'>
@@ -462,9 +494,8 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
                         </div>
                         <div className='flex px-2 py-[2px] gap-2 bg-[#EBECF2] rounded-lg'>
                           <span className='text-[#4F576A] font-medium leading-5 text-sm'>
-                            {token.balance?.toFixed(6) || '0.00'}
-
-                            {/* {token.balance} */}
+                            {/* {token.balance?.toFixed(6) || '0.00'} */}
+                            {formatBalance(token.balance)}
                           </span>
                         </div>
                       </div>
@@ -489,13 +520,40 @@ const SelectChainModal = ({ isOpen, onClose, closeable = true }: any) => {
                   <IconSearch color='#A5ADBF' />
                 </div>
               </div>
+              <div
+                className={`w-full flex p-2 cursor-pointer items-center border rounded-lg gap-2 my-3 `}
+                onClick={() => {
+                  switchChain({ chainId: 137 });
+                  setSelectedChain({ id: POLYGON_POS_CHAIN_ID, imageUrl: '' });
+                  setShowAllNetworks(false);
+                }}
+              >
+                <img
+                  className='rounded-full'
+                  src='https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg'
+                  alt='ETH Logo'
+                  width='32'
+                  height='32'
+                />
+                <div className='flex flex-col gap'>
+                  <span className='font-medium text-[#4F576A] text-sm'>
+                    Polygon
+                  </span>
+                  <span className='text-[14px] text-[#82899A] text-sm'>
+                    Save more on gas fees!
+                  </span>
+                </div>
+              </div>
               <div className='flex flex-col gap-3  max-h-[500px] overflow-y-auto'>
                 {filteredChains.map((chain: any) => (
                   <div
                     key={chain.chainId}
                     onClick={() => {
                       switchChain({ chainId: Number(chain.chainId) });
-                      setSelectedChain(chain.chainId);
+                      setSelectedChain({
+                        id: chain.chainId,
+                        imageUrl: chain.chainIconURI,
+                      });
                       setShowAllNetworks(false);
                     }}
                     className='w-full justify-between h-auto '
