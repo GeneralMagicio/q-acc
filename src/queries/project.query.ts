@@ -293,6 +293,7 @@ export const GET_PROJECT_BY_SLUG = `
 				id
 				userId
 			}
+      hasEARound
 			categories {
 				name
 				value
@@ -475,6 +476,7 @@ export const GET_ALL_PROJECTS = `
       networkId
       chainType
     }
+    hasEARound
     qfRounds {
       name
       isActive
@@ -537,6 +539,7 @@ export const GET_PROJECT_BY_USER_ID = `
       givingBlocksId
       icon
       batchNumbersWithSafeTransactions
+      hasEARound
       qfRounds {
         name
         id
