@@ -60,7 +60,7 @@ import SelectChainModal, {
   POLYGON_POS_CHAIN_ID,
   POLYGON_POS_CHAIN_IMAGE,
 } from './SelectChainModal';
-import { SquidToken } from '@/helpers/squidTransactions';
+import { SquidTokenType } from '@/helpers/squidTransactions';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -158,7 +158,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     id: POLYGON_POS_CHAIN_ID,
     imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
   });
-  const [selectedToken, setSelectedToken] = useState<SquidToken>({
+  const [selectedToken, setSelectedToken] = useState<SquidTokenType>({
     symbol: 'POL',
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainId: '137',

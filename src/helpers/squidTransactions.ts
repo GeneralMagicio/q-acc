@@ -1,10 +1,9 @@
-import config from '@/config/configuration';
 import axios from 'axios';
 import { ethers } from 'ethers';
-
+import config from '@/config/configuration';
 const integratorId: string = config.SQUID_INTEGRATOR_ID;
 
-export type SquidToken = {
+export type SquidTokenType = {
   symbol: string;
   address: string;
   chainId: string;

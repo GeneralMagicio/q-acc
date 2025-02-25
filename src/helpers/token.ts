@@ -6,7 +6,7 @@ import { multicall, getBalance, getPublicClient } from 'wagmi/actions';
 import { wagmiConfig } from '@/config/wagmi';
 
 import config from '@/config/configuration';
-import { SquidToken } from './squidTransactions';
+import { SquidTokenType } from './squidTransactions';
 
 export const AddressZero = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -291,7 +291,7 @@ export const formatBalance = (balance?: number): string => {
   return `${integerPart}.${result}`;
 };
 
-export const convertMinDonation = async (token: SquidToken) => {
+export const convertMinDonation = async (token: SquidTokenType) => {
   const minPOL = config.MINIMUM_DONATION_AMOUNT;
   const polPrice = await fetchTokenPrice('polygon-ecosystem-token'); // Fetch MATIC price (POL)
   const targetTokenPrice = token.usdPrice;
