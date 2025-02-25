@@ -1,13 +1,54 @@
-import { writeContract } from '@wagmi/core';
+import { readContract, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
-import { multicall, getBalance } from 'wagmi/actions';
+import { multicall, getBalance, getPublicClient } from 'wagmi/actions';
 
 import { wagmiConfig } from '@/config/wagmi';
 
 import config from '@/config/configuration';
+import { SquidToken } from './squidTransactions';
 
 export const AddressZero = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+export const fetchBalanceWithDecimals = async (
+  tokenAddress: Address,
+  userAddress: Address,
+) => {
+  try {
+    if (tokenAddress === AddressZero) {
+      const client = getPublicClient(wagmiConfig);
+      const balance = await client?.getBalance({ address: userAddress });
+      const formattedBalance = formatUnits(balance!, 18);
+      return {
+        formattedBalance: formattedBalance,
+        decimals: 18, // Native token always has 18 decimals
+      };
+    } else {
+      const [balance, decimals] = await Promise.all([
+        readContract(wagmiConfig, {
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'balanceOf',
+          args: [userAddress],
+        }),
+        readContract(wagmiConfig, {
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'decimals',
+        }),
+      ]);
+
+      const formattedBalance = formatUnits(balance, decimals);
+      return {
+        formattedBalance: formattedBalance,
+        decimals,
+      };
+    }
+  } catch (error) {
+    console.error('error on fetchBalanceWithDecimals', { error });
+    return null;
+  }
+};
 
 export const fetchTokenDetails = async ({
   tokenAddress,
@@ -69,8 +110,9 @@ export const handleErc20Transfer = async ({
   return hash;
 };
 
-export const fetchTokenPrice = async () => {
-  const coingeckoId = 'polygon-ecosystem-token';
+export const fetchTokenPrice = async (
+  coingeckoId: string = 'polygon-ecosystem-token',
+) => {
   try {
     const res = await fetch(
       `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
@@ -247,4 +289,17 @@ export const formatBalance = (balance?: number): string => {
 
   // Combine the integer part and the formatted decimal part
   return `${integerPart}.${result}`;
+};
+
+export const convertMinDonation = async (token: SquidToken) => {
+  const minPOL = config.MINIMUM_DONATION_AMOUNT;
+  const polPrice = await fetchTokenPrice('polygon-ecosystem-token'); // Fetch MATIC price (POL)
+  const targetTokenPrice = token.usdPrice;
+
+  if (!polPrice || !targetTokenPrice) {
+    console.error('Error fetching token prices');
+    return null;
+  }
+
+  return (minPOL * polPrice) / targetTokenPrice;
 };

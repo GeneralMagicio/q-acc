@@ -7,6 +7,7 @@ import { fetchEVMTokenBalances, formatBalance } from '@/helpers/token';
 import { Spinner } from '../Loading/Spinner';
 import { IconArrowLeft } from '../Icons/IconArrowLeft';
 import config from '@/config/configuration';
+import { SquidToken } from '@/helpers/squidTransactions';
 
 export const POLYGON_POS_CHAIN_ID = '137';
 export const POLYGON_POS_CHAIN_IMAGE =
@@ -130,9 +131,9 @@ const SelectChainModal = ({
   const filteredTokens =
     selectedChain && tokenData
       ? tokenData.filter(
-          (token: any) =>
+          (token: SquidToken) =>
             token.symbol.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (!hideZeroBalance || token.balance > 0),
+            (!hideZeroBalance || (token.balance ?? 0) > 0),
         )
       : [];
 
@@ -286,7 +287,7 @@ const SelectChainModal = ({
                     <Spinner />
                   </h1>
                 ) : (
-                  filteredTokens.map((token: any) => (
+                  filteredTokens.map((token: SquidToken) => (
                     <div
                       key={token.address}
                       onClick={() => {

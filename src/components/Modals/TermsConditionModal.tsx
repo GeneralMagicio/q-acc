@@ -33,7 +33,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
 
   useEffect(() => {
     if (terms) {
-      onContinue();
+      // onContinue();
       onClose();
     }
   }, [terms]);
