@@ -602,7 +602,7 @@ const MyProjects = () => {
             ></RoundCollectHeader>
           )}
 
-          {round1Started ? (
+          {projectData.hasEARound && round1Started ? (
             <div className='flex flex-col'>
               <RoundCollectHeader
                 type={'ea'}
