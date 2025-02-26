@@ -1,18 +1,18 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   useAccount,
   useWaitForTransactionReceipt,
   useSwitchChain,
+  useSendTransaction,
 } from 'wagmi';
 import { useRouter } from 'next/navigation';
-import { createPublicClient, http } from 'viem';
-import Link from 'next/link';
-import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
+import { parseEther } from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
-
+import { ethers } from 'ethers';
+import debounce from 'lodash/debounce';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
@@ -24,7 +24,6 @@ import {
   convertMinDonation,
   fetchBalanceWithDecimals,
   formatBalance,
-  handleErc20Transfer,
 } from '@/helpers/token';
 import config from '@/config/configuration';
 import {
@@ -48,7 +47,6 @@ import {
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
-import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
@@ -60,7 +58,12 @@ import SelectChainModal, {
   POLYGON_POS_CHAIN_ID,
   POLYGON_POS_CHAIN_IMAGE,
 } from './SelectChainModal';
-import { SquidTokenType } from '@/helpers/squidTransactions';
+import {
+  approveSpending,
+  convertToTokenUnits,
+  getRoute,
+  SquidTokenType,
+} from '@/helpers/squidTransactions';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -121,8 +124,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [userDonationCapError, setUserDonationCapError] =
     useState<boolean>(false);
 
-  const drawerRef = useRef<WidgetDrawer>(null);
-
   let { isVerified } = usePrivado();
 
   const {
@@ -175,8 +176,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     balance: 0,
   });
 
+  const [squidTransactionRequest, setSquidTransactionRequest] =
+    useState<any>(null);
+  const [squidRouteLoading, setSquidRouteLoading] = useState(false);
+
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
+
+  let provider = new ethers.BrowserProvider(window.ethereum);
 
   useEffect(() => {
     const fetchConversion = async () => {
@@ -191,6 +198,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleChainTokenSelection = (chain: any, token: any) => {
     setSelectedChain(chain);
     setSelectedToken(token);
+    setInputAmount('');
+    setSquidTransactionRequest(null);
     setShowChainTokenModal(false);
   };
 
@@ -256,13 +265,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
   }, [isConnected]);
 
-  // LIFI LOGIC
-  const toggleWidget = () => {
-    drawerRef.current?.toggleDrawer();
-  };
-
-  // New token price logic
-
   const tokenPriceRange = useTokenPriceRange({
     contributionLimit: maxPOLCap,
     contractAddress: projectData?.abc?.fundingManagerAddress || '',
@@ -283,10 +285,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
 
-  const client = createPublicClient({
-    chain: chain,
-    transport: http(config.NETWORK_RPC_ADDRESS),
-  });
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -294,13 +292,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   } = useWaitForTransactionReceipt({
     hash,
   });
-  useEffect(() => {
-    if (hash !== undefined && donationId === 0) {
-      setIsConfirming(true);
-    } else {
-      setIsConfirming(false);
-    }
-  }, [isConfirming, setIsConfirming, hash, donationId]);
+
+  // useEffect(() => {
+  //   if (hash !== undefined && donationId === 0) {
+  //     setIsConfirming(true);
+  //   } else {
+  //     setIsConfirming(false);
+  //   }
+  // }, [isConfirming, setIsConfirming, hash, donationId]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
@@ -363,6 +362,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
   }, []);
 
+  const { data: noramalTransferTx, sendTransaction } = useSendTransaction();
+
   useEffect(() => {
     if (isConfirmed && !hasSavedDonation) {
       const token = config.ERC_TOKEN_SYMBOL;
@@ -392,6 +393,83 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       address,
     );
     setTokenDetails(data);
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const regex = /^\d*\.?\d{0,5}$/;
+
+    if (regex.test(value)) {
+      const inputAmount = parseFloat(value);
+      if (activeRoundDetails) {
+        if (
+          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
+        ) {
+          return; // Exit without updating the input
+        }
+      }
+
+      setInputAmount(value);
+
+      if (inputAmount < minimumContributionAmount) {
+        setInputErrorMessage(
+          `Minimum contribution: ${minimumContributionAmount} POL`,
+        );
+        return;
+      } else {
+        setInputErrorMessage(null);
+      }
+      if (inputAmount > tokenDetails.formattedBalance) {
+        setInputBalanceError(true);
+        return;
+      } else {
+        setInputBalanceError(false);
+      }
+
+      const fromAmount = convertToTokenUnits(
+        inputAmount.toString(),
+        selectedToken.decimals || 18,
+      );
+
+      // param for getting route of transaction
+      const params = {
+        fromAddress: address,
+        fromChain: selectedChain.id,
+        fromToken: selectedToken.address,
+        fromAmount: fromAmount,
+        toChain: '137',
+        toToken: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        toAddress: projectData?.addresses[0].address, // '0x4ce6B0F604E1036AFFD0826764b51Fb72310964c',
+        quoteOnly: false,
+      };
+
+      const debouncedGetRoute = debounce(async () => {
+        try {
+          const routeResult = await getRoute(params);
+          const route = routeResult.data.route;
+          setSquidTransactionRequest(route.transactionRequest);
+        } catch (error) {
+          setFlashMessage('No route round');
+          console.error('Error fetching route:', error);
+        } finally {
+          setSquidRouteLoading(false);
+        }
+      }, 1500);
+
+      console.log(selectedToken, selectedChain);
+
+      if (
+        selectedToken.address ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedChain.id === '137'
+      ) {
+        return;
+      } else {
+        setSquidRouteLoading(true);
+        debouncedGetRoute();
+      }
+    }
   };
 
   const handleSaveDonation = async ({
@@ -427,20 +505,23 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
-        chain?.id!,
+        137,
         parseFloat(inputAmount),
         config.ERC_TOKEN_SYMBOL,
         projectData?.addresses[0].address,
-        tokenAddress,
+        selectedToken.address,
       );
 
-      const hash = await handleErc20Transfer({
-        inputAmount,
-        tokenAddress,
-        projectAddress: projectData?.addresses[0].address,
-      });
-
-      setHash(hash);
+      if (
+        selectedToken.address ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedChain.id === '137'
+      ) {
+        await handleNormalTranfer();
+        console.log("handle normal transfeer'");
+      } else {
+        handleApproveSpendingAndSendTransaction();
+      }
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('An error occurred.');
       console.log(ContractFunctionExecutionError);
@@ -448,25 +529,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
   };
 
-  const handleDonateClick = () => {
+  const handleDonateClick = async () => {
     setDonateDisabled(true);
-    console.log(parseFloat(inputAmount));
-    console.log('isVerified', isVerified);
-    // if (!isVerified) {
-    //   if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-    //     console.log('User is not verified with Privado ID');
-    //     setShowZkidModal(true);
-    //     return;
-    //   } else if (
-    //     (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
-    //     (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
-    //   ) {
-    //     setShowGitcoinModal(true);
-    //     console.log('User is not verified with Gitcoin passport');
-    //     return;
-    //   }
-    // }
-
     if (!isVerified) {
       if (
         activeRoundDetails &&
@@ -506,20 +570,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setShowTermsConditionModal(true);
       return;
     }
-    if (chain?.id !== SUPPORTED_CHAIN.id) {
-      {
-        switchChain({ chainId: SUPPORTED_CHAIN.id });
-      }
-      setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
-      setDonateDisabled(false);
-      return;
-    }
-    // if (!isVerified) {
-    //   openPrivadoModal();
-    //   console.log('User is not verified with Privado ID');
-    //   return;
-    // }
-
     if (
       parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
@@ -551,7 +601,56 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setDonateDisabled(false);
       return;
     }
+
     handleDonate();
+  };
+  useEffect(() => {
+    if (noramalTransferTx) {
+      setHash(noramalTransferTx);
+      console.log('Transaction hash updated:', noramalTransferTx);
+    }
+  }, [noramalTransferTx]);
+
+  const handleNormalTranfer = async () => {
+    const to = projectData?.addresses[0].address; // '0x2E555fCf3A9a91C2971C6205D3f8F42Cbbfc9d5A' as `0x${string}`;
+    const value = inputAmount;
+    sendTransaction({ to, value: parseEther(value) });
+  };
+
+  const handleApproveSpendingAndSendTransaction = async () => {
+    let provider = new ethers.BrowserProvider(window.ethereum);
+    let signer = await provider.getSigner();
+
+    const amount = convertToTokenUnits(inputAmount, selectedToken.decimals);
+
+    // approve from user to user their token
+    await approveSpending(
+      squidTransactionRequest?.target,
+      selectedToken.address,
+      amount,
+    );
+
+    const tx = await signer.sendTransaction({
+      to: squidTransactionRequest.target,
+      data: squidTransactionRequest.data,
+      value: squidTransactionRequest.value,
+      gasPrice: (await provider.getFeeData()).gasPrice,
+      gasLimit: squidTransactionRequest.gasLimit,
+    });
+
+    console.log(tx.hash);
+
+    setHash(tx.hash as `0x${string}`);
+    const txReceipt = await tx.wait();
+
+    console.log(txReceipt);
+
+    // console.log('Transaction Request', squidTransactionRequest.requestId);
+    // await updateTransactionStatus(
+    //   tx.hash,
+    //   squidTransactionRequest.requestId,
+    //   selectedChain.id!,
+    // );
   };
 
   const handleRefetch = async () => {
@@ -583,42 +682,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleRemainingCapClick = () => {
     const remainingBalance = floor(tokenDetails?.formattedBalance);
     setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    const regex = /^\d*\.?\d{0,5}$/;
-
-    if (regex.test(value)) {
-      const inputAmount = parseFloat(value);
-      if (activeRoundDetails) {
-        if (
-          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
-        ) {
-          return; // Exit without updating the input
-        }
-      }
-
-      setInputAmount(value);
-
-      if (inputAmount < minimumContributionAmount) {
-        setInputErrorMessage(
-          `Minimum contribution: ${minimumContributionAmount} POL`,
-        );
-      }
-      // else if (inputAmount > userDonationCap) {
-      //   setInputErrorMessage('Amount should be less than the remaining cap');
-      // }
-      else {
-        setInputErrorMessage(null);
-      }
-      if (inputAmount > tokenDetails.formattedBalance) {
-        setInputBalanceError(true);
-      } else {
-        setInputBalanceError(false);
-      }
-    }
   };
 
   // Handle Terms checkbox change event
@@ -768,7 +831,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {inputAmount === ''
                   ? 0
                   : formatAmount(
-                      round(parseFloat(inputAmount) * Number(POLPrice || 1)),
+                      round(
+                        parseFloat(inputAmount) *
+                          Number(selectedToken.usdPrice),
+                      ),
                     )}
               </span>
             </div>
@@ -823,51 +889,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             </div>
           </div>
 
-          {/* LIFI */}
-
-          <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
-            <div>
-              <span className='text-[#4F576A] font-medium'>
-                Need POL or ETH (for gas) ?
-              </span>
-            </div>
-
-            <div className='flex gap-2 font-medium items-center'>
-              <button
-                className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
-                onClick={toggleWidget}
-              >
-                <span className='text-[#5326EC]'>Use LI.FI</span>
-              </button>
-              <LiFiWidget
-                ref={drawerRef}
-                config={{
-                  variant: 'drawer',
-                  fromChain: 137,
-                  fee: 0.006,
-                  fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
-                  toChain: SUPPORTED_CHAIN.id,
-                  toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
-                }}
-                integrator='general-magic'
-              />
-
-              <Link
-                target='_blank'
-                href={
-                  'https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
-                }
-              >
-                <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                  <span className='text-[#5326EC]'>Read Guide</span>
-                  <IconArrowRight color='#5326EC' />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          {/*  */}
-
           {/* Token Lock Schedule */}
 
           <div className='flex flex-col p-4 border-[1px] border-[#D7DDEA] rounded-lg  gap-2'>
@@ -893,12 +914,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected || donateDisabled}
-              loading={isConfirming}
+              disabled={!isConnected || donateDisabled || squidRouteLoading}
+              loading={isConfirming || squidRouteLoading}
               color={ButtonColor.Giv}
               className='text-white justify-center'
             >
-              {isConnected ? 'Support This Project' : 'Connect Wallet'}
+              {isConnected
+                ? squidRouteLoading
+                  ? 'Getting Swap Routes'
+                  : 'Support This Project'
+                : 'Connect Wallet'}
             </Button>
             <FlashMessage
               message={flashMessage}
