@@ -391,9 +391,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       selectedToken.address as `0x${string}`,
       address,
     );
-    // console.log('Data with decimals', data, chain);
     setTokenDetails(data);
-    console.log('NEW token details', tokenDetails);
   };
 
   const handleSaveDonation = async ({
@@ -569,7 +567,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return null;
       } else {
         const remainingBalance = tokenDetails?.formattedBalance;
-        console.log(remainingBalance);
+
         const amount =
           (Math.min(remainingBalance, userDonationCap) * percentage) / 100;
 

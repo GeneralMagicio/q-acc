@@ -76,12 +76,7 @@ export const getStatus = async (params: any) => {
     const result = await axios.get(
       'https://apiplus.squidrouter.com/v2/status',
       {
-        params: {
-          transactionId: params.transactionId,
-          requestId: params.requestId,
-          fromChainId: params.fromChainId,
-          toChainId: params.toChainId,
-        },
+        params,
         headers: {
           'x-integrator-id': integratorId,
         },
@@ -104,8 +99,8 @@ export const updateTransactionStatus = async (
 ) => {
   const getStatusParams = {
     transactionId: txHash,
-    requestId: requestId,
-    fromChainId: fromChainId,
+    requestId,
+    fromChainId,
     toChainId: '137',
   };
 
