@@ -20,7 +20,12 @@ import { IconShare } from '../Icons/IconShare';
 import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
 
-import { fetchTokenDetails, handleErc20Transfer } from '@/helpers/token';
+import {
+  convertMinDonation,
+  fetchBalanceWithDecimals,
+  formatBalance,
+  handleErc20Transfer,
+} from '@/helpers/token';
 import config from '@/config/configuration';
 import {
   createDraftDonation,
@@ -55,6 +60,7 @@ import SelectChainModal, {
   POLYGON_POS_CHAIN_ID,
   POLYGON_POS_CHAIN_IMAGE,
 } from './SelectChainModal';
+import { SquidTokenType } from '@/helpers/squidTransactions';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 
@@ -152,7 +158,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     id: POLYGON_POS_CHAIN_ID,
     imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
   });
-  const [selectedToken, setSelectedToken] = useState<any>({
+  const [selectedToken, setSelectedToken] = useState<SquidTokenType>({
     symbol: 'POL',
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     chainId: '137',
@@ -161,14 +167,32 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     type: 'evm',
     logoURI:
       'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg',
+    usdPrice: 0,
+    coingeckoId: 'polygon-ecosystem-token',
+    subGraphIds: [],
+    subGraphOnly: false,
+    active: true,
+    balance: 0,
   });
+
+  const [minimumContributionAmount, setMinimumContributionAmount] =
+    useState<number>(config.MINIMUM_DONATION_AMOUNT);
+
+  useEffect(() => {
+    const fetchConversion = async () => {
+      const amount = await convertMinDonation(selectedToken);
+      console.log(amount);
+      setMinimumContributionAmount(amount ?? config.MINIMUM_DONATION_AMOUNT);
+    };
+
+    fetchConversion();
+  }, [selectedToken]);
 
   const handleChainTokenSelection = (chain: any, token: any) => {
     setSelectedChain(chain);
     setSelectedToken(token);
     setShowChainTokenModal(false);
   };
-  console.log(selectedChain, selectedToken);
 
   const handleShare = () => {
     openShareModal();
@@ -225,6 +249,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     maxPOLCap,
     progress,
   ]);
+
+  useEffect(() => {
+    if (isConnected && chain?.id !== SUPPORTED_CHAIN.id) {
+      switchChain({ chainId: SUPPORTED_CHAIN.id });
+    }
+  }, [isConnected]);
 
   // LIFI LOGIC
   const toggleWidget = () => {
@@ -294,7 +324,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   useEffect(() => {
     getTokenDetails();
-  }, [address, tokenAddress, chain]);
+  }, [address, tokenAddress, chain, selectedToken]);
 
   // if user allready accepted terms and conditions set it to true
   // useEffect(() => {
@@ -309,7 +339,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       // !terms ||
       !isConnected ||
       !(
-        (parseFloat(inputAmount) >= config.MINIMUM_DONATION_AMOUNT)
+        (parseFloat(inputAmount) >= minimumContributionAmount)
         // &&
         // parseFloat(inputAmount) <= userDonationCap
       ) ||
@@ -352,12 +382,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const getTokenDetails = async () => {
     if (!address) return;
-    const data = await fetchTokenDetails({
-      tokenAddress,
+    // const data = await fetchTokenDetails({
+    //   tokenAddress,
+    //   address,
+    //   client,
+    // });
+    const data = await fetchBalanceWithDecimals(
+      selectedToken.address as `0x${string}`,
       address,
-      client,
-    });
-    console.log('Data', data, chain);
+    );
     setTokenDetails(data);
   };
 
@@ -477,7 +510,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       {
         switchChain({ chainId: SUPPORTED_CHAIN.id });
       }
-      console.log('chain', chain?.id);
       setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
       setDonateDisabled(false);
       return;
@@ -489,11 +521,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     // }
 
     if (
-      parseFloat(inputAmount) < config.MINIMUM_DONATION_AMOUNT ||
+      parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
     ) {
       console.log(
-        `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
+        `The minimum donation amount is ${minimumContributionAmount}.`,
       );
       setDonateDisabled(false);
 
@@ -522,8 +554,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     handleDonate();
   };
 
-  const handleRefetch = () => {
-    getTokenDetails();
+  const handleRefetch = async () => {
+    await getTokenDetails();
     console.log('Refetched', parseFloat(tokenDetails.formattedBalance));
   };
 
@@ -534,14 +566,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         setInputBalanceError(false);
         return null;
       } else {
-        const remainingBalance = floor(tokenDetails?.formattedBalance);
-        const amount = floor(
-          (Math.min(remainingBalance, userDonationCap) * percentage) / 100,
-        );
+        const remainingBalance = tokenDetails?.formattedBalance;
+
+        const amount =
+          (Math.min(remainingBalance, userDonationCap) * percentage) / 100;
 
         setInputAmount(Math.min(amount, userDonationCap).toString());
-        setUserDonationCapError(userDonationCap === 0);
-        setInputBalanceError(remainingBalance === 0);
+        // setUserDonationCapError(userDonationCap === 0);
+        // setInputBalanceError(remainingBalance === 0);
 
         return percentage;
       }
@@ -556,7 +588,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    const regex = /^\d*\.?\d{0,2}$/;
+    const regex = /^\d*\.?\d{0,5}$/;
 
     if (regex.test(value)) {
       const inputAmount = parseFloat(value);
@@ -570,9 +602,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       setInputAmount(value);
 
-      if (inputAmount < config.MINIMUM_DONATION_AMOUNT) {
+      if (inputAmount < minimumContributionAmount) {
         setInputErrorMessage(
-          `Minimum contribution: ${config.MINIMUM_DONATION_AMOUNT} POL`,
+          `Minimum contribution: ${minimumContributionAmount} POL`,
         );
       }
       // else if (inputAmount > userDonationCap) {
@@ -652,7 +684,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 <span className='font-medium'>
                   {!tokenDetails
                     ? 'Loading...'
-                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+                    : `${formatBalance(Number(tokenDetails?.formattedBalance))} ${selectedToken?.symbol}`}
                 </span>
                 <button onClick={handleRefetch}>
                   <IconRefresh size={16} />
@@ -783,7 +815,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   <span
                     className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                   >
-                    {config.MINIMUM_DONATION_AMOUNT} POL
+                    {formatBalance(minimumContributionAmount || 20)}{' '}
+                    {selectedToken.symbol}
                   </span>
                 </h2>
               </div>
