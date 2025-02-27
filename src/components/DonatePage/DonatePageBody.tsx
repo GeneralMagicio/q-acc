@@ -7,6 +7,8 @@ import {
   useSwitchChain,
   useSendTransaction,
 } from 'wagmi';
+import { getConnectorClient } from '@wagmi/core';
+import { wagmiConfig } from '@/config/wagmi';
 import { useRouter } from 'next/navigation';
 import { Account, Chain, Client, parseEther, Transport } from 'viem';
 import round from 'lodash/round';
@@ -64,8 +66,6 @@ import {
   getRoute,
   SquidTokenType,
 } from '@/helpers/squidTransactions';
-import { getConnectorClient } from '@wagmi/core';
-import { wagmiConfig } from '@/config/wagmi';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
