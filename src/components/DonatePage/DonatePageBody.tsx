@@ -8,13 +8,14 @@ import {
   useSendTransaction,
 } from 'wagmi';
 import { getConnectorClient } from '@wagmi/core';
-import { wagmiConfig } from '@/config/wagmi';
 import { useRouter } from 'next/navigation';
 import { Account, Chain, Client, parseEther, Transport } from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
 import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers';
 import debounce from 'lodash/debounce';
+import { wagmiConfig } from '@/config/wagmi';
+
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
