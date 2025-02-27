@@ -88,6 +88,11 @@ const SelectChainModal = ({
   }, []);
 
   useEffect(() => {
+    if (!selectedChain || !address) {
+      console.log('No address or chain found');
+      return;
+    }
+
     setTokenLoading(true);
     const fetchToken = async () => {
       try {
@@ -104,7 +109,7 @@ const SelectChainModal = ({
         const tokenData = await tokenResponse.json();
         const tokenWithBalances = await fetchEVMTokenBalances(
           tokenData.tokens,
-          address!,
+          address,
         );
 
         const sortedTokens = tokenWithBalances.sort(
@@ -120,10 +125,8 @@ const SelectChainModal = ({
       }
     };
 
-    if (selectedChain) {
-      fetchToken();
-    }
-  }, [selectedChain]);
+    fetchToken();
+  }, [selectedChain, address]);
 
   const displayedNetworks = chainData.slice(0, 11);
   const remainingNetworksCount = Math.max(0, chainData.length - 11);
