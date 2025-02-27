@@ -8,10 +8,10 @@ import {
   useSendTransaction,
 } from 'wagmi';
 import { useRouter } from 'next/navigation';
-import { parseEther } from 'viem';
+import { Account, Chain, Client, parseEther, Transport } from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
-import { ethers } from 'ethers';
+import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers';
 import debounce from 'lodash/debounce';
 import { IconRefresh } from '../Icons/IconRefresh';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -64,8 +64,26 @@ import {
   getRoute,
   SquidTokenType,
 } from '@/helpers/squidTransactions';
+import { getConnectorClient } from '@wagmi/core';
+import { wagmiConfig } from '@/config/wagmi';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
+export function clientToSigner(client: Client<Transport, Chain, Account>) {
+  const { account, chain, transport } = client;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new BrowserProvider(transport, network);
+  const signer = new JsonRpcSigner(provider, account.address);
+  return signer;
+}
+
+export async function getEthersSigner({ chainId }: { chainId?: number } = {}) {
+  const client = await getConnectorClient(wagmiConfig, { chainId });
+  return clientToSigner(client);
+}
 
 interface ITokenSchedule {
   message: string;
@@ -618,8 +636,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handleApproveSpendingAndSendTransaction = async () => {
-    let provider = new ethers.BrowserProvider(window.ethereum);
-    let signer = await provider.getSigner();
+    const signer = await getEthersSigner();
 
     const amount = convertToTokenUnits(inputAmount, selectedToken.decimals);
 
