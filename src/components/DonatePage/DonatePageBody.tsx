@@ -133,6 +133,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
   const [donateDisabled, setDonateDisabled] = useState(true);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
   const [userUnusedCapOnGP, setUserUnusedCapOnGP] = useState(0);
@@ -381,7 +382,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
   }, []);
 
-  const { data: noramalTransferTx, sendTransaction } = useSendTransaction();
+  const { data: noramalTransferTx, sendTransactionAsync } =
+    useSendTransaction();
 
   useEffect(() => {
     if (isConfirmed && !hasSavedDonation) {
@@ -389,7 +391,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
       handleSaveDonation({
         projectId: parseInt(projectData?.id),
-        transactionNetworkId: chain?.id,
+        transactionNetworkId: 137, //chain?.id,
         amount: parseFloat(inputAmount),
         token,
         transactionId: hash,
@@ -521,6 +523,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const handleDonate = async () => {
     setDonateDisabled(true);
+    setIsButtonLoading(true);
     try {
       await createDraftDonation(
         parseInt(projectData?.id),
@@ -539,12 +542,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         await handleNormalTranfer();
         console.log("handle normal transfeer'");
       } else {
-        handleApproveSpendingAndSendTransaction();
+        await handleApproveSpendingAndSendTransaction();
       }
     } catch (ContractFunctionExecutionError) {
       setFlashMessage('An error occurred.');
       console.log(ContractFunctionExecutionError);
       setDonateDisabled(false);
+      setIsButtonLoading(false);
+    } finally {
+      setIsButtonLoading(false);
     }
   };
 
@@ -631,44 +637,49 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   }, [noramalTransferTx]);
 
   const handleNormalTranfer = async () => {
-    const to = projectData?.addresses[0].address; // '0x2E555fCf3A9a91C2971C6205D3f8F42Cbbfc9d5A' as `0x${string}`;
-    const value = inputAmount;
-    sendTransaction({ to, value: parseEther(value) });
+    try {
+      const to = projectData?.addresses[0].address; // '0x2E555fCf3A9a91C2971C6205D3f8F42Cbbfc9d5A' as `0x${string}`;
+      const value = inputAmount;
+      await sendTransactionAsync({ to, value: parseEther(value) });
+    } catch (e) {
+      setInputAmount('');
+      setSquidTransactionRequest(null);
+      setIsButtonLoading(false);
+      console.log('Error in normal tx ', e);
+    } finally {
+    }
   };
 
   const handleApproveSpendingAndSendTransaction = async () => {
-    const signer = await getEthersSigner();
+    try {
+      const signer = await getEthersSigner();
 
-    const amount = convertToTokenUnits(inputAmount, selectedToken.decimals);
+      const amount = convertToTokenUnits(inputAmount, selectedToken.decimals);
 
-    // approve from user to user their token
-    await approveSpending(
-      squidTransactionRequest?.target,
-      selectedToken.address,
-      amount,
-    );
+      // approve from user to user their token
+      await approveSpending(
+        squidTransactionRequest?.target,
+        selectedToken.address,
+        amount,
+      );
 
-    const tx = await signer.sendTransaction({
-      to: squidTransactionRequest.target,
-      data: squidTransactionRequest.data,
-      value: squidTransactionRequest.value,
-      gasPrice: (await provider.getFeeData()).gasPrice,
-      gasLimit: squidTransactionRequest.gasLimit,
-    });
-
-    console.log(tx.hash);
-
-    setHash(tx.hash as `0x${string}`);
-    const txReceipt = await tx.wait();
-
-    console.log(txReceipt);
-
-    // console.log('Transaction Request', squidTransactionRequest.requestId);
-    // await updateTransactionStatus(
-    //   tx.hash,
-    //   squidTransactionRequest.requestId,
-    //   selectedChain.id!,
-    // );
+      const tx = await signer.sendTransaction({
+        to: squidTransactionRequest.target,
+        data: squidTransactionRequest.data,
+        value: squidTransactionRequest.value,
+        gasPrice: (await provider.getFeeData()).gasPrice,
+        gasLimit: squidTransactionRequest.gasLimit,
+      });
+      console.log(tx.hash);
+      setHash(tx.hash as `0x${string}`);
+      const txReceipt = await tx.wait();
+      console.log(txReceipt);
+    } catch (e) {
+      setSquidTransactionRequest(null);
+      setInputAmount('');
+      setIsButtonLoading(false);
+      console.log('Error in Approve or sending tx ', e);
+    }
   };
 
   const handleRefetch = async () => {
@@ -933,7 +944,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             <Button
               onClick={handleDonateClick}
               disabled={!isConnected || donateDisabled || squidRouteLoading}
-              loading={isConfirming || squidRouteLoading}
+              loading={isConfirming || squidRouteLoading || isButtonLoading}
               color={ButtonColor.Giv}
               className='text-white justify-center'
             >
