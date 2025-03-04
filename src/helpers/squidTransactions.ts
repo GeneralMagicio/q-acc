@@ -138,3 +138,7 @@ export const updateTransactionStatus = async (
     }
   } while (!completedStatuses.includes(status.squidTransactionStatus));
 };
+
+export const convertToTokenUnits = (amount: string, decimals: number) => {
+  return ethers.parseUnits(amount, decimals).toString();
+};
