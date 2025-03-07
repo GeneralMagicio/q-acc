@@ -3,6 +3,7 @@ import { polygonZkEvm } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
+// Added pre prod configs
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygonZkEvm] as const,
   SCAN_URL: 'https://zkevm.polygonscan.com/',
