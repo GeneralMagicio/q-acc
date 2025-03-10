@@ -142,6 +142,7 @@ export interface IProject {
     networkId?: string;
     chainType?: string;
   }[];
+  hasEARound?: boolean;
   qfRounds?: {
     name: string;
     isActive: boolean;

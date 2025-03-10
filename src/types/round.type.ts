@@ -5,11 +5,10 @@ export interface IEarlyAccessRound {
   endDate: string;
   createdAt: string;
   updatedAt: string;
-  roundUSDCapPerProject: number;
-  roundUSDCapPerUserPerProject: number;
-  tokenPrice: number;
-  cumulativeUSDCapPerProject: number;
-  cumulativeUSDCapPerUserPerProject: number;
+  roundPOLCapPerProject: number;
+  roundPOLCapPerUserPerProject: number;
+  cumulativePOLCapPerProject: number;
+  cumulativePOLCapPerUserPerProject: number;
   isBatchMintingExecuted: boolean;
 }
 
@@ -21,14 +20,13 @@ export interface IQfRound {
   allocatedFund: string;
   startDate: string;
   endDate: string;
-  roundUSDCapPerProject: number;
-  roundUSDCapPerUserPerProject: number;
-  tokenPrice: number;
-  cumulativeUSDCapPerProject: number;
-  cumulativeUSDCapPerUserPerProject: number;
-  roundUSDCloseCapPerProject: number;
+  roundPOLCapPerProject: number;
+  roundPOLCapPerUserPerProject: number;
+  cumulativePOLCapPerProject: number;
+  cumulativePOLCapPerUserPerProject: number;
+  roundPOLCloseCapPerProject: number;
   isBatchMintingExecuted: boolean;
-  roundUSDCapPerUserPerProjectWithGitcoinScoreOnly: number;
+  roundPOLCapPerUserPerProjectWithGitcoinScoreOnly: number;
 }
 
 export interface IQaccStats {

@@ -6,7 +6,7 @@ export const requestGraphQL = async <T>(
   variables: Record<string, any> = {},
   options: { auth?: boolean; url?: string } = {},
 ): Promise<T> => {
-  let headers: HeadersInit_ = {
+  let headers: HeadersInit = {
     'Content-Type': 'application/json',
   };
 

@@ -32,30 +32,6 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   const [donationStatus, setDonationStatus] = useState<string>(
     DonationStatus.Pending,
   );
-  // const { data: user } = useFetchUser();
-
-  // useEffect(() => {
-  //   if (transactionHash) {
-  //     const checkDonationStatus = async () => {
-  //       const donation = await fetchDonationStatus(
-  //         Number(user?.id),
-  //         transactionHash,
-  //       );
-  //       if (donation?.status === 'verified') {
-  //         setDonationStatus(DonationStatus.Verified);
-  //         clearInterval(interval);
-  //         // Stop the polling when verified
-  //       } else {
-  //         setDonationStatus(donation?.status || DonationStatus.Pending);
-  //       }
-  //       // console.log('Current donation', donation);
-  //     };
-
-  //     const interval = setInterval(checkDonationStatus, 1000);
-  //     return () => clearInterval(interval);
-  //   }
-  // }, [transactionHash]);
-
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
 
