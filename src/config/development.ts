@@ -15,7 +15,6 @@ import {
   moonbeam,
   optimism,
   polygon,
-  polygonZkEvmCardona,
   scroll,
 } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
