@@ -232,6 +232,7 @@ query (
     }
         qfRound {
           id
+          seasonNumber
         }
         status
         user {
@@ -680,6 +681,7 @@ query (
     }
         qfRound {
           id
+          seasonNumber
         }
         status
         user {
