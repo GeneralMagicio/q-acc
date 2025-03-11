@@ -15,11 +15,10 @@ import {
   moonbeam,
   optimism,
   polygon,
-  polygonZkEvmCardona,
   scroll,
 } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
-import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
+import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [
@@ -54,17 +53,17 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://dev.indexer.inverter.network/v1/graphql',
   privadoConfig: {
-    chain: polygonZkEvmCardona,
-    chainName: 'zkevm_cardona',
+    chain: polygon,
+    chainName: 'polygon',
+    contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
-      'did:iden3:privado:main:2SdUfDwHK3koyaH5WzhvPhpcjFfdem2xD625aymTNc',
+      'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
     ],
-    contractAddress: '0xdE9eBC446d69EF9a876a377e3E3cEe91d08fE2A0',
-    requestId: 34,
+    requestId: 12,
     webWalletBaseUrl: 'https://wallet-dev.privado.id',
     verifierDid:
-      'did:iden3:polygon:amoy:x6x5sor7zpyWUUVJNZLzuDgMmeZfR2thKN2uMui8J',
-    method: PrivadoContractMethodV1,
+      'did:iden3:polygon:amoy:x6x5sor7zpyefHwZu9RE4xiuRWBkq9xAEHxrKbKWb',
+    method: PrivadoContractMethodV2,
   },
   GP_ANALYSIS_SCORE_THRESHOLD: 50,
   GP_SCORER_SCORE_THRESHOLD: 15,

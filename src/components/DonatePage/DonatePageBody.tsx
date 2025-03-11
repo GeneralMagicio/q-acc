@@ -67,6 +67,7 @@ import {
   convertToTokenUnits,
   getRoute,
   SquidTokenType,
+  SwapData,
 } from '@/helpers/squidTransactions';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
@@ -202,6 +203,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [squidTransactionRequest, setSquidTransactionRequest] =
     useState<any>(null);
   const [squidRouteLoading, setSquidRouteLoading] = useState(false);
+  const [isSquidTransaction, setIsSquidTransaction] = useState(false);
 
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
@@ -390,14 +392,39 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     if (isConfirmed && !hasSavedDonation) {
       const token = config.ERC_TOKEN_SYMBOL;
 
-      handleSaveDonation({
-        projectId: parseInt(projectData?.id),
-        transactionNetworkId: 137, //chain?.id,
-        amount: parseFloat(inputAmount),
-        token,
-        transactionId: hash,
-        tokenAddress,
-      });
+      if (isSquidTransaction) {
+        const swapData: SwapData = {
+          squidRequestId: squidTransactionRequest?.requestId,
+          firstTxHash: hash!,
+          fromChainId: Number(selectedChain.id),
+          toChainId: Number(137),
+          fromTokenAddress: selectedToken.address,
+          toTokenAddress: tokenAddress,
+          fromAmount: parseFloat(inputAmount),
+          toAmount: parseFloat(inputAmount),
+          fromTokenSymbol: selectedToken.symbol,
+          toTokenSymbol: config.ERC_TOKEN_SYMBOL,
+        };
+
+        handleSaveDonation({
+          projectId: parseInt(projectData?.id),
+          transactionNetworkId: 137, //chain?.id,
+          amount: parseFloat(inputAmount),
+          token,
+          transactionId: hash,
+          tokenAddress,
+          swapData,
+        });
+      } else {
+        handleSaveDonation({
+          projectId: parseInt(projectData?.id),
+          transactionNetworkId: 137, //chain?.id,
+          amount: parseFloat(inputAmount),
+          token,
+          transactionId: hash,
+          tokenAddress,
+        });
+      }
 
       setHasSavedDonation(true);
     }
@@ -500,6 +527,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     token,
     transactionId,
     tokenAddress,
+    swapData,
   }: any) => {
     try {
       const data = await saveDonations(
@@ -510,6 +538,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         transactionId,
         tokenAddress,
         anoynmous,
+        swapData,
       );
       setDonationId(Number(data));
     } catch (error) {
@@ -690,6 +719,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         gasLimit: squidTransactionRequest.gasLimit,
       });
       console.log(tx.hash);
+      console.log('Tx Request', squidTransactionRequest);
+      setIsSquidTransaction(true);
       setHash(tx.hash as `0x${string}`);
       const txReceipt = await tx.wait();
       console.log(txReceipt);
