@@ -19,6 +19,36 @@ export type SquidTokenType = {
   balance?: number | undefined;
 };
 
+export const CHAIN_IMAGES: Record<number, string> = {
+  1: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/webp128/chains/ethereum.webp', //Mainnet
+  42161:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/webp128/chains/arbitrum.webp', //Arbitrum
+  43114:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/avalanche.svg', //Avalnache
+  10: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/webp128/chains/optimism.webp', //Optimism
+  137: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg', //Polygon
+  8453: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/base.svg', //Base
+  59144:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/linea.svg', //Linea
+  56: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/binance.svg', //Binance
+  5000: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/mantle.svg', //Mantel
+  250: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/fantom.svg', //Fantom
+  1284: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/moonbeam.svg', //Moonbeam
+  42220:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/celo.svg', //Celo
+  534352:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/scroll.svg', //Scroll
+  2222: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/kava.svg', //kava
+  314: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/webp128/chains/filecoin.webp', //Filecoin
+  81457:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/blast.svg', //Blast
+  252: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/fraxtal.svg,', //Fraxtal
+  13371:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/immutable-blk.svg', //Immutable
+  80094:
+    'https://raw.githubusercontent.com/0xsquid/assets/main/images/webp128/chains/berachain.webp', //Berachain
+};
+
 export const getRoute = async (params: any) => {
   try {
     const result = await axios.post(
@@ -141,4 +171,27 @@ export const updateTransactionStatus = async (
 
 export const convertToTokenUnits = (amount: string, decimals: number) => {
   return ethers.parseUnits(amount, decimals).toString();
+};
+
+export const fetchUSDPrices = async (uniqueTokens: any) => {
+  try {
+    const priceMap: any = {};
+    for (const { chainId, tokenAddress } of uniqueTokens) {
+      const result = await axios.get(
+        `https://v2.api.squidrouter.com/v2/tokens?chainId=${chainId}&address=${tokenAddress}`,
+        {
+          headers: {
+            'x-integrator-id': integratorId,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const usdPrice = result.data?.tokens?.[0]?.usdPrice || null;
+      priceMap[`${chainId}-${tokenAddress}`] = usdPrice;
+    }
+    return priceMap;
+  } catch (error) {
+    console.error('Error fetching token prices:', error);
+    return {};
+  }
 };

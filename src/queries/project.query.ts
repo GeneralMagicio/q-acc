@@ -220,6 +220,20 @@ query (
         anonymous
         valueUsd
         amount
+        isSwap
+        swapTransaction{
+          squidRequestId
+          firstTxHash
+          secondTxHash
+          toChainId
+          toTokenSymbol
+          toTokenAddress
+          toAmount
+          fromAmount
+          fromChainId
+          fromTokenSymbol
+          fromTokenAddress  
+        }
         rewardTokenAmount
         rewardStreamStart
         rewardStreamEnd

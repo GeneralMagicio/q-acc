@@ -16,6 +16,8 @@ import { calculateCapAmount } from '@/helpers/round';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { isContractAddress } from '@/helpers/token';
 import { POLYGON_POS_CHAIN_IMAGE } from '../DonatePage/SelectChainModal';
+import { CHAIN_IMAGES, fetchUSDPrices } from '@/helpers/squidTransactions';
+import { Spinner } from '../Loading/Spinner';
 
 const itemPerPage = 5;
 
@@ -54,6 +56,8 @@ const ProjectDonationTable = () => {
   const [safeAddresses, setSafeAddresses] = useState<Record<string, boolean>>(
     {},
   );
+  const [usdPrices, setUsdPrices] = useState<any>({});
+  const [usdPricesLoading, setUsdPricesLoading] = useState(false);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -97,6 +101,35 @@ const ProjectDonationTable = () => {
 
     fetchProjectDonations();
   }, [page, projectData, itemPerPage, totalCount, order]);
+
+  useEffect(() => {
+    const unique = Array.from(
+      new Set(
+        pageDonations
+          ?.map((donation: any) => {
+            const chainId = donation.swapTransaction?.fromChainId;
+            const tokenAddress = donation.swapTransaction?.fromTokenAddress;
+
+            // Ensure both values exist before adding to the set
+            return chainId && tokenAddress
+              ? `${chainId}-${tokenAddress}`
+              : null;
+          })
+          .filter(Boolean), // Remove null/undefined values
+      ),
+    ).map((key: any) => {
+      const [chainId, tokenAddress] = key.split('-');
+      return { chainId: Number(chainId), tokenAddress };
+    });
+
+    const getPrices = async () => {
+      setUsdPricesLoading(true);
+      const prices = await fetchUSDPrices(unique);
+      setUsdPrices(prices);
+      setUsdPricesLoading(false);
+    };
+    getPrices();
+  }, [pageDonations]);
 
   const orderChangeHandler = (orderBy: EOrderBy) => {
     if (orderBy === order.by) {
@@ -214,15 +247,19 @@ const ProjectDonationTable = () => {
                               <div className='w-6 h-6  absolute right-6 p-[4px] bg-[#fff] rounded-full shadow-baseShadow'>
                                 <img
                                   className='rounded-full  w-full'
-                                  src={POLYGON_POS_CHAIN_IMAGE}
-                                  alt='Chain Logo'
+                                  src={
+                                    CHAIN_IMAGES[
+                                      donation.swapTransaction?.fromChainId
+                                    ] || POLYGON_POS_CHAIN_IMAGE
+                                  }
+                                  alt='From Chain  Logo'
                                 />
                               </div>
                               <div className='w-6 h-6 z-10 p-[4px] bg-[#fff] rounded-full shadow-baseShadow'>
                                 <img
                                   className='rounded-full  w-full'
                                   src={POLYGON_POS_CHAIN_IMAGE}
-                                  alt='Token Logo'
+                                  alt='To Chain Logo'
                                   width={16}
                                   height={16}
                                 />
@@ -233,7 +270,11 @@ const ProjectDonationTable = () => {
                         <div className='flex flex-col'>
                           <div className='flex gap-1 items-center'>
                             <span className='font-medium'>
-                              {formatAmount(donation.amount)}
+                              {formatAmount(donation.amount)}{' '}
+                            </span>
+                            <span className='text-[#1D1E1F] text-xs align-top font-medium'>
+                              {donation.swapTransaction?.fromTokenSymbol ||
+                                'POL'}
                             </span>
                             <Link
                               target='_blank'
@@ -244,11 +285,21 @@ const ProjectDonationTable = () => {
                           </div>
 
                           <span className='text-xs font-medium  text-[#A5ADBF]'>
-                            ${' '}
-                            {formatAmount(
-                              Math.round(
-                                donation.amount * Number(POLPrice) * 100,
-                              ) / 100,
+                            {usdPricesLoading ? (
+                              <Spinner size={10} />
+                            ) : (
+                              <>
+                                ${' '}
+                                {formatAmount(
+                                  Math.round(
+                                    donation.amount *
+                                      (usdPrices[
+                                        `${donation.swapTransaction?.fromChainId}-${donation.swapTransaction?.fromTokenAddress}`
+                                      ] || Number(POLPrice)) *
+                                      100,
+                                  ) / 100,
+                                )}
+                              </>
                             )}
                           </span>
                         </div>
