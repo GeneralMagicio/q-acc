@@ -19,6 +19,21 @@ export type SquidTokenType = {
   balance?: number | undefined;
 };
 
+export interface SwapData {
+  squidRequestId?: string;
+  firstTxHash: `0x${string}`;
+  secondTxHash?: string;
+  fromChainId: number;
+  toChainId: number;
+  fromTokenAddress: string;
+  toTokenAddress: string;
+  fromAmount: number;
+  toAmount?: number;
+  fromTokenSymbol: string;
+  toTokenSymbol: string;
+  metadata?: Record<string, any>;
+}
+
 export const getRoute = async (params: any) => {
   try {
     const result = await axios.post(

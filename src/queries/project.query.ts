@@ -378,6 +378,7 @@ export const SAVE_DONATION = `mutation (
   $referrerId: String
   $safeTransactionId: String
   $tokenAddress:String
+  $swapData: SwapTransactionInput
 ) {
   createDonation(
     transactionId: $transactionId
@@ -390,6 +391,7 @@ export const SAVE_DONATION = `mutation (
     referrerId: $referrerId
     safeTransactionId: $safeTransactionId
     tokenAddress:$tokenAddress
+    swapData: $swapData
   )
 }`;
 
