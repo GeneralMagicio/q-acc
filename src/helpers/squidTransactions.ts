@@ -190,7 +190,7 @@ export const convertToTokenUnits = (amount: string, decimals: number) => {
 
 export const fetchUSDPrices = async (uniqueTokens: any) => {
   try {
-    const priceMap: any = {};
+    const tokenPriceImageMap: any = {};
     for (const { chainId, tokenAddress } of uniqueTokens) {
       const result = await axios.get(
         `https://v2.api.squidrouter.com/v2/tokens?chainId=${chainId}&address=${tokenAddress}`,
@@ -201,10 +201,13 @@ export const fetchUSDPrices = async (uniqueTokens: any) => {
           },
         },
       );
-      const usdPrice = result.data?.tokens?.[0]?.usdPrice || null;
-      priceMap[`${chainId}-${tokenAddress}`] = usdPrice;
+
+      const tokenData = result.data?.tokens?.[0] || {};
+      const usdPrice = tokenData.usdPrice || null;
+      const imageUrl = tokenData.logoURI || null;
+      tokenPriceImageMap[`${chainId}-${tokenAddress}`] = { usdPrice, imageUrl };
     }
-    return priceMap;
+    return tokenPriceImageMap;
   } catch (error) {
     console.error('Error fetching token prices:', error);
     return {};
