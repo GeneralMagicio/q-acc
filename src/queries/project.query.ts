@@ -699,6 +699,19 @@ query (
           id
           seasonNumber
         }
+           swapTransaction{
+          squidRequestId
+          firstTxHash
+          secondTxHash
+          toChainId
+          toTokenSymbol
+          toTokenAddress
+          toAmount
+          fromAmount
+          fromChainId
+          fromTokenSymbol
+          fromTokenAddress  
+        }
         status
         user {
           id
