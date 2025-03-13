@@ -264,10 +264,10 @@ const ProjectDonateButton = () => {
               loading={loadingNFTCheck}
             >
               {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
-                ? 'Support This Project'
+                ? 'Buy Token'
                 : progress >= 100
                   ? 'Project Maxed Out'
-                  : 'Support This Project'}
+                  : 'Buy Token'}
             </Button>
           )}
 

@@ -65,7 +65,7 @@ export const SupportButton: FC<ISupportButtonProps> = ({
           disabled
         }
       >
-        Support This Project
+        Buy Token
       </Button>
     </>
   );
