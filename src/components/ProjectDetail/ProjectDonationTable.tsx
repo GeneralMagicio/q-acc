@@ -286,7 +286,7 @@ const ProjectDonationTable = () => {
                               </span>
                               <Link
                                 target='_blank'
-                                href={`${config.SCAN_URL}/tx/${donation.transactionId}`}
+                                href={`${config.SCAN_URL}/tx/${donation.isSwap ? donation.swapTransaction?.secondTxHash : donation.transactionId}`}
                               >
                                 <IconViewTransaction
                                   size={16}
