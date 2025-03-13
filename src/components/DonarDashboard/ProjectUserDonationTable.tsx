@@ -61,7 +61,7 @@ enum EDirection {
 }
 
 const getStatusClassesBadges = (status: string) => {
-  if (status === 'pending')
+  if (status === 'pending' || status === 'swap_pending')
     return 'bg-[#FFFBEF] text-[#EA960D] border-[#FFEAB5]';
   if (status === 'failed')
     return 'bg-[#FFD6D0] text-[#C71D06] border-[#FFB3A9]';
@@ -69,7 +69,8 @@ const getStatusClassesBadges = (status: string) => {
 };
 
 const getStatusClassesAmount = (status: string) => {
-  if (status === 'pending') return ' text-[#EA960D] font-medium';
+  if (status === 'pending' || status === 'swap_pending')
+    return ' text-[#EA960D] font-medium';
   if (status === 'failed') return ' text-[#C71D06] font-medium';
   return 'text-[#1D1E1F]';
 };
@@ -322,7 +323,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                             >
                               <IconViewTransaction
                                 size={16}
-                                color={`${donation.status === 'failed' ? '#C71D06' : donation.status === 'pending' ? '#EA960D' : '#4F576A'}`}
+                                color={`${donation.status === 'failed' ? '#C71D06' : donation.status === 'pending' || donation.status === 'swap_pending' ? '#EA960D' : '#4F576A'}`}
                               />
                             </Link>
                           </div>
@@ -348,7 +349,12 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                           <span
                             className={`px-2 py-[2px] border-2  font-medium text-xs rounded-[50px] capitalize flex items-center ${getStatusClassesBadges(donation.status)}`}
                           >
-                            {donation.status}
+                            {donation.status === 'pending' ||
+                            donation.status === 'swap_pending' ? (
+                              'Pending'
+                            ) : (
+                              <span>{donation.status}</span>
+                            )}
                           </span>
                         )}
                       </div>
