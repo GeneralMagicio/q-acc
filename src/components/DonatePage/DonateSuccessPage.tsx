@@ -56,7 +56,8 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
         setDonationStatus(DonationStatus.Pending);
         const res = await updateDonation(DonationStatus.Verified, donationId);
         // console.log(res.status);
-        setDonationStatus(DonationStatus.Verified);
+        // setDonationStatus(DonationStatus.Verified);
+        setDonationStatus(res.status);
       }
       if (status === 'error') {
         updateDonation(DonationStatus.Failed, donationId);
