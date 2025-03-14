@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -21,6 +22,8 @@ const DonarSupports = () => {
   useEffect(() => {
     if (projectId) {
       setShowBreakDown(true);
+    } else {
+      setShowBreakDown(false);
     }
   }, [projectId]);
 
@@ -64,14 +67,6 @@ const DonarSupports = () => {
                   totalRewardTokens={0}
                   onClickBreakdown={() => {
                     setShowBreakDown(true);
-                    // setProjectDonorDataForBreakDown({
-                    //   uniqueDonors: donationData.uniqueDonors,
-                    //   donarContributions: donationData.totalContributions,
-                    //   donationCount: donationData.donationCount,
-                    //   userProjectContributionSum:
-                    //     donationData.userProjectContributionSum,
-                    // });
-                    // setProjectDonationsForBreakDown(projectDonations);
                   }}
                 />
               </div>
@@ -90,6 +85,21 @@ const DonarSupports = () => {
             }}
             className='bg-white container p-6 rounded-2xl flex items-center gap-3'
           >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='32'
+              height='32'
+              viewBox='0 0 32 32'
+              fill='none'
+            >
+              <path
+                d='M25.3332 15.9993H6.6665M6.6665 15.9993L15.9998 25.3327M6.6665 15.9993L15.9998 6.66602'
+                stroke='#030823'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              />
+            </svg>
             <h1 className='text-[#1D1E1F] text-lg font-bold'>Go Back</h1>
           </button>
         </Link>

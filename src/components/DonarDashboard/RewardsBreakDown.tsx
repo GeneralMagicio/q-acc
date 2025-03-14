@@ -1,6 +1,6 @@
+'use client';
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-
 import ProjectUserDonationTable from './ProjectUserDonationTable';
 import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
