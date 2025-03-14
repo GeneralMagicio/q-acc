@@ -3,10 +3,10 @@
 import { createAppKit } from '@reown/appkit/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
+import { polygon } from '@reown/appkit/networks';
 import { Config, State, WagmiProvider } from 'wagmi';
 import { projectId, wagmiAdapter, metadata } from '@/config/wagmi';
 import config from '@/config/configuration';
-import { polygon } from '@reown/appkit/networks';
 
 const queryClient = new QueryClient();
 

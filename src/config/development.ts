@@ -17,6 +17,7 @@ import {
   polygon,
   scroll,
 } from '@reown/appkit/networks';
+import { polygon as viemPolygon } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
@@ -54,7 +55,7 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://dev.indexer.inverter.network/v1/graphql',
   privadoConfig: {
-    chain: polygon,
+    chain: viemPolygon,
     chainName: 'polygon',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [

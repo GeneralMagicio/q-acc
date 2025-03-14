@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { Account, Chain, Client, parseEther, Transport } from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
-import { BrowserProvider, ethers, JsonRpcSigner } from 'ethers';
+import { BrowserProvider, JsonRpcSigner } from 'ethers';
 import debounce from 'lodash/debounce';
 
 import { IconRefresh } from '../Icons/IconRefresh';
