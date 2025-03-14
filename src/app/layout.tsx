@@ -4,7 +4,7 @@ import './globals.css';
 import { cookieToInitialState } from 'wagmi';
 import { headers } from 'next/headers';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
-import { wagmiConfig } from '@/config/wagmi';
+import { wagmiAdapter } from '@/config/wagmi';
 import ClientLayout from './ClientLayout';
 
 import { GA_ID, GTM_ID } from '@/config/configuration';
@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialState = cookieToInitialState(
-    wagmiConfig,
+    wagmiAdapter.wagmiConfig,
     headers().get('cookie'),
   );
 

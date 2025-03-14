@@ -1,13 +1,12 @@
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-
 import { cookieStorage, createStorage } from 'wagmi';
-import config from './configuration';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import config from '@/config/configuration';
 
 // Your WalletConnect Cloud project ID
-export const projectId = 'cea85f2edebb693e0443973f37e23153';
+export const projectId = '92d26d6f099b694e1df95f1dfdaf5914';
 
 // Create a metadata object
-const metadata = {
+export const metadata = {
   name: 'qacc',
   description:
     'The Quadratic Accelerator is pioneering a novel tokenization protocol that combines the best features of Quadratic Funding (QF) and Augmented Bonding Curves (ABCs).',
@@ -17,17 +16,11 @@ const metadata = {
 
 export const networks = config.SUPPORTED_CHAINS;
 
-// Create wagmiConfig
-export const wagmiConfig = defaultWagmiConfig({
-  chains: config.SUPPORTED_CHAINS,
-  projectId,
-  metadata,
-  ssr: true,
-  auth: {
-    email: false,
-    socials: [],
-  },
+export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({
     storage: cookieStorage,
   }),
+  networks,
+  projectId,
+  ssr: true,
 });

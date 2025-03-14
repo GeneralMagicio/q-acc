@@ -1,12 +1,12 @@
 import { type FC } from 'react';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAppKit } from '@reown/appkit/react';
 import Modal, { BaseModalProps } from './Modal';
 import { Button } from './Button';
 
 interface ConnectModalProps extends BaseModalProps {}
 
 export const ConnectModal: FC<ConnectModalProps> = props => {
-  const { open } = useWeb3Modal();
+  const { open } = useAppKit();
 
   return (
     <Modal {...props} title='Please connect your wallet'>

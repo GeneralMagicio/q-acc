@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAppKit } from '@reown/appkit/react';
 import { usePrivado } from '@/hooks/usePrivado';
 import Routes from '@/lib/constants/Routes';
 import { useFetchUser } from '@/hooks/useFetchUser';
@@ -14,7 +14,7 @@ export const OnBoardButton = () => {
   const { address } = useAccount();
   const { isVerified: isVerifiedByPrivado } = usePrivado();
   const { data: user } = useFetchUser();
-  const { open } = useWeb3Modal();
+  const { open } = useAppKit();
 
   const analysisScore = user?.analysisScore || 0;
   const passportScore = user?.passportScore || 0;
