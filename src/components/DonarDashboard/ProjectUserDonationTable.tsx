@@ -96,7 +96,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     const fetchUserDonationData = async () => {
       // const data = await fetchUserDonations(userId);
       const donationsByProjectId = await fetchProjectDonors(
-        Number(project.id),
+        Number(project?.id),
         1000,
       );
       const userDonations = donationsByProjectId?.donations.filter(
@@ -143,7 +143,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
     };
 
     fetchUserDonationData();
-  }, [userId, project.id, page, order]);
+  }, [userId, project?.id, page, order]);
 
   useEffect(() => {
     const uniqueTokens = Array.from(
