@@ -1001,7 +1001,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               {isConnected
                 ? squidRouteLoading
                   ? 'Getting Swap Routes'
-                  : 'Support This Project'
+                  : 'Buy Token'
                 : 'Connect Wallet'}
             </Button>
             <FlashMessage

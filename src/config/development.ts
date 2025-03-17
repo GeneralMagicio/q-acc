@@ -40,8 +40,8 @@ const config: EnvConfig = {
     fraxtal,
     immutableZkEvm,
   ] as const,
-  ERC_TOKEN_ADDRESS: '0xc20CAf8deE81059ec0c8E5971b2AF7347eC131f4',
-  ERC_TOKEN_SYMBOL: 'TPOL',
+  ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
+  ERC_TOKEN_SYMBOL: 'POL',
   SCAN_URL: 'https://polygonscan.com/',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
