@@ -1,5 +1,7 @@
 import { readContract, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
+import axios from 'axios';
+
 import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { multicall, getBalance, getPublicClient } from 'wagmi/actions';
 
@@ -7,7 +9,6 @@ import { wagmiConfig } from '@/config/wagmi';
 
 import config from '@/config/configuration';
 import { SquidTokenType } from './squidTransactions';
-import axios from 'axios';
 const integratorId: string = config.SQUID_INTEGRATOR_ID;
 
 export const AddressZero = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
