@@ -7,6 +7,8 @@ import { wagmiConfig } from '@/config/wagmi';
 
 import config from '@/config/configuration';
 import { SquidTokenType } from './squidTransactions';
+import axios from 'axios';
+const integratorId: string = config.SQUID_INTEGRATOR_ID;
 
 export const AddressZero = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -291,9 +293,15 @@ export const formatBalance = (balance?: number): string => {
   return `${integerPart}.${result}`;
 };
 
-export const convertMinDonation = async (token: SquidTokenType) => {
-  const minPOL = config.MINIMUM_DONATION_AMOUNT;
-  const polPrice = await fetchTokenPrice('polygon-ecosystem-token'); // Fetch MATIC price (POL)
+export const convertDonationAmount = async (
+  token: SquidTokenType,
+  polAmount?: number,
+) => {
+  let minPOL = config.MINIMUM_DONATION_AMOUNT;
+  if (polAmount) {
+    minPOL = polAmount;
+  }
+  const polPrice = await fetchSquidPOLUSDPrice();
   const targetTokenPrice = token.usdPrice;
 
   if (!polPrice || !targetTokenPrice) {
@@ -302,4 +310,25 @@ export const convertMinDonation = async (token: SquidTokenType) => {
   }
 
   return (minPOL * polPrice) / targetTokenPrice;
+};
+
+export const fetchSquidPOLUSDPrice = async () => {
+  try {
+    const result = await axios.get(
+      `https://v2.api.squidrouter.com/v2/tokens?chainId=137&address=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`,
+      {
+        headers: {
+          'x-integrator-id': integratorId,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    const tokenData = result.data?.tokens?.[0] || {};
+    const usdPrice = tokenData.usdPrice || null;
+    return usdPrice;
+  } catch (error) {
+    console.error('Error fetching token prices:', error);
+    return {};
+  }
 };
