@@ -18,8 +18,9 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { SupportButton } from './SupportButton';
 import { useFetchMostRecentEndRound } from '../ProjectDetail/usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
-import { isAllocationDone } from '@/config/configuration';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
+import config from '@/config/configuration';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -41,12 +42,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+  const [isTokenListed, setIsTokenListed] = useState(false);
+  const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
   useEffect(() => {
-    console.log(
-      project?.title,
-      project?.id + ' NFT address ' + project?.abc?.nftContractAddress,
-    );
     if (project?.id) {
       const fetchProjectDonations = async () => {
         const data = await fetchProjectDonationsById(
@@ -61,7 +60,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
       };
-      fetchProjectDonations();
+      // fetchProjectDonations();
     }
   }, [project]);
 
@@ -107,9 +106,27 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   };
   const polPriceNumber = Number(POLPrice);
   const totalHeightClass =
-    activeRoundDetails || isAllocationDone
-      ? 'h-project-card-full'
-      : 'h-project-card';
+    activeRoundDetails || true ? 'h-project-card-full' : 'h-project-card';
+
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (project?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          project.abc.issuanceTokenAddress,
+          config.WPOL_TOKEN_ADDRESS,
+        );
+        setIsTokenListed(isListed);
+        setCurrentTokenPrice(1 / Number(price));
+        console.log(
+          'Current Price  Address:',
+          isTokenListed,
+          currentTokenPrice,
+        );
+      }
+    };
+
+    fetchPoolAddress(); // Call the async function inside useEffect
+  }, [project?.abc?.issuanceTokenAddress]);
 
   return (
     <div
@@ -131,7 +148,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isAllocationDone ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
           <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
@@ -283,7 +300,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         range, based on the amount of POL this project receives.
                       </div>
                     </div>
-                    {isAllocationDone ? (
+                    {isTokenListed ? (
                       ' '
                     ) : (
                       <span className='bg-[#5326EC] mx-2 p-1 text-xs text-white rounded-md'>
@@ -293,14 +310,14 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     )}
                   </div>
                 </div>
-                {isAllocationDone && (
+                {isTokenListed && (
                   <div className='mt-1 flex justify-between'>
                     {tokenPriceRangeStatus.isSuccess &&
                     tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                       <>
                         <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
                           <p className='font-bold text-gray-800'>
-                            {tokenPriceRange.max.toFixed(2)}
+                            {currentTokenPrice.toFixed(2)}
                           </p>
                           <p className='text-xs text-gray-400'>POL</p>
                         </div>
@@ -308,7 +325,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                           <p className='text-sm text-[#4F576A] font-medium'>
                             ~$
                             {polPriceNumber
-                              ? `${' ' + formatNumber(polPriceNumber * tokenPriceRange.max)}`
+                              ? `${' ' + formatNumber(polPriceNumber * currentTokenPrice)}`
                               : ''}
                           </p>
                         </div>
@@ -329,14 +346,19 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                   </div>
                 )}
 
-                {isAllocationDone ? (
+                {isTokenListed ? (
                   <div className='mt-4'>
                     <Button
+                      onClick={e => {
+                        e.stopPropagation();
+                        const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${project?.abc?.issuanceTokenAddress}`;
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                      }}
                       color={ButtonColor.Pink}
                       className={`w-full justify-center opacity-80 hover:opacity-100`}
                     >
                       {'Get ' + project?.abc?.tokenTicker + ' on QuickSwap'}
-                    </Button>
+                    </Button>{' '}
                   </div>
                 ) : (
                   ''

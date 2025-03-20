@@ -76,6 +76,7 @@ const ProjectDonationTable = () => {
 
       if (data) {
         const { donations, totalCount } = data;
+        const filteredDonations: any[] = [];
         setTotalCount(totalCount);
         setPageDonations(donations);
         const addressChecks: Record<string, boolean> = {};
@@ -85,10 +86,14 @@ const ProjectDonationTable = () => {
             if (address && !safeAddresses[address]) {
               const isSafe = await isContractAddress(address);
               addressChecks[address] = isSafe;
+              if (donation.amount !== 0) {
+                filteredDonations.push(donation);
+              }
             }
           }),
         );
         setSafeAddresses(prev => ({ ...prev, ...addressChecks }));
+        setPageDonations(filteredDonations);
       }
 
       console.log(pageDonations, 'donations');

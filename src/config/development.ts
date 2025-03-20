@@ -1,10 +1,11 @@
-import { polygonZkEvm, polygonZkEvmCardona } from 'wagmi/chains';
+import { polygon, polygonZkEvm, polygonZkEvmCardona } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV1 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygonZkEvm] as const,
+  SUPPORTED_CHAINS: [polygon, polygonZkEvm] as const,
   ERC_TOKEN_ADDRESS: '0x961bB3932A7efAa9aDcc7409e1fea090479E8312',
+  WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   ERC_TOKEN_SYMBOL: 'TPOL',
   SCAN_URL: 'https://zkevm.polygonscan.com/',
   GRAPHQL_ENDPOINT:
