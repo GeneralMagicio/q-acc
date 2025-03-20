@@ -17,7 +17,6 @@ import {
 } from '@/helpers/donation';
 import { useFetchUser } from '@/hooks/useFetchUser';
 
-import config from '@/config/configuration';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';

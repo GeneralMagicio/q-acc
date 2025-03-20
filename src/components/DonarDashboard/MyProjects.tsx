@@ -18,7 +18,6 @@ import { IconDropDown } from '../Icons/IconDropDown';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchProjectByUserId } from '@/hooks/useFetchProjectByUserId';
 import { formatDateMonthDayYear, isMiddleOfThePeriod } from '@/helpers/date';
-import config from '@/config/configuration';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import {
   calculateTotalDonations,

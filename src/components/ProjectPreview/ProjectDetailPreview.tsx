@@ -12,7 +12,6 @@ import RichTextViewer from '../RichTextViewer';
 import ProjectTeamMembers from '@/components/ProjectDetail/ProjectTeamMember';
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 
-import config from '@/config/configuration';
 import RoundCountBanner from '../RoundCountBanner';
 import { ProjectFormData } from '../Create/CreateProjectForm';
 

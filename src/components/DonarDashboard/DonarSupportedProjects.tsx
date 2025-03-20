@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import config from '@/config/configuration';
 import { getIpfsAddress } from '@/helpers/image';
 
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
