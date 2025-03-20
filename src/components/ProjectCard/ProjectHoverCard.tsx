@@ -118,10 +118,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       if (project?.abc?.issuanceTokenAddress) {
         const { price, isListed } = await getPoolAddressByPair(
           project.abc.issuanceTokenAddress,
-          config.ERC_TOKEN_ADDRESS,
+          config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
-        setCurrentTokenPrice(Number(price));
+        setCurrentTokenPrice(1 / Number(price));
         console.log(
           'Current Price  Address:',
           isTokenListed,
