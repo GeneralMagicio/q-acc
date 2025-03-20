@@ -141,7 +141,7 @@ const RewardsBreakDown: React.FC<RewardsBreakDownProps> = ({
 
             <Link
               target='_blank'
-              href={`${config.SCAN_URL}/address/${project?.abc?.projectAddress}`}
+              href={`https://polygonscan.com/address/${project?.abc?.projectAddress}`}
             >
               <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
                 <span className='flex gap-4 text-[#5326EC] font-bold'>
