@@ -351,7 +351,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     <Button
                       onClick={e => {
                         e.stopPropagation();
-                        const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${project?.abc?.issuanceTokenAddress}`;
+                        const url = `https://quickswap.exchange/#/swap?currency0=ETH&currency1=${project?.abc?.issuanceTokenAddress}`;
                         window.open(url, '_blank', 'noopener,noreferrer');
                       }}
                       color={ButtonColor.Pink}
