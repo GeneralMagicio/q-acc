@@ -24,7 +24,7 @@ import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
 
 import {
-  convertMinDonation,
+  convertDonationAmount,
   fetchBalanceWithDecimals,
   formatBalance,
 } from '@/helpers/token';
@@ -42,7 +42,6 @@ import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
@@ -68,6 +67,8 @@ import {
   SquidTokenType,
   SwapData,
 } from '@/helpers/squidTransactions';
+import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
+import { UserCapUpdateModal } from '../Modals/UserCapUpdateModal';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
@@ -127,7 +128,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const { data: user } = useFetchUser();
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
-  const { data: POLPrice } = useFetchTokenPrice();
+  const { data: POLPrice } = useFetchPOLPriceSquid();
 
   const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
@@ -168,6 +169,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
   const [showZkidModal, setShowZkidModal] = useState(false);
   const [showTermsConditionModal, setShowTermsConditionModal] = useState(false);
+  const [showUserCapModal, setshowUserCapModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
 
@@ -189,7 +191,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     type: 'evm',
     logoURI:
       'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg',
-    usdPrice: 0,
+    usdPrice: POLPrice,
     coingeckoId: 'polygon-ecosystem-token',
     subGraphIds: [],
     subGraphOnly: false,
@@ -209,7 +211,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   useEffect(() => {
     const fetchConversion = async () => {
-      const amount = await convertMinDonation(selectedToken);
+      const amount = await convertDonationAmount(selectedToken);
       console.log(amount);
       setMinimumContributionAmount(amount ?? config.MINIMUM_DONATION_AMOUNT);
     };
@@ -235,17 +237,22 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         Number(projectData?.id),
       );
       const { gitcoinPassport, zkId } = userCapp || {};
-      setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
+      const convertedUnusedCapOnGP = await convertDonationAmount(
+        selectedToken,
+        gitcoinPassport?.unusedCap,
+      );
+      setUserUnusedCapOnGP(convertedUnusedCapOnGP || 0);
       const userCap =
         floor(Number(zkId?.unusedCap)) ||
         floor(Number(gitcoinPassport?.unusedCap)) ||
         0;
+      const convertedCap = await convertDonationAmount(selectedToken, userCap);
       const res = remainingDonationAmount / 2 - 1;
       if (progress >= 90) {
         console.log('Res', res, progress);
-        setUserDonationCap(Math.min(res, Number(userCap)));
+        setUserDonationCap(Math.min(res, Number(convertedCap)));
       } else {
-        setUserDonationCap(userCap);
+        setUserDonationCap(Number(convertedCap));
       }
     }
   };
@@ -263,6 +270,82 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setProgress(tempprogress);
     }
   };
+  const handleDonateClick = async () => {
+    setDonateDisabled(true);
+    if (!isVerified) {
+      if (
+        activeRoundDetails &&
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
+          activeRoundDetails &&
+        parseFloat(inputAmount) >
+          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
+      ) {
+        {
+          console.log(
+            'User is not verified with Privado ID',
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+          );
+          setShowZkidModal(true);
+          setDonateDisabled(false);
+          return;
+        }
+      }
+
+      if (
+        !user?.hasEnoughGitcoinPassportScore &&
+        !user?.hasEnoughGitcoinAnalysisScore
+      ) {
+        setDonateDisabled(false);
+        setShowGitcoinModal(true);
+        console.log('User is not verified with Gitcoin passport');
+        return;
+      } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+        console.log('User is not verified with Privado ID');
+        setDonateDisabled(false);
+        setShowZkidModal(true);
+        return;
+      }
+    }
+    if (!terms) {
+      setDonateDisabled(false);
+      setShowTermsConditionModal(true);
+      return;
+    }
+    if (
+      parseFloat(inputAmount) < minimumContributionAmount ||
+      isNaN(parseFloat(inputAmount))
+    ) {
+      console.log(
+        `The minimum donation amount is ${minimumContributionAmount}.`,
+      );
+      setDonateDisabled(false);
+
+      return;
+    }
+    if (parseFloat(inputAmount) > userDonationCap) {
+      console.log('The donation amount exceeds the cap limit.');
+      setshowUserCapModal(true);
+      setDonateDisabled(false);
+      return;
+    }
+    if (!terms) {
+      console.log('Please accept the terms and conditions.');
+      setDonateDisabled(false);
+      return;
+    }
+    if (parseFloat(inputAmount) > remainingDonationAmount) {
+      console.log('Input amount will exceed the round cap');
+      setDonateDisabled(false);
+      return;
+    }
+    if (parseFloat(inputAmount) > tokenDetails.formattedBalance) {
+      console.log('Input amount is more than available balance');
+      setDonateDisabled(false);
+      return;
+    }
+
+    handleDonate();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -279,6 +362,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     remainingDonationAmount,
     maxPOLCap,
     progress,
+    selectedToken,
+    handleDonateClick,
   ]);
 
   useEffect(() => {
@@ -583,81 +668,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
   };
 
-  const handleDonateClick = async () => {
-    setDonateDisabled(true);
-    if (!isVerified) {
-      if (
-        activeRoundDetails &&
-        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
-          activeRoundDetails &&
-        parseFloat(inputAmount) >
-          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
-      ) {
-        {
-          console.log(
-            'User is not verified with Privado ID',
-            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
-          );
-          setShowZkidModal(true);
-          setDonateDisabled(false);
-          return;
-        }
-      }
-
-      if (
-        !user?.hasEnoughGitcoinPassportScore &&
-        !user?.hasEnoughGitcoinAnalysisScore
-      ) {
-        setDonateDisabled(false);
-        setShowGitcoinModal(true);
-        console.log('User is not verified with Gitcoin passport');
-        return;
-      } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-        console.log('User is not verified with Privado ID');
-        setDonateDisabled(false);
-        setShowZkidModal(true);
-        return;
-      }
-    }
-    if (!terms) {
-      setDonateDisabled(false);
-      setShowTermsConditionModal(true);
-      return;
-    }
-    if (
-      parseFloat(inputAmount) < minimumContributionAmount ||
-      isNaN(parseFloat(inputAmount))
-    ) {
-      console.log(
-        `The minimum donation amount is ${minimumContributionAmount}.`,
-      );
-      setDonateDisabled(false);
-
-      return;
-    }
-    if (parseFloat(inputAmount) > userDonationCap) {
-      console.log('The donation amount exceeds the cap limit.');
-      setDonateDisabled(false);
-      return;
-    }
-    if (!terms) {
-      console.log('Please accept the terms and conditions.');
-      setDonateDisabled(false);
-      return;
-    }
-    if (parseFloat(inputAmount) > remainingDonationAmount) {
-      console.log('Input amount will exceed the round cap');
-      setDonateDisabled(false);
-      return;
-    }
-    if (parseFloat(inputAmount) > tokenDetails.formattedBalance) {
-      console.log('Input amount is more than available balance');
-      setDonateDisabled(false);
-      return;
-    }
-
-    handleDonate();
-  };
   useEffect(() => {
     if (noramalTransferTx) {
       setHash(noramalTransferTx);
@@ -729,8 +739,9 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
         const amount =
           (Math.min(remainingBalance, userDonationCap) * percentage) / 100;
+        const formattedAmount = Math.min(amount, userDonationCap).toFixed(2);
 
-        setInputAmount(Math.min(amount, userDonationCap).toString());
+        setInputAmount(formattedAmount);
         // setUserDonationCapError(userDonationCap === 0);
         // setInputBalanceError(remainingBalance === 0);
 
@@ -794,6 +805,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         isOpen={showChainTokenModal}
         onClose={() => setShowChainTokenModal(false)}
         onSelection={handleChainTokenSelection}
+      />
+      <UserCapUpdateModal
+        isOpen={showUserCapModal}
+        onClose={() => setshowUserCapModal(false)}
+        userDonationCap={userDonationCap}
+        selectedTokenSymbol={selectedToken.symbol}
       />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-2/3 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
@@ -913,7 +930,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     {userDonationCap !== null && userDonationCap !== undefined
                       ? formatAmount(Math.floor(userDonationCap * 100) / 100)
                       : '---'}{' '}
-                    POL
+                    {selectedToken?.symbol}
                     <div className='relative group'>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
