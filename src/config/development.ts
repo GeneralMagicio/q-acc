@@ -15,6 +15,7 @@ import {
   moonbeam,
   optimism,
   polygon,
+  polygonAmoy,
   scroll,
 } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
@@ -53,8 +54,8 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://dev.indexer.inverter.network/v1/graphql',
   privadoConfig: {
-    chain: polygon,
-    chainName: 'polygon',
+    chain: polygonAmoy,
+    chainName: 'amoy',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
       'did:iden3:privado:main:2SfreFymXBFkp8GqF8DXegUHVrEYNdsqgmkZ9YjbKs',
