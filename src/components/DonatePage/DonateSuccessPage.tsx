@@ -18,6 +18,7 @@ import { IconShare } from '../Icons/IconShare';
 import { IconXSocial } from '../Icons/IconXSocial';
 import { IconLinkedin } from '../Icons/IconLinkedin';
 import { IconFacebook } from '../Icons/IconFacebook';
+import { IconTransactionProgress } from '../Icons/IconTransactionProgress';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -85,7 +86,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
         <div className=' rounded-2xl border-2 border-[#52B7FF] bg-[#fff] '>
           <div className='p-4 flex flex-col gap-2 font-redHatText  rounded-lg'>
             <h1 className=' text-[#52B7FF] font-medium flex gap-1 items-center '>
-              <IconTransactionVerified size={16} /> Transaction in Progress
+              <IconTransactionProgress size={16} /> Transaction in Progress
             </h1>
             <div className='flex gap-2 items-center'>
               <span className='text-[#4F576A]'>
@@ -94,7 +95,10 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
               </span>
               <div className='font-medium font-redHatText'>
                 <h3 className='text-[#82899A] flex gap-2'>
-                  <a href={`/dashboard?tab=contributions`} target='_blank'>
+                  <a
+                    href={`/dashboard?tab=contributions&projectId=${projectData?.id}`}
+                    target='_blank'
+                  >
                     <div className='flex gap-1 items-center'>
                       <span className='text-pink-500 flex gap-2 items-center'>
                         {' '}

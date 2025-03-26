@@ -17,7 +17,7 @@ import {
   polygon,
   scroll,
 } from '@reown/appkit/networks';
-import { polygon as viemPolygon } from 'wagmi/chains';
+import { polygonAmoy as viemPolygonAmoy } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
@@ -55,13 +55,13 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://dev.indexer.inverter.network/v1/graphql',
   privadoConfig: {
-    chain: viemPolygon,
-    chainName: 'polygon',
+    chain: viemPolygonAmoy,
+    chainName: 'amoy',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
-      'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
+      'did:iden3:privado:main:2SfreFymXBFkp8GqF8DXegUHVrEYNdsqgmkZ9YjbKs',
     ],
-    requestId: 12,
+    requestId: 11,
     webWalletBaseUrl: 'https://wallet-dev.privado.id',
     verifierDid:
       'did:iden3:polygon:amoy:x6x5sor7zpyefHwZu9RE4xiuRWBkq9xAEHxrKbKWb',
