@@ -26,13 +26,13 @@ export const fetchBalanceWithDecimals = async (
         decimals: 18, // Native token always has 18 decimals
       };
     } else {
-      const balance = await readContract(wagmiConfig, {
+      const balance = await readContract(wagmiAdapter.wagmiConfig, {
         address: tokenAddress,
         abi: erc20Abi,
         functionName: 'balanceOf',
         args: [userAddress],
       });
-      const decimals = await readContract(wagmiConfig, {
+      const decimals = await readContract(wagmiAdapter.wagmiConfig, {
         address: tokenAddress,
         abi: erc20Abi,
         functionName: 'decimals',
