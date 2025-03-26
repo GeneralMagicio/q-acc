@@ -432,7 +432,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   useEffect(() => {
     getTokenDetails();
-  }, [address, tokenAddress, chain, selectedToken]);
+  }, [address, tokenAddress, selectedToken]);
 
   // if user allready accepted terms and conditions set it to true
   // useEffect(() => {
