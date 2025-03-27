@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ethers } from 'ethers';
 import config from '@/config/configuration';
+import { getEthersSigner } from '@/components/DonatePage/DonatePageBody';
 const integratorId: string = config.SQUID_INTEGRATOR_ID;
 
 export type SquidTokenType = {
@@ -96,9 +97,9 @@ export const approveSpending = async (
     'function approve(address spender, uint256 amount) public returns (bool)',
   ];
 
-  let provider = new ethers.BrowserProvider(window.ethereum);
-  let signer = await provider.getSigner();
-
+  // let provider = new ethers.BrowserProvider(window.ethereum);
+  // let signer = await provider.getSigner();
+  const signer = await getEthersSigner();
   const tokenContract = new ethers.Contract(fromToken, erc20Abi, signer);
 
   try {
