@@ -1,4 +1,5 @@
-import { polygon, polygonZkEvm } from 'wagmi/chains';
+import { polygon, polygonZkEvm } from '@reown/appkit/networks';
+import { polygonZkEvm as viemPolygonZkEvm } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
@@ -19,7 +20,7 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: polygonZkEvm,
+    chain: viemPolygonZkEvm,
     chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
@@ -35,6 +36,7 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
+  SQUID_INTEGRATOR_ID: 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
 };
 
 export default config;
