@@ -45,7 +45,7 @@ const ProjectSocials = () => {
   };
 
   return (
-    <div>
+    <div className='container  max-w-[800px] '>
       <h1 className='text-2xl font-redHatText text-[#82899A]'>
         Find us on our social media
       </h1>

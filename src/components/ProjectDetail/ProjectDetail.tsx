@@ -17,6 +17,9 @@ import RoundCountBanner from '../RoundCountBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
+import { Button, ButtonColor } from '../Button';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
+import config from '@/config/configuration';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -29,6 +32,7 @@ const ProjectDetail = () => {
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const { projectData } = useProjectContext();
+  const [isTokenListed, setIsTokenListed] = useState(false);
 
   const isRoundActive = !!activeRoundDetails;
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
@@ -55,6 +59,20 @@ const ProjectDetail = () => {
       updatePOLCap();
     }
   }, [activeRoundDetails, projectData, maxPOLCap]);
+
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (projectData?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          projectData.abc.issuanceTokenAddress,
+          config.WPOL_TOKEN_ADDRESS,
+        );
+        setIsTokenListed(isListed);
+      }
+    };
+
+    fetchPoolAddress(); // Call the async function inside useEffect
+  }, [projectData?.abc?.issuanceTokenAddress]);
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -110,25 +128,42 @@ const ProjectDetail = () => {
       />
 
       {activeTab === 0 && (
-        <div className='flex flex-col gap-10 bg-white py-10'>
-          <RichTextViewer description={projectData?.description} />
-
-          <div className='container'>
-            <Link
-              target='_blank'
-              href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
-              className='  w-fit px-6 py-[10px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
-            >
-              <span className='flex gap-4 text-[#5326EC]  font-bold font-redHatText'>
-                Project Contract Address
-                <IconViewTransaction color='#5326EC' />
-              </span>
-            </Link>
+        <div className='flex flex-col gap-10 bg-white py-10 '>
+          <div className='container max-w-[800px]'>
+            <div className='flex md:flex-row flex-col gap-4 justify-center items-center md:justify-start'>
+              <Link
+                target='_blank'
+                href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
+                className=' w-[300px]  px-6 py-[10px] border border-[#5326EC] rounded-3xl  flex  justify-start cursor-pointer'
+              >
+                <span className='flex gap-4 text-[#5326EC]  font-bold font-redHatText'>
+                  Project Contract Address
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </Link>
+              {isTokenListed ? (
+                <Button
+                  onClick={e => {
+                    e.stopPropagation();
+                    const url = `https://quickswap.exchange/#/swap?currency0=ETH&currency1=${projectData?.abc?.issuanceTokenAddress}`;
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                  }}
+                  color={ButtonColor.Pink}
+                  className={`w-[300px] justify-center opacity-80 hover:opacity-100`}
+                >
+                  {'Get ' + projectData?.abc.tokenTicker + ' on QuickSwap'}
+                </Button>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
 
-          <div className='flex flex-col container'>
+          <div className='flex flex-col'>
             <ProjectSocials />
           </div>
+
+          <RichTextViewer description={projectData?.description} />
         </div>
       )}
 
