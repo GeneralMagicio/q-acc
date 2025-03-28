@@ -65,7 +65,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
       };
-      fetchProjectDonations();
+      // fetchProjectDonations();
     }
   }, [project]);
 
@@ -118,10 +118,10 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       if (project?.abc?.issuanceTokenAddress) {
         const { price, isListed } = await getPoolAddressByPair(
           project.abc.issuanceTokenAddress,
-          config.ERC_TOKEN_ADDRESS,
+          config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
-        setCurrentTokenPrice(Number(price));
+        setCurrentTokenPrice(1 / Number(price));
         console.log(
           'Current Price  Address:',
           isTokenListed,
@@ -130,8 +130,8 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       }
     };
 
-    // fetchPoolAddress(); // Call the async function inside useEffect
-  }, [project?.abc?.issuanceTokenAddress, currentTokenPrice, isTokenListed]);
+    fetchPoolAddress(); // Call the async function inside useEffect
+  }, [project?.abc?.issuanceTokenAddress]);
 
   return (
     <div
@@ -153,9 +153,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
-          <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
+          <div className='absolute bg-white    left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
               alt=''
@@ -356,7 +356,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                     <Button
                       onClick={e => {
                         e.stopPropagation();
-                        const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${project?.abc?.issuanceTokenAddress}`;
+                        const url = `https://quickswap.exchange/#/swap?currency0=ETH&currency1=${project?.abc?.issuanceTokenAddress}`;
                         window.open(url, '_blank', 'noopener,noreferrer');
                       }}
                       color={ButtonColor.Pink}

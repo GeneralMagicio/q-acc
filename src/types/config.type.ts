@@ -9,6 +9,7 @@ export type EnvConfig = {
   SUPPORTED_CHAINS: [Chain, ...Chain[]];
   ERC_TOKEN_ADDRESS: string;
   ERC_TOKEN_SYMBOL: string;
+  WPOL_TOKEN_ADDRESS: string;
   GRAPHQL_ENDPOINT: string;
   AUTH_BASE_ROUTE: string;
   SCAN_URL: string;
