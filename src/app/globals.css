@@ -62,6 +62,12 @@ body {
   }
 }
 
+@media (hover: none) {
+  .no-hover {
+    bottom: 0 !important;
+  }
+}
+
 @media (min-width: 1536px) {
   .one-side-container {
     width: calc(50% + 768px); /* 1536px / 2 */

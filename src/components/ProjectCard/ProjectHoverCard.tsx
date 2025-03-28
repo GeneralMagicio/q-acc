@@ -148,9 +148,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
-          <div className='absolute bg-white left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
+          <div className='absolute bg-white    left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
               alt=''
