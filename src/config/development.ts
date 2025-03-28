@@ -45,6 +45,7 @@ const config: EnvConfig = {
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
   ERC_TOKEN_SYMBOL: 'POL',
   SCAN_URL: 'https://polygonscan.com/',
+  WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
     'https://staging.qacc-be.generalmagic.io/graphql',

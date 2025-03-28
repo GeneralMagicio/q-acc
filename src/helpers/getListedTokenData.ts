@@ -8,16 +8,17 @@ const provider = new JsonRpcProvider(config.NETWORK_RPC_ADDRESS);
 let poolAddressCache: { [key: string]: string } = {};
 
 export const ALGEBRA_CONTRACTS = {
-  core: '0x4B9f4d2435Ef65559567e5DbFC1BbB37abC43B57',
-  poolDeployer: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
-  quoter: '0x55BeE1bD3Eb9986f6d2d963278de09eE92a3eF1D',
-  swapRouter: '0xF6Ad3CcF71Abb3E12beCf6b3D2a74C963859ADCd',
-  nonFungiblePositionManager: '0xd8E1E7009802c914b0d39B31Fc1759A865b727B1',
-  multicall: '0x61530d6E1c7A47BBB3e48e8b8EdF7569DcFeE121',
-  migrator: '0x4aE2bD0666c76C7f39311b9B3e39b53C8D7C43Ea',
-  finiteFarming: '0x17bE2Ed4409d8e6c22d46dE599f7C9Af40bD0759',
-  infiniteFarming: '0x1fd3f47B363f5b844eD7B7FAB6ceb679A367621E',
-  farmingCenter: '0x481FcFa00Ee6b2384FF0B3c3b5b29aD911c1AAA7',
+  core: '0x411b0fAcC3489691f28ad58c47006AF5E3Ab3A28',
+  poolDeployer: '0x2D98E2FA9da15aa6dC9581AB097Ced7af697CB92',
+  quoter: '0xa15F0D7377B2A0C0c10db057f641beD21028FC89',
+  swapRouter: '0xf5b509bB0909a69B1c207E495f687a596C168E12',
+  nonFungiblePositionManager: '0x8eF88E4c7CfbbaC1C163f7eddd4B578792201de6',
+  multicall: '0x6ccb9426CeceE2903FbD97fd833fD1D31c100292',
+  migrator: '0x157B9913E00204f8c980bb00aa62E22b0dAb1a63',
+  realStaker: '0x32CFF674763b06B983C0D55Ef2e41B84D16855bb',
+  finiteFarming: '0x9923f42a02A82dA63EE0DbbC5f8E311e3DD8A1f8',
+  infiniteFarming: '0x8a26436e41d0b5fc4C6Ed36C1976fafBe173444E',
+  farmingCenter: '0x7F281A8cdF66eF5e9db8434Ec6D97acc1bc01E78',
 };
 
 export function calculatePriceFromTick(tick: bigint): bigint {

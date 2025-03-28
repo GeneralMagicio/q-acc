@@ -1,10 +1,9 @@
-import { polygon, polygonZkEvm } from '@reown/appkit/networks';
-import { polygonZkEvm as viemPolygonZkEvm } from 'wagmi/chains';
-// import { polygon, polygonZkEvm } from 'wagmi/chains';
+import { polygon, polygonZkEvm } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
+// Added pre prod configs
 const config: EnvConfig = {
   SUPPORTED_CHAINS: [polygon, polygonZkEvm] as const,
   SCAN_URL: 'https://zkevm.polygonscan.com/',
@@ -13,14 +12,14 @@ const config: EnvConfig = {
   ERC_TOKEN_SYMBOL: 'POL',
   GRAPHQL_ENDPOINT:
     process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ||
-    'https://qacc-be.generalmagic.io/graphql',
+    'https://pre-prod.qacc-be.generalmagic.io/graphql',
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: viemPolygonZkEvm,
+    chain: polygonZkEvm,
     chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
@@ -36,7 +35,6 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
-  SQUID_INTEGRATOR_ID: '',
 };
 
 export default config;

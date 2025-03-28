@@ -1,7 +1,9 @@
 import development from './development';
+import preprod from './preprod';
 import production from './production';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+export const isPreprod = process.env.NEXT_PUBLIC_ENV === 'preprod';
 export const isProductReleased =
   process.env.NEXT_PUBLIC_IS_PRODUCT_RELEASE === 'true';
 export const isEarlyAccessBranch =
@@ -22,7 +24,8 @@ if (!isProduction) {
   console.log('Running in development mode');
 }
 
-const envConfig = isProduction ? production : development;
+const envConfig = isProduction ? production : isPreprod ? preprod : development;
+
 const config = {
   LOW_CAP_TEXT: '1,356 POL',
   HIGH_CAP_TEXT: '20,341 POL',
