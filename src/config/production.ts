@@ -18,8 +18,8 @@ const config: EnvConfig = {
   NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: polygon,
-    chainName: 'polygon',
+    chain: polygonZkEvm,
+    chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
       'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
