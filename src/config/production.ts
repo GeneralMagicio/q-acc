@@ -22,7 +22,7 @@ const config: EnvConfig = {
     chainName: 'Polygon',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
-      'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',
+      'did:iden3:privado:main:2SfreFymXBFkp8GqF8DXegUHVrEYNdsqgmkZ9YjbKs',
     ],
     requestId: 10,
     webWalletBaseUrl: 'https://wallet-dev.privado.id',
