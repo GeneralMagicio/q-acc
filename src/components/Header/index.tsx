@@ -17,6 +17,10 @@ const HEADER_ITEMS = [
     label: 'Projects',
     route: Routes.Projects,
   },
+  {
+    label: 'Leaderboard',
+    route: Routes.LeaderBoard,
+  },
 ];
 
 const Hide_Header_Items_Routes = [Routes.KycLanding];
