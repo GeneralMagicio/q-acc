@@ -27,11 +27,9 @@ const DashboardHeader = () => {
             height={128}
             className='hidden md:block rounded-2xl'
           />
-          <div className='pt-4'>
+          <div className='pt-4 text-gray-600 text-lg'>
             <h1 className='text-xl font-bold'>{user?.fullName}</h1>
-            <div className='text-xl leading-8 font-redHatText'>
-              {user?.email}
-            </div>
+            <div className=' leading-8 font-bold'>{user?.email}</div>
             <CopyHash value={address || ''} />
           </div>
           <div className='flex-1'></div>
