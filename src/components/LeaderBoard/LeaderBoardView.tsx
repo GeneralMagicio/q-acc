@@ -122,7 +122,18 @@ export const LeaderBoardView = () => {
                 className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
                 <div className='text-right'>#{user.rank}</div>
-                <div className=''>{user.name}</div>
+                <div className='flex gap-2'>
+                  {isTop && (
+                    <Image
+                      src={`/images/icons/rank.svg`}
+                      alt='medal'
+                      width={24}
+                      height={24}
+                      className='w-6 h-6'
+                    />
+                  )}
+                  {user.name}
+                </div>
                 <div className=''>{user.points}</div>
                 <div className=''>{user.projects}</div>
               </div>
