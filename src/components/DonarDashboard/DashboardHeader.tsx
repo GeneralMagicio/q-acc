@@ -27,7 +27,7 @@ const DashboardHeader = () => {
             height={128}
             className='hidden md:block rounded-2xl'
           />
-          <div>
+          <div className='pt-4'>
             <h1 className='text-xl font-bold'>{user?.fullName}</h1>
             <div className='text-xl leading-8 font-redHatText'>
               {user?.email}
@@ -35,15 +35,20 @@ const DashboardHeader = () => {
             <CopyHash value={address || ''} />
           </div>
           <div className='flex-1'></div>
-          {!isSafeAccount && (
-            <Link href={`edit/${user?.id}/profile`}>
-              <span>Edit Profile</span>
-            </Link>
-          )}
+          <div>
+            {!isSafeAccount && (
+              <Link href={`edit/${user?.id}/profile`}>
+                <div className='font-bold border-[1px] text-giv-700 border-giv-50 py-3 px-8 rounded-xl'>
+                  Edit Profile
+                </div>
+              </Link>
+            )}
+          </div>
         </div>
         <div className='border-b-[1px] border-gray-200'></div>
-        <div className='flex'>
+        <div className='flex items-center'>
           <UserQaccPoints />
+          <div className='flex-1'></div>
           <div>
             {isVerified ? (
               <div className='px-2 py-1 bg-[#5CD3C9] rounded-lg font-medium flex  gap-2 font-redHatText items-center'>
