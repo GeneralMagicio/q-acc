@@ -42,10 +42,10 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleConnect}
         disabled={isConnecting}
-        className={`px-6 py-[14px] text-sm font-medium rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
+        className={`px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
           ${
             address
-              ? 'bg-white text-gray-900 shadow-tabShadow hover:shadow-md'
+              ? 'bg-giv-50 border-[1px] border-giv-100 text-gray-900'
               : 'bg-pink-500 text-white hover:bg-pink-600'
           }
         `}
@@ -80,12 +80,14 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               height={24}
               className='rounded-full w-6 h-6'
             />
-            <div className='flex flex-col items-start'>
-              <div className='text-sm'>{user?.fullName || shortAddress}</div>
-              <div className='text-[0.6rem] text-giv-800 max-w-32 whitespace-nowrap overflow-hidden text-ellipsis'>
-                Connected to {chain?.name}
-              </div>
-            </div>
+            <Image
+              src='/images/icons/polygon.svg'
+              alt='chain Icon'
+              width={24}
+              height={24}
+              className='rounded-full w-6 h-6 -ml-3'
+            />
+            <div className='text-sm'>{user?.fullName || shortAddress}</div>
           </div>
         ) : (
           <div>q/acc Sign in</div>
