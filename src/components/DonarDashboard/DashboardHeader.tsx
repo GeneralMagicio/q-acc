@@ -21,7 +21,7 @@ const DashboardHeader = () => {
       <div className='bg-white rounded-2xl w-ful p-6 mt-8 flex flex-col gap-4'>
         <div className='flex gap-6'>
           <Image
-            src='/images/placeholders/PFPQACC.png'
+            src={user?.avatar || '/images/placeholders/PFPQACC.png'}
             alt='logo'
             width={128}
             height={128}
