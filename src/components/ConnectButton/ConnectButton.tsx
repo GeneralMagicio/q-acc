@@ -9,6 +9,7 @@ import { useState, type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
+import { shortenAddress } from '@/helpers/address';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -31,9 +32,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
     }
   };
 
-  const shortAddress = address
-    ? `${address?.slice(0, 6)}...${address?.slice(-4)}`
-    : '';
+  const shortAddress = shortenAddress(address);
 
   return (
     <div className={`relative ${className}`} {...props}>
