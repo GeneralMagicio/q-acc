@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function UserQaccPoints() {
   return (
-    <div className='inline-flex items-center px-6 py-4 bg-white rounded-2xl border-2 border-r-4 border-b-4 border-black shadow-sm'>
+    <div className='inline-flex items-center px-6 py-4 bg-white rounded-xl border-2 border-r-4 border-b-4 border-black shadow-sm'>
       <span className='text-gray-500 text-xl mr-4'>Your q/acc points</span>
       <div className='flex items-center'>
         <Image
