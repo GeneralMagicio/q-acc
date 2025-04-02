@@ -88,6 +88,12 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               className='rounded-full w-6 h-6 -ml-3'
             />
             <div className='text-sm'>{user?.fullName || shortAddress}</div>
+            <Image
+              src='/images/icons/chevron-down.svg'
+              alt='arrow down'
+              width={16}
+              height={16}
+            />
           </div>
         ) : (
           <div>q/acc Sign in</div>
