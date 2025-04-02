@@ -94,32 +94,40 @@ export const LeaderBoardView = () => {
         <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor'>
           All supporters
         </div>
-        <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText'>
-          {tableHeaders.map((header, index) => (
-            <div key={index} className='font-bold flex gap-1'>
-              {header.name}
-              {header.isSortable && (
-                <Image
-                  src='/images/icons/sort.svg'
-                  alt='sort'
-                  width={16}
-                  height={16}
-                  className='cursor-pointer'
-                  onClick={() => {
-                    // Handle sorting logic here
-                  }}
-                />
-              )}
-            </div>
-          ))}
-          {mockData.map(user => (
-            <>
-              <div className='text-right'>#{user.rank}</div>
-              <div className=''>{user.name}</div>
-              <div className=''>{user.points}</div>
-              <div className=''>{user.projects}</div>
-            </>
-          ))}
+        <div>
+          <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
+            {tableHeaders.map((header, index) => (
+              <div key={index} className='font-bold flex gap-1'>
+                {header.name}
+                {header.isSortable && (
+                  <Image
+                    src='/images/icons/sort.svg'
+                    alt='sort'
+                    width={16}
+                    height={16}
+                    className='cursor-pointer'
+                    onClick={() => {
+                      // Handle sorting logic here
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          {mockData.map(user => {
+            const isTop = user.rank <= 3;
+            return (
+              <div
+                key={user.rank}
+                className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
+              >
+                <div className='text-right'>#{user.rank}</div>
+                <div className=''>{user.name}</div>
+                <div className=''>{user.points}</div>
+                <div className=''>{user.projects}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
