@@ -61,41 +61,6 @@ const DashboardHeader = () => {
             )}
           </div>
         </div>
-        {/* <div className='container flex md:flex-row flex-col gap-6 items-center md:text-left text-center'>
-          <div
-            className='min-w-[150px] min-h-[150px] bg-cover bg-center  rounded-3xl relative'
-            style={{
-              backgroundImage: `url(${user?.avatar || '/images/placeholders/PFPQACC.png'})`,
-            }}
-          ></div>
-          <div className='flex flex-col gap-4 text-[#1D1E1F] w-full'>
-            <div className='flex gap-2 md:gap-6  font-redHatText flex-col md:flex-row  items-center justify-between'>
-              <div className='flex gap-8 text-pink-500 flex-col md:flex-row '>
-                <Link
-                  target='_blank'
-                  href={`${config.SCAN_URL}/address/${address}`}
-                >
-                  <h3 className='flex gap-2 items-center'>
-                    <span>{address}</span>
-                    <IconViewTransaction size={18} />
-                  </h3>
-                </Link>
-              </div>
-
-              {isVerified ? (
-                <div className='px-2 py-1 bg-[#5CD3C9] rounded-lg font-medium flex  gap-2 font-redHatText items-center'>
-                  <IconIdentityVerified />
-                  Identity verified{' '}
-                </div>
-              ) : (
-                <div className='flex flex-col gap-4'>
-                  <GitcoinVerificationBadge />
-                  <PrivadoVerificationBadge />
-                </div>
-              )}
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
