@@ -1,6 +1,5 @@
 import { requestGraphQL } from '@/helpers/request';
 import { FETCH_LEADERBOARD } from '@/queries/points.query';
-import { IUser } from '@/types/user.type';
 
 export interface IOrderBy {
   field: 'QaccPoints' | 'ProjectsFundedCount';
@@ -10,7 +9,14 @@ export interface IOrderBy {
 export interface ILeaderBoardInfo {
   getUsersByQaccPoints: {
     totalCount: number;
-    users: IUser[];
+    users: {
+      id: string;
+      name: string;
+      email: string;
+      qaccPoints: number;
+      qaccPointsMultiplier: number;
+      projectsFundedCount: number;
+    }[];
   };
 }
 
