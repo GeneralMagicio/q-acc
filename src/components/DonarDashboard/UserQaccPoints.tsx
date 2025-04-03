@@ -15,7 +15,7 @@ export default function UserQaccPoints() {
           className='w-6 h-6'
         />
         <span className='text-black text-2xl font-bold'>
-          {(user?.qaccPoints || 0).toLocaleString()}
+          {(user?.qaccPoints || 0).toLocaleString('en-US')}
         </span>
       </div>
     </div>

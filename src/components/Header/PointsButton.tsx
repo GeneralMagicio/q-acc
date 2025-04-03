@@ -5,7 +5,7 @@ export const PointsButton = () => {
   const { data: userInfo } = useFetchUser();
   return (
     <div className='text-sm font-redHatText font-semibold text-giv-900'>
-      {userInfo?.qaccPoints}
+      {userInfo?.qaccPoints?.toLocaleString('en-US')}
     </div>
   );
 };
