@@ -7,6 +7,7 @@ import Routes from '@/lib/constants/Routes';
 import { HeaderItem } from './HeaderItem';
 import { isProductReleased } from '@/config/configuration';
 import { VerificationBanner } from './VerificationBanner';
+import { PointsButton } from './PointsButton';
 
 const HEADER_ITEMS = [
   {
@@ -64,9 +65,7 @@ export const Header = () => {
             height={24}
             className='w-6 h-6'
           />
-          <div className='text-sm font-redHatText font-semibold text-giv-900'>
-            1200
-          </div>
+          <PointsButton />
         </div>
         <ConnectButton className='order-2 md:order-3' />
       </nav>
