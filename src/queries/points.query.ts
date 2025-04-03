@@ -13,3 +13,17 @@ export const FETCH_LEADERBOARD = /* GraphQL */ `
     }
   }
 `;
+
+export const FETCH_POINTS_HISTORY_OF_USER = /* GraphQL */ `
+  query getQaccPointsHistory {
+    getQaccPointsHistory {
+      pointsEarned
+      user {
+        name
+      }
+      donation {
+        id
+      }
+    }
+  }
+`;
