@@ -1,5 +1,8 @@
 import { requestGraphQL } from '@/helpers/request';
-import { FETCH_LEADERBOARD } from '@/queries/points.query';
+import {
+  FETCH_LEADERBOARD,
+  FETCH_POINTS_HISTORY_OF_USER,
+} from '@/queries/points.query';
 
 export type SortField = 'QaccPoints' | 'ProjectsFundedCount';
 export type SortDirection = 'ASC' | 'DESC';
@@ -35,6 +38,15 @@ export const fetchLeaderBoard = async (
       orderBy,
     });
     return res?.getUsersByQaccPoints;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchPointsHistoryOfUser = async () => {
+  try {
+    const res = await requestGraphQL<any>(FETCH_POINTS_HISTORY_OF_USER);
+    return res?.getQaccPointsHistory;
   } catch (error) {
     console.error(error);
   }
