@@ -53,7 +53,6 @@ const config: EnvConfig = {
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
     'https://auth.serve.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://impact-graph.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://dev.indexer.inverter.network/v1/graphql',
   privadoConfig: {
     chain: viemPolygonAmoy,

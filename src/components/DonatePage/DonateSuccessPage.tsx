@@ -19,6 +19,8 @@ import { IconXSocial } from '../Icons/IconXSocial';
 import { IconLinkedin } from '../Icons/IconLinkedin';
 import { IconFacebook } from '../Icons/IconFacebook';
 import { IconTransactionProgress } from '../Icons/IconTransactionProgress';
+import { useFetchPointsHistoryOfUser } from '@/hooks/useFetchPointsHistoryOfUser';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -38,10 +40,13 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   donationId,
   status,
 }) => {
+  const [pointsEarned, setPointsEarned] = useState('Calculating...');
+  const { refetch: refetchPointsHistory } = useFetchPointsHistoryOfUser();
   const { projectData } = useDonateContext();
   const [donationStatus, setDonationStatus] = useState<string>(
     DonationStatus.Pending,
   );
+  const { refetch: refetchUser } = useFetchUser();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
 
@@ -67,6 +72,34 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
     };
     checkDonationStatus();
   }, [status, donationId]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (donationStatus !== DonationStatus.Verified) return;
+
+    const checkDonationStatus = async () => {
+      interval = setInterval(async () => {
+        const { data } = await refetchPointsHistory();
+        console.log('donationId', donationId);
+        const found = data?.find(
+          entry =>
+            entry.donation?.id && Number(entry.donation.id) === donationId,
+        );
+        if (found) {
+          clearInterval(interval);
+          console.log('✅ Donation found in points history!');
+          setPointsEarned(found.pointsEarned.toLocaleString('en-US'));
+          refetchUser();
+        }
+      }, 3000);
+    };
+    checkDonationStatus();
+
+    return () => {
+      console.log('cleared interval');
+      if (interval) clearInterval(interval);
+    };
+  }, [donationStatus, donationId, refetchPointsHistory]);
 
   return (
     <div className='flex flex-col gap-6 my-10 container '>
@@ -222,7 +255,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                     <span className=' '>q/acc points you've earned</span>
                   </div>
                   <div className='flex gap-2 items-center'>
-                    <span>1200</span>
+                    <span>{pointsEarned}</span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='32'

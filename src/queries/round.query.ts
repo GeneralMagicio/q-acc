@@ -1,8 +1,8 @@
-export const GET_ALL_ROUNDS = `
+export const GET_ALL_ROUNDS = /* GraphQL */ `
   query {
     allRounds {
       ... on EarlyAccessRound {
-      __typename
+        __typename
         roundNumber
         startDate
         endDate
@@ -15,11 +15,11 @@ export const GET_ALL_ROUNDS = `
         isBatchMintingExecuted
       }
       ... on QfRound {
-      __typename
+        __typename
         name
         slug
         allocatedFund
-        startDate:beginDate
+        startDate: beginDate
         endDate
         roundPOLCapPerProject
         roundPOLCapPerUserPerProject
@@ -33,7 +33,7 @@ export const GET_ALL_ROUNDS = `
   }
 `;
 
-export const GET_ACTIVE_ROUND = `
+export const GET_ACTIVE_ROUND = /* GraphQL */ `
   query {
     activeRound {
       activeRound {
@@ -55,7 +55,7 @@ export const GET_ACTIVE_ROUND = `
           name
           slug
           allocatedFund
-          startDate:beginDate
+          startDate: beginDate
           endDate
           roundPOLCapPerProject
           roundPOLCapPerUserPerProject
@@ -70,35 +70,30 @@ export const GET_ACTIVE_ROUND = `
   }
 `;
 
-export const GET_PROJECT_ROUND_RECORDS = `
-query(
-  $projectId: Int!
-  $qfRoundNumber: Int
-  $earlyAccessRoundNumber: Int
-) {
-  getProjectRoundRecords(
-    projectId: $projectId
-    earlyAccessRoundNumber:$earlyAccessRoundNumber
-    qfRoundNumber:$qfRoundNumber
-    
-  ) {
-    projectId
-    cumulativePastRoundsDonationAmounts
-    totalDonationAmount
-    totalDonationUsdAmount
-    qfRound {
-      id
-    }
-    earlyAccessRound {
-      id
-      roundNumber
+export const GET_PROJECT_ROUND_RECORDS = /* GraphQL */ `
+  query ($projectId: Int!, $qfRoundNumber: Int, $earlyAccessRoundNumber: Int) {
+    getProjectRoundRecords(
+      projectId: $projectId
+      earlyAccessRoundNumber: $earlyAccessRoundNumber
+      qfRoundNumber: $qfRoundNumber
+    ) {
+      projectId
+      cumulativePastRoundsDonationAmounts
+      totalDonationAmount
+      totalDonationUsdAmount
+      qfRound {
+        id
+      }
+      earlyAccessRound {
+        id
+        roundNumber
+      }
     }
   }
-}
 `;
 
-export const GET_QACC_ROUND_STATS = `
-query {
+export const GET_QACC_ROUND_STATS = /* GraphQL */ `
+  query {
     qAccStat {
       totalCollected
       qfTotalCollected

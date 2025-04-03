@@ -1,127 +1,99 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { useAccount } from 'wagmi';
 import { Banner } from './Banner';
 import { UserInfo } from './UserInfo';
+import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
+import { SortDirection, SortField } from '@/services/points.service';
+import { Pagination } from './Pagination';
+import { Spinner } from '../Loading/Spinner';
 
 const tableHeaders = [
-  { name: 'Rank', isSortable: true },
-  { name: 'Supporter', isSortable: false },
-  { name: 'q/acc points', isSortable: true },
-  { name: 'Projects funded', isSortable: true },
+  { name: 'Rank', sortField: null },
+  { name: 'Supporter', sortField: null },
+  { name: 'q/acc points', sortField: 'QaccPoints' },
+  { name: 'Projects funded', sortField: 'ProjectsFundedCount' },
 ];
 
-const mockData = [
-  {
-    rank: 1,
-    name: 'John Doe',
-    points: 392,
-    projects: 2,
-  },
-  {
-    rank: 2,
-    name: 'Jane Smith',
-    points: 300,
-    projects: 3,
-  },
-  {
-    rank: 3,
-    name: 'Alice Johnson',
-    points: 250,
-    projects: 4,
-  },
-  {
-    rank: 4,
-    name: 'Bob Brown',
-    points: 200,
-    projects: 5,
-  },
-  {
-    rank: 5,
-    name: 'Charlie Davis',
-    points: 150,
-    projects: 6,
-  },
-  {
-    rank: 6,
-    name: 'David Wilson',
-    points: 100,
-    projects: 7,
-  },
-  {
-    rank: 7,
-    name: 'Eva Green',
-    points: 50,
-    projects: 8,
-  },
-  {
-    rank: 8,
-    name: 'Frank White',
-    points: 25,
-    projects: 9,
-  },
-  {
-    rank: 9,
-    name: 'Grace Black',
-    points: 10,
-    projects: 10,
-  },
-  {
-    rank: 10,
-    name: 'Hannah Blue',
-    points: 5,
-    projects: 11,
-  },
-  {
-    rank: 11,
-    name: 'Ian Red',
-    points: 3,
-    projects: 12,
-  },
-  {
-    rank: 12,
-    name: 'Jack Yellow',
-    points: 2,
-    projects: 13,
-  },
-];
+const LIMIT = 10;
 
 export const LeaderBoardView = () => {
+  const { isConnected } = useAccount();
+  const [sortField, setSortField] = useState<SortField>('QaccPoints');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
+  const [page, setPage] = useState(0); // 0-based index
+
+  const { data: leaderboardInfo, isLoading } = useFetchLeaderBoard(
+    LIMIT,
+    page * LIMIT,
+    {
+      field: sortField,
+      direction: sortDirection,
+    },
+  );
+
+  const toggleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(prev => (prev === 'ASC' ? 'DESC' : 'ASC'));
+    } else {
+      setSortField(field);
+      setSortDirection('DESC'); // default on new field
+    }
+    setPage(0); // reset to first page when sorting
+  };
+
+  const total = leaderboardInfo?.totalCount ?? 0;
+  const totalPages = Math.ceil(total / LIMIT);
+
   return (
     <div className='container'>
       <Banner />
       <div className='bg-white rounded-xl p-6 flex flex-col gap-8'>
-        <UserInfo />
+        {isConnected && <UserInfo />}
         <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor'>
           All supporters
         </div>
-        <div>
+
+        <div className='relative'>
           <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
             {tableHeaders.map((header, index) => (
-              <div key={index} className='font-bold flex gap-1'>
+              <div
+                key={index}
+                className='font-bold flex gap-1 items-center cursor-pointer'
+                onClick={() =>
+                  header.sortField && toggleSort(header.sortField as SortField)
+                }
+              >
                 {header.name}
-                {header.isSortable && (
+                {header.sortField && (
                   <Image
                     src='/images/icons/sort.svg'
                     alt='sort'
                     width={16}
                     height={16}
-                    className='cursor-pointer'
-                    onClick={() => {
-                      // Handle sorting logic here
-                    }}
+                    className={`transition-transform ${
+                      sortField === header.sortField
+                        ? sortDirection === 'ASC'
+                          ? 'rotate-180'
+                          : ''
+                        : 'opacity-30'
+                    }`}
                   />
                 )}
               </div>
             ))}
           </div>
-          {mockData.map(user => {
-            const isTop = user.rank <= 3;
+
+          {leaderboardInfo?.users?.map((user, idx) => {
+            const rank = page * LIMIT + idx + 1;
+            const isTop = rank <= 3;
             return (
               <div
-                key={user.rank}
+                key={rank}
                 className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
-                <div className='text-right'>#{user.rank}</div>
+                <div className='text-right'>#{rank}</div>
                 <div className='flex gap-2'>
                   {isTop && (
                     <Image
@@ -134,12 +106,25 @@ export const LeaderBoardView = () => {
                   )}
                   {user.name}
                 </div>
-                <div className=''>{user.points}</div>
-                <div className=''>{user.projects}</div>
+                <div>{user.qaccPoints.toLocaleString('en-US')}</div>
+                <div>{user.projectsFundedCount}</div>
               </div>
             );
           })}
+          {isLoading && (
+            <div className='absolute inset-0 flex items-center justify-center'>
+              <Spinner size={24} />
+            </div>
+          )}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        )}
       </div>
     </div>
   );
