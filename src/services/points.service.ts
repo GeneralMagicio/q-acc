@@ -1,11 +1,11 @@
 import { requestGraphQL } from '@/helpers/request';
 import { FETCH_LEADERBOARD } from '@/queries/points.query';
 
-export type SortFiled = 'QaccPoints' | 'ProjectsFundedCount';
+export type SortField = 'QaccPoints' | 'ProjectsFundedCount';
 export type SortDirection = 'ASC' | 'DESC';
 
 export interface IOrderBy {
-  field: SortFiled;
+  field: SortField;
   direction: SortDirection;
 }
 

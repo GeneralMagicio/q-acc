@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Banner } from './Banner';
 import { UserInfo } from './UserInfo';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
-import { SortDirection, SortFiled } from '@/services/points.service';
+import { SortDirection, SortField } from '@/services/points.service';
 import { Pagination } from './Pagination';
 import { Spinner } from '../Loading/Spinner';
 
@@ -18,7 +18,7 @@ const tableHeaders = [
 const LIMIT = 10;
 
 export const LeaderBoardView = () => {
-  const [sortField, setSortField] = useState<SortFiled>('QaccPoints');
+  const [sortField, setSortField] = useState<SortField>('QaccPoints');
   const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
   const [page, setPage] = useState(0); // 0-based index
 
@@ -31,7 +31,7 @@ export const LeaderBoardView = () => {
     },
   );
 
-  const toggleSort = (field: SortFiled) => {
+  const toggleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection(prev => (prev === 'ASC' ? 'DESC' : 'ASC'));
     } else {
@@ -60,7 +60,7 @@ export const LeaderBoardView = () => {
                 key={index}
                 className='font-bold flex gap-1 items-center cursor-pointer'
                 onClick={() =>
-                  header.sortField && toggleSort(header.sortField as SortFiled)
+                  header.sortField && toggleSort(header.sortField as SortField)
                 }
               >
                 {header.name}
