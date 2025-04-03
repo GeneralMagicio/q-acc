@@ -1,8 +1,11 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Banner } from './Banner';
 import { UserInfo } from './UserInfo';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
+import { SortDirection, SortFiled } from '@/services/points.service';
+import { Pagination } from './Pagination';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -11,12 +14,31 @@ const tableHeaders = [
   { name: 'Projects funded', sortField: 'ProjectsFundedCount' },
 ];
 
+const LIMIT = 10;
+
 export const LeaderBoardView = () => {
-  const { data: leaderboardInfo } = useFetchLeaderBoard(10, 0, {
-    field: 'QaccPoints',
-    direction: 'DESC',
+  const [sortField, setSortField] = useState<SortFiled>('QaccPoints');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
+  const [page, setPage] = useState(0); // 0-based index
+
+  const { data: leaderboardInfo } = useFetchLeaderBoard(LIMIT, page * LIMIT, {
+    field: sortField,
+    direction: sortDirection,
   });
-  console.log('leaderboardInfo', leaderboardInfo);
+
+  const toggleSort = (field: SortFiled) => {
+    if (sortField === field) {
+      setSortDirection(prev => (prev === 'ASC' ? 'DESC' : 'ASC'));
+    } else {
+      setSortField(field);
+      setSortDirection('DESC'); // default on new field
+    }
+    setPage(0); // reset to first page when sorting
+  };
+
+  const total = leaderboardInfo?.totalCount ?? 0;
+  const totalPages = Math.ceil(total / LIMIT);
+
   return (
     <div className='container'>
       <Banner />
@@ -25,10 +47,17 @@ export const LeaderBoardView = () => {
         <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor'>
           All supporters
         </div>
+
         <div>
           <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
             {tableHeaders.map((header, index) => (
-              <div key={index} className='font-bold flex gap-1'>
+              <div
+                key={index}
+                className='font-bold flex gap-1 items-center cursor-pointer'
+                onClick={() =>
+                  header.sortField && toggleSort(header.sortField as SortFiled)
+                }
+              >
                 {header.name}
                 {header.sortField && (
                   <Image
@@ -36,17 +65,21 @@ export const LeaderBoardView = () => {
                     alt='sort'
                     width={16}
                     height={16}
-                    className='cursor-pointer'
-                    onClick={() => {
-                      // Handle sorting logic here
-                    }}
+                    className={`transition-transform ${
+                      sortField === header.sortField
+                        ? sortDirection === 'ASC'
+                          ? 'rotate-180'
+                          : ''
+                        : 'opacity-30'
+                    }`}
                   />
                 )}
               </div>
             ))}
           </div>
+
           {leaderboardInfo?.users.map((user, idx) => {
-            const rank = idx + 1;
+            const rank = page * LIMIT + idx + 1;
             const isTop = rank <= 3;
             return (
               <div
@@ -66,12 +99,20 @@ export const LeaderBoardView = () => {
                   )}
                   {user.name}
                 </div>
-                <div className=''>{user.qaccPoints}</div>
-                <div className=''>{user.projectsFundedCount}</div>
+                <div>{user.qaccPoints}</div>
+                <div>{user.projectsFundedCount}</div>
               </div>
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        )}
       </div>
     </div>
   );
