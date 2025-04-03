@@ -15,6 +15,8 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 export const isAllocationDone =
   process.env.NEXT_PUBLIC_IS_ALLOCATION_DONE === 'true';
 
+const NETWORK_RPC_ADDRESS = process.env.NEXT_PUBLIC_NETWORK_RPC_ADDRESS;
+
 console.log('config-isProductReleased', isProductReleased);
 console.log('config-isProduction', isProduction);
 console.log('config-isEarlyAccessBranch', isEarlyAccessBranch);
@@ -33,6 +35,7 @@ const config = {
   MATCHING_FUND_ADDRESS: envConfig.MATCHING_FUND_ADDRESS.map(address =>
     address.toLowerCase(),
   ),
+  NETWORK_RPC_ADDRESS,
 };
 
 export default config;

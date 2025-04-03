@@ -7,6 +7,7 @@ import Routes from '@/lib/constants/Routes';
 import { HeaderItem } from './HeaderItem';
 import { isProductReleased } from '@/config/configuration';
 import { VerificationBanner } from './VerificationBanner';
+import { PointsButton } from './PointsButton';
 
 const HEADER_ITEMS = [
   {
@@ -16,6 +17,10 @@ const HEADER_ITEMS = [
   {
     label: 'Projects',
     route: Routes.Projects,
+  },
+  {
+    label: 'Leaderboard',
+    route: Routes.LeaderBoard,
   },
 ];
 
@@ -52,6 +57,16 @@ export const Header = () => {
             ))}
         </div>
         <div className='flex-1 order-2 md:order-3'></div>
+        <div className='bg-giv-50 border-[1px] border-giv-100 rounded-xl flex gap-2 order-2 md:order-3 py-3 px-4 items-center'>
+          <Image
+            src='/images/icons/points.svg'
+            alt='points'
+            width={24}
+            height={24}
+            className='w-6 h-6'
+          />
+          <PointsButton />
+        </div>
         <ConnectButton className='order-2 md:order-3' />
       </nav>
       {/* <PrivadoBanner /> */}

@@ -1,50 +1,47 @@
-export const GET_USER_BY_ADDRESS = `
-	query UserByAddress($address: String!) {
-		userByAddress(address: $address) {
-			__typename
-			id
-			fullName: name
-			avatar
-			email
-			isSignedIn
-			privadoVerified
+export const GET_USER_BY_ADDRESS = /* GraphQL */ `
+  query UserByAddress($address: String!) {
+    userByAddress(address: $address) {
+      __typename
+      id
+      fullName: name
+      avatar
+      email
+      isSignedIn
+      privadoVerified
       acceptedToS
       passportScore
       analysisScore
       hasEnoughGitcoinPassportScore
       hasEnoughGitcoinAnalysisScore
-		}
-	}
+      qaccPoints
+      qaccPointsMultiplier
+      projectsFundedCount
+    }
+  }
 `;
 
-export const GET_GIVETH_USER_BY_ADDRESS = `
-	query UserByAddress($address: String!) {
-		userByAddress(address: $address) {
-			__typename
-			id
-			avatar
-			email
-			firstName
-			lastName
-			name
-			isSignedIn
-		}
-	}
+export const GET_GIVETH_USER_BY_ADDRESS = /* GraphQL */ `
+  query UserByAddress($address: String!) {
+    userByAddress(address: $address) {
+      __typename
+      id
+      avatar
+      email
+      firstName
+      lastName
+      name
+      isSignedIn
+    }
+  }
 `;
 
-export const UPDATE_USER = `mutation(
-    $email: String
-	  $fullName: String
-    $avatar: String
-  ) {
-    updateUser(
-      email: $email
-      fullName: $fullName
-      avatar: $avatar
-    )
-  }`;
+export const UPDATE_USER = /* GraphQL */ `
+  mutation ($email: String, $fullName: String, $avatar: String) {
+    updateUser(email: $email, fullName: $fullName, avatar: $avatar)
+  }
+`;
 
-export const GET_USER_DONATIONS = `
+export const GET_USER_DONATIONS = /* GraphQL */ `
   query (
     $take: Int
     $skip: Int
@@ -101,12 +98,12 @@ export const GET_USER_DONATIONS = `
           }
           totalDonations
         }
-        earlyAccessRound{
+        earlyAccessRound {
           roundNumber
           startDate
           endDate
         }
-       qfRound {
+        qfRound {
           id
           name
           isActive
@@ -118,33 +115,27 @@ export const GET_USER_DONATIONS = `
   }
 `;
 
-export const GET_USER_DONATIONS_COUNT = `
-  query (
-    $status: String
-    $userId: Int!
-  ) {
-    donationsByUserId(
-      userId: $userId
-      status: $status
-    ) {
+export const GET_USER_DONATIONS_COUNT = /* GraphQL */ `
+  query ($status: String, $userId: Int!) {
+    donationsByUserId(userId: $userId, status: $status) {
       totalCount
     }
   }
 `;
 
-export const USER_ACCEPT_TERMS_MUTATION = `
+export const USER_ACCEPT_TERMS_MUTATION = /* GraphQL */ `
   mutation AcceptTermsOfService {
     acceptedTermsOfService
   }
 `;
 
-export const PROJECT_USER_DONATION_CAP = `
+export const PROJECT_USER_DONATION_CAP = /* GraphQL */ `
   query ProjectUserDonationCap($projectId: Int!) {
-    projectUserDonationCap(projectId: $projectId)   
+    projectUserDonationCap(projectId: $projectId)
   }
 `;
 
-export const PROJECT_USER_DONATION_CAP_KYC = `
+export const PROJECT_USER_DONATION_CAP_KYC = /* GraphQL */ `
   query UserCaps($projectId: Int!) {
     userCaps(projectId: $projectId) {
       qAccCap
@@ -158,7 +149,8 @@ export const PROJECT_USER_DONATION_CAP_KYC = `
   }
 `;
 
-export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
+export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = /* GraphQL */ `
+  query ($address: String!) {
     refreshUserScores(address: $address) {
       id
       firstName
@@ -175,7 +167,8 @@ export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = `query ($address: String!) {
       passportScore
       passportStamps
       analysisScore
-			privadoVerified
+      privadoVerified
       acceptedToS
     }
-  }`;
+  }
+`;

@@ -29,5 +29,6 @@ const Routes = {
   OnboardingDonors: '/onboarding/donors',
   Preview: '/preview',
   KycLanding: '/zkid',
+  LeaderBoard: '/leaderboard',
 };
 export default Routes;

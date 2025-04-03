@@ -17,7 +17,6 @@ const config: EnvConfig = {
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS: 'https://polygon.llamarpc.com',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
     chain: viemPolygonZkEvm,

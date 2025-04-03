@@ -19,6 +19,8 @@ import { IconXSocial } from '../Icons/IconXSocial';
 import { IconLinkedin } from '../Icons/IconLinkedin';
 import { IconFacebook } from '../Icons/IconFacebook';
 import { IconTransactionProgress } from '../Icons/IconTransactionProgress';
+import { useFetchPointsHistoryOfUser } from '@/hooks/useFetchPointsHistoryOfUser';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -38,10 +40,13 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   donationId,
   status,
 }) => {
+  const [pointsEarned, setPointsEarned] = useState('Calculating...');
+  const { refetch: refetchPointsHistory } = useFetchPointsHistoryOfUser();
   const { projectData } = useDonateContext();
   const [donationStatus, setDonationStatus] = useState<string>(
     DonationStatus.Pending,
   );
+  const { refetch: refetchUser } = useFetchUser();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
 
@@ -68,6 +73,34 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
     checkDonationStatus();
   }, [status, donationId]);
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (donationStatus !== DonationStatus.Verified) return;
+
+    const checkDonationStatus = async () => {
+      interval = setInterval(async () => {
+        const { data } = await refetchPointsHistory();
+        console.log('donationId', donationId);
+        const found = data?.find(
+          entry =>
+            entry.donation?.id && Number(entry.donation.id) === donationId,
+        );
+        if (found) {
+          clearInterval(interval);
+          console.log('✅ Donation found in points history!');
+          setPointsEarned(found.pointsEarned.toLocaleString('en-US'));
+          refetchUser();
+        }
+      }, 3000);
+    };
+    checkDonationStatus();
+
+    return () => {
+      console.log('cleared interval');
+      if (interval) clearInterval(interval);
+    };
+  }, [donationStatus, donationId, refetchPointsHistory]);
+
   return (
     <div className='flex flex-col gap-6 my-10 container '>
       {donationStatus === DonationStatus.Pending ? (
@@ -77,8 +110,8 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
               <IconPendingSpinner /> Processing Your Transaction…
             </h1>
             <span className='text-[#4F576A]'>
-              Your transaction is in progress and should be confirmed shortly.
-              This may take a minute—hang tight!
+              Your transaction is being processed and should be confirmed soon.
+              Some transactions may take longer depending on network conditions.
             </span>
           </div>
         </div>
@@ -149,9 +182,9 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
       )}
       <div className='bg-[#F7F7F9] w-full     z-40  '>
         <div className=' w-full flex  flex-col gap-14'>
-          <div className='flex  flex-col w-full lg:flex-row '>
+          <div className='flex  flex-col w-full lg:flex-row shadow-xl lg:rounded-xl'>
             {/* About Project */}
-            <div className='w-full lg:w-1/2 shadow-xl  lg:rounded-l-xl min-h-[450px] p-8 gap-8 flex flex-col'>
+            <div className='w-full lg:w-1/2  lg:rounded-l-xl min-h-[450px] p-8 gap-8 flex flex-col'>
               <div
                 className='w-full h-[288px] bg-cover bg-center rounded-3xl relative'
                 style={{
@@ -175,7 +208,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             </div>
 
             {/* Your are Giver Now */}
-            <div className='w-full bg-white lg:w-1/2 lg:rounded-r-xl  flex flex-col gap-8 p-10 shadow-xl min-h-[450px] '>
+            <div className='w-full bg-white lg:w-1/2 lg:rounded-r-xl  flex flex-col gap-8 p-10  min-h-[450px] '>
               <div
                 className='w-full min-h-[288px] flex flex-col gap-8  '
                 style={{
@@ -222,7 +255,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                     <span className=' '>q/acc points you've earned</span>
                   </div>
                   <div className='flex gap-2 items-center'>
-                    <span>1200</span>
+                    <span>{pointsEarned}</span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='32'

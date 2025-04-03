@@ -38,12 +38,12 @@ export const CreateView = () => {
         title2='Season one'
         subTitle='q/acc = QF*ABC'
       />
-      <InfoSection title='Congratulations, you’re in Season 1!'>
+      <InfoSection title='Congratulations, and welcome to q/acc on Giveth.'>
         <p>
           Now you need to create your Giveth q/acc project page in preparation
-          for the Early Access Window and the q/acc round.
+          for q/acc round.
         </p>
-        <p>
+        {/* <p>
           The Giveth platform is hosting this first q/acc Season. This is where
           your supporters will be able to contribute to your project during the
           Early Access Window and the subsequent q/acc round. As well, they will
@@ -51,7 +51,7 @@ export const CreateView = () => {
           contribute to projects, see their tokens, and claim them once they
           begin to unlock.
         </p>
-
+*/}
         {isConnected && (userProjectsCount || 0 > 0) ? (
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
