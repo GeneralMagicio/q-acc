@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useAccount } from 'wagmi';
 import { Banner } from './Banner';
 import { UserInfo } from './UserInfo';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
@@ -18,6 +19,7 @@ const tableHeaders = [
 const LIMIT = 10;
 
 export const LeaderBoardView = () => {
+  const { isConnected } = useAccount();
   const [sortField, setSortField] = useState<SortField>('QaccPoints');
   const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
   const [page, setPage] = useState(0); // 0-based index
@@ -48,7 +50,7 @@ export const LeaderBoardView = () => {
     <div className='container'>
       <Banner />
       <div className='bg-white rounded-xl p-6 flex flex-col gap-8'>
-        <UserInfo />
+        {isConnected && <UserInfo />}
         <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor'>
           All supporters
         </div>
