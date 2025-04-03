@@ -6,6 +6,7 @@ import { UserInfo } from './UserInfo';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
 import { SortDirection, SortFiled } from '@/services/points.service';
 import { Pagination } from './Pagination';
+import { Spinner } from '../Loading/Spinner';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -21,10 +22,14 @@ export const LeaderBoardView = () => {
   const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
   const [page, setPage] = useState(0); // 0-based index
 
-  const { data: leaderboardInfo } = useFetchLeaderBoard(LIMIT, page * LIMIT, {
-    field: sortField,
-    direction: sortDirection,
-  });
+  const { data: leaderboardInfo, isLoading } = useFetchLeaderBoard(
+    LIMIT,
+    page * LIMIT,
+    {
+      field: sortField,
+      direction: sortDirection,
+    },
+  );
 
   const toggleSort = (field: SortFiled) => {
     if (sortField === field) {
@@ -48,7 +53,7 @@ export const LeaderBoardView = () => {
           All supporters
         </div>
 
-        <div>
+        <div className='relative'>
           <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
             {tableHeaders.map((header, index) => (
               <div
@@ -104,6 +109,11 @@ export const LeaderBoardView = () => {
               </div>
             );
           })}
+          {isLoading && (
+            <div className='absolute inset-0 flex items-center justify-center'>
+              <Spinner size={24} />
+            </div>
+          )}
         </div>
 
         {totalPages > 1 && (
