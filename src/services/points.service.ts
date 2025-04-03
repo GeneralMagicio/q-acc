@@ -43,9 +43,29 @@ export const fetchLeaderBoard = async (
   }
 };
 
+export interface IPointsHistory {
+  pointsEarned: number;
+  user: {
+    name: string;
+  };
+  donation: {
+    id: string;
+  };
+}
+
+export interface IPointsHistoryRes {
+  getQaccPointsHistory: IPointsHistory[];
+}
+
 export const fetchPointsHistoryOfUser = async () => {
   try {
-    const res = await requestGraphQL<any>(FETCH_POINTS_HISTORY_OF_USER);
+    const res = await requestGraphQL<IPointsHistoryRes>(
+      FETCH_POINTS_HISTORY_OF_USER,
+      {},
+      {
+        auth: true,
+      },
+    );
     return res?.getQaccPointsHistory;
   } catch (error) {
     console.error(error);

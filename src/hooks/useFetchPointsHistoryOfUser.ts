@@ -1,13 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { Address } from 'viem';
 import { fetchPointsHistoryOfUser } from '@/services/points.service';
 
-export const useFetchPointsHistoryOfUser = (userAddress?: Address) => {
+export const useFetchPointsHistoryOfUser = () => {
   return useQuery({
     queryKey: ['pointsHistory'],
     queryFn: async () => {
       return await fetchPointsHistoryOfUser();
     },
-    enabled: !!userAddress,
+    enabled: false,
   });
 };
