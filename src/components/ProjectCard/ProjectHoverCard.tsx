@@ -286,37 +286,43 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
               <div>
                 <div className='flex gap-2 items-center pb-1'>
                   {/* {getIpfsAddress(project.abc?.icon!)} */}
-                  <div className='w-6 h-6 relative rounded-full overflow-hidden'>
-                    <Image
-                      src={getIpfsAddress(
-                        project.abc?.icon! ||
-                          'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
-                      )}
-                      alt=''
-                      width={48}
-                      height={48}
-                    />
-                  </div>
 
                   {/* <IconABC /> */}
-                  <div className='text-gray-800 font-medium flex items-center gap-1'>
-                    {project?.abc?.tokenTicker} Price
-                    <div className='relative group '>
+                  {project.batchNumbersWithSafeTransactions?.length != 0 ? (
+                    <>
+                      <div className='w-6 h-6 relative rounded-full overflow-hidden'>
+                        <Image
+                          src={getIpfsAddress(
+                            project.abc?.icon! ||
+                              'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+                          )}
+                          alt=''
+                          width={48}
+                          height={48}
+                        />
+                      </div>
+                      <div className='text-gray-800 font-medium flex items-center gap-1'>
+                        {project?.abc?.tokenTicker} Price
+                        {/* <div className='relative group '>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] top-[-80px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                         The mint value of the ABC token will be within this
                         range, based on the amount of POL this project receives.
                       </div>
-                    </div>
-                    {isTokenListed ? (
-                      ' '
-                    ) : (
-                      <span className='bg-[#5326EC] mx-2 p-1 text-xs text-white rounded-md'>
-                        {' '}
-                        Pending LP Launch{' '}
-                      </span>
-                    )}
-                  </div>
+                    </div> */}
+                        {isTokenListed ? (
+                          ' '
+                        ) : (
+                          <span className='bg-[#5326EC] mx-2 p-1 text-xs text-white rounded-md'>
+                            {' '}
+                            Pending LP Launch{' '}
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    ''
+                  )}
                 </div>
                 {isTokenListed && (
                   <div className='mt-1 flex justify-between'>
