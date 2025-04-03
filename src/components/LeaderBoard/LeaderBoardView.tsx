@@ -83,7 +83,7 @@ export const LeaderBoardView = () => {
             ))}
           </div>
 
-          {leaderboardInfo?.users.map((user, idx) => {
+          {leaderboardInfo?.users?.map((user, idx) => {
             const rank = page * LIMIT + idx + 1;
             const isTop = rank <= 3;
             return (
