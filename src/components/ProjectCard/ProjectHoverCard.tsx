@@ -121,7 +121,15 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
-        setCurrentTokenPrice(1 / Number(price));
+        if (
+          project?.abc?.issuanceTokenAddress ===
+          '0x0b7a46e1af45e1eaadeed34b55b6fc00a85c7c68'
+        ) {
+          setCurrentTokenPrice(Number(price));
+        } else {
+          setCurrentTokenPrice(1 / Number(price));
+        }
+
         console.log(
           'Current Price  Address:',
           isTokenListed,
