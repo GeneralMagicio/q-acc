@@ -106,7 +106,7 @@ export const LeaderBoardView = () => {
                   )}
                   {user.name}
                 </div>
-                <div>{user.qaccPoints}</div>
+                <div>{user.qaccPoints.toLocaleString('en-US')}</div>
                 <div>{user.projectsFundedCount}</div>
               </div>
             );
