@@ -13,6 +13,9 @@ export const GET_USER_BY_ADDRESS = /* GraphQL */ `
       analysisScore
       hasEnoughGitcoinPassportScore
       hasEnoughGitcoinAnalysisScore
+      qaccPoints
+      qaccPointsMultiplier
+      projectsFundedCount
     }
   }
 `;
