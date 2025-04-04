@@ -27,8 +27,8 @@ const DonateIndex = () => {
           address,
         );
         setOwnsNFT(res);
-        setLoading(false);
       }
+      setLoading(false);
     };
     checkNFT();
   }, [projectData?.abc?.nftContractAddress, address, ownsNFT]);

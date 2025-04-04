@@ -106,6 +106,7 @@ export interface IProject {
     fundingManagerAddress?: string;
   };
   tributeClaimModuleAddress?: string;
+  tributeRecipientAddress?: string;
   status?: {
     id: string;
     symbol: string;
@@ -141,6 +142,7 @@ export interface IProject {
     networkId?: string;
     chainType?: string;
   }[];
+  hasEARound?: boolean;
   qfRounds?: {
     name: string;
     isActive: boolean;

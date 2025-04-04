@@ -16,9 +16,8 @@ export const calculateCapAmount = async (
   }
 
   let maxPOLAmount =
-    (activeRoundDetails?.roundUSDCloseCapPerProject ??
-      activeRoundDetails?.cumulativeUSDCapPerProject) /
-    activeRoundDetails?.tokenPrice;
+    activeRoundDetails?.roundPOLCloseCapPerProject ??
+    activeRoundDetails?.cumulativePOLCapPerProject;
 
   const roundRecords = await fetchProjectRoundRecords(
     projectId,

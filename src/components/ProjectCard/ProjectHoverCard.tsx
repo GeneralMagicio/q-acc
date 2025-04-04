@@ -46,6 +46,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
   useEffect(() => {
+    // console.log(
+    //   project?.title,
+    //   // project?.id + ' NFT address ' + project?.abc?.nftContractAddress,
+    //   project?.abc?.issuanceTokenAddress,
+    // );
     if (project?.id) {
       const fetchProjectDonations = async () => {
         const data = await fetchProjectDonationsById(

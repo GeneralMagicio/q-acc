@@ -301,13 +301,15 @@ const DonarSupportedProjects = ({
         >
           Claim Tokens
         </Button>
-        <Button
-          color={ButtonColor.Base}
-          className='flex justify-center shadow-lg '
-          onClick={onClickBreakdown}
-        >
-          Tokens & Contributions Breakdown <IconBreakdownArrow />
-        </Button>
+        <Link href={`/dashboard?tab=contributions&projectId=${projectId}`}>
+          <Button
+            color={ButtonColor.Base}
+            className='flex justify-center shadow-lg w-full '
+            onClick={onClickBreakdown}
+          >
+            Tokens & Contributions Breakdown <IconBreakdownArrow />
+          </Button>
+        </Link>
       </div>
     </div>
   );

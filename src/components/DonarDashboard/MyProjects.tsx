@@ -241,7 +241,8 @@ const MyProjects = () => {
   const claimableFeesFormated = Number(formatUnits(claimableFees, 18));
   const enableClaimButton = claimableFeesFormated > 0;
   const tributeModuleAvailable: boolean =
-    !!projectData?.tributeClaimModuleAddress;
+    !!projectData?.tributeClaimModuleAddress &&
+    !!projectData?.tributeRecipientAddress;
 
   const claimedTributesAndMintedTokenAmounts =
     useClaimedTributesAndMintedTokenAmounts(
@@ -258,6 +259,7 @@ const MyProjects = () => {
   const { claim } = useClaimCollectedFee({
     fundingManagerAddress: projectData?.abc?.fundingManagerAddress!,
     tributeModule: projectData?.tributeClaimModuleAddress!,
+    feeRecipient: projectData?.tributeRecipientAddress!,
     amount: claimableFees,
     onSuccess: () => {
       // do after 5 seconds
@@ -599,7 +601,7 @@ const MyProjects = () => {
             ></RoundCollectHeader>
           )}
 
-          {round1Started ? (
+          {projectData.hasEARound && round1Started ? (
             <div className='flex flex-col'>
               <RoundCollectHeader
                 type={'ea'}

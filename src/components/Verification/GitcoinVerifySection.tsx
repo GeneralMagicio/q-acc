@@ -14,7 +14,6 @@ import { GitcoinLow } from '../GitcoinVerifcationElements/GitcoinLow';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 import { formatAmount } from '@/helpers/donation';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export const GitcoinVerifySection = () => {
   const {
@@ -26,7 +25,6 @@ export const GitcoinVerifySection = () => {
   } = useGitcoinScore();
   const { isVerified } = usePrivado();
   const { data: allRounds } = useFetchAllRound();
-  const { data: POLPrice } = useFetchTokenPrice();
 
   const qaccRound: IQfRound | undefined = allRounds?.filter(
     round => round.__typename === 'QfRound',
@@ -35,10 +33,9 @@ export const GitcoinVerifySection = () => {
   let low_cap;
 
   if (qaccRound) {
-    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
+    if ('roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
       low_cap =
-        (qaccRound?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly || 1000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+        qaccRound?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly || 1000;
     }
   }
 

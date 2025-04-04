@@ -36,6 +36,11 @@ enum QuillState {
   INITIALIZED,
 }
 
+// Remove the Base64 image from the editor
+const removeBase64Image = (quill: any, range: any) => {
+  quill.deleteText(range.index - 1, 1);
+};
+
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   name,
   label,
@@ -75,6 +80,42 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           },
           theme: 'snow',
         });
+
+        quillInstance.root.addEventListener(
+          'paste',
+          async (event: ClipboardEvent) => {
+            event.preventDefault();
+            const clipboardData = event.clipboardData;
+            if (clipboardData) {
+              const items = Array.from(clipboardData.items);
+              for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                  event.preventDefault(); // Prevent default paste behavior for images
+                  const file = item.getAsFile();
+                  if (file) {
+                    try {
+                      const imageIpfsHash = await uploadToIPFS(file);
+                      if (imageIpfsHash) {
+                        const imageUrl = getIpfsAddress(imageIpfsHash);
+                        const range = quillInstance.getSelection();
+                        if (range) {
+                          removeBase64Image(quillInstance, range);
+                          quillInstance.insertEmbed(
+                            range.index,
+                            'image',
+                            imageUrl,
+                          );
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error uploading pasted image:', error);
+                    }
+                  }
+                }
+              }
+            }
+          },
+        );
         quillInstanceRef.current = quillInstance;
         quillStateRef.current = QuillState.INITIALIZED;
         console.log('OUT');

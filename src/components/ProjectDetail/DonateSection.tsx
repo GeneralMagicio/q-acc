@@ -77,7 +77,9 @@ const DonateSection = () => {
             supporters
           </p>
 
-          {!isRoundActive && (
+          <hr />
+
+          {isRoundActive && (
             <>
               {/* Percentage Bar */}
               <div className='flex flex-col gap-2 mt-12'>
@@ -182,7 +184,7 @@ const DonateSection = () => {
       <div className=' w-full  bg-white lg:min-h-[450px] h-full rounded-2xl p-6'>
         <div className='flex flex-col  h-full justify-between'>
           <div className=''>{renderContent()}</div>
-          <div className=' md:relative fixed bottom-0 w-full bg-white left-0 p-5 md:p-0 z-10'>
+          <div className=' md:relative fixed bottom-0 w-full bg-white left-0 p-5 md:p-0 z-20'>
             <ProjectDonateButton />
           </div>
         </div>

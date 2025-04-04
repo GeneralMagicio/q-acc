@@ -18,6 +18,8 @@ import { formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getAdjustedEndDate } from '@/helpers/date';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
+import config from '@/config/configuration';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -36,7 +38,26 @@ const ProjectDonateButton = () => {
     activeRoundDetails?.startDate,
     adjustedEndDate,
   );
+  const [isTokenListed, setIsTokenListed] = useState(false);
+  const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (projectData?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          projectData.abc.issuanceTokenAddress,
+          config.ERC_TOKEN_ADDRESS,
+        );
+        setIsTokenListed(isListed);
+        setCurrentTokenPrice(Number(price));
+      }
+    };
 
+    // fetchPoolAddress();
+  }, [
+    projectData?.abc?.issuanceTokenAddress,
+    currentTokenPrice,
+    isTokenListed,
+  ]);
   useEffect(() => {
     const updatePOLCap = async () => {
       if (activeRoundDetails) {
@@ -154,10 +175,60 @@ const ProjectDonateButton = () => {
       </div>
     </div>
   );
+
+  const listedPriceInfo = () => (
+    <div className='flex flex-col gap-2 font-redHatText'>
+      <div className='flex justify-start items-center gap-2 '>
+        <img
+          className='w-6 h-6 rounded-full'
+          src={getIpfsAddress(
+            projectData.abc?.icon! ||
+              'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+          )}
+        />
+        <div className='flex gap-2 items-center'>
+          <span className='text-[#4F576A] font-medium'>
+            {projectData?.abc?.tokenTicker} Price
+          </span>
+        </div>
+
+        {/* <IconInfo /> */}
+      </div>
+      <div className='flex items-center text-sm gap-2 text-[#82899A] flex-wrap justify-between'>
+        {isTokenListed &&
+        tokenPriceRangeStatus.isSuccess &&
+        tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+          <>
+            <h1 className=' flex-1 p-2 bg-[#F7F7F9] rounded-lg pr-10 '>
+              <span className='text-[#1D1E1F] font-medium'>
+                {currentTokenPrice.toFixed(2)}
+              </span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>
+              ${' '}
+              {Number(POLPrice) &&
+                formatNumber(Number(POLPrice) * currentTokenPrice)}
+            </span>
+          </>
+        ) : (
+          <>
+            <h1 className='p-2 bg-[#F7F7F9] rounded-lg pr-10'>
+              <span className='text-[#1D1E1F] font-medium'>---</span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>~$ ---</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   let currentState = 'early';
   return (
     <div className='flex flex-col gap-4'>
       {activeRoundDetails && PriceInfo()}
+      {isTokenListed && listedPriceInfo()}
       {currentState === EDonationCardStates.beforeFirstRound ? (
         <Button
           color={ButtonColor.Pink}
@@ -167,25 +238,38 @@ const ProjectDonateButton = () => {
         </Button>
       ) : (
         <>
-          <Button
-            color={ButtonColor.Pink}
-            className='w-full justify-center'
-            onClick={handleSupport}
-            disabled={
-              (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
-                !ownsNFT) ||
-              progress >= 100 ||
-              remainingTime === 'Time is up!' ||
-              remainingTime === '--:--:--'
-            }
-            loading={loadingNFTCheck}
-          >
-            {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
-              ? 'Support This Project'
-              : progress >= 100
-                ? 'Project Maxed Out'
-                : 'Support This Project'}
-          </Button>
+          {isTokenListed ? (
+            <Button
+              color={ButtonColor.Pink}
+              className='w-full justify-center'
+              onClick={() => {
+                const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${projectData?.abc?.issuanceTokenAddress}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              Get ${projectData?.abc?.tokenTicker} on QuickSwap
+            </Button>
+          ) : (
+            <Button
+              color={ButtonColor.Pink}
+              className='w-full justify-center'
+              onClick={handleSupport}
+              disabled={
+                (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
+                  !ownsNFT) ||
+                progress >= 100 ||
+                remainingTime === 'Time is up!' ||
+                remainingTime === '--:--:--'
+              }
+              loading={loadingNFTCheck}
+            >
+              {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+                ? 'Buy Token'
+                : progress >= 100
+                  ? 'Project Maxed Out'
+                  : 'Buy Token'}
+            </Button>
+          )}
 
           {activeRoundDetails ? (
             activeRoundDetails.__typename === 'EarlyAccessRound' ? (

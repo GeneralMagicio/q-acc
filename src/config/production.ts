@@ -1,4 +1,6 @@
-import { polygon, polygonZkEvm } from 'wagmi/chains';
+import { polygon, polygonZkEvm } from '@reown/appkit/networks';
+import { polygon as viemPolygon } from 'wagmi/chains';
+// import { polygon, polygonZkEvm } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
@@ -15,12 +17,10 @@ const config: EnvConfig = {
   AUTH_BASE_ROUTE:
     process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1',
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
-  NETWORK_RPC_ADDRESS:
-    'https://polygon-mainnet.g.alchemy.com/v2/ua3z8XEuKftFrdeKwZrBBFW_UdAQyl0h',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: polygon,
-    chainName: 'Polygon',
+    chain: viemPolygon,
+    chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
       'did:iden3:privado:main:2SfreFymXBFkp8GqF8DXegUHVrEYNdsqgmkZ9YjbKs',
@@ -35,6 +35,7 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
+  SQUID_INTEGRATOR_ID: '',
 };
 
 export default config;

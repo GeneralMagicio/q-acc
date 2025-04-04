@@ -1,4 +1,5 @@
-import { Address, Chain } from 'viem';
+import { Address, Chain as viemChain } from 'viem';
+import { Chain } from '@reown/appkit/networks';
 import {
   PrivadoContractMethodV1,
   PrivadoContractMethodV2,
@@ -13,10 +14,9 @@ export type EnvConfig = {
   AUTH_BASE_ROUTE: string;
   SCAN_URL: string;
   GIVETH_GQL_ENDPOINT: string;
-  NETWORK_RPC_ADDRESS: string;
   INDEXER_GRAPHQL_URL: string;
   privadoConfig: {
-    chain: Chain;
+    chain: viemChain;
     chainName: string;
     contractAddress: Address;
     requestId: number;
@@ -29,4 +29,5 @@ export type EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: number;
   MINIMUM_DONATION_AMOUNT: number;
   MATCHING_FUND_ADDRESS: string[];
+  SQUID_INTEGRATOR_ID: string;
 };

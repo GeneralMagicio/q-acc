@@ -1,27 +1,32 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   useAccount,
   useWaitForTransactionReceipt,
   useSwitchChain,
+  useSendTransaction,
 } from 'wagmi';
+import { getConnectorClient } from '@wagmi/core';
 import { useRouter } from 'next/navigation';
-import { createPublicClient, http } from 'viem';
-import Link from 'next/link';
-import { LiFiWidget, WidgetDrawer } from '@lifi/widget';
+import { Account, Chain, Client, parseEther, Transport } from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
+import { BrowserProvider, JsonRpcSigner } from 'ethers';
+import debounce from 'lodash/debounce';
 
 import { IconRefresh } from '../Icons/IconRefresh';
-import { IconMatic } from '../Icons/IconMatic';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconShare } from '../Icons/IconShare';
 
 import DonateSuccessPage from './DonateSuccessPage';
 import { Button, ButtonColor } from '../Button';
 
-import { fetchTokenDetails, handleErc20Transfer } from '@/helpers/token';
+import {
+  convertDonationAmount,
+  fetchBalanceWithDecimals,
+  formatBalance,
+} from '@/helpers/token';
 import config from '@/config/configuration';
 import {
   createDraftDonation,
@@ -36,7 +41,6 @@ import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
@@ -44,7 +48,6 @@ import {
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { IconAlertTriangle } from '../Icons/IconAlertTriangle';
-import { IconArrowRight } from '../Icons/IconArrowRight';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { EligibilityCheckToast } from './EligibilityCheckToast';
@@ -52,8 +55,40 @@ import { GitcoinEligibilityModal } from '../Modals/GitcoinEligibilityModal';
 import { fetchProjectUserDonationCapKyc } from '@/services/user.service';
 import { ZkidEligibilityModal } from '../Modals/ZkidEligibilityModal';
 import { TermsConditionModal } from '../Modals/TermsConditionModal';
+import SelectChainModal, {
+  POLYGON_POS_CHAIN_ID,
+  POLYGON_POS_CHAIN_IMAGE,
+} from './SelectChainModal';
+import {
+  approveSpending,
+  convertToTokenUnits,
+  getRoute,
+  SquidTokenType,
+  SwapData,
+} from '@/helpers/squidTransactions';
+import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
+import { UserCapUpdateModal } from '../Modals/UserCapUpdateModal';
+import { wagmiAdapter } from '@/config/wagmi';
 
 const SUPPORTED_CHAIN = config.SUPPORTED_CHAINS[0];
+export function clientToSigner(client: Client<Transport, Chain, Account>) {
+  const { account, chain, transport } = client;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new BrowserProvider(transport, network);
+  const signer = new JsonRpcSigner(provider, account.address);
+  return signer;
+}
+
+export async function getEthersSigner({ chainId }: { chainId?: number } = {}) {
+  const client = await getConnectorClient(wagmiAdapter.wagmiConfig, {
+    chainId,
+  });
+  return clientToSigner(client);
+}
 
 interface ITokenSchedule {
   message: string;
@@ -95,13 +130,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const { data: user } = useFetchUser();
   const [inputAmount, setInputAmount] = useState<string>('');
   const [tokenDetails, setTokenDetails] = useState<any>();
-  const { data: POLPrice } = useFetchTokenPrice();
+  const { data: POLPrice } = useFetchPOLPriceSquid();
 
   const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
   const [donateDisabled, setDonateDisabled] = useState(true);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [flashMessage, setFlashMessage] = useState('');
   const [userDonationCap, setUserDonationCap] = useState<number>(0);
   const [userUnusedCapOnGP, setUserUnusedCapOnGP] = useState(0);
@@ -111,8 +147,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [inputBalanceError, setInputBalanceError] = useState<boolean>(false);
   const [userDonationCapError, setUserDonationCapError] =
     useState<boolean>(false);
-
-  const drawerRef = useRef<WidgetDrawer>(null);
 
   let { isVerified } = usePrivado();
 
@@ -137,8 +171,63 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [showGitcoinModal, setShowGitcoinModal] = useState(false);
   const [showZkidModal, setShowZkidModal] = useState(false);
   const [showTermsConditionModal, setShowTermsConditionModal] = useState(false);
+  const [showUserCapModal, setshowUserCapModal] = useState(false);
   const [donationId, setDonationId] = useState<number>(0);
   const router = useRouter();
+
+  const [showChainTokenModal, setShowChainTokenModal] = useState(false);
+
+  const [selectedChain, setSelectedChain] = useState<{
+    id: string | null;
+    imageUrl: string;
+  }>({
+    id: POLYGON_POS_CHAIN_ID,
+    imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
+  });
+  const [selectedToken, setSelectedToken] = useState<SquidTokenType>({
+    symbol: 'POL',
+    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    chainId: '137',
+    name: 'POL',
+    decimals: 18,
+    type: 'evm',
+    logoURI:
+      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg',
+    usdPrice: POLPrice,
+    coingeckoId: 'polygon-ecosystem-token',
+    subGraphIds: [],
+    subGraphOnly: false,
+    active: true,
+    balance: 0,
+  });
+
+  const [squidTransactionRequest, setSquidTransactionRequest] =
+    useState<any>(null);
+  const [squidRouteLoading, setSquidRouteLoading] = useState(false);
+  const [isSquidTransaction, setIsSquidTransaction] = useState(false);
+
+  const [minimumContributionAmount, setMinimumContributionAmount] =
+    useState<number>(config.MINIMUM_DONATION_AMOUNT);
+
+  // let provider = new ethers.BrowserProvider(window.ethereum);
+
+  useEffect(() => {
+    const fetchConversion = async () => {
+      const amount = await convertDonationAmount(selectedToken);
+      console.log(amount);
+      setMinimumContributionAmount(amount ?? config.MINIMUM_DONATION_AMOUNT);
+    };
+
+    fetchConversion();
+  }, [selectedToken]);
+
+  const handleChainTokenSelection = (chain: any, token: any) => {
+    setSelectedChain(chain);
+    setSelectedToken(token);
+    setInputAmount('');
+    setSquidTransactionRequest(null);
+    setShowChainTokenModal(false);
+  };
 
   const handleShare = () => {
     openShareModal();
@@ -150,17 +239,22 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         Number(projectData?.id),
       );
       const { gitcoinPassport, zkId } = userCapp || {};
-      setUserUnusedCapOnGP(gitcoinPassport?.unusedCap || 0);
+      const convertedUnusedCapOnGP = await convertDonationAmount(
+        selectedToken,
+        gitcoinPassport?.unusedCap,
+      );
+      setUserUnusedCapOnGP(convertedUnusedCapOnGP || 0);
       const userCap =
         floor(Number(zkId?.unusedCap)) ||
         floor(Number(gitcoinPassport?.unusedCap)) ||
         0;
+      const convertedCap = await convertDonationAmount(selectedToken, userCap);
       const res = remainingDonationAmount / 2 - 1;
       if (progress >= 90) {
         console.log('Res', res, progress);
-        setUserDonationCap(Math.min(res, Number(userCap)));
+        setUserDonationCap(Math.min(res, Number(convertedCap)));
       } else {
-        setUserDonationCap(userCap);
+        setUserDonationCap(Number(convertedCap));
       }
     }
   };
@@ -178,245 +272,20 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setProgress(tempprogress);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (projectData) {
-        await updatePOLCap();
-        await getDonationCap();
-      }
-    };
-
-    fetchData();
-  }, [
-    projectData,
-    activeRoundDetails,
-    remainingDonationAmount,
-    maxPOLCap,
-    progress,
-  ]);
-
-  // LIFI LOGIC
-  const toggleWidget = () => {
-    drawerRef.current?.toggleDrawer();
-  };
-
-  // New token price logic
-
-  const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxPOLCap,
-    contractAddress: projectData?.abc?.fundingManagerAddress || '',
-  });
-
-  const { data: allRounds } = useFetchAllRound();
-  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
-    project: projectData,
-    allRounds,
-  });
-
-  const [selectedPercentage, setSelectedPercentage] = useState(0);
-
-  const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
-    message:
-      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
-    toolTip:
-      'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
-  });
-
-  const client = createPublicClient({
-    chain: chain,
-    transport: http(config.NETWORK_RPC_ADDRESS),
-  });
-  const {
-    isLoading: isConfirming,
-    isSuccess: isConfirmed,
-    status,
-  } = useWaitForTransactionReceipt({
-    hash,
-  });
-  useEffect(() => {
-    if (hash !== undefined && donationId === 0) {
-      setIsConfirming(true);
-    } else {
-      setIsConfirming(false);
-    }
-  }, [isConfirming, setIsConfirming, hash, donationId]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: any) => {
-      if (isConfirming) {
-        event.preventDefault();
-
-        event.returnValue =
-          'Transaction is in progress. Are you sure you want to leave?';
-        return 'Transaction is in progress. Are you sure you want to leave?';
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [isConfirming, donationId]);
-
-  const tokenAddress = config.ERC_TOKEN_ADDRESS;
-
-  useEffect(() => {
-    getTokenDetails();
-  }, [address, tokenAddress, chain]);
-
-  // if user allready accepted terms and conditions set it to true
-  // useEffect(() => {
-  //   if (user && user.acceptedToS) {
-  //     setTerms(true);
-  //   }
-  // }, [user]);
-
-  useEffect(() => {
-    // Update donateDisabled based on conditions
-    if (
-      // !terms ||
-      !isConnected ||
-      !(
-        (parseFloat(inputAmount) >= config.MINIMUM_DONATION_AMOUNT)
-        // &&
-        // parseFloat(inputAmount) <= userDonationCap
-      ) ||
-      parseFloat(inputAmount) > remainingDonationAmount ||
-      parseFloat(inputAmount) > tokenDetails?.formattedBalance
-    ) {
-      setDonateDisabled(true);
-    } else {
-      setDonateDisabled(false);
-    }
-  }, [terms, isConnected, inputAmount, userDonationCap]);
-
-  useEffect(() => {
-    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
-      const message =
-        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
-      const toolTip =
-        'Tokens are locked for a period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
-
-      setTokenSchedule({ message, toolTip });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isConfirmed && !hasSavedDonation) {
-      const token = config.ERC_TOKEN_SYMBOL;
-
-      handleSaveDonation({
-        projectId: parseInt(projectData?.id),
-        transactionNetworkId: chain?.id,
-        amount: parseFloat(inputAmount),
-        token,
-        transactionId: hash,
-        tokenAddress,
-      });
-
-      setHasSavedDonation(true);
-    }
-  }, [isConfirmed, hasSavedDonation]);
-
-  const getTokenDetails = async () => {
-    if (!address) return;
-    const data = await fetchTokenDetails({
-      tokenAddress,
-      address,
-      client,
-    });
-    console.log('Data', data, chain);
-    setTokenDetails(data);
-  };
-
-  const handleSaveDonation = async ({
-    projectId,
-    transactionNetworkId,
-    amount,
-    token,
-    transactionId,
-    tokenAddress,
-  }: any) => {
-    try {
-      const data = await saveDonations(
-        projectId,
-        transactionNetworkId,
-        amount,
-        token,
-        transactionId,
-        tokenAddress,
-        anoynmous,
-      );
-      setDonationId(Number(data));
-    } catch (error) {
-      console.log('Save donation error', error);
-      setFlashMessage('Error saving  donation : ' + error);
-      setHash(undefined);
-      setHasSavedDonation(false);
-      setDonateDisabled(false);
-    }
-  };
-
-  const handleDonate = async () => {
+  const handleDonateClick = async () => {
     setDonateDisabled(true);
-    try {
-      await createDraftDonation(
-        parseInt(projectData?.id),
-        chain?.id!,
-        parseFloat(inputAmount),
-        config.ERC_TOKEN_SYMBOL,
-        projectData?.addresses[0].address,
-        tokenAddress,
-      );
-
-      const hash = await handleErc20Transfer({
-        inputAmount,
-        tokenAddress,
-        projectAddress: projectData?.addresses[0].address,
-      });
-
-      setHash(hash);
-    } catch (ContractFunctionExecutionError) {
-      setFlashMessage('An error occurred.');
-      console.log(ContractFunctionExecutionError);
-      setDonateDisabled(false);
-    }
-  };
-
-  const handleDonateClick = () => {
-    setDonateDisabled(true);
-    console.log(parseFloat(inputAmount));
-    console.log('isVerified', isVerified);
-    // if (!isVerified) {
-    //   if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-    //     console.log('User is not verified with Privado ID');
-    //     setShowZkidModal(true);
-    //     return;
-    //   } else if (
-    //     (user?.analysisScore || 0) < config.GP_ANALYSIS_SCORE_THRESHOLD &&
-    //     (user?.passportScore || 0) < config.GP_SCORER_SCORE_THRESHOLD
-    //   ) {
-    //     setShowGitcoinModal(true);
-    //     console.log('User is not verified with Gitcoin passport');
-    //     return;
-    //   }
-    // }
-
     if (!isVerified) {
       if (
         activeRoundDetails &&
-        'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
           activeRoundDetails &&
         parseFloat(inputAmount) >
-          activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly /
-            Number(activeRoundDetails?.tokenPrice)
+          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
       ) {
         {
           console.log(
             'User is not verified with Privado ID',
-            activeRoundDetails?.tokenPrice,
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
           );
           setShowZkidModal(true);
           setDonateDisabled(false);
@@ -444,27 +313,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setShowTermsConditionModal(true);
       return;
     }
-    if (chain?.id !== SUPPORTED_CHAIN.id) {
-      {
-        switchChain({ chainId: SUPPORTED_CHAIN.id });
-      }
-      console.log('chain', chain?.id);
-      setFlashMessage('Wrong Network ! Switching  to Polygon Zkevm ');
-      setDonateDisabled(false);
-      return;
-    }
-    // if (!isVerified) {
-    //   openPrivadoModal();
-    //   console.log('User is not verified with Privado ID');
-    //   return;
-    // }
-
     if (
-      parseFloat(inputAmount) < config.MINIMUM_DONATION_AMOUNT ||
+      parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
     ) {
       console.log(
-        `The minimum donation amount is ${config.MINIMUM_DONATION_AMOUNT}.`,
+        `The minimum donation amount is ${minimumContributionAmount}.`,
       );
       setDonateDisabled(false);
 
@@ -472,6 +326,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     }
     if (parseFloat(inputAmount) > userDonationCap) {
       console.log('The donation amount exceeds the cap limit.');
+      setshowUserCapModal(true);
       setDonateDisabled(false);
       return;
     }
@@ -490,11 +345,388 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setDonateDisabled(false);
       return;
     }
+
     handleDonate();
   };
 
-  const handleRefetch = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (projectData) {
+        await updatePOLCap();
+        await getDonationCap();
+      }
+    };
+
+    fetchData();
+  }, [
+    projectData,
+    activeRoundDetails,
+    remainingDonationAmount,
+    maxPOLCap,
+    progress,
+    selectedToken,
+    handleDonateClick,
+  ]);
+
+  useEffect(() => {
+    if (isConnected && chain?.id !== SUPPORTED_CHAIN.id) {
+      switchChain({ chainId: SUPPORTED_CHAIN.id });
+    }
+  }, [isConnected]);
+
+  const tokenPriceRange = useTokenPriceRange({
+    contributionLimit: maxPOLCap,
+    contractAddress: projectData?.abc?.fundingManagerAddress || '',
+  });
+
+  const { data: allRounds } = useFetchAllRound();
+  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+    project: projectData,
+    allRounds,
+  });
+
+  const [selectedPercentage, setSelectedPercentage] = useState(0);
+
+  const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
+    message:
+      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
+    toolTip:
+      'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
+  });
+
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    status,
+  } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  // useEffect(() => {
+  //   if (hash !== undefined && donationId === 0) {
+  //     setIsConfirming(true);
+  //   } else {
+  //     setIsConfirming(false);
+  //   }
+  // }, [isConfirming, setIsConfirming, hash, donationId]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      if (isConfirming) {
+        event.preventDefault();
+
+        event.returnValue =
+          'Transaction is in progress. Are you sure you want to leave?';
+        return 'Transaction is in progress. Are you sure you want to leave?';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isConfirming, donationId]);
+
+  const tokenAddress = config.ERC_TOKEN_ADDRESS;
+
+  useEffect(() => {
     getTokenDetails();
+  }, [address, tokenAddress, selectedToken]);
+
+  // if user allready accepted terms and conditions set it to true
+  // useEffect(() => {
+  //   if (user && user.acceptedToS) {
+  //     setTerms(true);
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    // Update donateDisabled based on conditions
+    if (
+      // !terms ||
+      !isConnected ||
+      !(
+        (parseFloat(inputAmount) >= minimumContributionAmount)
+        // &&
+        // parseFloat(inputAmount) <= userDonationCap
+      ) ||
+      parseFloat(inputAmount) > remainingDonationAmount ||
+      parseFloat(inputAmount) > tokenDetails?.formattedBalance
+    ) {
+      setDonateDisabled(true);
+    } else {
+      setDonateDisabled(false);
+    }
+  }, [terms, isConnected, inputAmount, userDonationCap]);
+
+  useEffect(() => {
+    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
+      const message =
+        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
+      const toolTip =
+        'Tokens are locked for a period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
+
+      setTokenSchedule({ message, toolTip });
+    }
+  }, []);
+
+  const { data: noramalTransferTx, sendTransactionAsync } =
+    useSendTransaction();
+
+  useEffect(() => {
+    if (isConfirmed && !hasSavedDonation) {
+      const token = config.ERC_TOKEN_SYMBOL;
+
+      if (isSquidTransaction) {
+        const swapData: SwapData = {
+          squidRequestId: squidTransactionRequest?.requestId,
+          firstTxHash: hash!,
+          fromChainId: Number(selectedChain.id),
+          toChainId: Number(137),
+          fromTokenAddress: selectedToken.address,
+          toTokenAddress: tokenAddress,
+          fromAmount: parseFloat(inputAmount),
+          toAmount: parseFloat(inputAmount),
+          fromTokenSymbol: selectedToken.symbol,
+          toTokenSymbol: config.ERC_TOKEN_SYMBOL,
+        };
+
+        handleSaveDonation({
+          projectId: parseInt(projectData?.id),
+          transactionNetworkId: 137, //chain?.id,
+          amount: parseFloat(inputAmount),
+          token,
+          transactionId: hash,
+          tokenAddress,
+          swapData,
+        });
+      } else {
+        handleSaveDonation({
+          projectId: parseInt(projectData?.id),
+          transactionNetworkId: 137, //chain?.id,
+          amount: parseFloat(inputAmount),
+          token,
+          transactionId: hash,
+          tokenAddress,
+        });
+      }
+
+      setHasSavedDonation(true);
+    }
+  }, [isConfirmed, hasSavedDonation]);
+
+  const getTokenDetails = async () => {
+    if (!address) return;
+    // const data = await fetchTokenDetails({
+    //   tokenAddress,
+    //   address,
+    //   client,
+    // });
+    const data = await fetchBalanceWithDecimals(
+      selectedToken.address as `0x${string}`,
+      address,
+    );
+    setTokenDetails(data);
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const regex = /^\d*\.?\d{0,5}$/;
+
+    if (regex.test(value)) {
+      const inputAmount = parseFloat(value);
+      if (activeRoundDetails) {
+        if (
+          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
+        ) {
+          return; // Exit without updating the input
+        }
+      }
+
+      setInputAmount(value);
+
+      if (inputAmount < minimumContributionAmount) {
+        setInputErrorMessage(
+          `Minimum contribution: ${minimumContributionAmount} POL`,
+        );
+        return;
+      } else {
+        setInputErrorMessage(null);
+      }
+      if (inputAmount > tokenDetails.formattedBalance) {
+        setInputBalanceError(true);
+        return;
+      } else {
+        setInputBalanceError(false);
+      }
+
+      const fromAmount = convertToTokenUnits(
+        inputAmount.toString(),
+        selectedToken.decimals || 18,
+      );
+
+      // param for getting route of transaction
+      const params = {
+        fromAddress: address,
+        fromChain: selectedChain.id,
+        fromToken: selectedToken.address,
+        fromAmount: fromAmount,
+        toChain: '137',
+        toToken: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        toAddress: projectData?.addresses[0].address, // '0x4ce6B0F604E1036AFFD0826764b51Fb72310964c',
+        quoteOnly: false,
+      };
+
+      const debouncedGetRoute = debounce(async () => {
+        try {
+          const routeResult = await getRoute(params);
+          const route = routeResult.data.route;
+          setSquidTransactionRequest(route.transactionRequest);
+        } catch (error) {
+          setFlashMessage('No route round');
+          console.error('Error fetching route:', error);
+        } finally {
+          setSquidRouteLoading(false);
+        }
+      }, 1500);
+
+      console.log(selectedToken, selectedChain);
+
+      if (
+        selectedToken.address ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedChain.id === '137'
+      ) {
+        return;
+      } else {
+        setSquidRouteLoading(true);
+        debouncedGetRoute();
+      }
+    }
+  };
+
+  const handleSaveDonation = async ({
+    projectId,
+    transactionNetworkId,
+    amount,
+    token,
+    transactionId,
+    tokenAddress,
+    swapData,
+  }: any) => {
+    try {
+      const data = await saveDonations(
+        projectId,
+        transactionNetworkId,
+        amount,
+        token,
+        transactionId,
+        tokenAddress,
+        anoynmous,
+        swapData,
+      );
+      setDonationId(Number(data));
+    } catch (error) {
+      console.log('Save donation error', error);
+      setFlashMessage('Error saving  donation : ' + error);
+      setHash(undefined);
+      setHasSavedDonation(false);
+      setDonateDisabled(false);
+    }
+  };
+
+  const handleDonate = async () => {
+    setDonateDisabled(true);
+    setIsButtonLoading(true);
+    try {
+      await createDraftDonation(
+        parseInt(projectData?.id),
+        137,
+        parseFloat(inputAmount),
+        config.ERC_TOKEN_SYMBOL,
+        projectData?.addresses[0].address,
+        selectedToken.address,
+      );
+
+      if (
+        selectedToken.address ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedChain.id === '137'
+      ) {
+        await handleNormalTranfer();
+        console.log("handle normal transfeer'");
+      } else {
+        await handleApproveSpendingAndSendTransaction();
+      }
+    } catch (ContractFunctionExecutionError) {
+      setFlashMessage('An error occurred.');
+      console.log(ContractFunctionExecutionError);
+      setDonateDisabled(false);
+      setIsButtonLoading(false);
+    } finally {
+      setIsButtonLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (noramalTransferTx) {
+      setHash(noramalTransferTx);
+      console.log('Transaction hash updated:', noramalTransferTx);
+    }
+  }, [noramalTransferTx]);
+
+  const handleNormalTranfer = async () => {
+    try {
+      const to = projectData?.addresses[0].address; // '0x2E555fCf3A9a91C2971C6205D3f8F42Cbbfc9d5A' as `0x${string}`;
+      const value = inputAmount;
+      await sendTransactionAsync({ to, value: parseEther(value) });
+    } catch (e) {
+      setInputAmount('');
+      setSquidTransactionRequest(null);
+      setIsButtonLoading(false);
+      console.log('Error in normal tx ', e);
+    } finally {
+    }
+  };
+
+  const handleApproveSpendingAndSendTransaction = async () => {
+    try {
+      const signer = await getEthersSigner();
+
+      const amount = convertToTokenUnits(inputAmount, selectedToken.decimals);
+
+      // approve from user to user their token
+      await approveSpending(
+        squidTransactionRequest?.target,
+        selectedToken.address,
+        amount,
+      );
+
+      const tx = await signer.sendTransaction({
+        to: squidTransactionRequest.target,
+        data: squidTransactionRequest.data,
+        value: squidTransactionRequest.value,
+        // gasPrice: (await provider.getFeeData()).gasPrice,
+        gasLimit: squidTransactionRequest.gasLimit,
+      });
+      console.log(tx.hash);
+      console.log('Tx Request', squidTransactionRequest);
+      setIsSquidTransaction(true);
+      setHash(tx.hash as `0x${string}`);
+      const txReceipt = await tx.wait();
+      console.log(txReceipt);
+    } catch (e) {
+      setSquidTransactionRequest(null);
+      setInputAmount('');
+      setIsButtonLoading(false);
+      console.log('Error in Approve or sending tx ', e);
+    }
+  };
+
+  const handleRefetch = async () => {
+    await getTokenDetails();
     console.log('Refetched', parseFloat(tokenDetails.formattedBalance));
   };
 
@@ -505,14 +737,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         setInputBalanceError(false);
         return null;
       } else {
-        const remainingBalance = floor(tokenDetails?.formattedBalance);
-        const amount = floor(
-          (Math.min(remainingBalance, userDonationCap) * percentage) / 100,
-        );
+        const remainingBalance = tokenDetails?.formattedBalance;
 
-        setInputAmount(Math.min(amount, userDonationCap).toString());
-        setUserDonationCapError(userDonationCap === 0);
-        setInputBalanceError(remainingBalance === 0);
+        const amount =
+          (Math.min(remainingBalance, userDonationCap) * percentage) / 100;
+        const formattedAmount = Math.min(amount, userDonationCap).toFixed(2);
+
+        setInputAmount(formattedAmount);
+        // setUserDonationCapError(userDonationCap === 0);
+        // setInputBalanceError(remainingBalance === 0);
 
         return percentage;
       }
@@ -522,44 +755,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleRemainingCapClick = () => {
     const remainingBalance = floor(tokenDetails?.formattedBalance);
     setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    const regex = /^\d*\.?\d{0,2}$/;
-
-    if (regex.test(value)) {
-      const inputAmount = parseFloat(value);
-      if (activeRoundDetails) {
-        if (
-          inputAmount >
-          activeRoundDetails?.cumulativeUSDCapPerUserPerProject /
-            activeRoundDetails?.tokenPrice
-        ) {
-          return; // Exit without updating the input
-        }
-      }
-
-      setInputAmount(value);
-
-      if (inputAmount < config.MINIMUM_DONATION_AMOUNT) {
-        setInputErrorMessage(
-          `Minimum contribution: ${config.MINIMUM_DONATION_AMOUNT} POL`,
-        );
-      }
-      // else if (inputAmount > userDonationCap) {
-      //   setInputErrorMessage('Amount should be less than the remaining cap');
-      // }
-      else {
-        setInputErrorMessage(null);
-      }
-      if (inputAmount > tokenDetails.formattedBalance) {
-        setInputBalanceError(true);
-      } else {
-        setInputBalanceError(false);
-      }
-    }
   };
 
   // Handle Terms checkbox change event
@@ -608,6 +803,17 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         onContinue={handleDonateClick}
         onClose={() => setShowTermsConditionModal(false)}
       />
+      <SelectChainModal
+        isOpen={showChainTokenModal}
+        onClose={() => setShowChainTokenModal(false)}
+        onSelection={handleChainTokenSelection}
+      />
+      <UserCapUpdateModal
+        isOpen={showUserCapModal}
+        onClose={() => setshowUserCapModal(false)}
+        userDonationCap={userDonationCap}
+        selectedTokenSymbol={selectedToken.symbol}
+      />
       <div className='container w-full flex  flex-col lg:flex-row gap-10 '>
         <div className='p-6 lg:w-2/3 flex flex-col gap-8 bg-white rounded-2xl shadow-[0px 3px 20px 0px rgba(212, 218, 238, 0.40)] font-redHatText'>
           <EligibilityCheckToast />
@@ -620,7 +826,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 <span className='font-medium'>
                   {!tokenDetails
                     ? 'Loading...'
-                    : `${formatAmount(Math.floor(tokenDetails?.formattedBalance * 100) / 100)} ${tokenDetails?.symbol}`}
+                    : `${formatBalance(Number(tokenDetails?.formattedBalance))} ${selectedToken?.symbol}`}
                 </span>
                 <button onClick={handleRefetch}>
                   <IconRefresh size={16} />
@@ -642,17 +848,60 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           {/* Input Box */}
 
           <div className='flex flex-col gap-2 font-redHatText'>
-            <div className='border rounded-lg flex relative '>
-              <div className='md:w-40 flex gap-4 p-4 border '>
-                <IconMatic size={24} />
-                <h1 className=' font-medium'>POL</h1>
+            <div className='border rounded-lg flex relative  '>
+              <div
+                className='md:w-[40%] flex gap-4 p-4 border  justify-between items-center cursor-pointer'
+                onClick={() => setShowChainTokenModal(true)}
+              >
+                <div className='flex gap-2 items-center'>
+                  <div className='flex relative px-2'>
+                    <div className='flex items-center'>
+                      <div className='w-6 h-6  absolute right-6 p-[2px] bg-[#F7F7F9] rounded-full'>
+                        <img
+                          className='rounded-full  w-full'
+                          src={
+                            selectedChain?.imageUrl || POLYGON_POS_CHAIN_IMAGE
+                          }
+                          alt='Chain Logo'
+                        />
+                      </div>
+                      <div className='w-6 h-6 z-10 p-[2px] bg-[#F7F7F9] rounded-full'>
+                        <img
+                          className='rounded-full  w-full'
+                          src={
+                            selectedToken?.logoURI || POLYGON_POS_CHAIN_IMAGE
+                          }
+                          alt='Token Logo'
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h1 className=' font-medium text-[#1D1E1F] font-redHatText'>
+                    {selectedToken?.symbol}
+                  </h1>
+                </div>
+                <div>
+                  <svg
+                    width='16'
+                    height='16'
+                    viewBox='0 0 16 16'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M4.14279 6.126L7.55548 10.7619C7.61049 10.8366 7.67873 10.8965 7.75551 10.9376C7.8323 10.9787 7.91581 11 8.00032 11C8.08483 11 8.16835 10.9787 8.24513 10.9376C8.32191 10.8965 8.39015 10.8366 8.44516 10.7619L11.8579 6.126C12.1835 5.6835 11.9135 5 11.413 5H4.58665C4.08614 5 3.81612 5.6835 4.14279 6.126Z'
+                      fill='#1D1E1F'
+                    />
+                  </svg>
+                </div>
               </div>
               <input
                 onChange={handleInputChange}
                 value={inputAmount}
                 type='number'
                 disabled={isConfirming}
-                className='w-full  text-sm  md:text-base border rounded-lg  px-4'
+                className='w-full  text-sm  md:text-base border rounded-r-lg  px-4'
                 onWheel={(e: any) => e.target.blur()}
               />
 
@@ -663,7 +912,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   : formatAmount(
                       round(
                         parseFloat(inputAmount) *
-                          Number(activeRoundDetails?.tokenPrice || 1),
+                          Number(selectedToken.usdPrice),
                       ),
                     )}
               </span>
@@ -683,13 +932,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     {userDonationCap !== null && userDonationCap !== undefined
                       ? formatAmount(Math.floor(userDonationCap * 100) / 100)
                       : '---'}{' '}
-                    POL
+                    {selectedToken?.symbol}
                     <div className='relative group'>
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                        Caps are set at the start of the round and may be
-                        changed during the round in the event of significant
-                        fluctuation in POL-USD rate over a 48 hour period.
+                        Caps are set at the start of the round in POL.
                       </div>
                     </div>
                   </span>
@@ -713,57 +960,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   <span
                     className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                   >
-                    {config.MINIMUM_DONATION_AMOUNT} POL
+                    {formatBalance(minimumContributionAmount || 20)}{' '}
+                    {selectedToken.symbol}
                   </span>
                 </h2>
               </div>
             </div>
           </div>
-
-          {/* LIFI */}
-
-          <div className='px-4 py-2 bg-[#F7F7F9]  rounded-lg flex flex-col md:flex-row  justify-between font-redHatText items-center'>
-            <div>
-              <span className='text-[#4F576A] font-medium'>
-                Need POL or ETH (for gas) ?
-              </span>
-            </div>
-
-            <div className='flex gap-2 font-medium items-center'>
-              <button
-                className='px-4 py-1 bg-white rounded-lg  hover:border-[#5326EC] border border-white'
-                onClick={toggleWidget}
-              >
-                <span className='text-[#5326EC]'>Use LI.FI</span>
-              </button>
-              <LiFiWidget
-                ref={drawerRef}
-                config={{
-                  variant: 'drawer',
-                  fromChain: 137,
-                  fee: 0.006,
-                  fromToken: '0x0000000000000000000000000000000000001010', // POL token address in polygon
-                  toChain: SUPPORTED_CHAIN.id,
-                  toToken: '0x22B21BedDef74FE62F031D2c5c8F7a9F8a4b304D', //POL token address in zkevm
-                }}
-                integrator='general-magic'
-              />
-
-              <Link
-                target='_blank'
-                href={
-                  'https://giveth.notion.site/Get-ETH-and-POL-on-Polygon-zkEVM-1223ab28d48c8003b76fd98c3ed2a194'
-                }
-              >
-                <div className='px-4 py-1 bg-white rounded-lg flex gap-1 items-center hover:border-[#5326EC] border border-white cursor-pointer'>
-                  <span className='text-[#5326EC]'>Read Guide</span>
-                  <IconArrowRight color='#5326EC' />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          {/*  */}
 
           {/* Token Lock Schedule */}
 
@@ -790,12 +993,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
           <div className='flex flex-col'>
             <Button
               onClick={handleDonateClick}
-              disabled={!isConnected || donateDisabled}
-              loading={isConfirming}
+              disabled={!isConnected || donateDisabled || squidRouteLoading}
+              loading={isConfirming || squidRouteLoading || isButtonLoading}
               color={ButtonColor.Giv}
               className='text-white justify-center'
             >
-              {isConnected ? 'Support This Project' : 'Connect Wallet'}
+              {isConnected
+                ? squidRouteLoading
+                  ? 'Getting Swap Routes'
+                  : 'Buy Token'
+                : 'Connect Wallet'}
             </Button>
             <FlashMessage
               message={flashMessage}
