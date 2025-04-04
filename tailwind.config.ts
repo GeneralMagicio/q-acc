@@ -52,7 +52,7 @@ const config: Config = {
       },
       height: {
         'project-card-full': '450px',
-        'project-card': '370px',
+        'project-card': '450px',
       },
     },
   },

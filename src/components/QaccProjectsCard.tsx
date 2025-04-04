@@ -18,7 +18,7 @@ export const QaccProjectsCard = () => {
         <h1 className='text-4xl  text-gray-900 font-bold mt-4 mb-16'>
           Projects in the next round
         </h1>
-        <div className='p-16 bg-[#f7f7f9]'>
+        <div className=''>
           <ProjectsSection />
         </div>
       </div>
