@@ -1,5 +1,5 @@
 import { polygon, polygonZkEvm } from '@reown/appkit/networks';
-import { polygonZkEvm as viemPolygonZkEvm } from 'wagmi/chains';
+import { polygon as viemPolygon } from 'wagmi/chains';
 // import { polygon, polygonZkEvm } from 'wagmi/chains';
 
 import { EnvConfig } from '@/types/config.type';
@@ -19,7 +19,7 @@ const config: EnvConfig = {
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: viemPolygonZkEvm,
+    chain: viemPolygon,
     chainName: 'zkevm',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
