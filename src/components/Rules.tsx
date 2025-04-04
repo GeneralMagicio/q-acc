@@ -1,9 +1,7 @@
 import React from 'react';
-import links from '@/lib/constants/links';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
-import { formatAmount } from '@/helpers/donation';
 
 const Rules = () => {
   const { data: POLPrice } = useFetchTokenPrice();
