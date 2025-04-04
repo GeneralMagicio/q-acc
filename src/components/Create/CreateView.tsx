@@ -34,8 +34,8 @@ export const CreateView = () => {
   return (
     <main className='flex flex-col gap-4'>
       <Banner
-        title1='Welcome to'
-        title2='Season one'
+        title1='the future of'
+        title2='tokenization'
         subTitle='q/acc = QF*ABC'
       />
       <InfoSection title='Congratulations, you’re in Season 1!'>

@@ -105,8 +105,9 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
       .replace(/(?:^|\.\s*)([a-z])/g, match => match.toUpperCase()); // Capitalize first letter of each sentence
   };
   const polPriceNumber = Number(POLPrice);
-  const totalHeightClass =
-    activeRoundDetails || true ? 'h-project-card-full' : 'h-project-card';
+  const totalHeightClass = activeRoundDetails
+    ? 'h-project-card-full'
+    : 'h-project-card';
 
   useEffect(() => {
     const fetchPoolAddress = async () => {
