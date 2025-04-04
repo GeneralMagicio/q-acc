@@ -1,8 +1,6 @@
 import React from 'react';
-import links from '@/lib/constants/links';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
-import { formatAmount } from '@/helpers/donation';
 
 const Rules = () => {
   const { data: allRounds } = useFetchAllRound();

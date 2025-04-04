@@ -7,11 +7,9 @@ import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
 
 import Rules from '@/components/Rules';
-import { RoundStatusBanner } from '@/components/RoundInfoBanner/RoundStatusBanner';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
-import QaccRoundEndBanner from '@/components/QaccRoundEndBanner';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
 
