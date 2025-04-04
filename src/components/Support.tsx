@@ -23,7 +23,7 @@ export const Support = () => {
             className='font-bold text-pink-500'
             referrerPolicy='no-referrer'
           >
-            qacc@giveth.io.
+            info@qacc.xyz
           </a>
         </div>
       </div>
