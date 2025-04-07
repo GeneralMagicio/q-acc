@@ -27,6 +27,7 @@ export interface IUser {
   qaccPoints: number;
   qaccPointsMultiplier: number;
   projectsFundedCount: number;
+  rank: number;
 }
 
 export interface IGivethUser {

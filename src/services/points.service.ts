@@ -17,6 +17,7 @@ export interface ILeaderBoardInfo {
     totalCount: number;
     users: {
       id: string;
+      rank: number;
       name: string;
       email: string;
       qaccPoints: number;
