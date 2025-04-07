@@ -108,7 +108,7 @@ const DonarSupportedProjects = ({
             </div>
           </div>
         </div>
-        <p className='text-[#4F576A] text-sm font-redHatText'>
+        <p className='text-gray-500 text-sm font-redHatText'>
           {project.descriptionSummary}
         </p>
         <div className='flex flex-wrap gap-6'>
