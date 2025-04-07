@@ -21,6 +21,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
+import { IProject } from '@/types/project.type';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -32,10 +33,22 @@ const DonarSupportedProjects = ({
   totalContribution,
   totalRewardTokens,
   onClickBreakdown,
-}: any) => {
+}: {
+  projectId: string;
+  project: IProject;
+  uniqueDonors: number;
+  totalClaimableRewardTokens: number | null;
+  totalContributions: number;
+  projectDonations: number;
+  totalContribution: number;
+  totalRewardTokens: number;
+  onClickBreakdown: () => void;
+}) => {
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+
+  console.log('project', project);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -61,6 +74,7 @@ const DonarSupportedProjects = ({
     contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
+
   return (
     <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'>
       {/* Project Details */}
@@ -89,15 +103,15 @@ const DonarSupportedProjects = ({
             </div>
           </div>
         </div>
-
-        <div className='flex flex-col gap-4 font-redHatText'>
+        <div className='flex flex-col gap-2'>
           <Link
             target='_blank'
             href={`https://polygonscan.com/address/${project?.abc?.issuanceTokenAddress}`}
+            className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
           >
-            <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
-              <span className='flex gap-4 text-[#5326EC] font-bold'>
-                Project Contract Address
+            <div>
+              <span className='flex gap-4 text-giv-500 font-bold'>
+                Contract Address
                 <IconViewTransaction color='#5326EC' />
               </span>
             </div>{' '}
@@ -111,8 +125,8 @@ const DonarSupportedProjects = ({
               </span>
             </div>
             <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(project.abc.totalSupply) || '---'}{' '}
-              {project.abc.tokenTicker}
+              {formatAmount(project.abc?.totalSupply) || '---'}{' '}
+              {project.abc?.tokenTicker}
             </span>
           </div>
 
@@ -158,7 +172,7 @@ const DonarSupportedProjects = ({
                 )}
               />
               <span className='text-[#4F576A] font-medium'>
-                {project.abc.tokenTicker} range
+                {project.abc?.tokenTicker} range
                 {tokenPriceRangeStatus.isSuccess &&
                 tokenPriceRangeStatus.data?.isPriceUpToDate
                   ? ' '
@@ -248,12 +262,13 @@ const DonarSupportedProjects = ({
           <div className='flex gap-1'>
             <span className='font-medium text-[#1D1E1F]'>
               {formatAmount(totalRewardTokens) || '---'}{' '}
-              {project.abc.tokenTicker}
+              {project.abc?.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
               ~ ${' '}
               {formatAmount(
-                totalRewardTokens * (project.abc.tokenPrice * Number(POLPrice)),
+                totalRewardTokens *
+                  ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
               ) || '---'}
             </span>
           </div>
@@ -283,7 +298,7 @@ const DonarSupportedProjects = ({
               ~ $
               {totalClaimableRewardTokens !== null
                 ? formatAmount(
-                    totalClaimableRewardTokens * project.abc.tokenPrice,
+                    totalClaimableRewardTokens * (project.abc?.tokenPrice || 0),
                   )
                 : '---'}
             </span>
