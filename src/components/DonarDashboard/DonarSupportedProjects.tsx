@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getIpfsAddress } from '@/helpers/image';
 
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
@@ -22,7 +23,6 @@ import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { EProjectSocialMediaType, IProject } from '@/types/project.type';
-import { socialMediaIconMap } from '../ProjectDetail/ProjectSocials';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -115,7 +115,6 @@ const DonarSupportedProjects = ({
           {project?.socialMedia
             ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
             .map((social: any) => {
-              const icon = socialMediaIconMap[social.type.toLowerCase()];
               return (
                 <Link
                   key={social.link}
@@ -123,7 +122,12 @@ const DonarSupportedProjects = ({
                   target='_blank'
                   className='p-2 rounded-lg border-gray-200 border'
                 >
-                  {icon}
+                  <Image
+                    src={`/images/icons/social/${social.type}.svg`}
+                    alt={`${social.type} icon`}
+                    width={24}
+                    height={24}
+                  />
                 </Link>
               );
             })}

@@ -50,7 +50,6 @@ import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { calculateCapAmount } from '@/helpers/round';
 import { Button, ButtonColor } from '../Button';
 import { EProjectSocialMediaType } from '@/types/project.type';
-import { socialMediaIconMap } from '../ProjectDetail/ProjectSocials';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -370,8 +369,7 @@ const MyProjects = () => {
             <div className='flex flex-wrap gap-6'>
               {projectData?.socialMedia
                 ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
-                .map((social: any) => {
-                  const icon = socialMediaIconMap[social.type.toLowerCase()];
+                .map(social => {
                   return (
                     <Link
                       key={social.link}
@@ -379,7 +377,12 @@ const MyProjects = () => {
                       target='_blank'
                       className='p-2 rounded-lg border-gray-200 border'
                     >
-                      {icon}
+                      <Image
+                        src={`/images/icons/social/${social.type}.svg`}
+                        alt={`${social.type} icon`}
+                        width={24}
+                        height={24}
+                      />
                     </Link>
                   );
                 })}

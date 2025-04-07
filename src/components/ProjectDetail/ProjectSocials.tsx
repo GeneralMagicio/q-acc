@@ -14,7 +14,7 @@ import { IconGithub } from '../Icons/IconGithub';
 import { useProjectContext } from '@/context/project.context';
 
 export const socialMediaIconMap: { [key: string]: React.ReactNode } = {
-  facebook: <IconFacebook color='#4267B2' size={16} />,
+  facebook: <IconFacebook size={16} />,
   x: <IconXSocial size={16} />,
   instagram: <IconInstagram size={16} />,
   youtube: <IconYoutube size={16} />,
