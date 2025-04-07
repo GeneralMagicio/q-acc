@@ -22,6 +22,7 @@ import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { EProjectSocialMediaType, IProject } from '@/types/project.type';
+import { socialMediaIconMap } from '../ProjectDetail/ProjectSocials';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -110,6 +111,21 @@ const DonarSupportedProjects = ({
         <p className='text-[#4F576A] text-sm font-redHatText'>
           {project.descriptionSummary}
         </p>
+        <div className='flex flex-wrap gap-6'>
+          {project?.socialMedia?.map((social: any) => {
+            const icon = socialMediaIconMap[social.type.toLowerCase()];
+            return (
+              <Link
+                key={social.link}
+                href={social.link}
+                target='_blank'
+                className='p-2 rounded-lg border-gray-200 border'
+              >
+                {icon}
+              </Link>
+            );
+          })}
+        </div>
         <div className='flex flex-col gap-4 font-redHatText'>
           <div className='flex gap-4'>
             {website && (
