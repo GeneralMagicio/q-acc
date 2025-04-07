@@ -46,6 +46,7 @@ const SelectChainModal = ({
   const { data: chainsData } = useFetchChainsFromSquid();
 
   useEffect(() => {
+    if (!chainsData?.chains) return;
     try {
       const evmChains = chainsData.chains.filter(
         (chain: any) =>
@@ -74,7 +75,7 @@ const SelectChainModal = ({
       setError(err.message);
       setLoading(false);
     }
-  }, [chainsData.chains]);
+  }, [chainsData?.chains]);
 
   useEffect(() => {
     if (!selectedChain || !address) {
