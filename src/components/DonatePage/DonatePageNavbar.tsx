@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ConnectButton } from '../ConnectButton/ConnectButton';
 import { IconGoBack } from '../Icons/IconGoBack';
 import { useDonateContext } from '@/context/donation.context';
+import { PointsButton } from '../Header/PointsButton';
 
 interface DonateNavbarProps {
   isConfirming: boolean;
@@ -35,7 +36,10 @@ const DonateNavbar: React.FC<DonateNavbarProps> = ({ isConfirming }) => {
           </p>
         </div>
       </div>
-      <ConnectButton />
+      <div className='flex gap-4 items-center'>
+        <PointsButton />
+        <ConnectButton />
+      </div>
     </div>
   );
 };
