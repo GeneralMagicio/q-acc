@@ -378,7 +378,7 @@ const MyProjects = () => {
                       className='p-2 rounded-lg border-gray-200 border'
                     >
                       <Image
-                        src={`/images/icons/social/${social.type}.svg`}
+                        src={`/images/icons/social/${social.type.toLowerCase()}.svg`}
                         alt={`${social.type} icon`}
                         width={24}
                         height={24}
