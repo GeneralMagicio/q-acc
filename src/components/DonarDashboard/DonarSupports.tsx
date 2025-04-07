@@ -5,6 +5,7 @@ import Link from 'next/link';
 import RewardsBreakDown from './RewardsBreakDown';
 import DonarSupportedProjects from './DonarSupportedProjects';
 import { useDonorContext } from '@/context/dashboard.context';
+import { Spinner } from '../Loading/Spinner';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
@@ -27,7 +28,12 @@ const DonarSupports = () => {
     }
   }, [projectId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className='container flex justify-center items-center min-h-80'>
+        <Spinner />
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   if (!totalCount) {
