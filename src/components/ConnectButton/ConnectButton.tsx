@@ -28,8 +28,6 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
     cd => cd.chainId === chain?.id.toString(),
   );
 
-  console.log('chain', chain);
-
   const [isHovered, setIsHovered] = useState(false);
 
   const handleConnect = () => {
