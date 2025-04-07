@@ -82,7 +82,7 @@ const DonarSupportedProjects = ({
   return (
     <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'>
       {/* Project Details */}
-      <div className='flex flex-col gap-10 w-full lg:w-1/2'>
+      <div className='flex flex-col gap-4 w-full lg:w-1/2'>
         {/* Project Banner */}
         <div
           className='w-full h-[230px] bg-cover bg-center rounded-3xl relative'
@@ -107,6 +107,9 @@ const DonarSupportedProjects = ({
             </div>
           </div>
         </div>
+        <p className='text-[#4F576A] text-sm font-redHatText'>
+          {project.descriptionSummary}
+        </p>
         <div className='flex flex-col gap-4 font-redHatText'>
           <div className='flex gap-4'>
             {website && (
