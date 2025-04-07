@@ -44,7 +44,7 @@ const DashboardHeader = () => {
           </div>
         </div>
         <div className='border-b-[1px] border-gray-200'></div>
-        <div className='flex items-center'>
+        <div className='flex items-center flex-wrap text-nowrap gap-4'>
           <UserQaccPoints />
           <div className='flex-1'></div>
           <div>
@@ -54,7 +54,7 @@ const DashboardHeader = () => {
                 Identity verified{' '}
               </div>
             ) : (
-              <div className='flex  gap-4'>
+              <div className='flex flex-wrap text-nowrap gap-4'>
                 <GitcoinVerificationBadge />
                 <PrivadoVerificationBadge />
               </div>
