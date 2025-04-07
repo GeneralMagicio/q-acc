@@ -8,10 +8,15 @@ import { Spinner } from '../Loading/Spinner';
 import { IconArrowLeft } from '../Icons/IconArrowLeft';
 import config from '@/config/configuration';
 import { SquidTokenType } from '@/helpers/squidTransactions';
+import { useFetchChainsFromSquid } from '@/hooks/useFetchChainsFromSquid';
 
 export const POLYGON_POS_CHAIN_ID = '137';
 export const POLYGON_POS_CHAIN_IMAGE =
   'https://raw.githubusercontent.com/0xsquid/assets/main/images/chains/polygon.svg';
+
+const headers = {
+  'x-integrator-id': config.SQUID_INTEGRATOR_ID,
+};
 
 const SelectChainModal = ({
   isOpen,
@@ -38,54 +43,39 @@ const SelectChainModal = ({
   const [showAllNetworks, setShowAllNetworks] = useState(false);
   const { address } = useAccount();
   const { switchChain } = useSwitchChain();
-
-  const headers = {
-    'x-integrator-id': config.SQUID_INTEGRATOR_ID,
-  };
+  const { data: chainsData } = useFetchChainsFromSquid();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const chainsResponse = await fetch(
-          'https://apiplus.squidrouter.com/v2/chains',
-          {
-            headers: headers,
-          },
-        );
+    if (!chainsData?.chains) return;
+    try {
+      const evmChains = chainsData.chains.filter(
+        (chain: any) =>
+          chain.type === 'evm' && chain.chainId !== POLYGON_POS_CHAIN_ID,
+      );
+      evmChains.sort((a: any, b: any) => {
+        if (a.chainId === POLYGON_POS_CHAIN_ID) return -1;
+        if (b.chainId === POLYGON_POS_CHAIN_ID) return 1;
+        return 0;
+      });
+      setChainData(evmChains);
 
-        const chainsData = await chainsResponse.json();
-
-        const evmChains = chainsData.chains.filter(
-          (chain: any) =>
-            chain.type === 'evm' && chain.chainId !== POLYGON_POS_CHAIN_ID,
-        );
-        evmChains.sort((a: any, b: any) => {
-          if (a.chainId === POLYGON_POS_CHAIN_ID) return -1;
-          if (b.chainId === POLYGON_POS_CHAIN_ID) return 1;
-          return 0;
+      // Set Polygon PoS as the default selected chain
+      const polygonChain = evmChains.find(
+        (chain: any) => chain.chainId === POLYGON_POS_CHAIN_ID,
+      );
+      if (polygonChain) {
+        setSelectedChain({
+          id: polygonChain.chainId,
+          imageUrl: polygonChain.chainIconURI,
         });
-        setChainData(evmChains);
-
-        // Set Polygon PoS as the default selected chain
-        const polygonChain = evmChains.find(
-          (chain: any) => chain.chainId === POLYGON_POS_CHAIN_ID,
-        );
-        if (polygonChain) {
-          setSelectedChain({
-            id: polygonChain.chainId,
-            imageUrl: polygonChain.chainIconURI,
-          });
-        }
-
-        setLoading(false);
-      } catch (err: any) {
-        setError(err.message);
-        setLoading(false);
       }
-    };
 
-    fetchData();
-  }, []);
+      setLoading(false);
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  }, [chainsData?.chains]);
 
   useEffect(() => {
     if (!selectedChain || !address) {

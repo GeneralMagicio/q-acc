@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { shortenAddress } from '@/helpers/address';
+import { useFetchChainsFromSquid } from '@/hooks/useFetchChainsFromSquid';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -22,6 +23,10 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
 
   const { address, isConnecting, chain, isConnected } = useAccount();
   const { data: user } = useFetchUser();
+  const { data: chainsData } = useFetchChainsFromSquid();
+  const chainData = chainsData?.chains.find(
+    cd => cd.chainId === chain?.id.toString(),
+  );
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -79,13 +84,15 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               height={24}
               className='rounded-full w-6 h-6'
             />
-            <Image
-              src='/images/icons/polygon.svg'
-              alt='chain Icon'
-              width={24}
-              height={24}
-              className='rounded-full w-6 h-6 -ml-3'
-            />
+            {chainData?.chainIconURI && (
+              <Image
+                src={chainData.chainIconURI}
+                alt='chain Icon'
+                width={24}
+                height={24}
+                className='rounded-full w-6 h-6 -ml-3'
+              />
+            )}
             <div className='text-sm'>{user?.fullName || shortAddress}</div>
             <Image
               src='/images/icons/chevron-down.svg'

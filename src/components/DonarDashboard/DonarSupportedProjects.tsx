@@ -54,8 +54,6 @@ const DonarSupportedProjects = ({
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  console.log('project', project);
-
   useEffect(() => {
     const updatePOLCap = async () => {
       if (activeRoundDetails) {
@@ -89,8 +87,10 @@ const DonarSupportedProjects = ({
     social => social.type === EProjectSocialMediaType.WEBSITE,
   )?.link;
 
+  const isTokenClaimable =
+    totalClaimableRewardTokens !== null && totalClaimableRewardTokens > 0;
   return (
-    <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'>
+    <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl'>
       {/* Project Details */}
       <div className='flex flex-col gap-4 w-full lg:w-1/2'>
         {/* Project Banner */}
@@ -389,19 +389,16 @@ const DonarSupportedProjects = ({
 
         {/* Claim Rewards */}
         <Button
-          color={ButtonColor.Gray}
-          className='flex justify-center'
-          disabled={
-            totalClaimableRewardTokens === null ||
-            totalClaimableRewardTokens <= 0
-          }
+          color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
+          className='flex justify-center rounded-xl'
+          disabled={!isTokenClaimable}
         >
           Claim Tokens
         </Button>
         <Link href={`/dashboard?tab=contributions&projectId=${projectId}`}>
           <Button
             color={ButtonColor.Base}
-            className='flex justify-center shadow-lg w-full '
+            className='flex justify-center w-full border border-giv-500 rounded-xl'
             onClick={onClickBreakdown}
           >
             Tokens & Contributions Breakdown <IconBreakdownArrow />
