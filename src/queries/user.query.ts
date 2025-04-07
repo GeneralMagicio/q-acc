@@ -16,6 +16,7 @@ export const GET_USER_BY_ADDRESS = /* GraphQL */ `
       qaccPoints
       qaccPointsMultiplier
       projectsFundedCount
+      rank
     }
   }
 `;
