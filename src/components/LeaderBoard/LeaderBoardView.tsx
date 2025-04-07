@@ -86,14 +86,13 @@ export const LeaderBoardView = () => {
           </div>
 
           {leaderboardInfo?.users?.map((user, idx) => {
-            const rank = page * LIMIT + idx + 1;
-            const isTop = rank <= 3;
+            const isTop = user.rank <= 3;
             return (
               <div
-                key={rank}
+                key={user.id}
                 className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
-                <div className='text-right'>#{rank}</div>
+                <div className='text-right'>#{user.rank}</div>
                 <div className='flex gap-2'>
                   {isTop && (
                     <Image

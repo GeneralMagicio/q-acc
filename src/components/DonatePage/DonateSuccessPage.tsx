@@ -99,7 +99,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
       console.log('cleared interval');
       if (interval) clearInterval(interval);
     };
-  }, [donationStatus, donationId, refetchPointsHistory]);
+  }, [donationStatus, donationId, refetchPointsHistory, refetchUser]);
 
   return (
     <div className='flex flex-col gap-6 my-10 container '>

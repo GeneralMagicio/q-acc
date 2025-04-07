@@ -7,7 +7,7 @@ export const useFetchLeaderBoard = (
   orderBy: IOrderBy,
 ) => {
   return useQuery({
-    queryKey: ['leaderboard', take, skip, orderBy],
+    queryKey: ['leaderboard', take, skip, orderBy.direction, orderBy.field],
     queryFn: async () => {
       return await fetchLeaderBoard(take, skip, orderBy);
     },
