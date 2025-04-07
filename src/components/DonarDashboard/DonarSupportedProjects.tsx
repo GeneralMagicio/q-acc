@@ -54,8 +54,6 @@ const DonarSupportedProjects = ({
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
 
-  console.log('project', project);
-
   useEffect(() => {
     const updatePOLCap = async () => {
       if (activeRoundDetails) {
