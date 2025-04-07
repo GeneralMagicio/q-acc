@@ -536,6 +536,7 @@ export const GET_PROJECT_BY_USER_ID = /* GraphQL */ `
         title
         balance
         description
+        descriptionSummary
         teaser
         image
         slug
@@ -640,6 +641,10 @@ export const GET_PROJECT_BY_USER_ID = /* GraphQL */ `
           email
           id
           walletAddress
+        }
+        socialMedia {
+          type
+          link
         }
         qualityScore
       }

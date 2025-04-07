@@ -82,6 +82,11 @@ export const GET_USER_DONATIONS = /* GraphQL */ `
           id
           title
           image
+          descriptionSummary
+          socialMedia {
+            type
+            link
+          }
           abc {
             tokenName
             tokenTicker

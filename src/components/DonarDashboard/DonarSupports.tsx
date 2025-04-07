@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import RewardsBreakDown from './RewardsBreakDown';
-import DonarSuppotedProjects from './DonarSupportedProjects';
+import DonarSupportedProjects from './DonarSupportedProjects';
 import { useDonorContext } from '@/context/dashboard.context';
+import { Spinner } from '../Loading/Spinner';
 
 const DonarSupports = () => {
   const [showBreakDown, setShowBreakDown] = useState<boolean>(false);
@@ -27,7 +28,12 @@ const DonarSupports = () => {
     }
   }, [projectId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className='container flex justify-center items-center min-h-80'>
+        <Spinner />
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   if (!totalCount) {
@@ -56,7 +62,7 @@ const DonarSupports = () => {
 
             return (
               <div key={projectId}>
-                <DonarSuppotedProjects
+                <DonarSupportedProjects
                   projectId={projectId}
                   project={project}
                   uniqueDonors={donationData.uniqueDonors}

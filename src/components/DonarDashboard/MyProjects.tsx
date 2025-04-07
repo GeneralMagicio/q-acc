@@ -49,6 +49,7 @@ import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { calculateCapAmount } from '@/helpers/round';
 import { Button, ButtonColor } from '../Button';
+import { EProjectSocialMediaType } from '@/types/project.type';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -283,6 +284,10 @@ const MyProjects = () => {
     ? `url(${projectData?.image})`
     : '';
 
+  const website = projectData.socialMedia?.find(
+    social => social.type === EProjectSocialMediaType.WEBSITE,
+  )?.link;
+
   return (
     <div className='container'>
       {/* Project Header */}
@@ -357,41 +362,79 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <p className='text-[#4F576A] font-redHatText leading-6'>
-              {projectData?.teaser}
+            <p className='text-gray-500 font-redHatText leading-6'>
+              {projectData?.descriptionSummary}
             </p>
 
-            <Link
-              target='_blank'
-              href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
-            >
-              <div className='w-full p-[10px_16px] shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                <span className='flex gap-4 text-[#5326EC] font-bold'>
-                  Project Contract Address
-                  <IconViewTransaction color='#5326EC' />
-                </span>
-              </div>{' '}
-            </Link>
-            <div className='flex justify-center gap-4'>
+            <div className='flex flex-wrap gap-6'>
+              {projectData?.socialMedia
+                ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
+                .map(social => {
+                  return (
+                    <Link
+                      key={social.link}
+                      href={social.link}
+                      target='_blank'
+                      className='p-2 rounded-lg border-gray-200 border'
+                    >
+                      <Image
+                        src={`/images/icons/social/${social.type.toLowerCase()}.svg`}
+                        alt={`${social.type} icon`}
+                        width={24}
+                        height={24}
+                      />
+                    </Link>
+                  );
+                })}
+            </div>
+
+            <div className='flex gap-4'>
+              {website && (
+                <Link
+                  target='_blank'
+                  href={website}
+                  className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+                >
+                  <div>
+                    <span className='flex gap-4 text-giv-500 font-bold'>
+                      Website
+                      <IconViewTransaction color='#5326EC' />
+                    </span>
+                  </div>{' '}
+                </Link>
+              )}
               <Link
                 target='_blank'
-                href={`/project/${projectData?.slug}`}
-                className='w-full'
+                href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
+                className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
-                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
-                    View Project
+                <div>
+                  <span className='flex gap-4 text-giv-500 font-bold'>
+                    Contract Address
                     <IconViewTransaction color='#5326EC' />
                   </span>
                 </div>{' '}
               </Link>
-              <div onClick={handleShare} className='cursor-pointer w-full'>
-                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
-                    Share your project
-                    <IconShare color='#5326EC' size={24} />
-                  </span>
-                </div>
+            </div>
+            <div className='flex justify-center gap-4'>
+              <Link
+                target='_blank'
+                href={`/project/${projectData?.slug}`}
+                className=' py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                  View Project
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </Link>
+              <div
+                onClick={handleShare}
+                className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                  Share your project
+                  <IconShare color='#5326EC' size={24} />
+                </span>
               </div>{' '}
               <ShareProjectModal
                 isOpen={isShareModalOpen}

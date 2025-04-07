@@ -16,7 +16,7 @@ const tableHeaders = [
   { name: 'Projects funded', sortField: 'ProjectsFundedCount' },
 ];
 
-const LIMIT = 10;
+const LIMIT = 15;
 
 export const LeaderBoardView = () => {
   const { isConnected } = useAccount();
