@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import RewardsBreakDown from './RewardsBreakDown';
-import DonarSuppotedProjects from './DonarSupportedProjects';
+import DonarSupportedProjects from './DonarSupportedProjects';
 import { useDonorContext } from '@/context/dashboard.context';
 
 const DonarSupports = () => {
@@ -56,7 +56,7 @@ const DonarSupports = () => {
 
             return (
               <div key={projectId}>
-                <DonarSuppotedProjects
+                <DonarSupportedProjects
                   projectId={projectId}
                   project={project}
                   uniqueDonors={donationData.uniqueDonors}
