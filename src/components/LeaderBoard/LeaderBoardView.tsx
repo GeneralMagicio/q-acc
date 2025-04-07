@@ -89,7 +89,7 @@ export const LeaderBoardView = () => {
             const isTop = user.rank <= 3;
             return (
               <div
-                key={user.rank}
+                key={user.id}
                 className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
                 <div className='text-right'>#{user.rank}</div>
