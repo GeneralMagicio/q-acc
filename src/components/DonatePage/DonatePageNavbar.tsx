@@ -36,7 +36,7 @@ const DonateNavbar: React.FC<DonateNavbarProps> = ({ isConfirming }) => {
           </p>
         </div>
       </div>
-      <div className='flex gap-4 items-center'>
+      <div className='flex gap-4 items-center flex-wrap'>
         <PointsButton />
         <ConnectButton />
       </div>
