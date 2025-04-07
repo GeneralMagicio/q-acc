@@ -388,7 +388,7 @@ const MyProjects = () => {
                 })}
             </div>
 
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-wrap'>
               {website && (
                 <Link
                   target='_blank'
@@ -409,20 +409,20 @@ const MyProjects = () => {
                 className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
                 <div>
-                  <span className='flex gap-4 text-giv-500 font-bold'>
+                  <span className='flex gap-4 text-giv-500 font-bold text-nowrap'>
                     Contract Address
                     <IconViewTransaction color='#5326EC' />
                   </span>
                 </div>{' '}
               </Link>
             </div>
-            <div className='flex justify-center gap-4'>
+            <div className='flex justify-center gap-4 flex-wrap'>
               <Link
                 target='_blank'
                 href={`/project/${projectData?.slug}`}
                 className=' py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
-                <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
                   View Project
                   <IconViewTransaction color='#5326EC' />
                 </span>
@@ -431,7 +431,7 @@ const MyProjects = () => {
                 onClick={handleShare}
                 className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
-                <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
                   Share your project
                   <IconShare color='#5326EC' size={24} />
                 </span>

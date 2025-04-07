@@ -80,6 +80,7 @@ export const GET_USER_DONATIONS = /* GraphQL */ `
         }
         project {
           id
+          slug
           title
           image
           descriptionSummary

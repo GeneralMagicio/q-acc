@@ -23,6 +23,8 @@ import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { EProjectSocialMediaType, IProject } from '@/types/project.type';
+import { IconShare } from '../Icons/IconShare';
+import { ShareProjectModal } from '../Modals/ShareProjectModal';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -48,6 +50,9 @@ const DonarSupportedProjects = ({
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const openShareModal = () => setIsShareModalOpen(true);
+  const closeShareModal = () => setIsShareModalOpen(false);
 
   console.log('project', project);
 
@@ -75,6 +80,10 @@ const DonarSupportedProjects = ({
     contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
+
+  const handleShare = () => {
+    openShareModal();
+  };
 
   const website = project.socialMedia?.find(
     social => social.type === EProjectSocialMediaType.WEBSITE,
@@ -133,7 +142,7 @@ const DonarSupportedProjects = ({
             })}
         </div>
         <div className='flex flex-col gap-4 font-redHatText'>
-          <div className='flex gap-4'>
+          <div className='flex gap-4 flex-wrap'>
             {website && (
               <Link
                 target='_blank'
@@ -154,12 +163,40 @@ const DonarSupportedProjects = ({
               className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
             >
               <div>
-                <span className='flex gap-4 text-giv-500 font-bold'>
+                <span className='flex gap-4 text-giv-500 font-bold text-nowrap'>
                   Contract Address
                   <IconViewTransaction color='#5326EC' />
                 </span>
               </div>{' '}
             </Link>
+          </div>
+          <div className='flex justify-center gap-4 flex-wrap'>
+            <Link
+              target='_blank'
+              href={`/project/${project?.slug}`}
+              className=' py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                View Project
+                <IconViewTransaction color='#5326EC' />
+              </span>
+            </Link>
+            <div
+              onClick={handleShare}
+              className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                Share your project
+                <IconShare color='#5326EC' size={24} />
+              </span>
+            </div>{' '}
+            <ShareProjectModal
+              isOpen={isShareModalOpen}
+              onClose={closeShareModal}
+              showCloseButton={true}
+              projectSlug={project?.slug || ''}
+              projectTitle={project?.title}
+            />
           </div>
 
           <div className='flex justify-between p-2'>
