@@ -21,7 +21,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
-import { IProject } from '@/types/project.type';
+import { EProjectSocialMediaType, IProject } from '@/types/project.type';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -75,6 +75,10 @@ const DonarSupportedProjects = ({
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
 
+  const website = project.socialMedia?.find(
+    social => social.type === EProjectSocialMediaType.WEBSITE,
+  )?.link;
+
   return (
     <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'>
       {/* Project Details */}
@@ -103,19 +107,35 @@ const DonarSupportedProjects = ({
             </div>
           </div>
         </div>
-        <div className='flex flex-col gap-2'>
-          <Link
-            target='_blank'
-            href={`https://polygonscan.com/address/${project?.abc?.issuanceTokenAddress}`}
-            className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
-          >
-            <div>
-              <span className='flex gap-4 text-giv-500 font-bold'>
-                Contract Address
-                <IconViewTransaction color='#5326EC' />
-              </span>
-            </div>{' '}
-          </Link>
+        <div className='flex flex-col gap-4 font-redHatText'>
+          <div className='flex gap-4'>
+            {website && (
+              <Link
+                target='_blank'
+                href={website}
+                className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <div>
+                  <span className='flex gap-4 text-giv-500 font-bold'>
+                    Website
+                    <IconViewTransaction color='#5326EC' />
+                  </span>
+                </div>{' '}
+              </Link>
+            )}
+            <Link
+              target='_blank'
+              href={`https://polygonscan.com/address/${project?.abc?.issuanceTokenAddress}`}
+              className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <div>
+                <span className='flex gap-4 text-giv-500 font-bold'>
+                  Contract Address
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </div>{' '}
+            </Link>
+          </div>
 
           <div className='flex justify-between p-2'>
             <div className='flex gap-2'>
