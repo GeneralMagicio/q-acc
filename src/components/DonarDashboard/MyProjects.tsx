@@ -366,7 +366,7 @@ const MyProjects = () => {
               {projectData?.descriptionSummary}
             </p>
 
-            <div className='flex flex-wrap gap-6'>
+            <div className='flex flex-wrap gap-2'>
               {projectData?.socialMedia
                 ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
                 .map(social => {

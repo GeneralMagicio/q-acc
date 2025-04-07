@@ -111,7 +111,7 @@ const DonarSupportedProjects = ({
         <p className='text-gray-500 text-sm font-redHatText'>
           {project.descriptionSummary}
         </p>
-        <div className='flex flex-wrap gap-6'>
+        <div className='flex flex-wrap gap-2'>
           {project?.socialMedia
             ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
             .map((social: any) => {
