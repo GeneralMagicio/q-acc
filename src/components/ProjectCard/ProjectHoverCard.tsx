@@ -142,7 +142,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full ${totalHeightClass} rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
+        className={`relative p-4  w-full ${totalHeightClass} rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
         <div className='relative h-[250px]'>
@@ -157,6 +157,19 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
         >
           <div className='absolute bg-white    left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
+            <svg
+              className='absolute top-[-18px] left-0'
+              xmlns='http://www.w3.org/2000/svg'
+              width='18'
+              height='18'
+              viewBox='0 0 18 18'
+              fill='none'
+            >
+              <path
+                d='M0 18V0C0 0 0.153782 10.1538 4 14C7.84622 17.8462 18 18 18 18H0Z'
+                fill='white'
+              />
+            </svg>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
               alt=''
