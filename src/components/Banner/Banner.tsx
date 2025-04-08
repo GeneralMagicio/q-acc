@@ -21,7 +21,7 @@ export const Banner: FC<BannerProps> = () => {
           width={270}
           height={135}
         />
-        <div className='absolute uppercase text-white text-center text-nowrap text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[-3%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10'>
+        <div className='absolute uppercase text-white text-center text-nowrap text-xl sm:text-4xl md:text-5xl tracking-[-3%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10'>
           the future of tokenization
         </div>
       </div>

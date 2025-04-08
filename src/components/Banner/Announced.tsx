@@ -1,8 +1,10 @@
 import { Inter, Nunito_Sans } from 'next/font/google';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateRemainingTime } from '@/helpers/date';
+import Routes from '@/lib/constants/Routes';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
@@ -67,12 +69,14 @@ export const Announced = () => {
           })}
         </div>
       </div>
-      <button
-        className={`flex items-center py-3 px-6 rounded-xl bg-gray-950 shadow-banner-button font-semibold tracking-wide ${inter.className}`}
-      >
-        <span>Get Started</span>
-        <IconArrowRight size={24} />
-      </button>
+      <Link href={Routes.Projects}>
+        <button
+          className={`flex items-center py-3 px-6 rounded-xl bg-gray-950 shadow-banner-button font-semibold tracking-wide ${inter.className}`}
+        >
+          <span>Get Started</span>
+          <IconArrowRight size={24} />
+        </button>
+      </Link>
     </div>
   );
 };
