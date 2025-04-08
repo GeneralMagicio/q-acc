@@ -33,11 +33,7 @@ export const CreateView = () => {
 
   return (
     <main className='flex flex-col gap-4'>
-      <Banner
-        title1='the future of'
-        title2='tokenization'
-        subTitle='q/acc = QF*ABC'
-      />
+      <Banner />
       <InfoSection title='Congratulations, and welcome to q/acc on Giveth.'>
         <p>
           Now you need to create your Giveth q/acc project page in preparation

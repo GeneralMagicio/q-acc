@@ -19,11 +19,7 @@ export default function Home() {
   const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   return isProductReleased ? (
     <main className='flex flex-col '>
-      <Banner
-        title1='the future of'
-        title2='tokenization'
-        subTitle='q/acc = QF*ABC'
-      />
+      <Banner />
       <div className='bg-white relative overflow-hidden'>
         <Image
           src='/images/bg/round1.png'

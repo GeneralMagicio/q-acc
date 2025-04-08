@@ -1,36 +1,33 @@
-import { IBM_Plex_Mono } from 'next/font/google';
 import Image from 'next/image';
 import { FC } from 'react';
+import { IconArrowRight } from './Icons/IconArrowRight';
 
-const plex = IBM_Plex_Mono({ subsets: ['latin'], weight: '400' });
+interface BannerProps {}
 
-interface BannerProps {
-  title1: string;
-  title2: string;
-  subTitle: string;
-}
-
-export const Banner: FC<BannerProps> = ({ title1, title2, subTitle }) => {
+export const Banner: FC<BannerProps> = () => {
   return (
-    <div className='relative bg-particle-pattern py-10 flex flex-col justify-center items-center'>
-      <Image
-        className='p-3 object-contain'
-        src='/images/home/banner-vector-1.svg'
-        alt='Banner Vector'
-        fill
-      />
-      <h1 className='uppercase text-white text-center text-nowrap relative font-tusker-grotesk'>
-        <div className='text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:tracking-[-3px]'>
-          {title1}
+    <div className='relative flex flex-col justify-center items-center bg-black bg-repeat font-tusker-grotesk '>
+      <div className='absolute top-0 left-0 w-full h-full bg-particle-pattern-small bg-repeat bg-auto opacity-15 z-0'></div>
+      <div className='relative z-10'>
+        <Image
+          className='py-3 px-6 object-contain'
+          src='/images/home/banner-vector-1.svg'
+          alt='Banner Vector'
+          width={270}
+          height={135}
+        />
+        <div className='absolute uppercase text-white text-center text-nowrap text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[-3%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10'>
+          the future of tokenization
         </div>
-        <div className='text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:tracking-[-1px] font-black text-peach '>
-          {title2}
+      </div>
+      <div className='flex text-peach items-center px-2 py-4 gap-4 flex-wrap justify-center relative z-10'>
+        <div className='text-3xl tracking-widest text-center'>
+          Round starts soon.
         </div>
-      </h1>
-      <div
-        className={`text-white text-base sm:text-lg lg:text-xl xl:text-2xl mt-4 ${plex.className}`}
-      >
-        {subTitle}
+        <button className='flex items-center font-adventor py-3 px-6 rounded-xl bg-gray-800'>
+          <span>Get Started</span>
+          <IconArrowRight size={16} />
+        </button>
       </div>
     </div>
   );
