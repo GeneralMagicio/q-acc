@@ -80,7 +80,7 @@ export const fetchAllProjects = async () => {
       },
     );
     res?.allProjects.projects.sort((a, b) =>
-      a.seasonNumber < b.seasonNumber ? -1 : 1,
+      a.seasonNumber < b.seasonNumber ? 1 : -1,
     );
 
     return res?.allProjects;

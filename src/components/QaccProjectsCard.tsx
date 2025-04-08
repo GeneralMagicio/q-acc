@@ -22,7 +22,7 @@ export const QaccProjectsCard = () => {
           setSeasonFilter={setSeasonFilter}
         />
         <div className=''>
-          <ProjectsSection />
+          <ProjectsSection seasonFilter={seasonFilter} />
         </div>
       </div>
     </div>
