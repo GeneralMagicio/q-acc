@@ -72,7 +72,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <div className='w-full h-8 bg-orange-300'></div> */}
       <QaccProjectsCard />
 
       <br></br>
@@ -81,15 +80,6 @@ export default function Home() {
         <OnBoardButton />
       </div>
       <Support />
-      <div className='flex justify-center rounded-md  mx-auto my-5 w-[80%] sm:h-[300px] md:h-[500px] lg:h-[720px] '>
-        <iframe
-          className='w-full rounded-lg'
-          src='https://www.youtube.com/embed/m30ElzaR--4'
-          title='Quadratic Acceleration (q/acc): The Future of Tokenization'
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-          allowFullScreen={true}
-        ></iframe>
-      </div>
       {/* <div className='w-full h-8 bg-orange-300'></div> */}
       <Collaborator />
     </main>
