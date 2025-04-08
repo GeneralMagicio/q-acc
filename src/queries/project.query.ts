@@ -516,6 +516,7 @@ export const GET_ALL_PROJECTS = /* GraphQL */ `
           chainId
           fundingManagerAddress
         }
+        seasonNumber
       }
       totalCount
     }

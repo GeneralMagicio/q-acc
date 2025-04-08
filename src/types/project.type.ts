@@ -150,4 +150,5 @@ export interface IProject {
     maximumReward?: number;
   }[];
   socialMedia?: IProjectSocialMedia[];
+  seasonNumber: number;
 }
