@@ -75,7 +75,7 @@ interface ISquidChainResponse {
 
 export const useFetchChainsFromSquid = () => {
   return useQuery({
-    queryKey: ['activeRoundDetails'],
+    queryKey: ['squid-chains'],
     queryFn: async () => {
       const chainsResponse = await fetch(
         'https://apiplus.squidrouter.com/v2/chains',
