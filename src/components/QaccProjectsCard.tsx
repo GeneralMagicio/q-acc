@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { ProjectsSection } from './Projects/ProjectsSection';
+import { ProjectsFilter } from './ProjectsFilter';
 
 export const QaccProjectsCard = () => {
+  const [seasonFilter, setSeasonFilter] = useState(0);
   return (
     <div className='bg-white relative pt-8 pb-5 mt-5'>
       <div className='absolute right-0 top-0 '>
@@ -14,10 +16,11 @@ export const QaccProjectsCard = () => {
           className='w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 '
         />
       </div>
-      <div className='container  '>
-        <h1 className='text-4xl  text-gray-900 font-bold mt-4 mb-16'>
-          Projects in the next round
-        </h1>
+      <div className='container '>
+        <ProjectsFilter
+          seasonFilter={seasonFilter}
+          setSeasonFilter={setSeasonFilter}
+        />
         <div className=''>
           <ProjectsSection />
         </div>
