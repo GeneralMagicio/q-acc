@@ -33,7 +33,7 @@ const ProjectCardImage: React.FC<ProjectCardImageProps> = ({
       objectFit='cover'
       width={width}
       height={height}
-      className={className}
+      className={`rounded-xl ${className}}`}
       onError={handleError}
     />
   );
