@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { Announced } from './Announced';
 import { NotAnnounced } from './NotAnnounced';
+import { Spinner } from '../Loading/Spinner';
 
 interface BannerProps {}
 
@@ -24,7 +25,15 @@ export const Banner: FC<BannerProps> = () => {
           the future of tokenization
         </div>
       </div>
-      {activeRoundDetails ? <Announced /> : <NotAnnounced />}
+      {isLoading ? (
+        <div className='p-7 h-24'>
+          <Spinner />
+        </div>
+      ) : activeRoundDetails ? (
+        <Announced />
+      ) : (
+        <NotAnnounced />
+      )}
     </div>
   );
 };
