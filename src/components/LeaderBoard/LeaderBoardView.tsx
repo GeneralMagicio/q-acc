@@ -20,8 +20,8 @@ const LIMIT = 15;
 
 export const LeaderBoardView = () => {
   const { isConnected } = useAccount();
-  const [sortField, setSortField] = useState<SortField>('QaccPoints');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('DESC');
+  const [sortField, setSortField] = useState<SortField>('Rank');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
   const [page, setPage] = useState(0); // 0-based index
 
   const { data: leaderboardInfo, isLoading } = useFetchLeaderBoard(

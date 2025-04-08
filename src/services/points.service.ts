@@ -4,7 +4,7 @@ import {
   FETCH_POINTS_HISTORY_OF_USER,
 } from '@/queries/points.query';
 
-export type SortField = 'QaccPoints' | 'ProjectsFundedCount';
+export type SortField = 'QaccPoints' | 'ProjectsFundedCount' | 'Rank';
 export type SortDirection = 'ASC' | 'DESC';
 
 export interface IOrderBy {
