@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import { FC } from 'react';
-import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
+import { Announced } from './Announced';
+import { NotAnnounced } from './NotAnnounced';
 
 interface BannerProps {}
 
 export const Banner: FC<BannerProps> = () => {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+
   return (
     <div className='relative flex flex-col justify-center items-center bg-black bg-repeat font-tusker-grotesk '>
       <div className='absolute top-0 left-0 w-full h-full bg-particle-pattern-small bg-repeat bg-auto opacity-15 z-0'></div>
@@ -22,15 +24,7 @@ export const Banner: FC<BannerProps> = () => {
           the future of tokenization
         </div>
       </div>
-      <div className='flex text-peach items-center px-2 py-4 gap-4 flex-wrap justify-center relative z-10'>
-        <div className='text-3xl tracking-widest text-center'>
-          Round starts soon.
-        </div>
-        <button className='flex items-center py-3 px-6 rounded-xl bg-gray-950 shadow-banner-button font-sans font-semibold tracking-wide'>
-          <span>Get Started</span>
-          <IconArrowRight size={16} />
-        </button>
-      </div>
+      {activeRoundDetails ? <Announced /> : <NotAnnounced />}
     </div>
   );
 };
