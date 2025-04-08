@@ -24,7 +24,7 @@ export const Banner: FC<BannerProps> = () => {
         <div className='text-3xl tracking-widest text-center'>
           Round starts soon.
         </div>
-        <button className='flex items-center font-adventor py-3 px-6 rounded-xl bg-gray-800'>
+        <button className='flex items-center py-3 px-6 rounded-xl bg-gray-800 shadow-banner-button font-sans font-semibold tracking-wide'>
           <span>Get Started</span>
           <IconArrowRight size={16} />
         </button>
