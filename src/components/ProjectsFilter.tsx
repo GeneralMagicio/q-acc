@@ -12,8 +12,8 @@ export const ProjectsFilter: FC<ProjectsFilterProps> = ({
   seasonFilter,
 }) => {
   return (
-    <div className='flex justify-between items-center'>
-      <h1 className='text-xl  text-gray-900 font-bold mt-4 mb-16'>
+    <div className='flex justify-between items-center mb-6'>
+      <h1 className='text-xl text-gray-900 font-bold'>
         <span className='text-gray-900'>Explore</span>
         &nbsp;
         <span className='text-gray-400'>20 Projects</span>
