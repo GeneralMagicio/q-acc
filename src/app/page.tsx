@@ -59,13 +59,15 @@ export default function Home() {
                   <br />
                 </div>
               </div>
-              <iframe
-                className='w-full rounded-lg h-full my-6'
-                src='https://www.youtube.com/embed/m30ElzaR--4'
-                title='Quadratic Acceleration (q/acc): The Future of Tokenization'
-                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                allowFullScreen={true}
-              ></iframe>
+              <div className='p-10'>
+                <iframe
+                  className='w-full rounded-lg h-full my-6'
+                  src='https://www.youtube.com/embed/m30ElzaR--4'
+                  title='Quadratic Acceleration (q/acc): The Future of Tokenization'
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                  allowFullScreen={true}
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
