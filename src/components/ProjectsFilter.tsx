@@ -1,3 +1,4 @@
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import React, { FC } from 'react';
 
 const projectsFilter = ['All Projects', 'Season 1', 'Season 2'];
@@ -11,12 +12,19 @@ export const ProjectsFilter: FC<ProjectsFilterProps> = ({
   setSeasonFilter,
   seasonFilter,
 }) => {
+  const { data: allProjects } = useFetchAllProjects();
+  const totalProjects =
+    allProjects?.projects.filter(project => {
+      if (seasonFilter === 0) return true;
+      return project.seasonNumber === seasonFilter;
+    }).length || 0;
+
   return (
     <div className='flex justify-between items-center mb-6'>
       <h1 className='text-xl text-gray-900 font-bold'>
         <span className='text-gray-900'>Explore</span>
         &nbsp;
-        <span className='text-gray-400'>20 Projects</span>
+        <span className='text-gray-400'>{totalProjects} Projects</span>
       </h1>
       <div className='flex gap-4'>
         {projectsFilter.map((filter, index) => (
