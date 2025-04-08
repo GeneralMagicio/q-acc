@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 
-import { Banner } from '@/components/Banner';
+import { Banner } from '@/components/Banner/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
 import { HelpSection } from '@/components/HelpSection';

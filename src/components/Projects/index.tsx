@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { ProjectsSection } from './ProjectsSection';
-import { Banner } from '../Banner';
+import { Banner } from '../Banner/Banner';
 
 export const ProjectsView = () => {
   return (

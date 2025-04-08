@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { FC } from 'react';
-import { IconArrowRight } from './Icons/IconArrowRight';
+import { IconArrowRight } from '../Icons/IconArrowRight';
+import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 interface BannerProps {}
 
 export const Banner: FC<BannerProps> = () => {
+  const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   return (
     <div className='relative flex flex-col justify-center items-center bg-black bg-repeat font-tusker-grotesk '>
       <div className='absolute top-0 left-0 w-full h-full bg-particle-pattern-small bg-repeat bg-auto opacity-15 z-0'></div>
@@ -24,7 +26,7 @@ export const Banner: FC<BannerProps> = () => {
         <div className='text-3xl tracking-widest text-center'>
           Round starts soon.
         </div>
-        <button className='flex items-center py-3 px-6 rounded-xl bg-gray-800 shadow-banner-button font-sans font-semibold tracking-wide'>
+        <button className='flex items-center py-3 px-6 rounded-xl bg-gray-950 shadow-banner-button font-sans font-semibold tracking-wide'>
           <span>Get Started</span>
           <IconArrowRight size={16} />
         </button>

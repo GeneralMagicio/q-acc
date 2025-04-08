@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { Banner } from '@/components/Banner';
+import { Banner } from '@/components/Banner/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
 import { KycLandingButton } from '@/components/KycLandingButton';

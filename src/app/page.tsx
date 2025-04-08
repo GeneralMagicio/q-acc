@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { Banner } from '@/components/Banner';
+import { Banner } from '@/components/Banner/Banner';
 import Collaborator from '@/components/Collaborator';
 import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
@@ -10,13 +10,11 @@ import Rules from '@/components/Rules';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
-import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { useFetchMostRecentEndRound } from '@/components/ProjectDetail/usefetchMostRecentEndRound';
 
 export default function Home() {
-  const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
+  // const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
 
-  const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
+  // const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   return isProductReleased ? (
     <main className='flex flex-col '>
       <Banner />
