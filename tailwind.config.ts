@@ -42,6 +42,7 @@ const config: Config = {
       },
       backgroundImage: {
         'particle-pattern': "url('/images/bg/particles.png')",
+        'particle-pattern-small': "url('/images/bg/particles-s.png')",
       },
       boxShadow: {
         baseShadow: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
