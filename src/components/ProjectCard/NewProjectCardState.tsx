@@ -6,7 +6,7 @@ import ProjectCardImage from './ProjectCardImage';
 
 import { getIpfsAddress } from '@/helpers/image';
 import { fetchProjectDonationsById } from '@/services/donation.services';
-import { calculateTotalDonations } from '@/helpers/donation';
+import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import {
@@ -239,11 +239,30 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   </span>
                 </div>
                 <div className='flex flex-col'>
-                  <span className='text-[#1D1E1F] font-bold text-lg'>
-                    {' '}
-                    ~ $ 3.88
-                  </span>
-                  <span className='text-[#4F576A] font-medium'>2.02 POL</span>
+                  {isTokenListed ? (
+                    <>
+                      <span className='text-[#1D1E1F] font-bold text-lg'>
+                        {' '}
+                        ~ ${' '}
+                        {polPriceNumber
+                          ? `${' ' + formatNumber(polPriceNumber * currentTokenPrice)}`
+                          : ''}
+                      </span>
+                      <span className='text-[#4F576A] font-medium'>
+                        {' '}
+                        {currentTokenPrice.toFixed(2)} POL
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className='text-[#4F576A] font-bold text-lg text-right'>
+                        ---
+                      </span>
+                      <span className='text-[#4F576A] font-medium'>
+                        --- POL
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
               <hr />
