@@ -20,19 +20,13 @@ export default function Home() {
       <Banner />
       <div className='bg-white relative overflow-hidden'>
         <Image
-          src='/images/bg/round1.png'
+          src='/images/bg/section1.svg'
           alt='round'
-          width={500}
-          height={500}
-          style={{
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            opacity: 0.3,
-            zIndex: 0,
-          }}
+          width={700}
+          height={700}
+          className='absolute z-50 opacity-20 right-0 top-0'
         />
-        <div className='container relative flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
+        <div className='container relative flex flex-col gap-10 pt-4 pb-4 font-light text-2xl text-gray-600'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             <div>
               <h1

@@ -21,7 +21,7 @@ export const ProjectsFilter: FC<ProjectsFilterProps> = ({
 
   return (
     <div className='flex justify-between items-center mb-6'>
-      <h1 className='text-xl text-gray-900 font-bold'>
+      <h1 className='text-2xl text-gray-900 font-bold'>
         <span className='text-gray-900'>Explore</span>
         &nbsp;
         <span className='text-gray-400'>{totalProjects} Projects</span>
