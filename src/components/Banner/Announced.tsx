@@ -81,7 +81,7 @@ export const Announced = () => {
         </Link>
       </div>
       {isStarted && (
-        <div className='flex justify-center items-center text-white bg-gray-800 w-full relative z-10 py-2 gap-20'>
+        <div className='flex justify-center items-center text-white bg-gray-800 w-full relative z-10 py-2 gap-20 overflow-hidden'>
           <Image
             src='/images/home/matching-pool.svg'
             alt='Matching Pool image'
@@ -89,7 +89,7 @@ export const Announced = () => {
             height={100}
             className='object-contain'
           />
-          <div>
+          <div className='text-nowrap'>
             <div className={`${inter.className} mb-1`}>Matching Pool</div>
             <div className='text-tusker-grotesk text-5xl'>$ 250,000</div>
           </div>
