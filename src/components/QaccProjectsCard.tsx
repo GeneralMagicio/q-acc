@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { ProjectsSection } from './Projects/ProjectsSection';
 import { ProjectsFilter } from './ProjectsFilter';

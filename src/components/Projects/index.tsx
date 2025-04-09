@@ -9,7 +9,7 @@ export const ProjectsView = () => {
       <Banner />
       <div className='container'>
         <div className='my-[60px]'></div>
-        <ProjectsSection />
+        <ProjectsSection seasonFilter={0} />
       </div>
     </>
   );
