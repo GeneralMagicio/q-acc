@@ -35,10 +35,9 @@ export const ProjectsFilter: FC<ProjectsFilterProps> = ({
                 ? 'bg-gray-900 text-white'
                 : 'text-gray-900 bg-[#E8E9F0]'
             } px-4 py-3 rounded-xl text-redHatText select-none`}
+            onClick={() => setSeasonFilter(index)}
           >
-            <span className='text-sm' onClick={() => setSeasonFilter(index)}>
-              {filter}
-            </span>
+            <span className='text-sm'>{filter}</span>
           </button>
         ))}
       </div>
