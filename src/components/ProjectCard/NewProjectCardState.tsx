@@ -72,7 +72,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
     };
 
     updatePOLCap();
-  }, [activeRoundDetails, project, progress, maxPOLCap, amountDonatedInRound]);
+  }, [activeRoundDetails, project, progress]);
 
   const handleCardClick = () => {
     router.push(`/project/${project.slug}`);
@@ -157,7 +157,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
             </svg>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
-              alt=''
+              alt='Project Icon'
               width={50}
               height={50}
             />
@@ -203,25 +203,43 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
             </div>
 
             <div className='flex flex-col gap-2'>
-              {/* Amount in this Round */}
+              {/* Amount in this Round or Total Receieved */}
               <div className='p-2 flex justify-between items-center bg-[#EBECF2] rounded-lg'>
                 <div className='text-[#1D1E1F] font-medium text-sm'>
                   {activeRoundDetails
                     ? 'Received this round'
                     : 'Total received'}
                 </div>
-                <div className='flex flex-col'>
-                  <span className='text-[#1D1E1F] font-bold text-lg'>
-                    {' '}
-                    ~ ${' '}
-                    {polPriceNumber
-                      ? `${' ' + formatNumber(polPriceNumber * totalPOLDonated)}`
-                      : ''}
-                  </span>
-                  <span className='text-[#4F576A] font-medium'>
-                    {formatNumber(totalPOLDonated)} POL
-                  </span>
-                </div>
+
+                {activeRoundDetails ? (
+                  // Amount in this Round
+                  <div className='flex flex-col'>
+                    <span className='text-[#1D1E1F] font-bold text-lg'>
+                      {' '}
+                      ~ ${' '}
+                      {polPriceNumber
+                        ? `${' ' + formatNumber(polPriceNumber * amountDonatedInRound)}`
+                        : ''}
+                    </span>
+                    <span className='text-[#4F576A] font-medium text-right'>
+                      {formatNumber(amountDonatedInRound)} POL
+                    </span>
+                  </div>
+                ) : (
+                  // Total Receieved
+                  <div className='flex flex-col'>
+                    <span className='text-[#1D1E1F] font-bold text-lg'>
+                      {' '}
+                      ~ ${' '}
+                      {polPriceNumber
+                        ? `${' ' + formatNumber(polPriceNumber * totalPOLDonated)}`
+                        : ''}
+                    </span>
+                    <span className='text-[#4F576A] font-medium text-right'>
+                      {formatNumber(totalPOLDonated)} POL
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* QuickSwap Price */}
@@ -332,9 +350,6 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
               <Button
                 className='w-full  flex justify-center items-center'
                 color={ButtonColor.Base}
-                onClick={e => {
-                  console.log('Clicked Review ');
-                }}
               >
                 Review Project
               </Button>
