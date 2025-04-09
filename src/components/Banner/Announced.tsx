@@ -6,12 +6,17 @@ import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateRemainingTime } from '@/helpers/date';
 import Routes from '@/lib/constants/Routes';
+import { IQfRound } from '@/types/round.type';
+import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
+import { Spinner } from '../Loading/Spinner';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
 export const Announced = () => {
-  const { data: activeRoundDetails } = useFetchActiveRoundDetails();
+  const { data: activeRoundDetails, isLoading: isPolPriceLoading } =
+    useFetchActiveRoundDetails();
+  const { data: POLPrice } = useFetchTokenPrice();
   const [remainingTime, setRemainingTime] = useState<string>('');
   const [isStarted, setIsStarted] = useState(false);
 
@@ -91,7 +96,17 @@ export const Announced = () => {
           />
           <div className='text-nowrap'>
             <div className={`${inter.className} mb-1`}>Matching Pool</div>
-            <div className='text-tusker-grotesk text-5xl'>$ 250,000</div>
+            <div className='text-tusker-grotesk text-5xl'>
+              $&nbsp;
+              {isPolPriceLoading ? (
+                <Spinner />
+              ) : (
+                (
+                  (Number((activeRoundDetails as IQfRound)?.allocatedFund) ||
+                    0) * (POLPrice || 0)
+                ).toLocaleString('en-US') || '0'
+              )}
+            </div>
           </div>
           <Image
             src='/images/home/matching-pool.svg'
