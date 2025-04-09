@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import { Spinner } from '../Loading/Spinner';
-import { ProjectHoverCard } from '../ProjectCard/ProjectHoverCard';
+import { NewProjectCardState } from '../ProjectCard/NewProjectCardState';
 
 interface ProjectsSectionProps {
   seasonFilter: number;
@@ -21,7 +21,7 @@ export const ProjectsSection: FC<ProjectsSectionProps> = ({ seasonFilter }) => {
           return project.seasonNumber === seasonFilter;
         })
         .map(project => (
-          <ProjectHoverCard key={project.id} project={project} />
+          <NewProjectCardState key={project.id} project={project} />
         ))}
     </div>
   );

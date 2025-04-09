@@ -53,8 +53,8 @@ const config: Config = {
         'banner-button': '0px 3px 20px 0px rgba(212, 218, 238, 0.4)',
       },
       height: {
-        'project-card-full': '450px',
-        'project-card': '450px',
+        'project-card-full': '650px',
+        'project-card': '650px',
       },
     },
   },
