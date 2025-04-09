@@ -1,5 +1,5 @@
-import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 import React, { FC } from 'react';
+import { useFetchAllProjects } from '@/hooks/useFetchAllProjects';
 
 const projectsFilter = ['All Projects', 'Season 1', 'Season 2'];
 

@@ -81,7 +81,7 @@ export const Announced = () => {
         </Link>
       </div>
       {isStarted && (
-        <div className='flex justify-center items-center text-white bg-gray-800 w-full relative z-10 py-2 gap-20 overflow-hidden'>
+        <div className='flex justify-center items-center text-white bg-gray-900 w-full relative z-10 py-2 gap-20 overflow-hidden'>
           <Image
             src='/images/home/matching-pool.svg'
             alt='Matching Pool image'
