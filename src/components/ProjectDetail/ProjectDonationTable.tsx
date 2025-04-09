@@ -98,7 +98,7 @@ const ProjectDonationTable = () => {
           }),
         );
         setSafeAddresses(prev => ({ ...prev, ...addressChecks }));
-        setPageDonations(filteredDonations);
+        // setPageDonations(filteredDonations);
       }
 
       console.log(pageDonations, 'donations');
@@ -283,7 +283,10 @@ const ProjectDonationTable = () => {
                           <div className='flex flex-col'>
                             <div className='flex gap-1 items-center'>
                               <span className='font-medium'>
-                                {formatAmount(donation.amount)}{' '}
+                                {donation.fromTokenAmount
+                                  ? formatAmount(donation.fromTokenAmount)
+                                  : formatAmount(donation.amount)}
+                                {/* {formatAmount(donation.amount)}{' '} */}
                               </span>
                               <span className='text-[#1D1E1F] text-xs align-top font-medium'>
                                 {donation.swapTransaction?.fromTokenSymbol ||
@@ -306,11 +309,19 @@ const ProjectDonationTable = () => {
                               ) : (
                                 <>
                                   ${' '}
-                                  {formatAmount(
-                                    Math.round(
-                                      donation.amount * tokenUsdPrice * 100,
-                                    ) / 100,
-                                  )}
+                                  {donation.fromTokenAmount
+                                    ? formatAmount(
+                                        Math.round(
+                                          donation.fromTokenAmount *
+                                            tokenUsdPrice *
+                                            100,
+                                        ) / 100,
+                                      )
+                                    : formatAmount(
+                                        Math.round(
+                                          donation.amount * tokenUsdPrice * 100,
+                                        ) / 100,
+                                      )}
                                 </>
                               )}
                             </span>

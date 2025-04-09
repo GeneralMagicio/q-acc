@@ -216,6 +216,7 @@ export const GET_PROJECT_DONATIONS_BY_ID = /* GraphQL */ `
         anonymous
         valueUsd
         amount
+        fromTokenAmount
         isSwap
         swapTransaction {
           squidRequestId
@@ -378,6 +379,7 @@ export const SAVE_DONATION = /* GraphQL */ `
     $safeTransactionId: String
     $tokenAddress: String
     $swapData: SwapTransactionInput
+    $fromTokenAmount: Float
   ) {
     createDonation(
       transactionId: $transactionId
@@ -391,6 +393,7 @@ export const SAVE_DONATION = /* GraphQL */ `
       safeTransactionId: $safeTransactionId
       tokenAddress: $tokenAddress
       swapData: $swapData
+      fromTokenAmount: $fromTokenAmount
     )
   }
 `;
@@ -406,6 +409,7 @@ export const CREATE_DRAFT_DONATION = /* GraphQL */ `
     $anonymous: Boolean
     $referrerId: String
     $safeTransactionId: String
+    $fromTokenAmount: Float!
   ) {
     createDraftDonation(
       networkId: $networkId
@@ -417,6 +421,7 @@ export const CREATE_DRAFT_DONATION = /* GraphQL */ `
       anonymous: $anonymous
       referrerId: $referrerId
       safeTransactionId: $safeTransactionId
+      fromTokenAmount: $fromTokenAmount
     )
   }
 `;
@@ -675,6 +680,7 @@ export const GET_PROJECT_DONATIONS_USERS_BY_ID = /* GraphQL */ `
         anonymous
         valueUsd
         amount
+        fromTokenAmount
         rewardTokenAmount
         rewardStreamStart
         rewardStreamEnd

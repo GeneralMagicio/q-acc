@@ -309,7 +309,9 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                         <div className='flex flex-col'>
                           <div className='flex gap-1 items-center flex-wrap'>
                             <span className='font-medium'>
-                              {formatAmount(donation.amount)}{' '}
+                              {donation.fromTokenAmount
+                                ? formatAmount(donation.fromTokenAmount)
+                                : formatAmount(donation.amount)}
                             </span>
                             <span
                               className={`text-[#1D1E1F] text-xs align-top font-medium ${getStatusClassesAmount(donation.status)} `}
@@ -336,11 +338,19 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                             ) : (
                               <>
                                 ${' '}
-                                {formatAmount(
-                                  Math.round(
-                                    donation.amount * tokenUsdPrice * 100,
-                                  ) / 100,
-                                )}
+                                {donation.fromTokenAmount
+                                  ? formatAmount(
+                                      Math.round(
+                                        donation.fromTokenAmount *
+                                          tokenUsdPrice *
+                                          100,
+                                      ) / 100,
+                                    )
+                                  : formatAmount(
+                                      Math.round(
+                                        donation.amount * tokenUsdPrice * 100,
+                                      ) / 100,
+                                    )}
                               </>
                             )}
                           </span>
