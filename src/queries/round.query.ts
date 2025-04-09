@@ -19,6 +19,7 @@ export const GET_ALL_ROUNDS = /* GraphQL */ `
         name
         slug
         allocatedFund
+        allocatedFundUSD
         startDate: beginDate
         endDate
         roundPOLCapPerProject
@@ -55,6 +56,7 @@ export const GET_ACTIVE_ROUND = /* GraphQL */ `
           name
           slug
           allocatedFund
+          allocatedFundUSD
           startDate: beginDate
           endDate
           roundPOLCapPerProject

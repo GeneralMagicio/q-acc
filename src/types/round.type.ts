@@ -18,6 +18,7 @@ export interface IQfRound {
   slug: string;
   roundNumber: string;
   allocatedFund: string;
+  allocatedFundUSD: string;
   startDate: string;
   endDate: string;
   roundPOLCapPerProject: number;

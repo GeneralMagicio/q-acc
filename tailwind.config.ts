@@ -42,6 +42,7 @@ const config: Config = {
       },
       backgroundImage: {
         'particle-pattern': "url('/images/bg/particles.png')",
+        'particle-pattern-small': "url('/images/bg/particles-s.png')",
       },
       boxShadow: {
         baseShadow: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
@@ -49,6 +50,7 @@ const config: Config = {
         walletShadow: '0px 3px 20px 0px rgba(212, 218, 238, 0.70)',
         cardShadow: '0px 3px 20px 0px rgba(49, 11, 181, 0.45)',
         GIV400: '0px 3px 20px 0px rgba(83, 38, 236, 0.13)',
+        'banner-button': '0px 3px 20px 0px rgba(212, 218, 238, 0.4)',
       },
       height: {
         'project-card-full': '450px',

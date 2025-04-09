@@ -40,7 +40,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   donationId,
   status,
 }) => {
-  const [pointsEarned, setPointsEarned] = useState('Calculating...');
+  const [pointsEarned, setPointsEarned] = useState<string | null>(null);
   const { refetch: refetchPointsHistory } = useFetchPointsHistoryOfUser();
   const { projectData } = useDonateContext();
   const [donationStatus, setDonationStatus] = useState<string>(
@@ -218,7 +218,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                 <h1 className='text-3xl text-[#121B4B] font-bold text-center'>
                   Thank You
                 </h1>
-                <p className='bg-white '>
+                <p className='bg-white'>
                   Tokens will be distributed at the end of the q/acc round. On
                   your q/acc profile page you may view your tokens, see the
                   unlock schedule and claim unlocked tokens once the unlock
@@ -243,33 +243,43 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                     </div>
                   </div>
                   <hr />
-                  <h2 className='text-[#4F576A]'>
+                  <h2 className='text-redHatText text-gray-600 font-normal text-sm'>
                     {round === 'EarlyAccessRound'
                       ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. `
                       : 'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.'}
                   </h2>
                 </div>
 
-                <div className='flex p-4 justify-between border border-[#D7DDEA] bg-[#FFF] rounded-lg font-redHatText items-center text-[#1D1E1F] font-semibold leading-6'>
-                  <div>
-                    <span className=' '>q/acc points you've earned</span>
+                <div className='border border-gray-300 bg-white rounded-lg font-redHatText text-gray-800 font-semibold leading-6 p-4'>
+                  <div className='flex justify-between items-center '>
+                    <div>
+                      <span className=' '>q/acc points you've earned</span>
+                    </div>
+                    <div className='flex gap-2 items-center'>
+                      <span>
+                        {pointsEarned ? pointsEarned : '⏳ Calculating...'}
+                      </span>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='32'
+                        height='32'
+                        viewBox='0 0 32 32'
+                        fill='none'
+                      >
+                        <circle cx='16' cy='16' r='15' fill='#101010' />
+                        <path
+                          d='M16.9559 17.6581L23.2158 23.8003L23.9654 23.0206L17.5223 16.6986H25V15.6272H17.9338L23.8437 9.82831L23.0646 9.07754L16.9559 15.0714V8H15.864V15.0715L9.87251 9.19262L9.10038 9.95024L14.8861 15.6272H1V16.6986H15.2976L9.10818 22.7717L9.88031 23.5293L15.864 17.6581V25H16.9559V17.6581Z'
+                          fill='white'
+                        />
+                      </svg>
+                    </div>
                   </div>
-                  <div className='flex gap-2 items-center'>
-                    <span>{pointsEarned}</span>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='32'
-                      height='32'
-                      viewBox='0 0 32 32'
-                      fill='none'
-                    >
-                      <circle cx='16' cy='16' r='15' fill='#101010' />
-                      <path
-                        d='M16.9559 17.6581L23.2158 23.8003L23.9654 23.0206L17.5223 16.6986H25V15.6272H17.9338L23.8437 9.82831L23.0646 9.07754L16.9559 15.0714V8H15.864V15.0715L9.87251 9.19262L9.10038 9.95024L14.8861 15.6272H1V16.6986H15.2976L9.10818 22.7717L9.88031 23.5293L15.864 17.6581V25H16.9559V17.6581Z'
-                        fill='white'
-                      />
-                    </svg>
-                  </div>
+                  {pointsEarned === null && (
+                    <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
+                      Your points are being calculated and will be added to your
+                      account once the transaction is confirmed.
+                    </div>
+                  )}
                 </div>
               </div>
 

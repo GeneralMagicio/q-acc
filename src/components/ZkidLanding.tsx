@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { Banner } from '@/components/Banner';
+import { Banner } from '@/components/Banner/Banner';
 import About from '@/components/About';
 import Collaborator from '@/components/Collaborator';
 import { KycLandingButton } from '@/components/KycLandingButton';
@@ -14,11 +14,7 @@ const ZkidLanding = () => {
   const { isVerified } = usePrivado();
   return (
     <div className='flex flex-col gap-4'>
-      <Banner
-        title1='the future of'
-        title2='tokenization'
-        subTitle='q/acc = QF*ABC'
-      />
+      <Banner />
       <div className='bg-white relative overflow-hidden pt-20'>
         <Image
           src='/images/bg/round1.png'
