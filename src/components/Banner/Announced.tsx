@@ -33,7 +33,7 @@ export const Announced = () => {
       if (now < _startDate) {
         _targetDate = _startDate;
         isStarted && setIsStarted(false);
-      } else if (now === _startDate) {
+      } else if (now.getTime() === _startDate.getTime()) {
         setRemainingTime('00:00:00');
         setIsStarted(true);
       } else {
