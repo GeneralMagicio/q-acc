@@ -6,7 +6,6 @@ import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateRemainingTime } from '@/helpers/date';
 import Routes from '@/lib/constants/Routes';
-import { IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { Spinner } from '../Loading/Spinner';
 
@@ -102,8 +101,9 @@ export const Announced = () => {
                 <Spinner />
               ) : (
                 (
-                  (Number((activeRoundDetails as IQfRound)?.allocatedFund) ||
-                    0) * (POLPrice || 0)
+                  (activeRoundDetails?.__typename === 'QfRound'
+                    ? Number(activeRoundDetails.allocatedFund)
+                    : 0) * (POLPrice || 0)
                 ).toLocaleString('en-US') || '0'
               )}
             </div>
