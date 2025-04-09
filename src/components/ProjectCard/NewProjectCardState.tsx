@@ -58,7 +58,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
       };
-      // fetchProjectDonations();
+      fetchProjectDonations();
     }
   }, [project]);
 
@@ -213,9 +213,14 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                 <div className='flex flex-col'>
                   <span className='text-[#1D1E1F] font-bold text-lg'>
                     {' '}
-                    ~ $ 2,358
+                    ~ ${' '}
+                    {polPriceNumber
+                      ? `${' ' + formatNumber(polPriceNumber * totalPOLDonated)}`
+                      : ''}
                   </span>
-                  <span className='text-[#4F576A] font-medium'>5,825 POL</span>
+                  <span className='text-[#4F576A] font-medium'>
+                    {formatNumber(totalPOLDonated)} POL
+                  </span>
                 </div>
               </div>
 
