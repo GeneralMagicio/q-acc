@@ -154,7 +154,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`bg-white absolute h-fit ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover transition-bottom duration-500 ease-in-out left-4 right-4 py-4`}
         >
           <div className='absolute bg-white    left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
             <svg
@@ -191,7 +191,21 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </svg>
           </div>
 
-          <div className='flex flex-col gap-4'>
+          <svg
+            className='absolute -top-[18px] right-0'
+            xmlns='http://www.w3.org/2000/svg'
+            width='18'
+            height='18'
+            viewBox='0 0 18 18'
+            fill='none'
+          >
+            <path
+              d='M18 18V0C18 0 17.8462 10.1538 14 14C10.1538 17.8462 0 18 0 18H18Z'
+              fill='white'
+            />
+          </svg>
+
+          <div className='relative flex flex-col gap-4'>
             <div className='flex flex-col'>
               <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
@@ -251,11 +265,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         : ' (Calculating) '}
                     </div>
                   </div>
-                  <div className='mt-1 flex justify-between'>
+                  <div className='mt-1 flex justify-between flex-wrap'>
                     {tokenPriceRangeStatus.isSuccess &&
                     tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                       <>
-                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md'>
                           <p className='font-bold text-gray-800'>
                             {tokenPriceRange.min.toFixed(2)} -{' '}
                             {tokenPriceRange.max.toFixed(2)}
