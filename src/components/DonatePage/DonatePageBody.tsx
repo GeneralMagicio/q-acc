@@ -24,6 +24,7 @@ import { Button, ButtonColor } from '../Button';
 
 import {
   convertDonationAmount,
+  convertToPOLAmount,
   fetchBalanceWithDecimals,
   formatBalance,
 } from '@/helpers/token';
@@ -475,45 +476,56 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     useSendTransaction();
 
   useEffect(() => {
-    if (isConfirmed && !hasSavedDonation) {
-      const token = config.ERC_TOKEN_SYMBOL;
+    const saveDonation = async () => {
+      if (isConfirmed && !hasSavedDonation) {
+        const token = config.ERC_TOKEN_SYMBOL;
 
-      if (isSquidTransaction) {
-        const swapData: SwapData = {
-          squidRequestId: squidTransactionRequest?.requestId,
-          firstTxHash: hash!,
-          fromChainId: Number(selectedChain.id),
-          toChainId: Number(137),
-          fromTokenAddress: selectedToken.address,
-          toTokenAddress: tokenAddress,
-          fromAmount: parseFloat(inputAmount),
-          toAmount: parseFloat(inputAmount),
-          fromTokenSymbol: selectedToken.symbol,
-          toTokenSymbol: config.ERC_TOKEN_SYMBOL,
-        };
+        if (isSquidTransaction) {
+          const swapData: SwapData = {
+            squidRequestId: squidTransactionRequest?.requestId,
+            firstTxHash: hash!,
+            fromChainId: Number(selectedChain.id),
+            toChainId: Number(137),
+            fromTokenAddress: selectedToken.address,
+            toTokenAddress: tokenAddress,
+            fromAmount: parseFloat(inputAmount),
+            toAmount: parseFloat(inputAmount),
+            fromTokenSymbol: selectedToken.symbol,
+            toTokenSymbol: config.ERC_TOKEN_SYMBOL,
+          };
 
-        handleSaveDonation({
-          projectId: parseInt(projectData?.id),
-          transactionNetworkId: 137, //chain?.id,
-          amount: parseFloat(inputAmount),
-          token,
-          transactionId: hash,
-          tokenAddress,
-          swapData,
-        });
-      } else {
-        handleSaveDonation({
-          projectId: parseInt(projectData?.id),
-          transactionNetworkId: 137, //chain?.id,
-          amount: parseFloat(inputAmount),
-          token,
-          transactionId: hash,
-          tokenAddress,
-        });
+          const amountInPOL = await convertToPOLAmount(
+            selectedToken,
+            parseFloat(inputAmount),
+          );
+
+          handleSaveDonation({
+            projectId: parseInt(projectData?.id),
+            transactionNetworkId: 137, //chain?.id,
+            amount: amountInPOL,
+            token,
+            transactionId: hash,
+            tokenAddress,
+            swapData,
+            fromTokenAmount: parseFloat(inputAmount),
+          });
+        } else {
+          handleSaveDonation({
+            projectId: parseInt(projectData?.id),
+            transactionNetworkId: 137, //chain?.id,
+            amount: parseFloat(inputAmount),
+            token,
+            transactionId: hash,
+            tokenAddress,
+            fromTokenAmount: parseFloat(inputAmount),
+          });
+        }
+
+        setHasSavedDonation(true);
       }
+    };
 
-      setHasSavedDonation(true);
-    }
+    saveDonation();
   }, [isConfirmed, hasSavedDonation]);
 
   const getTokenDetails = async () => {
@@ -615,6 +627,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     transactionId,
     tokenAddress,
     swapData,
+    fromTokenAmount,
   }: any) => {
     try {
       const data = await saveDonations(
@@ -626,6 +639,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         tokenAddress,
         anoynmous,
         swapData,
+        fromTokenAmount,
       );
       setDonationId(Number(data));
     } catch (error) {
@@ -648,6 +662,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         config.ERC_TOKEN_SYMBOL,
         projectData?.addresses[0].address,
         selectedToken.address,
+        parseFloat(inputAmount),
       );
 
       if (

@@ -46,6 +46,7 @@ export const createDraftDonation = async (
   token: string,
   toAddress: string,
   tokenAddress: String,
+  fromTokenAmount: number,
 ) => {
   try {
     const res = await requestGraphQL<{ createDraftDonation: number }>(
@@ -57,6 +58,7 @@ export const createDraftDonation = async (
         token,
         toAddress,
         tokenAddress,
+        fromTokenAmount,
       },
       {
         auth: true,
@@ -78,6 +80,7 @@ export const saveDonations = async (
   tokenAddress: String,
   anonymous: boolean,
   swapData?: SwapData,
+  fromTokenAmount?: number,
 ) => {
   try {
     const res = await requestGraphQL<{ createDonation: number }>(
@@ -91,6 +94,7 @@ export const saveDonations = async (
         tokenAddress,
         anonymous,
         swapData,
+        fromTokenAmount,
       },
       {
         auth: true,

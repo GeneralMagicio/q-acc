@@ -309,6 +309,25 @@ export const convertDonationAmount = async (
   return (minPOL * polPrice) / targetTokenPrice;
 };
 
+export const convertToPOLAmount = async (
+  token: SquidTokenType,
+  amountInToken: number,
+) => {
+  const polPrice = await fetchSquidPOLUSDPrice();
+  const tokenPrice = token.usdPrice;
+
+  if (!polPrice || !tokenPrice) {
+    console.error('Error fetching token prices');
+    return null;
+  }
+
+  // Convert token amount to USD, then USD to POL
+  const usdValue = amountInToken * tokenPrice;
+  const equivalentPOL = usdValue / polPrice;
+
+  return equivalentPOL;
+};
+
 export const fetchSquidPOLUSDPrice = async () => {
   try {
     const result = await axios.get(
