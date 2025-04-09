@@ -33,41 +33,39 @@ export default function Home() {
           }}
         />
         <div className='container relative flex flex-col gap-10 pt-4 pb-20 font-light text-2xl text-gray-600'>
-          <div className='flex flex-col gap-6 '>
-            <div className='grid grid-cols-2 gap-4'>
-              <div>
-                <h1
-                  className={`text-3xl text-gray-900 font-bold mt-10 ${inter.className} mb-6`}
-                >
-                  Quadratic Acceleration (q/acc): The Future of Trust in
-                  Tokenization
-                </h1>
-                <div className='text-2xl leading-9 text-gray-600'>
-                  <p>
-                    Web3 is the future, but let’s be honest—it’s chaotic. Scams,
-                    rug pulls, and hype-driven speculation make it nearly
-                    impossible for many to separate real innovation from noise;
-                    q/acc changes that.
-                  </p>
-                  <br />
-                  <p>
-                    The most promising Web3 startups are hand-picked to launch
-                    their tokens in a way that’s secure, transparent, and
-                    rug-proof. No more guessing games. No more losing to bad
-                    actors. Just pure, accelerated innovation
-                  </p>
-                  <br />
-                </div>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+            <div>
+              <h1
+                className={`text-3xl text-gray-900 font-bold mt-10 ${inter.className} mb-6`}
+              >
+                Quadratic Acceleration (q/acc): The Future of Trust in
+                Tokenization
+              </h1>
+              <div className='text-2xl leading-9 text-gray-600'>
+                <p>
+                  Web3 is the future, but let’s be honest—it’s chaotic. Scams,
+                  rug pulls, and hype-driven speculation make it nearly
+                  impossible for many to separate real innovation from noise;
+                  q/acc changes that.
+                </p>
+                <br />
+                <p>
+                  The most promising Web3 startups are hand-picked to launch
+                  their tokens in a way that’s secure, transparent, and
+                  rug-proof. No more guessing games. No more losing to bad
+                  actors. Just pure, accelerated innovation
+                </p>
+                <br />
               </div>
-              <div className='p-10'>
-                <iframe
-                  className='w-full rounded-lg h-full my-6'
-                  src='https://www.youtube.com/embed/m30ElzaR--4'
-                  title='Quadratic Acceleration (q/acc): The Future of Tokenization'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                  allowFullScreen={true}
-                ></iframe>
-              </div>
+            </div>
+            <div className='p-10 flex justify-center items-center'>
+              <iframe
+                className='w-full rounded-lg h-auto my-6 aspect-video'
+                src='https://www.youtube.com/embed/m30ElzaR--4'
+                title='Quadratic Acceleration (q/acc): The Future of Tokenization'
+                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                allowFullScreen={true}
+              ></iframe>
             </div>
           </div>
         </div>
