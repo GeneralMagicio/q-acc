@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
 import { formatAmount } from '@/helpers/donation';
-import ProgressBar from '../ProgressBar';
-import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
@@ -31,8 +29,6 @@ const DonateSection = () => {
     totalAmount: totalPOLDonated,
   } = useProjectContext();
 
-  const isRoundActive = !!activeRoundDetails;
-
   useEffect(() => {
     const updatePOLCap = async () => {
       const { capAmount, totalDonationAmountInRound }: any =
@@ -56,66 +52,32 @@ const DonateSection = () => {
   const renderContent = () => {
     const renderDonationInfo = () => {
       return totalDonations && totalDonations !== 0 ? (
-        <div className='mb-20px flex flex-col gap-2'>
-          <div className='inline-block w-fit text-sm text-[#82899A] bg-[#F7F7F9] rounded-md px-1 py-1'>
-            Total amount received
-          </div>
-          <h3 className='text-[41px] font-bold'>
-            {' '}
-            {formatAmount(totalAmountDonated)} POL
-          </h3>
-          <h2 className='text-[#1D1E1F] font-bold font-redHatText'>
-            {' '}
-            ~ ${' '}
-            {formatAmount(
-              Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
-            )}
-          </h2>
-          <p className='text-gray-700'>
-            From{' '}
-            <span className='font-bold text-[#1D1E1F]'>{uniqueDonars}</span>{' '}
+        <div className='mb-20px flex flex-col gap-2 font-redHatText'>
+          <div className='inline-block w-fit text-sm text-[#82899A] rounded-md px-1 py-1'>
+            Backed by{' '}
+            <span className='text-[#1D1E1F] text-base font-semibold'>
+              {uniqueDonars}
+            </span>{' '}
             supporters
-          </p>
+          </div>
 
-          <hr />
-
-          {isRoundActive && (
-            <>
-              {/* Percentage Bar */}
-              <div className='flex flex-col gap-2 mt-12'>
-                <div
-                  className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress >= 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
-                >
-                  {progress === 0 ? (
-                    'Getting started !'
-                  ) : progress >= 100 ? (
-                    'Maxed out this round!'
-                  ) : (
-                    <div className='flex gap-1'>
-                      {progress} % collected
-                      <div className='relative group'>
-                        <IconTokenSchedule />
-                        <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                          Bonding curves have a mint price and a burn price.
-                          This shows the mint price.
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <ProgressBar progress={progress} isStarted={false} />
-                <div className='flex justify-between px-2 font-redHatText  font-medium items-center'>
-                  <span className='text-[#A5ADBF] text-xs'>
-                    {' '}
-                    Cumulative Round Cap
-                  </span>
-                  <span className='text-[#1D1E1F]'>
-                    {formatAmount(maxPOLCap)} POL
-                  </span>
-                </div>
-              </div>
-            </>
-          )}
+          <div className='p-2 bg-[#EBECF2] rounded-lg flex flex-col gap-4'>
+            <span className='text-[#1D1E1F] text-sm font-semibold'>
+              Total received
+            </span>
+            <div className='flex gap-2 items-center'>
+              <span className='text-[#1D1E1F] font-bold text-lg'>
+                ~ ${' '}
+                {formatAmount(
+                  Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
+                )}
+              </span>
+              <span className='text-[#4F576A] font-medium'>
+                {' '}
+                {formatAmount(totalAmountDonated)} POL
+              </span>
+            </div>
+          </div>
         </div>
       ) : (
         <div className='mb-4'>
