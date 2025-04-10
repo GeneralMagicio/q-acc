@@ -101,22 +101,6 @@ const ProjectDetail = () => {
     }
   }, [searchParams.get('tab')]);
 
-  const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
-  useEffect(() => {
-    const fetchPoolAddress = async () => {
-      if (projectData?.abc?.issuanceTokenAddress) {
-        const { price, isListed } = await getPoolAddressByPair(
-          projectData.abc.issuanceTokenAddress,
-          config.ERC_TOKEN_ADDRESS,
-        );
-        setIsTokenListed(isListed);
-        setCurrentTokenPrice(Number(price));
-      }
-    };
-
-    // fetchPoolAddress();
-  }, [projectData?.abc?.issuanceTokenAddress, isTokenListed]);
-
   if (!projectData) {
     return (
       <div className='container flex justify-center items-center min-h-80'>
@@ -130,7 +114,7 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner isRoundActive={isRoundActive} />
 
-          {!isTokenListed ? <DonateSection /> : ''}
+          <DonateSection />
         </div>
         {isRoundActive && (
           <div className='my-6'>

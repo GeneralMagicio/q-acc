@@ -52,7 +52,7 @@ const ProjectDonateButton = () => {
       }
     };
 
-    // fetchPoolAddress();
+    fetchPoolAddress();
   }, [
     projectData?.abc?.issuanceTokenAddress,
     currentTokenPrice,
@@ -176,6 +176,68 @@ const ProjectDonateButton = () => {
     </div>
   );
 
+  const TokenInfo = () => (
+    <div className='flex flex-col gap-4 font-redHatText'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex gap-2'>
+          <img
+            className='w-6 h-6 rounded-full'
+            src={getIpfsAddress(
+              projectData.abc?.icon! ||
+                'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+            )}
+          />
+          <span className='text-[#4F576A] font-semibold text-sm '>
+            {projectData.abc.tokenTicker} price on Quickswap
+          </span>
+        </div>
+
+        <div className='flex justify-between items-center'>
+          <span className='text-[#1D1E1F] font-bold text-lg'>~ $ 3.88</span>
+          <span className='text-[#4F576A] font-semibold'>2.02 POL</span>
+        </div>
+      </div>
+      <hr />
+
+      <div className='flex justify-between items-center'>
+        {/* Market Cap */}
+        <div className='flex flex-col gap-2'>
+          <span className='text-[#4F576A] font-semibold text-sm'>
+            {projectData.abc.tokenTicker} Market Cap
+          </span>
+          <span className='text-[#1D1E1F] font-bold text-lg'>$ 400,000</span>
+        </div>
+
+        {/* 24 h Change */}
+
+        <div className='flex flex-col gap-2'>
+          <span className='text-[#4F576A] font-semibold text-sm'>
+            24h Change
+          </span>
+          <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
+            {' '}
+            9.56%{' '}
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='16'
+              height='16'
+              viewBox='0 0 16 16'
+              fill='none'
+            >
+              <path
+                d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
+                stroke='#4F576A'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+
   const listedPriceInfo = () => (
     <div className='flex flex-col gap-2 font-redHatText'>
       <div className='flex justify-start items-center gap-2 '>
@@ -224,23 +286,65 @@ const ProjectDonateButton = () => {
     </div>
   );
 
-  let currentState = 'early';
   return (
     <div className='flex flex-col gap-4'>
-      {activeRoundDetails && PriceInfo()}
-      {isTokenListed && listedPriceInfo()}
-      {currentState === EDonationCardStates.beforeFirstRound ? (
+      {TokenInfo()}
+
+      {/* If round is Active show Buy token */}
+      {activeRoundDetails && (
         <Button
-          color={ButtonColor.Pink}
-          className='w-full justify-center opacity-50 cursor-not-allowed'
+          color={ButtonColor.Giv}
+          className='w-full justify-center rounded-xl'
+          onClick={handleSupport}
+          disabled={
+            (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
+              !ownsNFT) ||
+            progress >= 100 ||
+            remainingTime === 'Time is up!' ||
+            remainingTime === '--:--:--'
+          }
+          loading={loadingNFTCheck}
         >
-          Starting Soon
+          {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+            ? 'Buy Token'
+            : progress >= 100
+              ? 'Project Maxed Out'
+              : 'Buy Token'}
         </Button>
+      )}
+
+      {/* If round is not active */}
+      {!activeRoundDetails ? (
+        isTokenListed ? (
+          <Button
+            color={ButtonColor.Giv}
+            className='w-full justify-center'
+            onClick={() => {
+              const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${projectData?.abc?.issuanceTokenAddress}`;
+              window.open(url, '_blank', 'noopener,noreferrer');
+            }}
+          >
+            Get {projectData?.abc?.tokenTicker} on QuickSwap
+          </Button>
+        ) : projectData.batchNumbersWithSafeTransactions?.length != 0 ? (
+          <Button
+            color={ButtonColor.Giv}
+            className='w-full justify-center rounded-xl'
+            disabled={true}
+          >
+            DEX listing soon
+          </Button>
+        ) : (
+          ''
+        )
       ) : (
-        <>
-          {isTokenListed ? (
+        ''
+      )}
+
+      <>
+        {/* {isTokenListed ? (
             <Button
-              color={ButtonColor.Pink}
+              color={ButtonColor.Giv}
               className='w-full justify-center'
               onClick={() => {
                 const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${projectData?.abc?.issuanceTokenAddress}`;
@@ -251,8 +355,8 @@ const ProjectDonateButton = () => {
             </Button>
           ) : (
             <Button
-              color={ButtonColor.Pink}
-              className='w-full justify-center'
+              color={ButtonColor.Giv}
+              className='w-full justify-center rounded-xl'
               onClick={handleSupport}
               disabled={
                 (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
@@ -269,9 +373,9 @@ const ProjectDonateButton = () => {
                   ? 'Project Maxed Out'
                   : 'Buy Token'}
             </Button>
-          )}
+          )} */}
 
-          {activeRoundDetails ? (
+        {/* {activeRoundDetails ? (
             activeRoundDetails.__typename === 'EarlyAccessRound' ? (
               !ownsNFT ? (
                 <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
@@ -283,9 +387,8 @@ const ProjectDonateButton = () => {
                 </span>
               )
             ) : null
-          ) : null}
-        </>
-      )}
+          ) : null} */}
+      </>
     </div>
   );
 };
