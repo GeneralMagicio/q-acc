@@ -274,12 +274,13 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                       </svg>
                     </div>
                   </div>
-                  {pointsEarned === null && (
-                    <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
-                      Your points are being calculated and will be added to your
-                      account once the transaction is confirmed.
-                    </div>
-                  )}
+                  {pointsEarned === null &&
+                    donationStatus === DonationStatus.Swap_pending && (
+                      <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
+                        Your points are being calculated and will be added to
+                        your account once the transaction is confirmed.
+                      </div>
+                    )}
                 </div>
               </div>
 
