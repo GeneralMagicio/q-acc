@@ -23,7 +23,7 @@ export const ProjectsSection: FC<ProjectsSectionProps> = ({ seasonFilter }) => {
 
   const sortedProjects =
     seasonFilter === 0
-      ? shuffledProjects.sort((a, b) => b.seasonNumber - a.seasonNumber)
+      ? [...shuffledProjects].sort((a, b) => b.seasonNumber - a.seasonNumber)
       : shuffledProjects;
 
   return isLoading ? (
