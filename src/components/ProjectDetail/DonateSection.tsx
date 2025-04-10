@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ProjectDonateButton from './ProjectDonateButton';
 import { useProjectContext } from '@/context/project.context';
 import { formatAmount } from '@/helpers/donation';
-import ProgressBar from '../ProgressBar';
-import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
@@ -30,8 +28,6 @@ const DonateSection = () => {
     uniqueDonars,
     totalAmount: totalPOLDonated,
   } = useProjectContext();
-
-  const isRoundActive = !!activeRoundDetails;
 
   useEffect(() => {
     const updatePOLCap = async () => {

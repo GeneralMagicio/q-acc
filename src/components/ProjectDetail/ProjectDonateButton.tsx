@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { Button, ButtonColor } from '../Button';
-import { EDonationCardStates } from './DonateSection';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
