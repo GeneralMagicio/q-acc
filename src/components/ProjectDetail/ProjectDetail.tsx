@@ -145,7 +145,7 @@ const ProjectDetail = () => {
                 <Button
                   onClick={e => {
                     e.stopPropagation();
-                    const url = `https://quickswap.exchange/#/swap?currency0=ETH&currency1=${projectData?.abc?.issuanceTokenAddress}`;
+                    const url = `https://dapp.quickswap.exchange/swap/best/ETH/${projectData?.abc?.issuanceTokenAddress}`;
                     window.open(url, '_blank', 'noopener,noreferrer');
                   }}
                   color={ButtonColor.Pink}
