@@ -5,7 +5,7 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateRemainingTime } from '@/helpers/date';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { Spinner } from '../Loading/Spinner';
-import { OnBoardButton } from './onBoardButton';
+import { OnBoardButton } from './OnBoardButton';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });

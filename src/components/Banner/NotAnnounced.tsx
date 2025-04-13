@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OnBoardButton } from './onBoardButton';
+import { OnBoardButton } from './OnBoardButton';
 
 export const NotAnnounced = () => {
   return (
