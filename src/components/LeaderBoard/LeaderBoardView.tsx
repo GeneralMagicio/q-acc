@@ -8,6 +8,7 @@ import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
 import { SortDirection, SortField } from '@/services/points.service';
 import { Pagination } from './Pagination';
 import { Spinner } from '../Loading/Spinner';
+import { roundPoints } from '@/helpers/points';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -105,7 +106,9 @@ export const LeaderBoardView = () => {
                   )}
                   {user.name}
                 </div>
-                <div>{user.qaccPoints.toLocaleString('en-US')}</div>
+                <div>
+                  {roundPoints(user.qaccPoints).toLocaleString('en-US')}
+                </div>
                 <div>{user.projectsFundedCount}</div>
               </div>
             );

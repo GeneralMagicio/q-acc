@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { FC, HTMLProps } from 'react';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { roundPoints } from '@/helpers/points';
 
 interface PointsButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -18,7 +19,7 @@ export const PointsButton: FC<PointsButtonProps> = ({ className }) => {
         className='w-6 h-6'
       />
       <div className='text-sm font-redHatText font-semibold text-giv-900'>
-        {userInfo?.qaccPoints?.toLocaleString('en-US')}
+        {roundPoints(userInfo?.qaccPoints).toLocaleString('en-US')}
       </div>
     </div>
   ) : null;
