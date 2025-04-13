@@ -1,4 +1,7 @@
-export function roundPoints(value: number): number {
+export function roundPoints(value?: number): number {
+  if (value === undefined || value === null) {
+    return 0;
+  }
   const integerPart = Math.floor(value);
   const decimalPart = value - integerPart;
 
