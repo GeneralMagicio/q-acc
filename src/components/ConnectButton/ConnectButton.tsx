@@ -18,6 +18,9 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   className,
   ...props
 }) => {
+  const { connector } = useAccount();
+  console.log('connector', connector);
+
   const { disconnect } = useDisconnect();
   const { open } = useAppKit();
 
@@ -77,13 +80,23 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
           </svg>
         ) : address ? (
           <div className='flex gap-2 items-center'>
-            <Image
+            {/* <Image
               src={user?.avatar || '/images/placeholders/PFPQACC.png'}
               alt='Profile Pic'
               width={24}
               height={24}
               className='rounded-full w-6 h-6'
-            />
+            /> */}
+            {connector?.icon && (
+              <div className='rounded-full w-6 h-6 bg-white flex items-center justify-center'>
+                <Image
+                  src={connector.icon}
+                  alt='wallet Icon'
+                  width={16}
+                  height={16}
+                />
+              </div>
+            )}
             {chainData?.chainIconURI && (
               <Image
                 src={chainData.chainIconURI}
