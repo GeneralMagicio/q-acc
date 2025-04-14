@@ -192,8 +192,26 @@ const ProjectDonateButton = () => {
         </div>
 
         <div className='flex justify-between items-center'>
-          <span className='text-[#1D1E1F] font-bold text-lg'>~ $ 3.88</span>
-          <span className='text-[#4F576A] font-semibold'>2.02 POL</span>
+          {isTokenListed ? (
+            <>
+              <span className='text-[#1D1E1F] font-bold text-lg'>
+                {' '}
+                ~ ${' '}
+                {POLPrice
+                  ? `${' ' + formatNumber(POLPrice * currentTokenPrice)}`
+                  : ''}
+              </span>
+              <span className='text-[#4F576A] font-semibold'>
+                {' '}
+                {currentTokenPrice.toFixed(2)} POL
+              </span>
+            </>
+          ) : (
+            <>
+              <span className='text-[#1D1E1F] font-bold text-lg'>---</span>
+              <span className='text-[#4F576A] font-semibold'>---</span>
+            </>
+          )}
         </div>
       </div>
       <hr />
