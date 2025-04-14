@@ -21,6 +21,7 @@ import { IconFacebook } from '../Icons/IconFacebook';
 import { IconTransactionProgress } from '../Icons/IconTransactionProgress';
 import { useFetchPointsHistoryOfUser } from '@/hooks/useFetchPointsHistoryOfUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { roundPoints } from '@/helpers/points';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -88,7 +89,9 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
         if (found) {
           clearInterval(interval);
           console.log('✅ Donation found in points history!');
-          setPointsEarned(found.pointsEarned.toLocaleString('en-US'));
+          setPointsEarned(
+            roundPoints(found.pointsEarned).toLocaleString('en-US'),
+          );
           refetchUser();
         }
       }, 3000);
@@ -274,12 +277,13 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                       </svg>
                     </div>
                   </div>
-                  {pointsEarned === null && (
-                    <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
-                      Your points are being calculated and will be added to your
-                      account once the transaction is confirmed.
-                    </div>
-                  )}
+                  {pointsEarned === null &&
+                    donationStatus === DonationStatus.Swap_pending && (
+                      <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
+                        Your points are being calculated and will be added to
+                        your account once the transaction is confirmed.
+                      </div>
+                    )}
                 </div>
               </div>
 

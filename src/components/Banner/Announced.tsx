@@ -1,13 +1,11 @@
 import { Inter, Nunito_Sans } from 'next/font/google';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { IconArrowRight } from '../Icons/IconArrowRight';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateRemainingTime } from '@/helpers/date';
-import Routes from '@/lib/constants/Routes';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { Spinner } from '../Loading/Spinner';
+import { OnBoardButton } from './OnBoardButton';
 
 const nunito = Nunito_Sans({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
@@ -75,14 +73,7 @@ export const Announced = () => {
             })}
           </div>
         </div>
-        <Link href={Routes.Projects}>
-          <button
-            className={`flex items-center py-3 px-6 rounded-xl bg-gray-950 shadow-banner-button font-semibold tracking-wide ${inter.className}`}
-          >
-            <span>Get Started</span>
-            <IconArrowRight size={24} />
-          </button>
-        </Link>
+        <OnBoardButton />
       </div>
       {isStarted && (
         <div className='flex justify-center items-center text-white bg-gray-900 w-full relative z-10 py-2 gap-20 overflow-hidden'>
