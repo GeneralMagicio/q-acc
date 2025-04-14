@@ -235,9 +235,7 @@ export function calculateMarketCapChange(supply: number, donations: any[]) {
   const recentDonationExists = donations.some(
     d => new Date(d.createdAt) > cutoff,
   );
-  // const sorted = [...donations].sort(
-  //   (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  // );
+
   donations.forEach(({ amount, createdAt }) => {
     supply = supply * Math.pow(1 + amount / reserve, reserveRatio);
     reserve += amount;
