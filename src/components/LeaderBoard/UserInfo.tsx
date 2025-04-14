@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { roundPoints } from '@/helpers/points';
 
 export const UserInfo = () => {
   const { data: user } = useFetchUser();
@@ -8,7 +9,7 @@ export const UserInfo = () => {
       <div># {user?.rank}</div>
       <div className='text-lg font-semibold'>{user?.fullName}</div>
       <div className='text-lg font-semibold'>
-        {user?.qaccPoints.toLocaleString('en-US')}
+        {roundPoints(user?.qaccPoints).toLocaleString('en-US')}
       </div>
       <div className='text-lg font-semibold'>{user?.projectsFundedCount}</div>
     </div>
