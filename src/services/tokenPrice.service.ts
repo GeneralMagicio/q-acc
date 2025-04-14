@@ -216,10 +216,9 @@ export const useTokenPriceRangeStatus = ({
   });
 };
 
-export function calculateMarketCapChange(donations: any[]) {
-  const reserveRatio = 0.125;
-  let supply = 6_400_000; //inital token supply
-  let reserve = 250_000; //inital collateral supply
+export function calculateMarketCapChange(supply: number, donations: any[]) {
+  const reserveRatio = config.RESERVE_RATIO;
+  let reserve = config.COLLATERAL_RESERVE;
 
   // Sort by date
   const history: { createdAt: string; marketCap: number }[] = [];
@@ -232,14 +231,14 @@ export function calculateMarketCapChange(donations: any[]) {
   });
 
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+  const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const recentDonationExists = donations.some(
     d => new Date(d.createdAt) > cutoff,
   );
-  const sorted = [...donations].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
-  sorted.forEach(({ amount, createdAt }) => {
+  // const sorted = [...donations].sort(
+  //   (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  // );
+  donations.forEach(({ amount, createdAt }) => {
     supply = supply * Math.pow(1 + amount / reserve, reserveRatio);
     reserve += amount;
     const price = reserve / (supply * reserveRatio);

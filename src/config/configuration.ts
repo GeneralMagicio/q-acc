@@ -36,6 +36,8 @@ const config = {
     address.toLowerCase(),
   ),
   NETWORK_RPC_ADDRESS,
+  RESERVE_RATIO: 0.125,
+  COLLATERAL_RESERVE: 250000,
 };
 
 export default config;
