@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useAccount, useDisconnect } from 'wagmi';
@@ -11,6 +12,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
 import { shortenAddress } from '@/helpers/address';
 import { useFetchChainsFromSquid } from '@/hooks/useFetchChainsFromSquid';
+import { useWalletInfo } from '@/hooks/useWalletInfo';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -18,8 +20,8 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   className,
   ...props
 }) => {
-  const { connector } = useAccount();
-  console.log('connector', connector);
+  const walletInfo = useWalletInfo();
+  console.log('walletInfo', walletInfo);
 
   const { disconnect } = useDisconnect();
   const { open } = useAppKit();
@@ -87,16 +89,17 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               height={24}
               className='rounded-full w-6 h-6'
             /> */}
-            {connector?.icon && (
-              <div className='rounded-full w-6 h-6 bg-white flex items-center justify-center'>
-                <Image
-                  src={connector.icon}
+            {walletInfo && (
+              <div className='rounded-full w-6 h-6 bg-white flex items-center justify-center overflow-hidden'>
+                <img
+                  src={walletInfo.image_url.sm}
                   alt='wallet Icon'
-                  width={16}
-                  height={16}
+                  width={24}
+                  height={24}
                 />
               </div>
             )}
+
             {chainData?.chainIconURI && (
               <Image
                 src={chainData.chainIconURI}
