@@ -38,7 +38,6 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const router = useRouter();
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
-
   // const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   const [isTokenListed, setIsTokenListed] = useState(false);
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
@@ -136,7 +135,82 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
             alt='Project Card'
             fallbackSrc='/images/project-card/card-image.jpeg'
           />
-          {(project.seasonNumber !== 1 ||
+
+          {project.batchNumbersWithSafeTransactions?.length === 0 ? (
+            <div className='absolute bg-white    right-[-2px] top-0   py-[2px]  pr-0 pl-2 rounded-tr-xl rounded-bl-2xl '>
+              <svg
+                className='absolute left-[-18px] top-[-1px]'
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 18 18'
+                fill='none'
+              >
+                <path
+                  d='M18 0V18C18 18 17.8462 7.84622 14 4C10.1538 0.153782 0 0 0 0H18Z'
+                  fill='white'
+                />
+              </svg>
+              <span className='text-[#1D1E1F] font-redHatText font-semibold'>
+                {project.batchNumbersWithSafeTransactions?.length != 0
+                  ? ' DEX listing soon'
+                  : 'New!'}
+              </span>
+
+              <svg
+                className=' absolute bottom-[-18px] right-[1px]'
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 18 18'
+                fill='none'
+              >
+                <path
+                  d='M18 0V18C18 18 17.8462 7.84622 14 4C10.1538 0.153782 0 0 0 0H18Z'
+                  fill='white'
+                />
+              </svg>
+            </div>
+          ) : project.batchNumbersWithSafeTransactions?.length != 0 &&
+            !activeRoundDetails ? (
+            <div className='absolute bg-white    right-[-2px] top-0   py-[2px]  pr-0 pl-2 rounded-tr-xl rounded-bl-2xl '>
+              <svg
+                className='absolute left-[-18px] top-[-1px]'
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 18 18'
+                fill='none'
+              >
+                <path
+                  d='M18 0V18C18 18 17.8462 7.84622 14 4C10.1538 0.153782 0 0 0 0H18Z'
+                  fill='white'
+                />
+              </svg>
+              <span className='text-[#1D1E1F] font-redHatText font-semibold'>
+                {project.batchNumbersWithSafeTransactions?.length != 0
+                  ? ' DEX listing soon'
+                  : 'New!'}
+              </span>
+
+              <svg
+                className=' absolute bottom-[-18px] right-[1px]'
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 18 18'
+                fill='none'
+              >
+                <path
+                  d='M18 0V18C18 18 17.8462 7.84622 14 4C10.1538 0.153782 0 0 0 0H18Z'
+                  fill='white'
+                />
+              </svg>
+            </div>
+          ) : (
+            ''
+          )}
+          {/* {(project.seasonNumber !== 1 ||
             project.batchNumbersWithSafeTransactions?.length != 0) && (
             <div className='absolute bg-white    right-[-2px] top-0   py-[2px]  pr-0 pl-2 rounded-tr-xl rounded-bl-2xl '>
               <svg
@@ -172,7 +246,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                 />
               </svg>
             </div>
-          )}
+          )} */}
         </div>
 
         <div
