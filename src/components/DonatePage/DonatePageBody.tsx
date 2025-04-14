@@ -27,8 +27,9 @@ import {
   convertToPOLAmount,
   fetchBalanceWithDecimals,
   formatBalance,
+  handleErc20Transfer,
 } from '@/helpers/token';
-import config from '@/config/configuration';
+import config, { isProduction } from '@/config/configuration';
 import {
   createDraftDonation,
   saveDonations,
@@ -178,6 +179,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const [showChainTokenModal, setShowChainTokenModal] = useState(false);
 
+  const tokenAddress = config.ERC_TOKEN_ADDRESS;
+
   const [selectedChain, setSelectedChain] = useState<{
     id: string | null;
     imageUrl: string;
@@ -186,8 +189,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     imageUrl: POLYGON_POS_CHAIN_IMAGE, // Replace with actual URL
   });
   const [selectedToken, setSelectedToken] = useState<SquidTokenType>({
-    symbol: 'POL',
-    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    symbol: config.ERC_TOKEN_SYMBOL,
+    address: tokenAddress,
     chainId: '137',
     name: 'POL',
     decimals: 18,
@@ -429,8 +432,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     };
   }, [isConfirming, donationId]);
 
-  const tokenAddress = config.ERC_TOKEN_ADDRESS;
-
   useEffect(() => {
     getTokenDetails();
   }, [address, tokenAddress, selectedToken]);
@@ -607,8 +608,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log(selectedToken, selectedChain);
 
       if (
-        selectedToken.address ===
-          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedToken.address === tokenAddress &&
         selectedChain.id === '137'
       ) {
         return;
@@ -666,12 +666,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       );
 
       if (
-        selectedToken.address ===
-          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        selectedToken.address === tokenAddress &&
         selectedChain.id === '137'
       ) {
-        await handleNormalTranfer();
-        console.log("handle normal transfeer'");
+        if (isProduction) {
+          await handleNormalTranfer();
+          console.log("handle normal transfeer'");
+        } else {
+          await handleTPOLTransfer();
+        }
       } else {
         await handleApproveSpendingAndSendTransaction();
       }
@@ -703,6 +706,22 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setIsButtonLoading(false);
       console.log('Error in normal tx ', e);
     } finally {
+    }
+  };
+
+  const handleTPOLTransfer = async () => {
+    try {
+      const hash = await handleErc20Transfer({
+        inputAmount,
+        tokenAddress,
+        projectAddress: projectData?.addresses[0].address,
+      });
+      console.log('this is the hash', hash);
+      setHash(hash);
+    } catch (e) {
+      setInputAmount('');
+      setIsButtonLoading(false);
+      console.log('Error in TPOL tx ', e);
     }
   };
 
