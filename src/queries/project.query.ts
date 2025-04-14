@@ -520,6 +520,7 @@ export const GET_ALL_PROJECTS = /* GraphQL */ `
           nftContractAddress
           chainId
           fundingManagerAddress
+          totalSupply
         }
         seasonNumber
       }

@@ -215,3 +215,62 @@ export const useTokenPriceRangeStatus = ({
     enabled: !!allRounds && !!project, // Run only if allRounds and project is provided
   });
 };
+
+export function calculateMarketCapChange(donations: any[]) {
+  const reserveRatio = 0.125;
+  let supply = 6_400_000; //inital token supply
+  let reserve = 250_000; //inital collateral supply
+
+  // Sort by date
+  const history: { createdAt: string; marketCap: number }[] = [];
+  const initialPrice = reserve / (supply * reserveRatio);
+
+  const initialMarketCap = supply * initialPrice;
+  history.push({
+    createdAt: '2025-04-1T00:00:00Z', // virtual Day 0 timestamp (can be set based on your round start)
+    marketCap: initialMarketCap,
+  });
+
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+  const recentDonationExists = donations.some(
+    d => new Date(d.createdAt) > cutoff,
+  );
+  const sorted = [...donations].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
+  sorted.forEach(({ amount, createdAt }) => {
+    supply = supply * Math.pow(1 + amount / reserve, reserveRatio);
+    reserve += amount;
+    const price = reserve / (supply * reserveRatio);
+    const marketCap = supply * price;
+    history.push({ createdAt, marketCap });
+  });
+
+  const marketCapNow = history[history.length - 1].marketCap;
+  if (recentDonationExists) {
+    console.log(history);
+  }
+
+  // Find market cap from ≥24h ago
+
+  const past = [...history]
+    .reverse()
+    .find(h => new Date(h.createdAt) <= cutoff);
+
+  if (recentDonationExists) {
+    console.log('Past', past);
+  }
+  const marketCapPast = past ? past.marketCap : initialMarketCap;
+
+  const latestMarketCap = history[history.length - 1].marketCap;
+
+  // const change24h = ((marketCapNow - marketCapPast) / marketCapPast) * 100;
+  const change24h = recentDonationExists
+    ? ((latestMarketCap - marketCapPast) / marketCapPast) * 100
+    : 0;
+  return {
+    marketCap: Math.round(marketCapNow),
+    change24h: change24h,
+  };
+}

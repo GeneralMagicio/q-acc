@@ -10,6 +10,7 @@ import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import {
+  calculateMarketCapChange,
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
@@ -19,6 +20,9 @@ import { SupportButton } from './SupportButton';
 import { Button, ButtonColor } from '../Button';
 import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
+import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
+import { orderBy } from 'lodash';
+import { EDirection, EOrderBy } from '../ProjectDetail/ProjectDonationTable';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -36,12 +40,16 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
 
   const router = useRouter();
-  const { data: POLPrice } = useFetchTokenPrice();
+  const { data: POLPrice } = useFetchPOLPriceSquid();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
 
   // const isQaccRoundEnded = useFetchMostRecentEndRound(activeRoundDetails);
   const [isTokenListed, setIsTokenListed] = useState(false);
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
+
+  const [marketCap, setMarketCap] = useState(0);
+  const [lastDayPOLContributions, setLastDayPOLContributions] = useState(0);
+  const [pageDonation, setPageDonations] = useState([]);
 
   useEffect(() => {
     if (project?.id) {
@@ -50,10 +58,27 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           parseInt(project?.id),
           1000,
           0,
+          { field: EOrderBy.CreationDate, direction: EDirection.DESC },
         );
 
         if (data) {
           const { donations, totalCount } = data;
+          // setPageDonations(donations);
+
+          const { marketCap: newCap, change24h } =
+            calculateMarketCapChange(donations);
+          setMarketCap(newCap * polPriceNumber);
+
+          console.log(project.title, newCap, change24h, 'Change in percentafe');
+          const now = new Date();
+          const cutoff = new Date(now.getTime() - 100 * 60 * 60 * 1000);
+
+          // 🔍 Filter donations by createdAt
+          const recentDonations = donations.filter((donation: any) => {
+            return new Date(donation.createdAt) >= cutoff;
+          });
+
+          setLastDayPOLContributions(calculateTotalDonations(recentDonations));
 
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
@@ -335,7 +360,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                 <div className='flex flex-col'>
                   <span className='text-[#1D1E1F] font-bold text-lg text-right'>
                     {' '}
-                    $ 400,000
+                    $ {formatNumber(marketCap)}
                   </span>
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center'>
                     <span className='text-xs'>24h Change</span>
