@@ -418,7 +418,7 @@ export const CREATE_DRAFT_DONATION = `mutation (
 
 export const GET_ALL_PROJECTS = `
 {
-  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest) {
+  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest, limit: 50) {
      projects {
     id
     title
