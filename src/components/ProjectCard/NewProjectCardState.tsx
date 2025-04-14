@@ -59,10 +59,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           const { donations, totalCount } = data;
           // setPageDonations(donations);
 
-          const { marketCap: newCap, change24h } = calculateMarketCapChange(
-            project.abc?.totalSupply!,
-            donations,
-          );
+          const { marketCap: newCap, change24h } =
+            calculateMarketCapChange(donations);
 
           setMarketCap(newCap * polPriceNumber);
           setMarketCapChangePercentage(change24h);
@@ -81,7 +79,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
       };
       fetchProjectDonations();
     }
-  }, [project]);
+  }, [project, marketCap]);
 
   useEffect(() => {
     const updatePOLCap = async () => {

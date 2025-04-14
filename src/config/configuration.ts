@@ -38,6 +38,7 @@ const config = {
   NETWORK_RPC_ADDRESS,
   RESERVE_RATIO: 0.125,
   COLLATERAL_RESERVE: 250000,
+  TOTAL_SUPPLY: 640000,
 };
 
 export default config;

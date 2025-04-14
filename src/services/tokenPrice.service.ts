@@ -216,9 +216,10 @@ export const useTokenPriceRangeStatus = ({
   });
 };
 
-export function calculateMarketCapChange(supply: number, donations: any[]) {
+export function calculateMarketCapChange(donations: any[]) {
   const reserveRatio = config.RESERVE_RATIO;
   let reserve = config.COLLATERAL_RESERVE;
+  let supply = config.TOTAL_SUPPLY;
 
   // Sort by date
   const history: { createdAt: string; marketCap: number }[] = [];
