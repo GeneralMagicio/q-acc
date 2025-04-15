@@ -12,6 +12,7 @@ interface CreateNavbarProps {
   disabled?: boolean;
   loading?: boolean;
   hideSubmit?: boolean;
+  onSubmit?: (event: any) => void;
 }
 const CreateNavbar: FC<CreateNavbarProps> = (props: CreateNavbarProps) => {
   const { isIntersecting, elementRef } = useIntersectionObserver(() => {}, {
@@ -55,6 +56,7 @@ const InnerCreateNavbar: FC<CreateNavbarProps> = ({
   disabled,
   loading,
   hideSubmit = false,
+  onSubmit,
 }) => {
   return (
     <>
@@ -94,6 +96,12 @@ const InnerCreateNavbar: FC<CreateNavbarProps> = ({
             type='submit'
             disabled={disabled ? true : false}
             loading={loading}
+            onClick={e => {
+              if (onSubmit) {
+                e.preventDefault();
+                onSubmit(e);
+              }
+            }}
           >
             {submitLabel}
             {submitLabel == 'Save & continue' && (
