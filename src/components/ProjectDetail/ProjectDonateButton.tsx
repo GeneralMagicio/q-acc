@@ -12,6 +12,7 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
+  calculateMarketCapChange,
 } from '@/services/tokenPrice.service';
 import { formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
@@ -19,6 +20,8 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getAdjustedEndDate } from '@/helpers/date';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import config from '@/config/configuration';
+import { EOrderBy, EDirection } from '../DonarDashboard/DonarSupportTable';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -39,6 +42,49 @@ const ProjectDonateButton = () => {
   );
   const [isTokenListed, setIsTokenListed] = useState(false);
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
+
+  const [marketCap, setMarketCap] = useState(0);
+  const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
+
+  useEffect(() => {
+    if (projectData?.id) {
+      const fetchProjectDonations = async () => {
+        const data = await fetchProjectDonationsById(
+          parseInt(projectData?.id),
+          1000,
+          0,
+          { field: EOrderBy.CreationDate, direction: EDirection.DESC },
+        );
+
+        if (data) {
+          const { donations, totalCount } = data;
+          // setPageDonations(donations);
+
+          const { marketCap: newCap, change24h } =
+            calculateMarketCapChange(donations);
+
+          setMarketCap(newCap * Number(POLPrice));
+          setMarketCapChangePercentage(change24h);
+
+          console.log(
+            projectData.title,
+            newCap,
+            change24h,
+            'Change in percentafe',
+          );
+          const now = new Date();
+          const cutoff = new Date(now.getTime() - 100 * 60 * 60 * 1000);
+
+          // 🔍 Filter donations by createdAt
+          const recentDonations = donations.filter((donation: any) => {
+            return new Date(donation.createdAt) >= cutoff;
+          });
+        }
+      };
+      fetchProjectDonations();
+    }
+  }, [projectData, marketCap]);
+
   useEffect(() => {
     const fetchPoolAddress = async () => {
       if (projectData?.abc?.issuanceTokenAddress) {
@@ -222,7 +268,10 @@ const ProjectDonateButton = () => {
           <span className='text-[#4F576A] font-semibold text-sm'>
             {projectData.abc.tokenTicker} Market Cap
           </span>
-          <span className='text-[#1D1E1F] font-bold text-lg'>$ 400,000</span>
+          <span className='text-[#1D1E1F] font-bold text-lg'>
+            {' '}
+            $ {formatNumber(marketCap)}
+          </span>
         </div>
 
         {/* 24 h Change */}
@@ -233,7 +282,7 @@ const ProjectDonateButton = () => {
           </span>
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
-            9.56%{' '}
+            {marketCapChangePercentage}%{' '}
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='16'
