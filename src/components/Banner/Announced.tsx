@@ -93,7 +93,9 @@ export const Announced = () => {
               ) : (
                 (
                   (activeRoundDetails?.__typename === 'QfRound'
-                    ? Number(activeRoundDetails.allocatedFund)
+                    ? activeRoundDetails.allocatedFundUSD
+                      ? Number(activeRoundDetails.allocatedFundUSD)
+                      : Number(activeRoundDetails.allocatedFund)
                     : 0) * (POLPrice || 0)
                 ).toLocaleString('en-US') || '0'
               )}
