@@ -21,7 +21,6 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   ...props
 }) => {
   const walletInfo = useWalletInfo();
-  console.log('walletInfo', walletInfo);
 
   const { disconnect } = useDisconnect();
   const { open } = useAppKit();
