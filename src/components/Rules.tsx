@@ -50,12 +50,9 @@ const Rules = () => {
               seasons.
             </li>
             <li>
-              The q/acc protocol uses{' '}
-              <b className='font-extrabold'>
-                Human Passport and Privado zkID for verification
-              </b>
-              . The spending cap for Human Passport is up to approx. $1,000 and
-              the spending cap for zkID is approx. $25,000.
+              The q/acc protocol uses Human Passport and Privado zkID for
+              verification. The spending cap for Human Passport is up to approx.
+              $1,000 and the spending cap for zkID is approx. $25,000.
             </li>
 
             <li>
