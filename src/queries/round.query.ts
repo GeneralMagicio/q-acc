@@ -18,7 +18,6 @@ export const GET_ALL_ROUNDS = /* GraphQL */ `
         __typename
         name
         slug
-        roundNumber
         allocatedFund
         allocatedFundUSD
         startDate: beginDate
