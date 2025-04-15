@@ -56,6 +56,7 @@ export const GET_ACTIVE_ROUND = /* GraphQL */ `
           __typename
           name
           slug
+          roundNumber
           allocatedFund
           allocatedFundUSD
           startDate: beginDate
