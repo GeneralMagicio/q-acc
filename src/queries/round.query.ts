@@ -3,7 +3,6 @@ export const GET_ALL_ROUNDS = /* GraphQL */ `
     allRounds {
       ... on EarlyAccessRound {
         __typename
-        roundNumber
         startDate
         endDate
         createdAt
@@ -18,6 +17,7 @@ export const GET_ALL_ROUNDS = /* GraphQL */ `
         __typename
         name
         slug
+        roundNumber
         allocatedFund
         allocatedFundUSD
         startDate: beginDate
@@ -40,7 +40,6 @@ export const GET_ACTIVE_ROUND = /* GraphQL */ `
       activeRound {
         ... on EarlyAccessRound {
           __typename
-          roundNumber
           startDate
           endDate
           createdAt
