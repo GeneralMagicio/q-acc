@@ -18,10 +18,10 @@ export const GitcoinEligibilityModal: FC<
     useGitcoinScore();
 
   return (
-    <Modal {...props} title='Gitcoin Passport' showCloseButton>
+    <Modal {...props} title='Human Passport' showCloseButton>
       <div className=''>
         <p className='mt-4 mb-10 text-xl'>
-          The amount you want to submit requires Gitcoin Passport verification.
+          The amount you want to submit requires Human Passport verification.
         </p>
         {status === GitcoinVerificationStatus.NOT_CHECKED && (
           <Button

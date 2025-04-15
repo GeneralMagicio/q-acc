@@ -18,7 +18,7 @@ export const GitcoinVerificationBadge = () => {
     <Link href={Routes.DashBoard + '?tab=verification'}>
       <div className={getBadgeClasses(isVerified)}>
         <IconGitcoinPassport size={24} />
-        <span>Gitcoin Passport {isVerified ? 'Verified' : 'Not Verified'}</span>
+        <span>Human Passport {isVerified ? 'Verified' : 'Not Verified'}</span>
       </div>
     </Link>
   );

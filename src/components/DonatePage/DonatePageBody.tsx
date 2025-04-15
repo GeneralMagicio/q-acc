@@ -297,7 +297,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       ) {
         setDonateDisabled(false);
         setShowGitcoinModal(true);
-        console.log('User is not verified with Gitcoin passport');
+        console.log('User is not verified with Human Passport');
         return;
       } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
         console.log('User is not verified with Privado ID');
