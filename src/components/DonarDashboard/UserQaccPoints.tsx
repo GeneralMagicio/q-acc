@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useFetchUser } from '@/hooks/useFetchUser';
+import { roundPoints } from '@/helpers/points';
 
 export default function UserQaccPoints() {
   const { data: user } = useFetchUser();
@@ -15,7 +16,7 @@ export default function UserQaccPoints() {
           className='w-6 h-6'
         />
         <span className='text-black text-2xl font-bold'>
-          {(user?.qaccPoints || 0).toLocaleString('en-US')}
+          {roundPoints(user?.qaccPoints || 0).toLocaleString('en-US')}
         </span>
       </div>
     </div>
