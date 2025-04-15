@@ -91,12 +91,11 @@ export const Announced = () => {
               {isPolPriceLoading ? (
                 <Spinner />
               ) : (
-                (
-                  (activeRoundDetails?.__typename === 'QfRound'
-                    ? activeRoundDetails.allocatedFundUSD
-                      ? Number(activeRoundDetails.allocatedFundUSD)
-                      : Number(activeRoundDetails.allocatedFund)
-                    : 0) * (POLPrice || 0)
+                (activeRoundDetails?.__typename === 'QfRound'
+                  ? activeRoundDetails.allocatedFundUSD
+                    ? Number(activeRoundDetails.allocatedFundUSD)
+                    : Number(activeRoundDetails.allocatedFund) * (POLPrice || 0)
+                  : 0
                 ).toLocaleString('en-US') || '0'
               )}
             </div>
