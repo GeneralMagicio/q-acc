@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { redirect, useRouter } from 'next/navigation';
 import { fetchGivethUserInfo } from '@/services/user.service';
-import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
@@ -16,6 +15,7 @@ import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
+import { TermsConditionModal } from '../Modals/TermsConditionModal';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
@@ -121,7 +121,7 @@ export const UserController = () => {
       onSign={onSign}
     />
   ) : showCompleteProfileModal ? (
-    <CompleteProfileModal
+    <TermsConditionModal
       isOpen={showCompleteProfileModal}
       onClose={() => setShowCompleteProfileModal(false)}
     />
