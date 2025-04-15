@@ -31,7 +31,7 @@ export const EligibilityCheckToast = () => {
         <ul className='list-disc px-4'>
           <li>
             {' '}
-            With <span className='font-bold'>Gitcoin Passport</span>, you are
+            With <span className='font-bold'>Human Passport</span>, you are
             eligible to support each project with up to{' '}
             {formatAmount(floor(Number(low_cap)))} POL .
           </li>

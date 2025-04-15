@@ -1,27 +1,32 @@
 import { useState, type FC, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Modal, { BaseModalProps } from '../Modal';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { Button, ButtonColor } from '../Button';
 import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
+import Routes from '@/lib/constants/Routes';
 
 interface ConnectModalProps extends BaseModalProps {
   showCloseButton?: boolean;
   onClose: () => void;
-  onContinue: () => void;
-  setTerms: React.Dispatch<React.SetStateAction<boolean>>;
-  terms: boolean;
+  // onContinue: () => void;
+  // setTerms?: React.Dispatch<React.SetStateAction<boolean>>;
+  // terms?: boolean;
 }
 
 export const TermsConditionModal: FC<ConnectModalProps> = ({
   onClose,
-  onContinue,
-  setTerms,
-  terms,
+  // onContinue,
+  // setTerms,
+  // terms,
   ...props
 }) => {
   const { data: user } = useFetchUser();
-  const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
+  const router = useRouter();
+  const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms(() => {
+    if (!user?.fullName) router.push(Routes.CreateProfile);
+  });
 
   const [isUsUkChecked, setIsUsUkChecked] = useState<boolean>(false);
   const [isProhibitedCountriesChecked, setIsProhibitedCountriesChecked] =
@@ -32,11 +37,11 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
   );
 
   useEffect(() => {
-    if (terms) {
+    if (user?.acceptedToS) {
       // onContinue();
       onClose();
     }
-  }, [terms]);
+  }, [onClose, user?.acceptedToS]);
 
   const handleUsUkTermsChange = (
     _event: React.ChangeEvent<HTMLInputElement>,
@@ -60,13 +65,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
   const handleSaveTerms = () => {
     // Save that user accepted terms and conditions - ONLY ONCE
     if (!user?.acceptedToS) {
-      updateAcceptedTerms(true, {
-        onSuccess: () => {
-          setTerms(true);
-          // onContinue();
-          // onClose();
-        },
-      });
+      updateAcceptedTerms(true);
     }
   };
 
@@ -74,8 +73,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
     <Modal
       {...props}
       onClose={onClose}
-      title='Attestation'
-      showCloseButton={true}
+      title='Welcome to q/acc!'
+      showCloseButton={false}
+      closeable={false}
     >
       <div className='flex flex-col gap-5 text-lg  font-redHatText'>
         <p className=''>
@@ -163,7 +163,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
             className='w-[200px] flex justify-center '
             onClick={handleSaveTerms}
           >
-            Continue
+            Create Profile
           </Button>
         </div>
       </div>

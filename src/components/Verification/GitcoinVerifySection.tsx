@@ -42,9 +42,9 @@ export const GitcoinVerifySection = () => {
   return isVerified ? (
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6'>
       <div>
-        <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+        <h1 className='text-lg font-bold'>Human Passport</h1>
         <p>
-          Verify your uniqueness with Gitcoin Passport to support each project
+          Verify your uniqueness with Human Passport to support each project
           with up to &nbsp;
           {formatAmount(low_cap)} POL.
         </p>
@@ -55,7 +55,7 @@ export const GitcoinVerifySection = () => {
     status === GitcoinVerificationStatus.SCORER_PASS ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <div>
-        <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+        <h1 className='text-lg font-bold'>Human Passport</h1>
         <p>
           You are eligible to support each project with up to&nbsp;
           {formatAmount(low_cap)} POL.
@@ -69,10 +69,10 @@ export const GitcoinVerifySection = () => {
     </section>
   ) : status === GitcoinVerificationStatus.NOT_CHECKED ? (
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
-      <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+      <h1 className='text-lg font-bold'>Human Passport</h1>
       <p>
-        Verify your uniqueness with Gitcoin Passport to support each project
-        with up to&nbsp;
+        Verify your uniqueness with Human Passport to support each project with
+        up to&nbsp;
         {formatAmount(low_cap)} POL.
       </p>
       <Button
@@ -87,11 +87,11 @@ export const GitcoinVerifySection = () => {
     </section>
   ) : status === GitcoinVerificationStatus.LOW_SCORE ? (
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
-      <h1 className='text-lg font-bold'>Gitcoin Passport</h1>
+      <h1 className='text-lg font-bold'>Human Passport</h1>
       <p>
         To support each project with up to {formatAmount(low_cap)} POL, you must
         <b className='font-bold'>
-          &nbsp;increase your Gitcoin Passport score to&nbsp;
+          &nbsp;increase your Human Passport score to&nbsp;
           {config.GP_SCORER_SCORE_THRESHOLD}
         </b>
         . Once you increase your score, return here and click “Refresh Score”.

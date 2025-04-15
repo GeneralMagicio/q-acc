@@ -41,7 +41,6 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
 import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
-import { useUpdateAcceptedTerms } from '@/hooks/useUpdateAcceptedTerms';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
@@ -162,8 +161,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [progress, setProgress] = useState(0);
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [remainingDonationAmount, setRemainingDonationAmount] = useState(0);
-
-  const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms();
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => setIsShareModalOpen(true);
@@ -300,7 +297,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       ) {
         setDonateDisabled(false);
         setShowGitcoinModal(true);
-        console.log('User is not verified with Gitcoin passport');
+        console.log('User is not verified with Human Passport');
         return;
       } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
         console.log('User is not verified with Privado ID');
@@ -772,18 +769,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
   };
 
-  // Handle Terms checkbox change event
-  const handleAcceptTerms = (_event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = _event.target.checked;
-
-    // Save that user accepted terms and conditions - ONLY ONCE
-    if (!user?.acceptedToS && isChecked) {
-      updateAcceptedTerms(true);
-    }
-
-    setTerms(isChecked);
-  };
-
   if (isConfirmed && donationId) {
     return (
       <DonateSuccessPage
@@ -810,12 +795,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         isOpen={showZkidModal}
         onClose={() => setShowZkidModal(false)}
       />
-
       <TermsConditionModal
         isOpen={showTermsConditionModal}
-        setTerms={setTerms}
-        terms={terms}
-        onContinue={handleDonateClick}
         onClose={() => setShowTermsConditionModal(false)}
       />
       <SelectChainModal
