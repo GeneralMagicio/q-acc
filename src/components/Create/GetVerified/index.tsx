@@ -6,13 +6,25 @@ import Routes from '@/lib/constants/Routes';
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import links from '@/lib/constants/links';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import config from '@/config/configuration';
+import { usePrivado } from '@/hooks/usePrivado';
 
 const GetVerified = () => {
   const router = useRouter();
 
+  const { data: user } = useFetchUser();
   const searchParams = useSearchParams();
+  const { isVerified: isVerifiedByPrivado } = usePrivado();
 
   const showBackButton = searchParams.get('b');
+
+  const analysisScore = user?.analysisScore || 0;
+  const passportScore = user?.passportScore || 0;
+  const isVerifiedByGP =
+    analysisScore >= config.GP_ANALYSIS_SCORE_THRESHOLD ||
+    passportScore >= config.GP_SCORER_SCORE_THRESHOLD;
+  const isVerified = isVerifiedByPrivado || isVerifiedByGP;
 
   return (
     <>
@@ -27,6 +39,10 @@ const GetVerified = () => {
               }
             : undefined
         }
+        onSubmit={() => {
+          router.push(Routes.AllProjects);
+        }}
+        disabled={!isVerified}
       />
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         {/* <CountryRegulatory /> */}
