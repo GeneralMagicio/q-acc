@@ -67,14 +67,14 @@ const CreateProjectForm: FC = () => {
     console.log('res', res);
   };
 
-  const nextLabel = 'Verify your identity';
+  const nextLabel = 'Verification';
   const submitLabel = 'Save & Continue';
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          title='Tell me about yourself'
+          title=''
           nextLabel={nextLabel}
           submitLabel={submitLabel}
           loading={isPending}

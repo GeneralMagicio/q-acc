@@ -18,7 +18,8 @@ const GetVerified = () => {
   return (
     <>
       <CreateNavbar
-        title='Get Verified'
+        title=''
+        submitLabel='Close'
         onBack={
           showBackButton
             ? e => {
@@ -27,7 +28,6 @@ const GetVerified = () => {
               }
             : undefined
         }
-        hideSubmit={true}
       />
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         <CountryRegulatory />
