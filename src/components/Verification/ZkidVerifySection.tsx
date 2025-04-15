@@ -24,7 +24,7 @@ export const ZkidVerifySection = () => {
   let high_cap;
 
   if (qaccRound) {
-    if ('roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
+    if ('roundPOLCapPerUserPerProject' in qaccRound) {
       high_cap = qaccRound?.roundPOLCapPerUserPerProject || 15000;
     }
   }

@@ -298,6 +298,10 @@ export const convertDonationAmount = async (
   if (polAmount) {
     minPOL = polAmount;
   }
+
+  if (token.symbol === 'POL') {
+    return minPOL;
+  }
   const polPrice = await fetchSquidPOLUSDPrice();
   const targetTokenPrice = token.usdPrice;
 
