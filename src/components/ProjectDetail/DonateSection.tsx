@@ -35,7 +35,7 @@ const DonateSection = () => {
         await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
       setMaxPOLCap(capAmount);
-      setTotalAmountDonated(totalDonationAmountInRound);
+      setTotalAmountDonated(projectData.totalDonations);
 
       let tempprogress = 0;
       if (maxPOLCap > 0) {
