@@ -295,7 +295,7 @@ export const convertDonationAmount = async (
   polAmount?: number,
 ) => {
   let minPOL = config.MINIMUM_DONATION_AMOUNT;
-  if (polAmount) {
+  if (polAmount || polAmount === 0) {
     minPOL = polAmount;
   }
 

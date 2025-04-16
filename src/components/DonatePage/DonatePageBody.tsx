@@ -249,7 +249,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       const convertedCap = await convertDonationAmount(selectedToken, userCap);
       const res = remainingDonationAmount / 2 - 1;
       if (progress >= 90) {
-        console.log('Res', res, progress);
+        // console.log('Res', res, progress);
         setUserDonationCap(Math.min(res, Number(convertedCap)));
       } else {
         setUserDonationCap(Number(convertedCap));
