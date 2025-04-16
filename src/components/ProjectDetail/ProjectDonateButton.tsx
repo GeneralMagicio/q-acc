@@ -276,7 +276,7 @@ const ProjectDonateButton = () => {
 
         {/* 24 h Change */}
 
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 group relative'>
           <span className='text-[#4F576A] font-semibold text-sm'>
             24h Change
           </span>
@@ -299,6 +299,16 @@ const ProjectDonateButton = () => {
               />
             </svg>
           </span>
+          <div
+            className='
+                absolute top-full left-1/2 transform -translate-x-1/2 mt-1
+                bg-gray-900 text-white text-sm font-medium px-2 py-1 rounded shadow-lg
+                opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out
+                pointer-events-none z-50 whitespace-nowrap
+              '
+          >
+            {marketCapChangePercentage}%
+          </div>
         </div>
       </div>
     </div>

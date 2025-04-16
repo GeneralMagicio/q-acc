@@ -386,7 +386,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     {' '}
                     $ {formatNumber(marketCap)}
                   </span>
-                  <div className='flex gap-1 text-[#4F576A] font-medium items-center'>
+                  <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
                     <span className='text-xs'>24h Change</span>
                     <span>{formatNumber(marketCapChangePercentage)}%</span>
                     <svg
@@ -404,6 +404,16 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                         strokeLinejoin='round'
                       />
                     </svg>
+                    <div
+                      className='
+                      absolute top-full right-0 transform mt-1
+                      bg-gray-900 text-white text-sm font-medium px-2 py-1 rounded shadow-lg
+                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out
+                      pointer-events-none z-50 whitespace-nowrap
+                    '
+                    >
+                      {marketCapChangePercentage}%
+                    </div>
                   </div>
                 </div>
               </div>
