@@ -388,7 +388,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   </span>
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center'>
                     <span className='text-xs'>24h Change</span>
-                    <span>{marketCapChangePercentage}%</span>
+                    <span>{formatNumber(marketCapChangePercentage)}%</span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='16'

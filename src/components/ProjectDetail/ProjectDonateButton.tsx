@@ -282,7 +282,7 @@ const ProjectDonateButton = () => {
           </span>
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
-            {marketCapChangePercentage}%{' '}
+            {formatNumber(marketCapChangePercentage)}%{' '}
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='16'
