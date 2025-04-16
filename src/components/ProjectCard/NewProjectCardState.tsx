@@ -52,27 +52,22 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           parseInt(project?.id),
           1000,
           0,
-          { field: EOrderBy.CreationDate, direction: EDirection.DESC },
+          { field: EOrderBy.CreationDate, direction: EDirection.ASC },
         );
 
-        if (data) {
+        if (data && project?.abc?.fundingManagerAddress) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
 
           const { marketCap: newCap, change24h } =
-            calculateMarketCapChange(donations);
+            await calculateMarketCapChange(
+              donations,
+              project?.abc?.fundingManagerAddress,
+            );
 
+          // console.log(project.title, change24h);
           setMarketCap(newCap * polPriceNumber);
           setMarketCapChangePercentage(change24h);
-
-          console.log(project.title, newCap, change24h, 'Change in percentafe');
-          const now = new Date();
-          const cutoff = new Date(now.getTime() - 100 * 60 * 60 * 1000);
-
-          // 🔍 Filter donations by createdAt
-          const recentDonations = donations.filter((donation: any) => {
-            return new Date(donation.createdAt) >= cutoff;
-          });
 
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
