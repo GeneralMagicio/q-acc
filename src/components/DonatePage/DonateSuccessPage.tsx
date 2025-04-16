@@ -239,17 +239,17 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                       <IconTokenSchedule />
                       <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
                         <h3 className='font-bold'>Token Lock Schedule</h3>
-                        {round === 'EarlyAccessRound'
-                          ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.`
-                          : `Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.`}
+                        {projectData?.seasonNumber === 2
+                          ? `Season 2 tokens are locked for 1 year with a 6 month cliff. Tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.`
+                          : `Season 1 tokens are locked for 10 months with a 6 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.`}
                       </div>
                     </div>
                   </div>
                   <hr />
                   <h2 className='text-redHatText text-gray-600 font-normal text-sm'>
-                    {round === 'EarlyAccessRound'
-                      ? `Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year. `
-                      : 'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.'}
+                    {projectData?.seasonNumber === 2
+                      ? `Season 2 tokens are locked for 1 year with a 6 month cliff. Tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream. `
+                      : 'Season 1 tokens are locked for 10 months with a 6 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.'}
                   </h2>
                 </div>
 

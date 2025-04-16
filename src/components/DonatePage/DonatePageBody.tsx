@@ -386,8 +386,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [selectedPercentage, setSelectedPercentage] = useState(0);
 
   const [tokenSchedule, setTokenSchedule] = useState<ITokenSchedule>({
-    message:
-      'Tokens are locked for 1 year with a 6 month cliff. This means that tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.',
+    message: `Season 2 tokens are locked for 1 year with a 6 month cliff. Tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream. `,
     toolTip:
       'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.',
   });
@@ -459,15 +458,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   }, [terms, isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
-    if (activeRoundDetails?.__typename === 'EarlyAccessRound') {
+    if (projectData?.seasonNumber === 1) {
       const message =
-        'Tokens are locked for 2 years with a 1-year cliff. This means that after 1 year, tokens will unlock in a stream over the following 1 year.';
+        'Season 1 tokens are locked for 10 months with a 6 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.';
       const toolTip =
-        'Tokens are locked for a period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
+        'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
 
       setTokenSchedule({ message, toolTip });
     }
-  }, []);
+  }, [projectData]);
 
   const { data: noramalTransferTx, sendTransactionAsync } =
     useSendTransaction();

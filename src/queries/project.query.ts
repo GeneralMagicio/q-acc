@@ -274,6 +274,7 @@ export const GET_PROJECT_BY_SLUG = /* GraphQL */ `
       totalDonations
       description
       teaser
+      seasonNumber
       batchNumbersWithSafeTransactions
       addresses {
         address
