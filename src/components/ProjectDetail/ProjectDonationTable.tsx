@@ -363,16 +363,18 @@ const ProjectDonationTable = () => {
                   Total received
                 </span>
               </div>
-
-              <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
-                ~ ${' '}
-                {formatAmount(
-                  Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
-                )}
-              </h1>
-              <h2 className='font-medium text-[#1D1E1F]'>
-                {formatAmount(totalAmountDonated)} POL
-              </h2>
+              <div className='flex flex-wrap gap-4 items-center'>
+                <h1 className='text-2xl text-gray-700 font-bold '>
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(totalAmountDonated * Number(POLPrice) * 100) /
+                      100,
+                  )}
+                </h1>
+                <h2 className='font-medium text-gray-700'>
+                  {formatAmount(totalAmountDonated)} POL
+                </h2>
+              </div>
             </div>
 
             <div className=' flex flex-col gap-4 font-redHatText'>
