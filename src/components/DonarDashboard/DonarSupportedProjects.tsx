@@ -225,9 +225,7 @@ const DonarSupportedProjects = ({
           <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
             <div className='flex gap-2'>
               <IconTotalDonations size={24} />
-              <span className='font-medium text-[#1D1E1F]'>
-                Total contributions
-              </span>
+              <span className='font-medium text-[#1D1E1F]'>Total received</span>
             </div>
             <div className='flex gap-1'>
               <span className='font-medium text-[#1D1E1F]'>
