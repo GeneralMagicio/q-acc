@@ -216,11 +216,13 @@ const ProjectDonationTable = () => {
                       <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                         {checkMatchingFundAddress(donation.fromWalletAddress)
                           ? 'Matching pool allocation'
-                          : donation.user.firstName
-                            ? donation.user.firstName +
-                              ' ' +
-                              donation.user.lastName
-                            : 'Anoynomous'}
+                          : donation?.anonymous
+                            ? 'Anoynomous'
+                            : donation.user.firstName
+                              ? donation.user.firstName +
+                                ' ' +
+                                donation.user.lastName
+                              : 'Anoynomous'}
                       </div>
                       <div className='p-[18px_4px] flex gap-2 text-start  w-full border-b min-w-[150px]'>
                         <div className='flex   items-center gap-2 flex-wrap'>
