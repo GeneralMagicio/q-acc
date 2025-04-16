@@ -2,7 +2,6 @@ import React from 'react';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { roundPoints } from '@/helpers/points';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
-import { useAccount } from 'wagmi';
 
 export const UserInfo = () => {
   const { data: user } = useFetchUser();
