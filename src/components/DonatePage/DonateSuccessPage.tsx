@@ -305,7 +305,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
         <div className='flex gap-2 items-center'>
           <IconShare size={24} color='#1D1E1F' />
           <span className='text-[#1D1E1F] text-2xl font-bold'>
-            Spread the Imapct!
+            Spread the Impact!
           </span>
         </div>
         <div className=' flex flex-col p-6 justify-center gap-6 bg-[#F7F7F9] border border-[#BBC3D4] rounded-xl border-dashed text-center'>

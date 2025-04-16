@@ -20,13 +20,13 @@ export const ProjectsFilter: FC<ProjectsFilterProps> = ({
     }).length || 0;
 
   return (
-    <div className='flex justify-between items-center mb-6'>
+    <div className='flex justify-between items-center mb-6 flex-wrap gap-4'>
       <h1 className='text-2xl text-gray-900 font-bold'>
         <span className='text-gray-900'>Explore</span>
         &nbsp;
         <span className='text-gray-400'>{totalProjects} Projects</span>
       </h1>
-      <div className='flex gap-4'>
+      <div className='flex gap-4 flex-wrap '>
         {projectsFilter.map((filter, index) => (
           <button
             key={index}

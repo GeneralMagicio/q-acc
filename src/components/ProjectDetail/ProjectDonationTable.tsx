@@ -184,7 +184,7 @@ const ProjectDonationTable = () => {
                   </button>
                 </div> */}
                 <div className='p-[8px_4px] flex gap-2 text-start w-full  font-medium text-[#1D1E1F] items-center min-w-[150px] border-b-2'>
-                  Amount [POL]
+                  Amount
                   <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                     <IconSort size={16} />
                   </button>
@@ -360,19 +360,21 @@ const ProjectDonationTable = () => {
               <div className='flex gap-2'>
                 <IconTotalDonations />
                 <span className='font-medium text-[#4F576A]'>
-                  Total support
+                  Total received
                 </span>
               </div>
-
-              <h1 className='text-[25px] text-[#1D1E1F] font-bold leading-[56px]'>
-                {formatAmount(totalAmountDonated)} POL
-              </h1>
-              <h2 className='font-medium text-[#1D1E1F]'>
-                ~ ${' '}
-                {formatAmount(
-                  Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
-                )}
-              </h2>
+              <div className='flex flex-wrap gap-4 items-center'>
+                <h1 className='text-2xl text-gray-700 font-bold '>
+                  ~ ${' '}
+                  {formatAmount(
+                    Math.round(totalAmountDonated * Number(POLPrice) * 100) /
+                      100,
+                  )}
+                </h1>
+                <h2 className='font-medium text-gray-700'>
+                  {formatAmount(totalAmountDonated)} POL
+                </h2>
+              </div>
             </div>
 
             <div className=' flex flex-col gap-4 font-redHatText'>

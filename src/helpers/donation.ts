@@ -27,7 +27,7 @@ export const calculateUniqueDonors = (donations: any[]) => {
   return uniqueDonors.size;
 };
 
-// Helper function to calculate total contributions in POL
+// Helper function to calculate Total received in POL
 export const calculateTotalContributions = (donations: any[]) => {
   return donations.reduce((total, donation) => total + donation.amount, 0);
 };

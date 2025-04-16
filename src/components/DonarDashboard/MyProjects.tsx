@@ -686,7 +686,7 @@ const MyProjects = () => {
           <div className='flex gap-4 items-center'>
             <IconTotalDonations size={32} />
             <span className='text-[#4F1D1E1F576A] font-bold text-[25px]'>
-              Total contributions
+              Total received
             </span>
           </div>
 

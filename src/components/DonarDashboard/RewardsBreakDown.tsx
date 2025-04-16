@@ -123,7 +123,7 @@ const RewardsBreakDown: React.FC = () => {
               <div className='flex gap-2'>
                 <IconTotalDonations size={24} />
                 <span className='font-medium text-[#1D1E1F]'>
-                  Total contributions
+                  Total received
                 </span>
               </div>
               <div className='flex gap-1'>

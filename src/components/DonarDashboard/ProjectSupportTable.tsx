@@ -156,7 +156,7 @@ const ProjectSupportTable = ({
               </button>
             </div> */}
             <div className='p-[8px_4px] flex gap-2 text-start w-full border-b-2   font-medium text-[#1D1E1F] items-center min-w-[150px]'>
-              Amount [POL]
+              Amount
               <button onClick={() => orderChangeHandler(EOrderBy.Amount)}>
                 <IconSort size={16} />
               </button>
