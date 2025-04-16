@@ -768,7 +768,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
   };
 
-  if (!isConfirmed && !donationId) {
+  if (isConfirmed && donationId) {
     return (
       <DonateSuccessPage
         transactionHash={hash}
