@@ -99,10 +99,10 @@ const CreateProjectForm: FC = () => {
                 name='emailAddress'
                 label='What is your email address?'
                 placeholder='Enter your email address'
-                // rules={{
-                //   required: 'Email Address is required',
-                // }}
-                rules={validators.email}
+                rules={{
+                  required: 'Email Address is required',
+                  ...validators.email,
+                }}
                 type='email'
               />
               {/* <div className='flex items-center ml-3'>
