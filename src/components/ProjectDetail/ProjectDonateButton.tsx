@@ -53,7 +53,7 @@ const ProjectDonateButton = () => {
           parseInt(projectData?.id),
           1000,
           0,
-          { field: EOrderBy.CreationDate, direction: EDirection.DESC },
+          { field: EOrderBy.CreationDate, direction: EDirection.ASC },
         );
 
         if (data) {
@@ -61,7 +61,10 @@ const ProjectDonateButton = () => {
           // setPageDonations(donations);
 
           const { marketCap: newCap, change24h } =
-            calculateMarketCapChange(donations);
+            await calculateMarketCapChange(
+              donations,
+              projectData.abc.fundingManagerAddress,
+            );
 
           setMarketCap(newCap * Number(POLPrice));
           setMarketCapChangePercentage(change24h);

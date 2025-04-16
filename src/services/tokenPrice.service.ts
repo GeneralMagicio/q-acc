@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ethers, BigNumberish, Contract } from 'ethers';
+import { ethers, BigNumberish, Contract, formatUnits } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import config from '@/config/configuration';
@@ -9,6 +9,13 @@ import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 const provider = new ethers.JsonRpcProvider(config.NETWORK_RPC_ADDRESS);
 
 const abi = [
+  {
+    inputs: [],
+    name: 'getReserveRatioForBuying',
+    outputs: [{ internalType: 'uint32', name: '', type: 'uint32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
   {
     inputs: [
       { internalType: 'uint256', name: '_depositAmount', type: 'uint256' },
@@ -28,6 +35,13 @@ const abi = [
   {
     inputs: [],
     name: 'getVirtualCollateralSupply',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getVirtualIssuanceSupply',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -216,19 +230,44 @@ export const useTokenPriceRangeStatus = ({
   });
 };
 
-export function calculateMarketCapChange(donations: any[]) {
-  const reserveRatio = config.RESERVE_RATIO;
-  let reserve = config.COLLATERAL_RESERVE;
-  let supply = config.TOTAL_SUPPLY;
+export async function getTokenSupplyDetails(address: string) {
+  const contract = new ethers.Contract(address, abi, provider);
+  const price = await contract.getStaticPriceForBuying();
+  const reserveRatioForBuying = await contract.getReserveRatioForBuying();
+  const virtualCollateralSupply = await contract.getVirtualCollateralSupply();
+  const virtualIssuanceSupply = await contract.getVirtualIssuanceSupply();
+  const collateral_supply = formatUnits(virtualCollateralSupply, 18);
+  const issuance_supply = formatUnits(virtualIssuanceSupply, 18);
+  const reserve_ration = formatUnits(reserveRatioForBuying, 6);
+  return {
+    reserve_ration,
+    collateral_supply,
+    issuance_supply,
+  };
+}
+
+export async function calculateMarketCapChange(
+  donations: any[],
+  contract_address: string,
+) {
+  const { reserve_ration, collateral_supply, issuance_supply } =
+    await getTokenSupplyDetails(contract_address);
+
+  const reserveRatio = Number(reserve_ration);
+  let reserve = Number(collateral_supply);
+  let supply = Number(issuance_supply);
 
   // Sort by date
-  const history: { createdAt: string; marketCap: number }[] = [];
+  let history: { createdAt: string; marketCap: number; id: number }[] = [];
   const initialPrice = reserve / (supply * reserveRatio);
 
   const initialMarketCap = supply * initialPrice;
+  const initialTimestamp = '2025-04-01T00:00:00Z'; // virtual Day 0 timestamp (can be set based on your round start)
+
   history.push({
-    createdAt: '2025-04-1T00:00:00Z', // virtual Day 0 timestamp (can be set based on your round start)
+    createdAt: initialTimestamp,
     marketCap: initialMarketCap,
+    id: 0,
   });
 
   const now = new Date();
@@ -237,18 +276,17 @@ export function calculateMarketCapChange(donations: any[]) {
     d => new Date(d.createdAt) > cutoff,
   );
 
-  donations.forEach(({ amount, createdAt }) => {
+  const filteredDonations = donations.filter(
+    d => new Date(d.createdAt) > new Date(initialTimestamp),
+  );
+
+  filteredDonations.forEach(({ amount, createdAt, id }) => {
     supply = supply * Math.pow(1 + amount / reserve, reserveRatio);
     reserve += amount;
     const price = reserve / (supply * reserveRatio);
     const marketCap = supply * price;
-    history.push({ createdAt, marketCap });
+    history.push({ createdAt, marketCap, id: id });
   });
-
-  const marketCapNow = history[history.length - 1].marketCap;
-  if (recentDonationExists) {
-    console.log(history);
-  }
 
   // Find market cap from ≥24h ago
 
@@ -256,9 +294,6 @@ export function calculateMarketCapChange(donations: any[]) {
     .reverse()
     .find(h => new Date(h.createdAt) <= cutoff);
 
-  if (recentDonationExists) {
-    console.log('Past', past);
-  }
   const marketCapPast = past ? past.marketCap : initialMarketCap;
 
   const latestMarketCap = history[history.length - 1].marketCap;
@@ -268,7 +303,7 @@ export function calculateMarketCapChange(donations: any[]) {
     ? ((latestMarketCap - marketCapPast) / marketCapPast) * 100
     : 0;
   return {
-    marketCap: Math.round(marketCapNow),
+    marketCap: Math.round(latestMarketCap),
     change24h: change24h,
   };
 }
