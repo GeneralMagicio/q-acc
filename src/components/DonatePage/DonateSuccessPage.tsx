@@ -51,7 +51,9 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
 
-  const shareMessage = `I just bought ${projectData?.abc?.tokenTicker} on q/acc! Join me in funding awesome projects`;
+  const shareMessage = `Just backed a real Web3 startup on @theqacc.Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. You’re not exit liquidity — you’re early.Round ends soon. Don’t sleep. 😤
+  👉`;
+
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
   const copyLink = `${url.protocol}//${url.host}/project/${projectData?.slug}`;
@@ -156,8 +158,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             </h1>
             <div className='flex gap-2 items-center'>
               <span className='text-[#4F576A]'>
-                Your transaction is complete and confirmed. Thanks for being
-                part of q/acc!
+                Your transaction is complete.
               </span>
               <div className='font-medium font-redHatText'>
                 <h3 className='text-[#82899A] flex gap-2'>
@@ -305,13 +306,22 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
         <div className='flex gap-2 items-center'>
           <IconShare size={24} color='#1D1E1F' />
           <span className='text-[#1D1E1F] text-2xl font-bold'>
-            Spread the Impact!
+            Spread the word.
           </span>
         </div>
         <div className=' flex flex-col p-6 justify-center gap-6 bg-[#F7F7F9] border border-[#BBC3D4] rounded-xl border-dashed text-center'>
           <div className='text-center text-[#1D1E1F] font-medium text-lg'>
-            I just bought {projectData?.abc?.tokenTicker} on q/acc! Join me in
-            funding awesome projects.
+            <p> Just backed a real Web3 startup on @theqacc.</p>
+            <p>
+              Bought ${projectData?.abc?.tokenTicker} in a true fair launch — no
+              insiders, no VCs.
+            </p>
+            <p> Just builders and the community.</p>
+            <p>You’re not exit liquidity — you’re early.</p>
+            <p> Round ends soon. Don’t sleep. 😤</p>
+            <p>
+              👉 <Link href={copyLink}> {copyLink}</Link>
+            </p>
           </div>
           <div className=' flex justify-center gap-6 items-center'>
             <TwitterShareButton title={shareMessage || ''} url={copyLink || ''}>
