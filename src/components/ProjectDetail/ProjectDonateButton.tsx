@@ -14,7 +14,7 @@ import {
   useTokenPriceRangeStatus,
   calculateMarketCapChange,
 } from '@/services/tokenPrice.service';
-import { formatNumber } from '@/helpers/donation';
+import { formatAmount, formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getAdjustedEndDate } from '@/helpers/date';
@@ -226,7 +226,7 @@ const ProjectDonateButton = () => {
 
   const TokenInfo = () => (
     <div className='flex flex-col gap-4 font-redHatText'>
-      <div className='flex flex-col gap-2'>
+      {/* <div className='flex flex-col gap-2'>
         <div className='flex gap-2'>
           <img
             className='w-6 h-6 rounded-full'
@@ -263,7 +263,38 @@ const ProjectDonateButton = () => {
           )}
         </div>
       </div>
-      <hr />
+      <hr /> */}
+
+      {isTokenListed && (
+        <div className='flex flex-col gap-2'>
+          <div className='flex gap-2'>
+            <img
+              className='w-6 h-6 rounded-full'
+              src={getIpfsAddress(
+                projectData.abc?.icon! ||
+                  'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+              )}
+            />
+            <span className='text-[#4F576A] font-semibold text-sm '>
+              {projectData.abc.tokenTicker} price on Quickswap
+            </span>
+          </div>
+
+          <div className='flex justify-between items-center'>
+            <span className='text-[#1D1E1F] font-bold text-lg'>
+              {' '}
+              ~ ${' '}
+              {POLPrice
+                ? `${' ' + formatNumber(POLPrice * currentTokenPrice)}`
+                : ''}
+            </span>
+            <span className='text-[#4F576A] font-semibold'>
+              {' '}
+              {currentTokenPrice.toFixed(2)} POL
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className='flex justify-between items-center'>
         {/* Market Cap */}
@@ -273,7 +304,7 @@ const ProjectDonateButton = () => {
           </span>
           <span className='text-[#1D1E1F] font-bold text-lg'>
             {' '}
-            $ {formatNumber(marketCap)}
+            $ {formatAmount(marketCap)}
           </span>
         </div>
 
