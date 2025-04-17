@@ -1078,7 +1078,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
           {/* Percentage Bar */}
 
-          <div className='flex flex-col gap-2  px-4 py-4 bg-[#F7F7F9] rounded-lg'>
+          {/* <div className='flex flex-col gap-2  px-4 py-4 bg-[#F7F7F9] rounded-lg'>
             <div
               className={`px-2 py-[2px] rounded-md  w-fit flex gap-2 font-redHatText text-xs font-medium ${progress === 100 ? 'bg-[#5326EC] text-white' : 'bg-[#F7F7F9] text-[#1D1E1F]'} `}
             >
@@ -1109,7 +1109,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {formatAmount(maxPOLCap)} POL
               </span>
             </div>
-          </div>
+          </div> */}
 
           {/* Project Details */}
           <div className='flex flex-col gap-6'>
@@ -1137,7 +1137,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 supporters
               </p>
             </div>
-            <div className='flex justify-between gap-1'>
+
+            {/* <div className='flex justify-between gap-1'>
               <div className='flex gap-1 items-center'>
                 <img
                   className='w-6 h-6 rounded-full'
@@ -1201,7 +1202,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   </>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Total Supply */}
             <div className='flex  flex-wrap  gap-2 justify-between'>

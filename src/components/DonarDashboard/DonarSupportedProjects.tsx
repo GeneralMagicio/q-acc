@@ -241,7 +241,7 @@ const DonarSupportedProjects = ({
 
       {/* Project Claim and Reward */}
       <div className='flex flex-col gap-4 w-full lg:w-1/2  font-redHatText'>
-        {activeRoundDetails && (
+        {/* {activeRoundDetails && (
           <>
             <div className='flex items-center gap-2'>
               <img
@@ -267,7 +267,6 @@ const DonarSupportedProjects = ({
               </div>
             </div>
 
-            {/* Conditional Rendering for Token Price Range */}
             <div className='flex justify-between text-[#1D1E1F] font-medium'>
               {tokenPriceRangeStatus.isSuccess &&
               tokenPriceRangeStatus.data?.isPriceUpToDate ? (
@@ -299,8 +298,8 @@ const DonarSupportedProjects = ({
               )}
             </div>
           </>
-        )}
-        <hr />
+        )} */}
+        {/* <hr /> */}
 
         {!isSafeAccount && (
           <>

@@ -461,7 +461,7 @@ const MyProjects = () => {
                 </span>
               </div>
             </div>
-            {activeRoundDetails && (
+            {/* {activeRoundDetails && (
               <>
                 <div className='flex gap-1 items-center'>
                   <img
@@ -484,7 +484,9 @@ const MyProjects = () => {
                     </div>
                   </div>
                 </div>
-                {/* Conditional Rendering for Token Price Range */}
+
+
+
                 <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
                   {tokenPriceRangeStatus.isSuccess &&
                   tokenPriceRangeStatus.data?.isPriceUpToDate ? (
@@ -518,7 +520,7 @@ const MyProjects = () => {
                   )}
                 </div>
               </>
-            )}
+            )} */}
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b'>
               <div className='flex gap-2'>
                 <IconTotalSupply />
