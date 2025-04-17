@@ -6,7 +6,11 @@ import ProjectCardImage from './ProjectCardImage';
 
 import { getIpfsAddress } from '@/helpers/image';
 import { fetchProjectDonationsById } from '@/services/donation.services';
-import { calculateTotalDonations, formatNumber } from '@/helpers/donation';
+import {
+  calculateTotalDonations,
+  formatAmount,
+  formatNumber,
+} from '@/helpers/donation';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import {
   calculateMarketCapChange,
@@ -359,11 +363,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     </>
                   ) : (
                     <>
-                      <span className='text-[#4F576A] font-bold text-lg text-right'>
-                        ---
-                      </span>
-                      <span className='text-[#4F576A] font-medium'>
-                        --- POL
+                      <span className='text-[#b2b5bc] font-semibold text-sm text-right'>
+                        Listing Soon
                       </span>
                     </>
                   )}
@@ -379,7 +380,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                 <div className='flex flex-col'>
                   <span className='text-[#1D1E1F] font-bold text-lg text-right'>
                     {' '}
-                    $ {formatNumber(marketCap)}
+                    $ {formatAmount(marketCap)}
                   </span>
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
                     <span className='text-xs'>24h Change</span>
