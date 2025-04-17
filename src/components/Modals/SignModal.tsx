@@ -11,7 +11,7 @@ interface SignModalProps extends BaseModalProps {
 }
 
 export const SignModal: FC<SignModalProps> = props => {
-  const { refetch, isFetching } = useSignUser(props.onSign);
+  const { refetch, isFetching } = useSignUser(props.onSign, props.onClose);
 
   return (
     <Modal {...props} className='max-w-xl' closeable={false}>
