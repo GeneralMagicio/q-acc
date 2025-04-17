@@ -34,12 +34,10 @@ import {
   saveDonations,
 } from '@/services/donation.services';
 import { useDonateContext } from '@/context/donation.context';
-import { getIpfsAddress } from '@/helpers/image';
-import { formatAmount, formatNumber } from '@/helpers/donation';
+import { formatAmount } from '@/helpers/donation';
 import { usePrivado } from '@/hooks/usePrivado';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import FlashMessage from '../FlashMessage';
-import ProgressBar from '../ProgressBar';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import {
   useTokenPriceRange,

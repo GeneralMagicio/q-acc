@@ -7,7 +7,7 @@ import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
-import { formatAmount, formatNumber } from '@/helpers/donation';
+import { formatAmount } from '@/helpers/donation';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconMinted } from '../Icons/IconMinted';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';

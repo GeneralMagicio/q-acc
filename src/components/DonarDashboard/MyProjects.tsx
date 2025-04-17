@@ -23,9 +23,7 @@ import {
   calculateTotalDonations,
   calculateUniqueDonors,
   formatAmount,
-  formatNumber,
 } from '@/helpers/donation';
-import { getIpfsAddress } from '@/helpers/image';
 import { RoundCollectedInfo } from './RoundCollectedInfo';
 import { IconChevronDown } from '../Icons/IconChevronDown';
 import { IconChevronUp } from '../Icons/IconChevronUp';
