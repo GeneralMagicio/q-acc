@@ -22,6 +22,7 @@ import { IconTransactionProgress } from '../Icons/IconTransactionProgress';
 import { useFetchPointsHistoryOfUser } from '@/hooks/useFetchPointsHistoryOfUser';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { roundPoints } from '@/helpers/points';
+import { IconFarcaster } from '../Icons/IconFarcaster';
 
 interface IDonateSuccessPage {
   transactionHash?: `0x${string}` | undefined; // Define the type for the transactionHash prop
@@ -341,18 +342,27 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             <FacebookShareButton
               title={shareMessage || ''}
               url={copyLink || ''}
-              hashtag={shareMessage}
+              // hashtag={shareMessage}
             >
               <div className='px-6 py-3 border border[#E7E1FF] bg-[#F6F3FF] rounded-xl flex items-center'>
                 <IconFacebook />
               </div>
             </FacebookShareButton>
+
+            <Link
+              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${shareMessage}`}
+              target='_blank'
+            >
+              <div className='px-6 py-3 border border[#E7E1FF] bg-[#F6F3FF] rounded-xl flex items-center'>
+                <IconFarcaster size={24} />
+              </div>
+            </Link>
           </div>
         </div>
       </div>
 
-      <div className='flex  md:flex-row flex-col py-4 px-8 justify-between items-center gap-4'>
-        <div className='flex flex-col gap-2'>
+      <div className='flex  md:flex-row flex-col py-4 px-8 justify-center items-center gap-4'>
+        {/* <div className='flex flex-col gap-2'>
           <span className='text-[#1D1E1F] font- font-semibold font-redHatText'>
             Buy more tokens?
           </span>
@@ -360,11 +370,11 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             There are still more projects on q/acc, let’s find a new token to
             buy!
           </span>
-        </div>
+        </div> */}
 
         <Link href={'/projects'}>
           <Button className='bg-white text-[#E1458D] w-[220px] flex justify-center items-center shadow-tabShadow font-redHatText'>
-            Explore Projects
+            Explore more projects
           </Button>
         </Link>
       </div>
