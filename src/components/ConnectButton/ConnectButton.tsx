@@ -148,7 +148,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               </Link>
             )}
             <Link
-              href={'mailto:qacc@giveth.io'}
+              href={'mailto:info@qacc.xyz'}
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
             >
               Do You Need Help?

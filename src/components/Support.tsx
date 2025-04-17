@@ -18,7 +18,7 @@ export const Support = () => {
           <br />
           on Telegram or email{' '}
           <a
-            href='mailto:qacc@giveth.io'
+            href='mailto:info@qacc.xyz'
             target='_blank'
             className='font-bold text-pink-500'
             referrerPolicy='no-referrer'
