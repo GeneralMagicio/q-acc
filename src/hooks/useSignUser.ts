@@ -1,12 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 import { getLocalStorageToken, signWithEVM } from '@/helpers/generateJWT';
 import { IUser } from '@/types/user.type';
 import { useFetchUser } from './useFetchUser';
 
-export const useSignUser = (onSigned?: (user: IUser) => void) => {
+export const useSignUser = (
+  onSigned?: (user: IUser) => void,
+  onReject?: () => void,
+) => {
   const { address, chain, connector } = useAccount();
   const { refetch } = useFetchUser();
+  const { disconnect } = useDisconnect();
 
   return useQuery({
     queryKey: ['token', address],
@@ -39,6 +43,8 @@ export const useSignUser = (onSigned?: (user: IUser) => void) => {
         return null;
       } catch (error) {
         console.log('Error generating token:', error);
+        disconnect();
+        onReject?.();
         return null;
       }
     },
