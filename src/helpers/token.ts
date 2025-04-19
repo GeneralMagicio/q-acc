@@ -352,3 +352,14 @@ export const fetchSquidPOLUSDPrice = async () => {
     return {};
   }
 };
+
+export function truncateToSignificantDigits(num: number, digits: number) {
+  if (num === 0) return 0;
+
+  if (num >= 1) {
+    return (Math.floor(num * 100) / 100).toFixed(2);
+  }
+  const exponent = Math.floor(Math.log10(Math.abs(num))) + 1;
+  const factor = 10 ** (digits - exponent);
+  return Math.floor(num * factor) / factor;
+}

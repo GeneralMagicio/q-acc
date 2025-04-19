@@ -27,6 +27,7 @@ import {
   convertToPOLAmount,
   fetchBalanceWithDecimals,
   formatBalance,
+  truncateToSignificantDigits,
 } from '@/helpers/token';
 import config from '@/config/configuration';
 import {
@@ -130,7 +131,6 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [tokenDetails, setTokenDetails] = useState<any>();
   const { data: POLPrice } = useFetchPOLPriceSquid();
 
-  const [terms, setTerms] = useState<boolean>(user?.acceptedToS || false);
   const [anoynmous, setAnoynmous] = useState<boolean>(false);
   const [hash, setHash] = useState<`0x${string}` | undefined>(undefined);
   const [hasSavedDonation, setHasSavedDonation] = useState<boolean>(false);
@@ -210,8 +210,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   useEffect(() => {
     const fetchConversion = async () => {
       const amount = await convertDonationAmount(selectedToken);
-      console.log(amount);
-      setMinimumContributionAmount(amount ?? config.MINIMUM_DONATION_AMOUNT);
+
+      if (amount) {
+        setMinimumContributionAmount(
+          Number(truncateToSignificantDigits(amount, 2)),
+        );
+      } else {
+        setMinimumContributionAmount(config.MINIMUM_DONATION_AMOUNT);
+      }
     };
 
     fetchConversion();
@@ -250,7 +256,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         // console.log('Res', res, progress);
         setUserDonationCap(Math.min(res, Number(convertedCap)));
       } else {
-        setUserDonationCap(Number(convertedCap));
+        setUserDonationCap(100);
+        // setUserDonationCap(Number(convertedCap));
       }
     }
   };
@@ -304,11 +311,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return;
       }
     }
-    if (!terms) {
-      setDonateDisabled(false);
-      setShowTermsConditionModal(true);
-      return;
-    }
+    // if (!terms) {
+    //   console.log('no terms');
+    //   setDonateDisabled(false);
+    //   setShowTermsConditionModal(true);
+    //   return;
+    // }
     if (
       parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
@@ -326,11 +334,12 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setDonateDisabled(false);
       return;
     }
-    if (!terms) {
-      console.log('Please accept the terms and conditions.');
-      setDonateDisabled(false);
-      return;
-    }
+
+    // if (!terms) {
+    //   console.log('Please accept the terms and conditions.');
+    //   setDonateDisabled(false);
+    //   return;
+    // }
     if (parseFloat(inputAmount) > remainingDonationAmount) {
       console.log('Input amount will exceed the round cap');
       setDonateDisabled(false);
@@ -453,7 +462,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     } else {
       setDonateDisabled(false);
     }
-  }, [terms, isConnected, inputAmount, userDonationCap]);
+  }, [isConnected, inputAmount, userDonationCap]);
 
   useEffect(() => {
     if (projectData?.seasonNumber === 1) {
@@ -750,9 +759,14 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
         const amount =
           (Math.min(remainingBalance, userDonationCap) * percentage) / 100;
-        const formattedAmount = Math.min(amount, userDonationCap).toFixed(2);
 
-        setInputAmount(formattedAmount);
+        const formattedAmount = Math.min(amount, userDonationCap);
+        // const formattedAmount = (Math.floor(minAmount * 100) / 100).toFixed(5);
+
+        setInputAmount(
+          truncateToSignificantDigits(formattedAmount, 2).toString(),
+        );
+        // setInputAmount(formattedAmount);
         // setUserDonationCapError(userDonationCap === 0);
         // setInputBalanceError(remainingBalance === 0);
 
@@ -762,8 +776,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handleRemainingCapClick = () => {
-    const remainingBalance = floor(tokenDetails?.formattedBalance);
-    setInputAmount(Math.min(remainingBalance, userDonationCap).toString());
+    const remainingBalance = truncateToSignificantDigits(
+      tokenDetails?.formattedBalance,
+      2,
+    );
+    setInputAmount(
+      Math.min(Number(remainingBalance), userDonationCap).toString(),
+    );
   };
 
   if (isConfirmed && donationId) {
@@ -819,7 +838,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 <span className='font-medium'>
                   {!tokenDetails
                     ? 'Loading...'
-                    : `${formatBalance(Number(tokenDetails?.formattedBalance))} ${selectedToken?.symbol}`}
+                    : `${truncateToSignificantDigits(Number(tokenDetails?.formattedBalance), 2)} ${selectedToken?.symbol}`}
                 </span>
                 <button onClick={handleRefetch}>
                   <IconRefresh size={16} />
@@ -903,10 +922,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                 {inputAmount === ''
                   ? 0
                   : formatAmount(
-                      round(
-                        parseFloat(inputAmount) *
-                          Number(selectedToken.usdPrice),
-                      ),
+                      parseFloat(inputAmount) * Number(selectedToken.usdPrice),
                     )}
               </span>
             </div>
