@@ -257,13 +257,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
 
                 <div className='border border-gray-300 bg-white rounded-lg font-redHatText text-gray-800 font-semibold leading-6 p-4'>
                   <div className='flex justify-between items-center '>
-                    <div>
-                      <span className=' '>q/acc points you've earned</span>
-                    </div>
-                    <div className='flex gap-2 items-center'>
-                      <span>
-                        {pointsEarned ? pointsEarned : '⏳ Calculating...'}
-                      </span>
+                    <div className='flex gap-1 items-center'>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
                         width='32'
@@ -277,15 +271,22 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                           fill='white'
                         />
                       </svg>
+                      <span className=' '>You've earned q/acc points</span>
+                    </div>
+                    <div className='flex gap-2 items-center'>
+                      <span className='font-semibold text-giv-500 '>
+                        {/* {pointsEarned ? pointsEarned : '⏳ Calculating...'} */}
+                        <Link href={'/leaderboard'}>Check leaderboard</Link>
+                      </span>
                     </div>
                   </div>
-                  {pointsEarned === null &&
+                  {/* {pointsEarned === null &&
                     donationStatus === DonationStatus.Swap_pending && (
                       <div className='border-t mt-2 p-2 text-redHatText text-gray-600 font-normal text-sm'>
                         Your points are being calculated and will be added to
                         your account once the transaction is confirmed.
                       </div>
-                    )}
+                    )} */}
                 </div>
               </div>
 
