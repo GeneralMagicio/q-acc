@@ -85,9 +85,11 @@ export const Announced = () => {
             className='object-contain'
           />
           <div className='text-nowrap'>
-            <div className={`${inter.className} mb-1`}>Matching Pool</div>
+            <div className={`${inter.className} mb-1 text-center`}>
+              Matching Pool
+            </div>
             <div className='text-tusker-grotesk text-5xl'>
-              $&nbsp;
+              {/* $&nbsp; */}
               {isPolPriceLoading ? (
                 <Spinner />
               ) : (
@@ -97,7 +99,8 @@ export const Announced = () => {
                     : Number(activeRoundDetails.allocatedFund) * (POLPrice || 0)
                   : 0
                 ).toLocaleString('en-US') || '0'
-              )}
+              )}{' '}
+              POL
             </div>
           </div>
           <Image
