@@ -24,9 +24,6 @@ import {
   calculateUniqueDonors,
   formatAmount,
 } from '@/helpers/donation';
-import { RoundCollectedInfo } from './RoundCollectedInfo';
-import { IconChevronDown } from '../Icons/IconChevronDown';
-import { IconChevronUp } from '../Icons/IconChevronUp';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -34,7 +31,6 @@ import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
-import { RoundCollectHeader } from './RoundCollectHeader';
 import {
   useClaimCollectedFee,
   useClaimedTributesAndMintedTokenAmounts,
@@ -634,7 +630,7 @@ const MyProjects = () => {
           </h1>
         </div>
 
-        <div className='flex flex-col gap-4'>
+        {/* <div className='flex flex-col gap-4'>
           {(filteredRoundData.roundType === 'QfRound' ||
             filteredRoundData.qfRoundEnded) && (
             <RoundCollectHeader
@@ -680,7 +676,7 @@ const MyProjects = () => {
           ) : (
             ''
           )}
-        </div>
+        </div> */}
 
         <div className='flex  flex-col md:flex-row justify-between p-4 bg-[#EBECF2] md:items-center rounded-xl'>
           <div className='flex gap-4 items-center'>
