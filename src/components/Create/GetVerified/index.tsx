@@ -31,7 +31,7 @@ const GetVerified = () => {
           router.push(Routes.AllProjects);
         }}
       />
-      <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
+      <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-lg font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         {/* <CountryRegulatory /> */}
         {/* <QaccCappDesc /> */}
         <p>
@@ -56,7 +56,7 @@ const GetVerified = () => {
         </div>
         <GitcoinVerifySection />
         <ZkidVerifySection />
-        <div className='text-xl border-gray-100 border-t-2 pt-4'>
+        <div className='text-lg border-gray-100 border-t-2 pt-4'>
           Need help? Hop onto the{' '}
           <a
             href={links.TELEGRAM_SUPPORT}

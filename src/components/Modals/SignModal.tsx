@@ -22,7 +22,7 @@ export const SignModal: FC<SignModalProps> = props => {
         </p>
         <Button
           styleType={ButtonStyle.Solid}
-          color={ButtonColor.Pink}
+          color={ButtonColor.Giv}
           onClick={() => refetch()}
           loading={isFetching}
         >
