@@ -467,7 +467,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   useEffect(() => {
     if (projectData?.seasonNumber === 1) {
       const message =
-        'Season 1 tokens are locked for 10 months with a 6 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.';
+        'Season 1 tokens are locked for 10 months with a 5 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.';
       const toolTip =
         'Tokens are locked for a period of time followed by an unlock stream over another period of time. The cliff is when tokens begin to unlock, in a stream, until the last day of the schedule.';
 
