@@ -259,7 +259,7 @@ export async function calculateMarketCapChange(
 
   // Sort by date
   let history: { createdAt: string; marketCap: number; id: number }[] = [];
-  const initialPrice = reserve / (supply * reserveRatio);
+  const initialPrice = (reserve / (supply * reserveRatio)) * 1.1;
 
   const initialMarketCap = supply * initialPrice;
   const initialTimestamp = '2025-04-01T00:00:00Z'; // virtual Day 0 timestamp (can be set based on your round start)
@@ -283,7 +283,7 @@ export async function calculateMarketCapChange(
   filteredDonations.forEach(({ amount, createdAt, id }) => {
     supply = supply * Math.pow(1 + amount / reserve, reserveRatio);
     reserve += amount;
-    const price = reserve / (supply * reserveRatio);
+    const price = (reserve / (supply * reserveRatio)) * 1.1;
     const marketCap = supply * price;
     history.push({ createdAt, marketCap, id: id });
   });
