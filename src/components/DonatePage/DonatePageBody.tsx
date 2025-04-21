@@ -256,8 +256,8 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         // console.log('Res', res, progress);
         setUserDonationCap(Math.min(res, Number(convertedCap)));
       } else {
-        setUserDonationCap(100);
-        // setUserDonationCap(Number(convertedCap));
+        // setUserDonationCap(100);
+        setUserDonationCap(Number(convertedCap));
       }
     }
   };
