@@ -26,7 +26,6 @@ import {
   convertDonationAmount,
   convertToPOLAmount,
   fetchBalanceWithDecimals,
-  formatBalance,
   truncateToSignificantDigits,
 } from '@/helpers/token';
 import config from '@/config/configuration';
@@ -748,7 +747,52 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     console.log('Refetched', parseFloat(tokenDetails.formattedBalance));
   };
 
+  const fetchRoute = (inputAmount: number) => {
+    // Skip if the token is already on Polygon and is native MATIC
+    if (
+      selectedToken.address === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+      selectedChain.id === '137'
+    ) {
+      setSquidRouteLoading(false);
+      return;
+    }
+
+    const fromAmount = convertToTokenUnits(
+      inputAmount.toString(),
+      selectedToken.decimals || 18,
+    );
+
+    // params for getting route of transaction
+    const params = {
+      fromAddress: address,
+      fromChain: selectedChain.id,
+      fromToken: selectedToken.address,
+      fromAmount: fromAmount,
+      toChain: '137',
+      toToken: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      toAddress: projectData?.addresses[0].address,
+      quoteOnly: false,
+    };
+
+    const getSwapRoute = async () => {
+      try {
+        setSquidRouteLoading(true);
+        const routeResult = await getRoute(params);
+        const route = routeResult.data.route;
+        setSquidTransactionRequest(route.transactionRequest);
+      } catch (error) {
+        setFlashMessage('No route found');
+        console.error('Error fetching route:', error);
+      } finally {
+        setSquidRouteLoading(false);
+      }
+    };
+
+    getSwapRoute();
+  };
+
   const handlePercentageClick = (percentage: number) => {
+    setSquidRouteLoading(true);
     setSelectedPercentage((prevSelected): any => {
       if (prevSelected === percentage) {
         setInputAmount('');
@@ -763,12 +807,11 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         const formattedAmount = Math.min(amount, userDonationCap);
         // const formattedAmount = (Math.floor(minAmount * 100) / 100).toFixed(5);
 
+        fetchRoute(Number(truncateToSignificantDigits(formattedAmount, 2)));
+
         setInputAmount(
           truncateToSignificantDigits(formattedAmount, 2).toString(),
         );
-        // setInputAmount(formattedAmount);
-        // setUserDonationCapError(userDonationCap === 0);
-        // setInputBalanceError(remainingBalance === 0);
 
         return percentage;
       }
@@ -776,12 +819,16 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handleRemainingCapClick = () => {
+    setSquidRouteLoading(true);
     const remainingBalance = truncateToSignificantDigits(
       tokenDetails?.formattedBalance,
       2,
     );
+    const userCap = truncateToSignificantDigits(userDonationCap, 2);
+
+    fetchRoute(Math.min(Number(remainingBalance), Number(userCap)));
     setInputAmount(
-      Math.min(Number(remainingBalance), userDonationCap).toString(),
+      Math.min(Number(remainingBalance), Number(userCap)).toString(),
     );
   };
 
@@ -969,8 +1016,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                   <span
                     className={` font-medium ${inputErrorMessage ? 'text-[#E6492D]' : 'text-[#303B72]'}`}
                   >
-                    {formatBalance(minimumContributionAmount || 20)}{' '}
-                    {selectedToken.symbol}
+                    {minimumContributionAmount || 20} {selectedToken.symbol}
                   </span>
                 </h2>
               </div>
