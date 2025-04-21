@@ -126,7 +126,7 @@ const ZkidLanding = () => {
             >
               q/acc Support Telegram channel
             </a>{' '}
-            or send an email to qacc@giveth.io. We’ll help you get back on
+            or send an email to info@qacc.xyz . We’ll help you get back on
             track!
           </p>
           {!isVerified && (

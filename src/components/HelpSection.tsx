@@ -11,8 +11,8 @@ export const HelpSection = () => {
           Stuck or have questions? Our team is on standby to assist you.
           <br />
           Send us an email at{' '}
-          <a className='text-pink-500' href='mailto:qacc@giveth.io'>
-            qacc@giveth.io
+          <a className='text-pink-500' href='mailto:info@qacc.xyz '>
+            info@qacc.xyz
           </a>
           , or drop us a message at{' '}
           <a
