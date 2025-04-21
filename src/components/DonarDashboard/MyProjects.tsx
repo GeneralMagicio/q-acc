@@ -436,6 +436,7 @@ const MyProjects = () => {
                 showCloseButton={true}
                 projectSlug={projectData?.slug || ''}
                 projectTitle={projectData?.title}
+                tokenTicker={projectData?.abc?.tokenTicker}
               />
             </div>
           </div>

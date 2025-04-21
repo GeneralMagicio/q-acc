@@ -196,6 +196,7 @@ const DonarSupportedProjects = ({
               showCloseButton={true}
               projectSlug={project?.slug || ''}
               projectTitle={project?.title}
+              tokenTicker={project?.abc?.tokenTicker}
             />
           </div>
 

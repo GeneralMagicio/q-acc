@@ -1254,6 +1254,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             showCloseButton={true}
             projectSlug={projectData?.slug || ''}
             projectTitle={projectData?.title}
+            tokenTicker={projectData?.abc?.tokenTicker}
           />
         </div>
       )}
