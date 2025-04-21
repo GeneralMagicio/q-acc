@@ -11,7 +11,7 @@ export const useFetchLeaderBoard = (
     queryFn: async () => {
       return await fetchLeaderBoard(take, skip, orderBy);
     },
-    staleTime: Infinity,
-    gcTime: Infinity,
+    // staleTime: Infinity,
+    // gcTime: Infinity,
   });
 };
