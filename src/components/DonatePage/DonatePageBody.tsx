@@ -26,7 +26,6 @@ import {
   convertDonationAmount,
   convertToPOLAmount,
   fetchBalanceWithDecimals,
-  formatBalance,
   truncateToSignificantDigits,
 } from '@/helpers/token';
 import config from '@/config/configuration';
