@@ -27,7 +27,7 @@ const Rules = () => {
           <h1 className='text-2xl text-black font-bold mb-8 '>
             What you need to know
           </h1>
-          <ol className='list-decimal text-2xl font-light text-slate-600 px-4 space-y-4 leading-normal'>
+          <ol className='list-decimal text-lg font-light text-slate-600 px-4 space-y-4 leading-normal'>
             <li>The q/acc round runs two weeks.</li>
             <li>
               There is a matching pool for this round. Your token purchases

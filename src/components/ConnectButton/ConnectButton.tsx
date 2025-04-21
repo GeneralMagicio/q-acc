@@ -54,7 +54,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
           ${
             address
               ? 'bg-giv-50 border-[1px] border-giv-100 text-gray-900'
-              : 'bg-pink-500 text-white hover:bg-pink-600'
+              : 'bg-giv-500 text-white hover:bg-giv-700'
           }
         `}
       >

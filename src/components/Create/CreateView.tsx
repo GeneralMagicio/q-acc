@@ -51,7 +51,7 @@ export const CreateView = () => {
         {isConnected && (userProjectsCount || 0 > 0) ? (
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
-            color={ButtonColor.Pink}
+            color={ButtonColor.Giv}
             styleType={ButtonStyle.Solid}
             disabled
           >
@@ -61,7 +61,7 @@ export const CreateView = () => {
           <Link href={Routes.CreateProject}>
             <Button
               className='mx-auto !py-6 !px-10 mt-20'
-              color={ButtonColor.Pink}
+              color={ButtonColor.Giv}
               styleType={ButtonStyle.Solid}
             >
               Create Project

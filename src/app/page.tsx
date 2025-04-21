@@ -30,12 +30,12 @@ export default function Home() {
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             <div>
               <h1
-                className={`text-3xl text-gray-900 font-bold mt-10 ${inter.className} mb-6`}
+                className={`text-2xl text-gray-900 font-bold mt-10 ${inter.className} mb-6`}
               >
                 Quadratic Acceleration (q/acc): The Future of Trust in
                 Tokenization
               </h1>
-              <div className='text-2xl leading-9 text-gray-600'>
+              <div className='text-lg leading-9 text-gray-600'>
                 <p>
                   Web3 is the future, but let’s be honest—it’s chaotic. Scams,
                   rug pulls, and hype-driven speculation make it nearly
