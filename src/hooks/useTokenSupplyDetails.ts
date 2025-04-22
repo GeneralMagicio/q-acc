@@ -7,7 +7,5 @@ export const useTokenSupplyDetails = (contract_address: string) => {
     queryFn: async () => {
       return await getTokenSupplyDetails(contract_address);
     },
-    staleTime: Infinity,
-    gcTime: Infinity,
   });
 };
