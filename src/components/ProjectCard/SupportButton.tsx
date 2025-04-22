@@ -56,7 +56,7 @@ export const SupportButton: FC<ISupportButtonProps> = ({
         showCloseButton={true}
       />
       <Button
-        color={ButtonColor.Pink}
+        color={ButtonColor.Giv}
         className={`w-full justify-center opacity-80 ${remainingTime === 'Time is up!' ? '' : 'hover:opacity-100'}`}
         onClick={handleSupport}
         disabled={
@@ -65,7 +65,7 @@ export const SupportButton: FC<ISupportButtonProps> = ({
           disabled
         }
       >
-        Support This Project
+        Buy Token
       </Button>
     </>
   );

@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { IIcon } from './type';
 
-export const IconDiscord: FC<IIcon> = ({ size = 30, color = '#23272A' }) => {
+export const IconDiscord: FC<IIcon> = ({
+  size = 30,
+  color = 'currentColor',
+}) => {
   return (
     <svg
       width={size}

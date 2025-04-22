@@ -93,7 +93,11 @@ const EditProjectForm: FC = () => {
                 name='emailAddress'
                 label='Email Address'
                 placeholder='Enter your email address'
-                rules={validators.email}
+                // rules={validators.email}
+                rules={{
+                  required: 'Email Address is required',
+                  ...validators.email,
+                }}
               />
             </div>
             <div className='border-b-2 text-[18px] font-bold text-[#4F576A]'>

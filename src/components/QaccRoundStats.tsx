@@ -19,7 +19,10 @@ const QaccRoundStats: React.FC<QaccRoundStatsProps> = ({}) => {
                 {formatAmount(qaccStats?.totalCollected)} POL
               </h1>
               <h3 className='text-[21px] font-semibold text-[#B9A7FF]'>
-                ~${formatAmount(qaccStats?.totalCollected * Number(POLPrice))}{' '}
+                ~$
+                {formatAmount(
+                  qaccStats?.totalCollected * Number(POLPrice),
+                )}{' '}
               </h3>
             </>
           ) : (
@@ -48,7 +51,10 @@ const QaccRoundStats: React.FC<QaccRoundStatsProps> = ({}) => {
                 {formatAmount(qaccStats?.qfTotalCollected)} POL
               </h1>
               <h3 className='text-[21px] font-semibold text-[#B9A7FF]'>
-                ~${formatAmount(qaccStats?.qfTotalCollected * Number(POLPrice))}{' '}
+                ~$
+                {formatAmount(
+                  qaccStats?.qfTotalCollected * Number(POLPrice),
+                )}{' '}
               </h3>
             </>
           ) : (

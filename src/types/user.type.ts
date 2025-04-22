@@ -24,6 +24,10 @@ export interface IUser {
   analysisScore?: number;
   hasEnoughGitcoinPassportScore?: boolean;
   hasEnoughGitcoinAnalysisScore?: boolean;
+  qaccPoints: number;
+  qaccPointsMultiplier: number;
+  projectsFundedCount: number;
+  rank: number;
 }
 
 export interface IGivethUser {

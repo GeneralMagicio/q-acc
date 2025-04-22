@@ -79,6 +79,10 @@ export const fetchAllProjects = async () => {
         auth: true,
       },
     );
+    res?.allProjects.projects.sort((a, b) =>
+      a.seasonNumber < b.seasonNumber ? 1 : -1,
+    );
+
     return res?.allProjects;
   } catch (error) {
     console.error(error);

@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import { requestGraphQL } from '@/helpers/request';
 import { USER_ACCEPT_TERMS_MUTATION } from '@/queries/user.query';
 
-export const useUpdateAcceptedTerms = () => {
+export const useUpdateAcceptedTerms = (onSuccess?: () => void) => {
   const { address } = useAccount();
   const queryClient = useQueryClient();
 
@@ -40,6 +40,7 @@ export const useUpdateAcceptedTerms = () => {
     },
     onSuccess: (data, variables, context) => {
       console.log('acceptedToS updated successfully', data, variables, context);
+      onSuccess && onSuccess();
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['user', address] });

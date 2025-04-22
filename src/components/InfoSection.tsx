@@ -9,13 +9,13 @@ const InfoSection: FC<InfoSectionProps> = ({ title, children }) => {
   return (
     <div className='relative  flex flex-col items-center gap-20  self-stretch bg-[#FFF] font-redHatText'>
       <div className='container  flex flex-col gap-6  items-start p-[80px_40px] '>
-        <h1 className=' relative  mx-auto font-bold text-[41px] '>
+        <h1 className=' relative  mx-auto font-bold text-2xl '>
           {title}
           <svg
-            className=' absolute left-[40%] top-[-40%]'
+            className=' absolute left-[40%] top-[-70%]'
             xmlns='http://www.w3.org/2000/svg'
-            width='31'
-            height='32'
+            width='24'
+            height='24'
             viewBox='0 0 31 32'
             fill='none'
           >
@@ -25,7 +25,7 @@ const InfoSection: FC<InfoSectionProps> = ({ title, children }) => {
             />
           </svg>
         </h1>
-        <div className='text-[24px] leading-9 mx-auto text-[#4F576A] font-redHatText flex flex-col gap-10'>
+        <div className='text-lg leading-9 mx-auto text-[#4F576A] font-redHatText flex flex-col gap-10'>
           {children}
         </div>
       </div>

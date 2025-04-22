@@ -20,6 +20,7 @@ import { useFetchMostRecentEndRound } from './usefetchMostRecentEndRound';
 import { Button, ButtonColor } from '../Button';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import config from '@/config/configuration';
+import { Spinner } from '../Loading/Spinner';
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
   MEMEBERS = 'members',
@@ -99,8 +100,13 @@ const ProjectDetail = () => {
       }
     }
   }, [searchParams.get('tab')]);
+
   if (!projectData) {
-    return <>Loading</>;
+    return (
+      <div className='container flex justify-center items-center min-h-80'>
+        <Spinner />
+      </div>
+    );
   }
   return (
     <div className=''>
@@ -108,7 +114,7 @@ const ProjectDetail = () => {
         <div className='flex gap-6 flex-col lg:flex-row mt-10 justify-center'>
           <ProjectDetailBanner isRoundActive={isRoundActive} />
 
-          {isRoundActive ? <DonateSection /> : ''}
+          <DonateSection />
         </div>
         {isRoundActive && (
           <div className='my-6'>
