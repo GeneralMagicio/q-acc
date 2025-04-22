@@ -427,15 +427,39 @@ export const CREATE_DRAFT_DONATION = /* GraphQL */ `
   }
 `;
 
-export const GET_ALL_PROJECTS = /* GraphQL */ `
-  {
-    allProjects(
-      includeAllProjectStatuses: true
-      includeAllReviewStatuses: true
-      sortingBy: Newest
-    ) {
-      projects {
-        id
+export const GET_ALL_PROJECTS = `
+{
+  allProjects(includeAllProjectStatuses: true, includeAllReviewStatuses: true,sortingBy:Newest, limit: 50) {
+     projects {
+    id
+    title
+    balance
+    image
+    slug
+    description
+    descriptionSummary
+    creationDate
+    updatedAt
+    teaser
+    adminUserId
+    description
+    walletAddress
+    impactLocation
+    qualityScore
+    verified
+    traceCampaignId
+    listed
+    reviewStatus
+    givingBlocksId
+    status {
+      id
+      symbol
+      name
+      description
+    }
+    categories {
+      name
+      mainCategory {
         title
         balance
         image
