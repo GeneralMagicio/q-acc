@@ -18,6 +18,7 @@ import { isContractAddress } from '@/helpers/token';
 import { POLYGON_POS_CHAIN_IMAGE } from '../DonatePage/SelectChainModal';
 import { CHAIN_IMAGES, fetchUSDPrices } from '@/helpers/squidTransactions';
 import { Spinner } from '../Loading/Spinner';
+import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 
 const itemPerPage = 5;
 
@@ -58,6 +59,10 @@ const ProjectDonationTable = () => {
   );
   const [usdPrices, setUsdPrices] = useState<any>({});
   const [usdPricesLoading, setUsdPricesLoading] = useState(false);
+
+  const { data: tokenDetails } = useTokenSupplyDetails(
+    projectData?.abc?.fundingManagerAddress,
+  );
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -401,7 +406,7 @@ const ProjectDonationTable = () => {
                 </div>
 
                 <h3 className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(projectData?.abc?.totalSupply) || '---'}{' '}
+                  {formatAmount(Number(tokenDetails?.issuance_supply)) || '---'}{' '}
                   {projectData?.abc?.tokenTicker}
                 </h3>
               </div>
