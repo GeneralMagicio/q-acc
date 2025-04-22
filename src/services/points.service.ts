@@ -31,12 +31,14 @@ export const fetchLeaderBoard = async (
   take: number,
   skip: number,
   orderBy: IOrderBy,
+  walletAddress?: string,
 ) => {
   try {
     const res = await requestGraphQL<ILeaderBoardInfo>(FETCH_LEADERBOARD, {
       take,
       skip,
       orderBy,
+      walletAddress,
     });
     return res?.getUsersByQaccPoints;
   } catch (error) {

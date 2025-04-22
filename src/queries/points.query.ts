@@ -1,6 +1,11 @@
 export const FETCH_LEADERBOARD = /* GraphQL */ `
-  query ($take: Int, $skip: Int, $orderBy: SortUserBy) {
-    getUsersByQaccPoints(take: $take, skip: $skip, orderBy: $orderBy) {
+  query ($take: Int, $skip: Int, $orderBy: SortUserBy, $walletAddress: String) {
+    getUsersByQaccPoints(
+      take: $take
+      skip: $skip
+      orderBy: $orderBy
+      walletAddress: $walletAddress
+    ) {
       users {
         id
         name
