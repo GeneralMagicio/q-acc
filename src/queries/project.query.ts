@@ -433,6 +433,7 @@ export const GET_ALL_PROJECTS = /* GraphQL */ `
       includeAllProjectStatuses: true
       includeAllReviewStatuses: true
       sortingBy: Newest
+      limit: 50
     ) {
       projects {
         id
