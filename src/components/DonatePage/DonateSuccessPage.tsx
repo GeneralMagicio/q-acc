@@ -243,7 +243,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                         <h3 className='font-bold'>Token Lock Schedule</h3>
                         {projectData?.seasonNumber === 2
                           ? `Season 2 tokens are locked for 1 year with a 6 month cliff. Tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream.`
-                          : `Season 1 tokens are locked for 10 months with a 5 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.`}
+                          : `Season 1 tokens are locked for 10 months with a 5 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens bought through q/acc always unlock before the Project’s vesting completes.`}
                       </div>
                     </div>
                   </div>
@@ -251,7 +251,7 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
                   <h2 className='text-redHatText text-gray-600 font-normal text-sm'>
                     {projectData?.seasonNumber === 2
                       ? `Season 2 tokens are locked for 1 year with a 6 month cliff. Tokens are locked completely for 6 months, and then unlocked gradually in a 6 month stream. `
-                      : 'Season 1 tokens are locked for 10 months with a 5 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens nought through q/acc always unlock before the Project’s vesting completes.'}
+                      : 'Season 1 tokens are locked for 10 months with a 5 month cliff. Tokens are locked completely for 5 months, and then unlocked gradually in a 5 month stream. The shorter vesting is to ensure  tokens bought through q/acc always unlock before the Project’s vesting completes.'}
                   </h2>
                 </div>
 
