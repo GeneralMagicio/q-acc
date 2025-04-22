@@ -144,7 +144,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
               <h2 className='text-base'>
                 I have read and agree to the{' '}
                 <Link
-                  href='https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5'
+                  href='/tos'
                   className='text-pink-500 font-semibold'
                   target='_blank'
                 >
