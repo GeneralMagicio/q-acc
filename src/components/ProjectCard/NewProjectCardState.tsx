@@ -151,7 +151,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
 
           {!activeRoundDetails
             ? (project.seasonNumber !== 1 ||
-                project.batchNumbersWithSafeTransactions?.length != 0) && (
+                (project.batchNumbersWithSafeTransactions?.length != 0 &&
+                  !isTokenListed)) && (
                 <div className='absolute bg-white    right-[-2px] top-0   py-[2px]  pr-0 pl-2 rounded-tr-xl rounded-bl-2xl '>
                   <svg
                     className='absolute left-[-18px] top-[-1px]'

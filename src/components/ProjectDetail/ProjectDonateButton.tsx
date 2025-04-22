@@ -93,7 +93,7 @@ const ProjectDonateButton = () => {
       if (projectData?.abc?.issuanceTokenAddress) {
         const { price, isListed } = await getPoolAddressByPair(
           projectData.abc.issuanceTokenAddress,
-          config.ERC_TOKEN_ADDRESS,
+          config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
         setCurrentTokenPrice(Number(price));
