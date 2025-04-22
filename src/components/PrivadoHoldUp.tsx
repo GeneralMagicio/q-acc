@@ -32,7 +32,7 @@ export const PrivadoHoldUp = () => {
           . Documents must include your date of birth or verification will fail.
           Have your document ready!
         </li>
-        <li>
+        {/* <li>
           <span className='text-gray-800 font-bold'>
             We strongly encourage you to use MetaMask at this time.
           </span>{' '}
@@ -46,7 +46,7 @@ export const PrivadoHoldUp = () => {
           </span>{' '}
           at this time. You will see an option to  “Continue via app” during
           verification. Do not select that.
-        </li>
+        </li> */}
       </ul>
     </>
   );

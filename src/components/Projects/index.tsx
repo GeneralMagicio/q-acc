@@ -1,19 +1,23 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { ProjectsSection } from './ProjectsSection';
-import { Banner } from '../Banner';
+import { Banner } from '../Banner/Banner';
+import { ProjectsFilter } from '../ProjectsFilter';
 
 export const ProjectsView = () => {
+  const [seasonFilter, setSeasonFilter] = useState(0);
+
   return (
     <>
-      <Banner
-        title1='the future of'
-        title2='tokenization'
-        subTitle='q/acc = QF*ABC'
-      />
-      <div className='container'>
-        <div className='my-[60px]'></div>
-        <ProjectsSection />
+      <Banner />
+      <div className='container my-14'>
+        <ProjectsFilter
+          seasonFilter={seasonFilter}
+          setSeasonFilter={setSeasonFilter}
+        />
+        <div className=''>
+          <ProjectsSection seasonFilter={seasonFilter} />
+        </div>
       </div>
     </>
   );

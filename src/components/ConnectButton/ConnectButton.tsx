@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useDisconnect } from 'wagmi';
+import { useAppKit } from '@reown/appkit/react';
 
 import Image from 'next/image';
 
@@ -9,6 +10,9 @@ import { useState, type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { isProductReleased } from '@/config/configuration';
+import { shortenAddress } from '@/helpers/address';
+import { useFetchChainsFromSquid } from '@/hooks/useFetchChainsFromSquid';
+import { useWalletInfo } from '@/hooks/useWalletInfo';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -16,11 +20,17 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   className,
   ...props
 }) => {
-  const { open } = useWeb3Modal();
+  const walletInfo = useWalletInfo();
+
   const { disconnect } = useDisconnect();
+  const { open } = useAppKit();
 
   const { address, isConnecting, chain, isConnected } = useAccount();
   const { data: user } = useFetchUser();
+  const { data: chainsData } = useFetchChainsFromSquid();
+  const chainData = chainsData?.chains.find(
+    cd => cd.chainId === chain?.id.toString(),
+  );
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -31,9 +41,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
     }
   };
 
-  const shortAddress = address
-    ? `${address?.slice(0, 6)}...${address?.slice(-4)}`
-    : '';
+  const shortAddress = shortenAddress(address);
 
   return (
     <div className={`relative ${className}`} {...props}>
@@ -42,11 +50,11 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleConnect}
         disabled={isConnecting}
-        className={`px-6 py-[14px] text-sm font-medium rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
+        className={`px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 text-nowrap
           ${
             address
-              ? 'bg-white text-gray-900 shadow-tabShadow hover:shadow-md'
-              : 'bg-pink-500 text-white hover:bg-pink-600'
+              ? 'bg-giv-50 border-[1px] border-giv-100 text-gray-900'
+              : 'bg-giv-500 text-white hover:bg-giv-700'
           }
         `}
       >
@@ -73,19 +81,40 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
           </svg>
         ) : address ? (
           <div className='flex gap-2 items-center'>
-            <Image
+            {/* <Image
               src={user?.avatar || '/images/placeholders/PFPQACC.png'}
               alt='Profile Pic'
               width={24}
               height={24}
               className='rounded-full w-6 h-6'
-            />
-            <div className='flex flex-col items-start'>
-              <div className='text-sm'>{user?.fullName || shortAddress}</div>
-              <div className='text-[0.6rem] text-giv-800 max-w-32 whitespace-nowrap overflow-hidden text-ellipsis'>
-                Connected to {chain?.name}
+            /> */}
+            {walletInfo && (
+              <div className='rounded-full w-6 h-6 bg-white flex items-center justify-center overflow-hidden'>
+                <img
+                  src={walletInfo.image_url.sm}
+                  alt='wallet Icon'
+                  width={24}
+                  height={24}
+                />
               </div>
-            </div>
+            )}
+
+            {chainData?.chainIconURI && (
+              <Image
+                src={chainData.chainIconURI}
+                alt='chain Icon'
+                width={24}
+                height={24}
+                className='rounded-full w-6 h-6 -ml-3'
+              />
+            )}
+            <div className='text-sm'>{user?.fullName || shortAddress}</div>
+            <Image
+              src='/images/icons/chevron-down.svg'
+              alt='arrow down'
+              width={16}
+              height={16}
+            />
           </div>
         ) : (
           <div>q/acc Sign in</div>
@@ -95,7 +124,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`bg-white  w-[250px] shadow-walletShadow p-4 md:right-4 rounded-xl absolute z-50 ${isHovered && isConnected ? 'visible' : 'hidden '}`}
+        className={`bg-white  w-[250px] shadow-walletShadow p-4 md:right-0  rounded-xl absolute z-50  ${isHovered && isConnected ? 'visible' : 'hidden'}`}
       >
         <div className='flex flex-col gap-2 font-redHatText cursor-pointer'>
           <div
@@ -119,7 +148,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
               </Link>
             )}
             <Link
-              href={'mailto:qacc@giveth.io'}
+              href={'mailto:info@qacc.xyz'}
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
             >
               Do You Need Help?

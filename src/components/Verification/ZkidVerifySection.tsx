@@ -10,12 +10,10 @@ import {
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 import { formatAmount } from '@/helpers/donation';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, error, isLoading } = usePrivado();
-  const { data: POLPrice } = useFetchTokenPrice();
 
   const { data: allRounds } = useFetchAllRound();
 
@@ -26,10 +24,8 @@ export const ZkidVerifySection = () => {
   let high_cap;
 
   if (qaccRound) {
-    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
-      high_cap =
-        (qaccRound?.roundUSDCapPerUserPerProject || 15000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+    if ('roundPOLCapPerUserPerProject' in qaccRound) {
+      high_cap = qaccRound?.roundPOLCapPerUserPerProject || 15000;
     }
   }
 

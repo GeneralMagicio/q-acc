@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 
-import { Banner } from '@/components/Banner';
+import { Banner } from '@/components/Banner/Banner';
 import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
 import Collaborator from '@/components/Collaborator';
 import { HelpSection } from '@/components/HelpSection';
@@ -33,11 +33,7 @@ export const CreateView = () => {
 
   return (
     <main className='flex flex-col gap-4'>
-      <Banner
-        title1='the future of'
-        title2='tokenization'
-        subTitle='q/acc = QF*ABC'
-      />
+      <Banner />
       <InfoSection title='Congratulations, and welcome to q/acc on Giveth.'>
         <p>
           Now you need to create your Giveth q/acc project page in preparation
@@ -55,7 +51,7 @@ export const CreateView = () => {
         {isConnected && (userProjectsCount || 0 > 0) ? (
           <Button
             className='mx-auto !py-6 !px-10 mt-20'
-            color={ButtonColor.Pink}
+            color={ButtonColor.Giv}
             styleType={ButtonStyle.Solid}
             disabled
           >
@@ -65,7 +61,7 @@ export const CreateView = () => {
           <Link href={Routes.CreateProject}>
             <Button
               className='mx-auto !py-6 !px-10 mt-20'
-              color={ButtonColor.Pink}
+              color={ButtonColor.Giv}
               styleType={ButtonStyle.Solid}
             >
               Create Project

@@ -21,10 +21,10 @@ export const NFTModal: FC<ConnectModalProps> = ({ ...props }) => {
         <div className=''>
           If you think this is a mistake, please check with the project team or
           you can reach out to us at
-          <Link href={`mailto:qacc@giveth.io`}>
+          <Link href={`mailto:info@qacc.xyz `}>
             <span className='text-pink-500 font-semibold font-redHatText'>
               {' '}
-              qacc@giveth.io{' '}
+              info@qacc.xyz{' '}
             </span>
           </Link>
           for support.

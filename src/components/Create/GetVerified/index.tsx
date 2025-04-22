@@ -5,7 +5,6 @@ import CreateNavbar from '../CreateNavbar';
 import Routes from '@/lib/constants/Routes';
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
-import { CountryRegulatory } from '@/components/Verification/CountryRegulatory';
 import links from '@/lib/constants/links';
 
 const GetVerified = () => {
@@ -18,7 +17,8 @@ const GetVerified = () => {
   return (
     <>
       <CreateNavbar
-        title='Get Verified'
+        title=''
+        submitLabel='Close'
         onBack={
           showBackButton
             ? e => {
@@ -27,14 +27,36 @@ const GetVerified = () => {
               }
             : undefined
         }
-        hideSubmit={true}
+        onSubmit={() => {
+          router.push(Routes.AllProjects);
+        }}
       />
-      <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-xl font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
-        <CountryRegulatory />
+      <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-lg font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
+        {/* <CountryRegulatory /> */}
         {/* <QaccCappDesc /> */}
+        <p>
+          The q/acc protocol prohibits citizens of the{' '}
+          <b className='font-bold'>United States and United Kingdom</b> from
+          participating due to regulatory reasons.
+        </p>
+        <div>
+          <p>
+            You must verify in order to use the q/acc protocol. You may verify
+            using Human Passport or Privado zkID for verification.
+          </p>
+          <p>
+            The spending cap for Human Passport is up to approx. $1,000 and the
+            spending cap for zkID is approx. $25,000.
+          </p>
+          <p className='border-gray-100 border-b-2 pb-4'>
+            The spending caps are set in $POL at the start of the round but may
+            be updated periodically based on significant fluctuation in the
+            POL-USD exchange rate.
+          </p>
+        </div>
         <GitcoinVerifySection />
         <ZkidVerifySection />
-        <div className='text-xl border-gray-100 border-t-2 pt-4'>
+        <div className='text-lg border-gray-100 border-t-2 pt-4'>
           Need help? Hop onto the{' '}
           <a
             href={links.TELEGRAM_SUPPORT}
@@ -46,12 +68,12 @@ const GetVerified = () => {
           </a>
           on Telegram or email{' '}
           <a
-            href='mailto:qacc@giveth.io'
+            href='mailto:info@qacc.xyz'
             target='_blank'
             className='font-bold text-pink-500'
             referrerPolicy='no-referrer'
           >
-            qacc@giveth.io.
+            info@qacc.xyz.
           </a>
         </div>
       </div>

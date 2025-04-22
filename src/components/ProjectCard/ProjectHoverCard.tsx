@@ -46,6 +46,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
   useEffect(() => {
+    // console.log(
+    //   project?.title,
+    //   // project?.id + ' NFT address ' + project?.abc?.nftContractAddress,
+    //   project?.abc?.issuanceTokenAddress,
+    // );
     if (project?.id) {
       const fetchProjectDonations = async () => {
         const data = await fetchProjectDonationsById(
@@ -117,15 +122,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
           config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
-        if (
-          project?.abc?.issuanceTokenAddress ===
-          '0x0b7a46e1af45e1eaadeed34b55b6fc00a85c7c68'
-        ) {
-          setCurrentTokenPrice(Number(price));
-        } else {
-          setCurrentTokenPrice(1 / Number(price));
-        }
-
+        setCurrentTokenPrice(1 / Number(price));
         console.log(
           'Current Price  Address:',
           isTokenListed,
@@ -145,7 +142,7 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative  w-full ${totalHeightClass} rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
+        className={`relative p-4  w-full ${totalHeightClass} rounded-xl bg-white overflow-hidden shadow-tabShadow shadow-gray-200 `}
         {...props}
       >
         <div className='relative h-[250px]'>
@@ -157,9 +154,22 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
         </div>
 
         <div
-          className={`w-full bg-white absolute h-fit   ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover rounded-xl p-6  transition-bottom duration-500 ease-in-out`}
+          className={`bg-white absolute h-fit ${isHovered ? 'bottom-0' : activeRoundDetails || isTokenListed ? 'bottom-[-80px]' : 'bottom-[-10px]'}  no-hover transition-bottom duration-500 ease-in-out left-4 right-4 py-4`}
         >
           <div className='absolute bg-white    left-0 -top-11 w-16 h-16 p-3 rounded-tr-xl rounded-bl-xl '>
+            <svg
+              className='absolute top-[-18px] left-0'
+              xmlns='http://www.w3.org/2000/svg'
+              width='18'
+              height='18'
+              viewBox='0 0 18 18'
+              fill='none'
+            >
+              <path
+                d='M0 18V0C0 0 0.153782 10.1538 4 14C7.84622 17.8462 18 18 18 18H0Z'
+                fill='white'
+              />
+            </svg>
             <Image
               src={project.icon || '/images/project-card/logo.svg'}
               alt=''
@@ -181,7 +191,21 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
             </svg>
           </div>
 
-          <div className='flex flex-col gap-4'>
+          <svg
+            className='absolute -top-[18px] right-0'
+            xmlns='http://www.w3.org/2000/svg'
+            width='18'
+            height='18'
+            viewBox='0 0 18 18'
+            fill='none'
+          >
+            <path
+              d='M18 18V0C18 0 17.8462 10.1538 14 14C10.1538 17.8462 0 18 0 18H18Z'
+              fill='white'
+            />
+          </svg>
+
+          <div className='relative flex flex-col gap-4'>
             <div className='flex flex-col'>
               <h2 className='text-lg font-bold'>{project.title}</h2>
             </div>
@@ -241,11 +265,11 @@ export const ProjectHoverCard: FC<ProjectCardProps> = ({
                         : ' (Calculating) '}
                     </div>
                   </div>
-                  <div className='mt-1 flex justify-between'>
+                  <div className='mt-1 flex justify-between flex-wrap'>
                     {tokenPriceRangeStatus.isSuccess &&
                     tokenPriceRangeStatus.data?.isPriceUpToDate ? (
                       <>
-                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md w-2/3'>
+                        <div className='flex gap-1 items-center p-2 bg-[#F7F7F9] rounded-md'>
                           <p className='font-bold text-gray-800'>
                             {tokenPriceRange.min.toFixed(2)} -{' '}
                             {tokenPriceRange.max.toFixed(2)}

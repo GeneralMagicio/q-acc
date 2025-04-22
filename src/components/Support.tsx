@@ -5,7 +5,7 @@ export const Support = () => {
   return (
     <div className='bg-white'>
       <div className='container'>
-        <div className='text-center my-20 text-4xl font-bold leading-relaxed'>
+        <div className='text-center my-20 text-lg font-bold leading-relaxed'>
           Need help? Hop onto the{' '}
           <a
             href={links.TELEGRAM_SUPPORT}
@@ -14,11 +14,11 @@ export const Support = () => {
             referrerPolicy='no-referrer'
           >
             q/acc support channel
-          </a>
-          <br />
+          </a>{' '}
+          {/* <br /> */}
           on Telegram or email{' '}
           <a
-            href='mailto:qacc@giveth.io'
+            href='mailto:info@qacc.xyz'
             target='_blank'
             className='font-bold text-pink-500'
             referrerPolicy='no-referrer'

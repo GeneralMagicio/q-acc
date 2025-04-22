@@ -67,14 +67,14 @@ const CreateProjectForm: FC = () => {
     console.log('res', res);
   };
 
-  const nextLabel = 'Verify your identity';
+  const nextLabel = 'Verification';
   const submitLabel = 'Save & Continue';
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CreateNavbar
-          title='Tell me about yourself'
+          title=''
           nextLabel={nextLabel}
           submitLabel={submitLabel}
           loading={isPending}
@@ -99,10 +99,10 @@ const CreateProjectForm: FC = () => {
                 name='emailAddress'
                 label='What is your email address?'
                 placeholder='Enter your email address'
-                // rules={{
-                //   required: 'Email Address is required',
-                // }}
-                rules={validators.email}
+                rules={{
+                  required: 'Email Address is required',
+                  ...validators.email,
+                }}
                 type='email'
               />
               {/* <div className='flex items-center ml-3'>
