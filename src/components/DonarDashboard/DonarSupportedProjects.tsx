@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getIpfsAddress } from '@/helpers/image';
 
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
-import { formatAmount, formatNumber } from '@/helpers/donation';
+import { formatAmount } from '@/helpers/donation';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconMinted } from '../Icons/IconMinted';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
@@ -21,6 +22,9 @@ import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
+import { EProjectSocialMediaType, IProject } from '@/types/project.type';
+import { IconShare } from '../Icons/IconShare';
+import { ShareProjectModal } from '../Modals/ShareProjectModal';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -32,10 +36,23 @@ const DonarSupportedProjects = ({
   totalContribution,
   totalRewardTokens,
   onClickBreakdown,
-}: any) => {
+}: {
+  projectId: string;
+  project: IProject;
+  uniqueDonors: number;
+  totalClaimableRewardTokens: number | null;
+  totalContributions: number;
+  projectDonations: number;
+  totalContribution: number;
+  totalRewardTokens: number;
+  onClickBreakdown: () => void;
+}) => {
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const openShareModal = () => setIsShareModalOpen(true);
+  const closeShareModal = () => setIsShareModalOpen(false);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -61,10 +78,21 @@ const DonarSupportedProjects = ({
     contributionLimit: maxPOLCap,
     contractAddress: project.abc?.fundingManagerAddress || '',
   });
+
+  const handleShare = () => {
+    openShareModal();
+  };
+
+  const website = project.socialMedia?.find(
+    social => social.type === EProjectSocialMediaType.WEBSITE,
+  )?.link;
+
+  const isTokenClaimable =
+    totalClaimableRewardTokens !== null && totalClaimableRewardTokens > 0;
   return (
-    <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl shadow-lg'>
+    <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl'>
       {/* Project Details */}
-      <div className='flex flex-col gap-10 w-full lg:w-1/2'>
+      <div className='flex flex-col gap-4 w-full lg:w-1/2'>
         {/* Project Banner */}
         <div
           className='w-full h-[230px] bg-cover bg-center rounded-3xl relative'
@@ -89,19 +117,88 @@ const DonarSupportedProjects = ({
             </div>
           </div>
         </div>
-
+        <p className='text-gray-500 text-sm font-redHatText'>
+          {project.descriptionSummary}
+        </p>
+        <div className='flex flex-wrap gap-2'>
+          {project?.socialMedia
+            ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
+            .map((social: any) => {
+              return (
+                <Link
+                  key={social.link}
+                  href={social.link}
+                  target='_blank'
+                  className='p-2 rounded-lg border-gray-200 border'
+                >
+                  <Image
+                    src={`/images/icons/social/${social.type.toLowerCase()}.svg`}
+                    alt={`${social.type} icon`}
+                    width={24}
+                    height={24}
+                  />
+                </Link>
+              );
+            })}
+        </div>
         <div className='flex flex-col gap-4 font-redHatText'>
-          <Link
-            target='_blank'
-            href={`https://polygonscan.com/address/${project?.abc?.issuanceTokenAddress}`}
-          >
-            <div className='w-full p-[10px_16px] border border-[#5326EC] rounded-3xl flex justify-center'>
-              <span className='flex gap-4 text-[#5326EC] font-bold'>
-                Project Contract Address
+          <div className='flex gap-4 flex-wrap'>
+            {website && (
+              <Link
+                target='_blank'
+                href={website}
+                className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <div>
+                  <span className='flex gap-4 text-giv-500 font-bold'>
+                    Website
+                    <IconViewTransaction color='#5326EC' />
+                  </span>
+                </div>{' '}
+              </Link>
+            )}
+            <Link
+              target='_blank'
+              href={`https://polygonscan.com/address/${project?.abc?.issuanceTokenAddress}`}
+              className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <div>
+                <span className='flex gap-4 text-giv-500 font-bold text-nowrap'>
+                  Contract Address
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </div>{' '}
+            </Link>
+          </div>
+          <div className='flex justify-center gap-4 flex-wrap'>
+            <Link
+              target='_blank'
+              href={`/project/${project?.slug}`}
+              className=' py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                View Project
                 <IconViewTransaction color='#5326EC' />
               </span>
+            </Link>
+            <div
+              onClick={handleShare}
+              className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+            >
+              <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                Share your project
+                <IconShare color='#5326EC' size={24} />
+              </span>
             </div>{' '}
-          </Link>
+            <ShareProjectModal
+              isOpen={isShareModalOpen}
+              onClose={closeShareModal}
+              showCloseButton={true}
+              projectSlug={project?.slug || ''}
+              projectTitle={project?.title}
+              tokenTicker={project?.abc?.tokenTicker}
+            />
+          </div>
 
           <div className='flex justify-between p-2'>
             <div className='flex gap-2'>
@@ -111,8 +208,8 @@ const DonarSupportedProjects = ({
               </span>
             </div>
             <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(project.abc.totalSupply) || '---'}{' '}
-              {project.abc.tokenTicker}
+              {formatAmount(project.abc?.totalSupply) || '---'}{' '}
+              {project.abc?.tokenTicker}
             </span>
           </div>
 
@@ -129,9 +226,7 @@ const DonarSupportedProjects = ({
           <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
             <div className='flex gap-2'>
               <IconTotalDonations size={24} />
-              <span className='font-medium text-[#1D1E1F]'>
-                Total contributions
-              </span>
+              <span className='font-medium text-[#1D1E1F]'>Total received</span>
             </div>
             <div className='flex gap-1'>
               <span className='font-medium text-[#1D1E1F]'>
@@ -147,7 +242,7 @@ const DonarSupportedProjects = ({
 
       {/* Project Claim and Reward */}
       <div className='flex flex-col gap-4 w-full lg:w-1/2  font-redHatText'>
-        {activeRoundDetails && (
+        {/* {activeRoundDetails && (
           <>
             <div className='flex items-center gap-2'>
               <img
@@ -158,7 +253,7 @@ const DonarSupportedProjects = ({
                 )}
               />
               <span className='text-[#4F576A] font-medium'>
-                {project.abc.tokenTicker} range
+                {project.abc?.tokenTicker} range
                 {tokenPriceRangeStatus.isSuccess &&
                 tokenPriceRangeStatus.data?.isPriceUpToDate
                   ? ' '
@@ -173,7 +268,6 @@ const DonarSupportedProjects = ({
               </div>
             </div>
 
-            {/* Conditional Rendering for Token Price Range */}
             <div className='flex justify-between text-[#1D1E1F] font-medium'>
               {tokenPriceRangeStatus.isSuccess &&
               tokenPriceRangeStatus.data?.isPriceUpToDate ? (
@@ -205,8 +299,8 @@ const DonarSupportedProjects = ({
               )}
             </div>
           </>
-        )}
-        <hr />
+        )} */}
+        {/* <hr /> */}
 
         {!isSafeAccount && (
           <>
@@ -248,12 +342,13 @@ const DonarSupportedProjects = ({
           <div className='flex gap-1'>
             <span className='font-medium text-[#1D1E1F]'>
               {formatAmount(totalRewardTokens) || '---'}{' '}
-              {project.abc.tokenTicker}
+              {project.abc?.tokenTicker}
             </span>
             <span className='font-medium text-[#82899A]'>
               ~ ${' '}
               {formatAmount(
-                totalRewardTokens * (project.abc.tokenPrice * Number(POLPrice)),
+                totalRewardTokens *
+                  ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
               ) || '---'}
             </span>
           </div>
@@ -283,7 +378,7 @@ const DonarSupportedProjects = ({
               ~ $
               {totalClaimableRewardTokens !== null
                 ? formatAmount(
-                    totalClaimableRewardTokens * project.abc.tokenPrice,
+                    totalClaimableRewardTokens * (project.abc?.tokenPrice || 0),
                   )
                 : '---'}
             </span>
@@ -292,22 +387,21 @@ const DonarSupportedProjects = ({
 
         {/* Claim Rewards */}
         <Button
-          color={ButtonColor.Gray}
-          className='flex justify-center'
-          disabled={
-            totalClaimableRewardTokens === null ||
-            totalClaimableRewardTokens <= 0
-          }
+          color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
+          className='flex justify-center rounded-xl'
+          disabled={!isTokenClaimable}
         >
           Claim Tokens
         </Button>
-        <Button
-          color={ButtonColor.Base}
-          className='flex justify-center shadow-lg '
-          onClick={onClickBreakdown}
-        >
-          Tokens & Contributions Breakdown <IconBreakdownArrow />
-        </Button>
+        <Link href={`/dashboard?tab=contributions&projectId=${projectId}`}>
+          <Button
+            color={ButtonColor.Base}
+            className='flex justify-center w-full border border-giv-500 rounded-xl'
+            onClick={onClickBreakdown}
+          >
+            Tokens & Contributions Breakdown <IconBreakdownArrow />
+          </Button>
+        </Link>
       </div>
     </div>
   );

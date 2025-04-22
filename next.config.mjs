@@ -15,6 +15,14 @@ const nextConfig = {
       {
         hostname: 'example.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'ipfs.infura.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+      },
     ],
   },
   redirects: async () => {

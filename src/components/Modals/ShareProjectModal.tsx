@@ -17,15 +17,16 @@ interface ShareProjectModalProps extends BaseModalProps {
   projectSlug: string;
   projectTitle?: string;
   shareMessage?: string;
+  tokenTicker?: string;
 }
 
 export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   projectTitle,
   projectSlug,
   onClose,
-  shareMessage = 'Check out ' +
-    projectTitle +
-    ' on q/acc! Be part of its success story. ',
+  tokenTicker,
+  shareMessage = `Just backed a real Web3 startup on @theqacc.Bought $${tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. You’re not exit liquidity — you’re early.Round ends soon. Don’t sleep. 😤
+  👉`,
   ...props
 }) => {
   const [copied, setCopied] = useState(false);

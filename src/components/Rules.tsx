@@ -1,11 +1,8 @@
 import React from 'react';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
 
 const Rules = () => {
-  const { data: POLPrice } = useFetchTokenPrice();
-
   const { data: allRounds } = useFetchAllRound();
 
   const qaccRound: IQfRound | undefined = allRounds?.filter(
@@ -15,14 +12,11 @@ const Rules = () => {
   let high_cap, low_cap;
 
   if (qaccRound) {
-    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
+    if ('roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
       low_cap =
-        (qaccRound?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly || 1000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+        qaccRound?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly || 1000;
 
-      high_cap =
-        (qaccRound?.roundUSDCapPerUserPerProject || 15000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+      high_cap = qaccRound?.roundPOLCapPerUserPerProject || 15000;
     }
   }
 
@@ -33,7 +27,7 @@ const Rules = () => {
           <h1 className='text-2xl text-black font-bold mb-8 '>
             What you need to know
           </h1>
-          <ol className='list-decimal text-2xl font-light text-slate-600 px-4 space-y-4 leading-normal'>
+          <ol className='list-decimal text-lg font-light text-slate-600 px-4 space-y-4 leading-normal'>
             <li>The q/acc round runs two weeks.</li>
             <li>
               There is a matching pool for this round. Your token purchases
@@ -56,12 +50,9 @@ const Rules = () => {
               seasons.
             </li>
             <li>
-              The q/acc protocol uses{' '}
-              <b className='font-extrabold'>
-                Human Passport and Privado zkID for verification
-              </b>
-              . The spending cap for Human Passport is up to approx. $1,000 and
-              the spending cap for zkID is approx. $25,000.
+              The q/acc protocol uses Human Passport and Privado zkID for
+              verification. The spending cap for Human Passport is up to approx.
+              $1,000 and the spending cap for zkID is approx. $25,000.
             </li>
 
             <li>
