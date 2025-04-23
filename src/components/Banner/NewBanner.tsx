@@ -4,6 +4,8 @@ import { format } from 'date-fns';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 import { getUpcomingRound, remainingTimeValues } from '@/helpers/date';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { Spinner } from '../Loading/Spinner';
 
 interface NewBannerProps {}
 
@@ -19,6 +21,8 @@ export const NewBanner: FC<NewBannerProps> = () => {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
   const [isStarted, setIsStarted] = useState(false);
+
+  const { data: allRounds, isLoading: allRoundsLoading } = useFetchAllRound();
 
   const [startDate, setStartDate] = useState('');
 
@@ -46,9 +50,8 @@ export const NewBanner: FC<NewBannerProps> = () => {
           setRemainingTime(remainingTimeValues(_endDate));
         }
       } else {
-        const upcomingRound = await getUpcomingRound();
+        const upcomingRound = await getUpcomingRound(allRounds);
         if (upcomingRound?.startDate) {
-          console.log(upcomingRound.startDate);
           const formatted = format(
             new Date(upcomingRound.startDate),
             'MMMM do, yyyy',
@@ -73,7 +76,7 @@ export const NewBanner: FC<NewBannerProps> = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [activeRoundDetails?.startDate, activeRoundDetails?.endDate]);
+  }, [activeRoundDetails?.startDate, activeRoundDetails?.endDate, allRounds]);
 
   return (
     <div className='relative flex flex-col justify-center items-center bg-black bg-repeat font-tusker-grotesk '>
@@ -87,78 +90,71 @@ export const NewBanner: FC<NewBannerProps> = () => {
           height={275}
         />
         <div className='absolute uppercase  font-tusker-grotesk text-[74px] text-white text-center text-nowrap text-xl sm:text-4xl md:text-5xl tracking-[-3%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10'>
-          <p className='text-[73.173px] text-[#91A0A1] uppercase font-normal text-center'>
+          <p className=' text-[52px] md:text-[74px] leading-[106%] tracking-[-2.195px]   text-[#91A0A1] uppercase font-normal text-center'>
             {' '}
             the future of
           </p>
-          <p className='text-[73.173px] leading-[106%] tracking-[-2.195px] uppercase  text-[#F6F6F6] font-bold'>
+          <p className='text-[52px] md:text-[74px] leading-[106%] tracking-[-2.195px] uppercase  text-[#F6F6F6] font-bold'>
             tokenization
           </p>
         </div>
       </div>
-      <div className='  bg-black z-50 w-full flex justify-center gap-40 px-10 py-4 '>
-        <div className='flex flex-col justify-center py-2'>
-          <div className='text-center text-[#FBBA80] text-sm  font-redHatText'>
-            {/* {roundStatus === 'ended' ? (
-              'Round has ended'
-            ) : roundStatus === 'starts' ? (
-              <>
-                Round starts{' '}
-                <span className='font-bold'>December 21st, 2024</span>
-              </>
-            ) : (
-              'Round ends in '
-            )} */}
-            {roundStatus === 'starts' ? (
-              <>
-                Round starts <span className='font-bold'>{startDate}</span>
-              </>
-            ) : activeRoundDetails ? (
-              'Round ends in '
-            ) : (
-              ''
-            )}
-            {/* Round {activeRoundDetails ? 'ends ' : 'starts '} */}
-            {/* <span className='font-bold'>December 21st, 2024</span> */}
+      <div className='  bg-black z-50 w-full flex flex-col md:flex-row justify-center gap-4 md:gap-40 px-10 py-4 '>
+        {allRoundsLoading ? (
+          <div className='flex justify-center items-center'>
+            <Spinner />
           </div>
-
-          {activeRoundDetails || roundStatus === 'starts' ? (
-            <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3'>
-              <div className='flex items-center gap-1'>
-                <span className='font-tusker-grotesk '>
-                  {remainingTime?.days}
-                </span>
-                <span className='text-lg font-redHatText font-semibold mt-4'>
-                  Days
-                </span>
-              </div>
-              <div className='flex items-center justify-center gap-1'>
-                <span>{remainingTime?.hours}</span>
-                <span className='text-lg font-redHatText font-semibold mt-4'>
-                  Hours
-                </span>
-              </div>
-              <div className='flex items-center gap-1'>
-                <span>{remainingTime?.minutes}</span>
-                <span className='text-lg font-redHatText font-semibold mt-4'>
-                  Minutes
-                </span>
-              </div>
+        ) : (
+          <div className='flex flex-col justify-center py-2'>
+            <div className='text-center text-[#FBBA80] text-sm  font-redHatText'>
+              {roundStatus === 'starts' ? (
+                <>
+                  Round starts <span className='font-bold'>{startDate}</span>
+                </>
+              ) : activeRoundDetails ? (
+                'Round ends in '
+              ) : (
+                ''
+              )}
             </div>
-          ) : (
-            <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
-              Round has Ended
-            </div>
-          )}
-        </div>
 
+            {activeRoundDetails || roundStatus === 'starts' ? (
+              <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3  justify-center'>
+                <div className='flex items-center gap-1'>
+                  <span className='font-tusker-grotesk '>
+                    {remainingTime?.days}
+                  </span>
+                  <span className='text-lg font-redHatText font-semibold mt-4'>
+                    Days
+                  </span>
+                </div>
+                <div className='flex items-center justify-center gap-1'>
+                  <span>{remainingTime?.hours}</span>
+                  <span className='text-lg font-redHatText font-semibold mt-4'>
+                    Hours
+                  </span>
+                </div>
+                <div className='flex items-center gap-1'>
+                  <span>{remainingTime?.minutes}</span>
+                  <span className='text-lg font-redHatText font-semibold mt-4'>
+                    Minutes
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
+                Round has Ended
+              </div>
+            )}
+          </div>
+        )}
         <div className='flex flex-col justify-center py-2'>
-          <div className='text-center text-[#FBBA80] text-sm font-bold font-redHatText'>
+          <div className='text-center text-[#FBBA80] text-sm font-bold font-redHatText '>
             {' '}
             Matching Pool
           </div>
 
-          <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
+          <div className=' flex text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]  justify-center'>
             500,000 POL
           </div>
         </div>
