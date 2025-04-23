@@ -63,13 +63,13 @@ const ProjectDonationTable = () => {
   const { data: tokenDetails } = useTokenSupplyDetails(
     projectData?.abc?.fundingManagerAddress,
   );
-
+  const { totalAmount: totalPOLDonated } = useProjectContext();
   useEffect(() => {
     const updatePOLCap = async () => {
       const { capAmount, totalDonationAmountInRound }: any =
         await calculateCapAmount(activeRoundDetails, Number(projectData.id));
 
-      setTotalAmountDonated(totalDonationAmountInRound);
+      setTotalAmountDonated(totalPOLDonated);
     };
 
     updatePOLCap();
