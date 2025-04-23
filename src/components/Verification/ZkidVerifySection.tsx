@@ -9,7 +9,6 @@ import {
 } from '@/components/EligibilityBadge';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
-import { formatAmount } from '@/helpers/donation';
 
 export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
