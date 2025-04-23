@@ -159,7 +159,7 @@ export const NewBanner: FC<NewBannerProps> = () => {
           </div>
 
           <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
-            50,000 POL
+            500,000 POL
           </div>
         </div>
       </div>
