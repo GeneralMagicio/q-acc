@@ -1,3 +1,5 @@
+import { fetchAllRoundDetails } from '@/services/round.services';
+
 /**
  * Formats an ISO date string (e.g., "2024-09-10T15:44:56.794Z") into a readable date
  * in the format "Month Day, Year" (e.g., "Sep 10, 2024").
@@ -159,3 +161,59 @@ export const getAdjustedEndDate = (endDate?: string): string | undefined => {
 };
 
 export const OneYearInMilliSecs = 31536000 * 1000;
+
+export function remainingTimeValues(endDate: Date): any {
+  const now = new Date().getTime(); // Current time in milliseconds
+  const end = endDate.getTime(); // End time in milliseconds
+  const difference = end - now; // Time difference in milliseconds
+
+  if (difference <= 0) {
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      isTimeUp: true,
+    };
+  }
+
+  const seconds = Math.floor((difference / 1000) % 60);
+  const minutes = Math.floor((difference / (1000 * 60)) % 60);
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+  // Store each non-zero unit in an array
+  const timeParts: string[] = [];
+
+  if (days > 0) timeParts.push(`${days}`);
+  if (hours > 0) timeParts.push(`${hours}`);
+  if (minutes > 0) timeParts.push(`${minutes} `);
+  if (seconds > 0) timeParts.push(`${seconds}`);
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    isTimeUp: false,
+  };
+}
+
+export async function getUpcomingRound(): Promise<any | null> {
+  const allRounds = await fetchAllRoundDetails();
+  const now = new Date();
+
+  if (!allRounds) return null;
+
+  const upcomingRounds = allRounds.filter(round => {
+    const start = new Date(round.startDate);
+    return start > now;
+  });
+
+  if (upcomingRounds.length === 0) return null;
+
+  // Return the one with the closest start date
+  return upcomingRounds.sort(
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+  )[0];
+}
