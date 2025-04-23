@@ -11,13 +11,15 @@ import Rules from '@/components/Rules';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
+import { NewBanner } from '@/components/Banner/NewBanner';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return isProductReleased ? (
     <main className='flex flex-col '>
-      <Banner />
+      {/* <Banner /> */}
+      <NewBanner />
       <div className='bg-white relative overflow-hidden'>
         <Image
           src='/images/bg/section1.svg'
