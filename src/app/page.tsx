@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Inter } from 'next/font/google';
-import { Banner } from '@/components/Banner/Banner';
 import Collaborator from '@/components/Collaborator';
 import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';
@@ -11,13 +10,15 @@ import Rules from '@/components/Rules';
 import { OnBoardButton } from '@/components/OnBoardButton';
 import { Support } from '@/components/Support';
 import { QaccProjectsCard } from '@/components/QaccProjectsCard';
+import { NewBanner } from '@/components/Banner/NewBanner';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return isProductReleased ? (
     <main className='flex flex-col '>
-      <Banner />
+      {/* <Banner /> */}
+      <NewBanner />
       <div className='bg-white relative overflow-hidden'>
         <Image
           src='/images/bg/section1.svg'
