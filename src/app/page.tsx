@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Inter } from 'next/font/google';
-import { Banner } from '@/components/Banner/Banner';
 import Collaborator from '@/components/Collaborator';
 import { isProductReleased } from '@/config/configuration';
 import Routes from '@/lib/constants/Routes';

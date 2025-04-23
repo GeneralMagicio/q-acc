@@ -1,3 +1,5 @@
+import { fetchAllRoundDetails } from '@/services/round.services';
+
 /**
  * Formats an ISO date string (e.g., "2024-09-10T15:44:56.794Z") into a readable date
  * in the format "Month Day, Year" (e.g., "Sep 10, 2024").
@@ -197,8 +199,11 @@ export function remainingTimeValues(endDate: Date): any {
   };
 }
 
-export function getUpcomingRound(allRounds: any[]): any | null {
+export async function getUpcomingRound(): Promise<any | null> {
+  const allRounds = await fetchAllRoundDetails();
   const now = new Date();
+
+  if (!allRounds) return null;
 
   const upcomingRounds = allRounds.filter(round => {
     const start = new Date(round.startDate);

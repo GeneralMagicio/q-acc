@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
+import { format } from 'date-fns';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 
 import { getUpcomingRound, remainingTimeValues } from '@/helpers/date';
-import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface NewBannerProps {}
 
@@ -19,45 +19,52 @@ export const NewBanner: FC<NewBannerProps> = () => {
   const { data: activeRoundDetails, isLoading } = useFetchActiveRoundDetails();
   const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
   const [isStarted, setIsStarted] = useState(false);
-  const { data: allRounds } = useFetchAllRound();
+
+  const [startDate, setStartDate] = useState('');
+
   const [roundStatus, setRoundStatus] = useState('ended');
 
   useEffect(() => {
-    const calcRemTime = () => {
-      const startDate = activeRoundDetails?.startDate;
-      const endDate = activeRoundDetails?.endDate;
-      if (!startDate || !endDate) {
-        const upcomingRound = allRounds ? getUpcomingRound(allRounds) : null;
+    const calcRemTime = async () => {
+      let startDate = activeRoundDetails?.startDate;
+      let endDate = activeRoundDetails?.endDate;
+      // console.log(allRounds);
 
-        if (upcomingRound) {
+      const now = new Date();
+
+      if (startDate && endDate) {
+        const _startDate = new Date(startDate);
+        const _endDate = new Date(endDate);
+
+        if (now < _startDate) {
           setRoundStatus('starts');
-          console.log('Next round:', upcomingRound);
-          return;
+          setIsStarted(false);
+          setRemainingTime(remainingTimeValues(_startDate));
+        } else {
+          setRoundStatus('ends');
+          setIsStarted(true);
+          setRemainingTime(remainingTimeValues(_endDate));
+        }
+      } else {
+        const upcomingRound = await getUpcomingRound();
+        if (upcomingRound?.startDate) {
+          console.log(upcomingRound.startDate);
+          const formatted = format(
+            new Date(upcomingRound.startDate),
+            'MMMM do, yyyy',
+          );
+
+          setStartDate(formatted);
+          setRoundStatus('starts');
+          setIsStarted(false);
+          setRemainingTime(
+            remainingTimeValues(new Date(upcomingRound.startDate)),
+          );
         } else {
           setRoundStatus('ended');
           console.log('No upcoming round.');
-          return;
         }
       }
-      const _startDate = new Date(startDate);
-      const _endDate = new Date(endDate);
-      const now = new Date();
-      let _targetDate = new Date();
-
-      if (now < _startDate) {
-        _targetDate = _startDate;
-        isStarted && setIsStarted(false);
-      } else if (now.getTime() === _startDate.getTime()) {
-        // setRemainingTime('00:00:00');
-        setIsStarted(true);
-      } else {
-        _targetDate = _endDate;
-        setIsStarted(true);
-      }
-
-      _targetDate = new Date('2025-05-07T12:00:00.000Z');
-
-      setRemainingTime(remainingTimeValues(_targetDate));
     };
     calcRemTime();
 
@@ -66,7 +73,7 @@ export const NewBanner: FC<NewBannerProps> = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [activeRoundDetails?.endDate, activeRoundDetails?.startDate, isStarted]);
+  }, [activeRoundDetails?.startDate, activeRoundDetails?.endDate]);
 
   return (
     <div className='relative flex flex-col justify-center items-center bg-black bg-repeat font-tusker-grotesk '>
@@ -92,37 +99,57 @@ export const NewBanner: FC<NewBannerProps> = () => {
       <div className='  bg-black z-50 w-full flex justify-center gap-40 px-10 py-4 '>
         <div className='flex flex-col justify-center py-2'>
           <div className='text-center text-[#FBBA80] text-sm  font-redHatText'>
-            {roundStatus === 'ended'
-              ? 'Round has ended'
-              : roundStatus === 'starts'
-                ? 'starts'
-                : 'ends'}
+            {/* {roundStatus === 'ended' ? (
+              'Round has ended'
+            ) : roundStatus === 'starts' ? (
+              <>
+                Round starts{' '}
+                <span className='font-bold'>December 21st, 2024</span>
+              </>
+            ) : (
+              'Round ends in '
+            )} */}
+            {roundStatus === 'starts' ? (
+              <>
+                Round starts <span className='font-bold'>{startDate}</span>
+              </>
+            ) : activeRoundDetails ? (
+              'Round ends in '
+            ) : (
+              ''
+            )}
             {/* Round {activeRoundDetails ? 'ends ' : 'starts '} */}
             {/* <span className='font-bold'>December 21st, 2024</span> */}
           </div>
 
-          <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3'>
-            <div className='flex items-center gap-1'>
-              <span className='font-tusker-grotesk '>
-                {remainingTime?.days}
-              </span>
-              <span className='text-lg font-redHatText font-semibold mt-4'>
-                Days
-              </span>
+          {activeRoundDetails || roundStatus === 'starts' ? (
+            <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3'>
+              <div className='flex items-center gap-1'>
+                <span className='font-tusker-grotesk '>
+                  {remainingTime?.days}
+                </span>
+                <span className='text-lg font-redHatText font-semibold mt-4'>
+                  Days
+                </span>
+              </div>
+              <div className='flex items-center justify-center gap-1'>
+                <span>{remainingTime?.hours}</span>
+                <span className='text-lg font-redHatText font-semibold mt-4'>
+                  Hours
+                </span>
+              </div>
+              <div className='flex items-center gap-1'>
+                <span>{remainingTime?.minutes}</span>
+                <span className='text-lg font-redHatText font-semibold mt-4'>
+                  Minutes
+                </span>
+              </div>
             </div>
-            <div className='flex items-center justify-center gap-1'>
-              <span>{remainingTime?.hours}</span>
-              <span className='text-lg font-redHatText font-semibold mt-4'>
-                Hours
-              </span>
+          ) : (
+            <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
+              Round has Ended
             </div>
-            <div className='flex items-center gap-1'>
-              <span>{remainingTime?.minutes}</span>
-              <span className='text-lg font-redHatText font-semibold mt-4'>
-                Minutes
-              </span>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className='flex flex-col justify-center py-2'>
@@ -132,7 +159,7 @@ export const NewBanner: FC<NewBannerProps> = () => {
           </div>
 
           <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
-            $ 250,000{' '}
+            50,000 POL
           </div>
         </div>
       </div>
