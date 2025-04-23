@@ -44,6 +44,7 @@ import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { calculateCapAmount } from '@/helpers/round';
 import { Button, ButtonColor } from '../Button';
 import { EProjectSocialMediaType } from '@/types/project.type';
+import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -91,6 +92,9 @@ const MyProjects = () => {
     round => round.__typename === 'EarlyAccessRound' && round.roundNumber === 1,
   );
 
+  const { data: tokenDetails } = useTokenSupplyDetails(
+    projectData?.abc?.fundingManagerAddress!,
+  );
   // Check if Round 1 has started
   const round1Started = round1
     ? new Date().toISOString().split('T')[0] >=
@@ -522,8 +526,8 @@ const MyProjects = () => {
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.totalSupply
-                  ? formatAmount(projectData?.abc?.totalSupply)
+                {Number(tokenDetails?.issuance_supply)
+                  ? formatAmount(Number(tokenDetails?.issuance_supply))
                   : '---'}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
