@@ -431,7 +431,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     color={ButtonColor.Giv}
                     onClick={e => {
                       e.stopPropagation();
-                      const url = `https://quickswap.exchange/#/swap?currency0=ETH&currency1=${project?.abc?.issuanceTokenAddress}`;
+                      const url = `https://dapp.quickswap.exchange/swap/best/ETH/${project?.abc?.issuanceTokenAddress}`;
                       window.open(url, '_blank', 'noopener,noreferrer');
                     }}
                   >

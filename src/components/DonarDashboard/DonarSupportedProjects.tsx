@@ -25,6 +25,7 @@ import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { EProjectSocialMediaType, IProject } from '@/types/project.type';
 import { IconShare } from '../Icons/IconShare';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
+import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -69,6 +70,10 @@ const DonarSupportedProjects = ({
 
   const { data: allRounds } = useFetchAllRound();
   const { data: isSafeAccount } = useCheckSafeAccount();
+
+  const { data: tokenDetails } = useTokenSupplyDetails(
+    project?.abc?.fundingManagerAddress!,
+  );
 
   const tokenPriceRangeStatus = useTokenPriceRangeStatus({
     project,
@@ -208,7 +213,7 @@ const DonarSupportedProjects = ({
               </span>
             </div>
             <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(project.abc?.totalSupply) || '---'}{' '}
+              {formatAmount(Number(tokenDetails?.issuance_supply)) || '---'}{' '}
               {project.abc?.tokenTicker}
             </span>
           </div>
