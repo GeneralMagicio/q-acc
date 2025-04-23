@@ -101,24 +101,21 @@ export const NewBanner: FC<NewBannerProps> = () => {
       </div>
       <div className='  bg-black z-50 w-full flex flex-col md:flex-row justify-center gap-4 md:gap-40 px-10 py-4 '>
         {allRoundsLoading ? (
-          <div className='flex justify-center items-center'>
-            <Spinner />
-          </div>
-        ) : (
-          <div className='flex flex-col justify-center py-2'>
-            <div className='text-center text-[#FBBA80] text-sm  font-redHatText'>
-              {roundStatus === 'starts' ? (
-                <>
-                  Round starts <span className='font-bold'>{startDate}</span>
-                </>
-              ) : activeRoundDetails ? (
-                'Round ends in '
-              ) : (
-                ''
-              )}
-            </div>
-
-            {activeRoundDetails || roundStatus === 'starts' ? (
+          <Spinner />
+        ) : activeRoundDetails || roundStatus === 'starts' ? (
+          <>
+            <div className='flex flex-col justify-center py-2'>
+              <div className='text-center text-[#FBBA80] text-sm  font-redHatText'>
+                {roundStatus === 'starts' ? (
+                  <>
+                    Round starts <span className='font-bold'>{startDate}</span>
+                  </>
+                ) : activeRoundDetails ? (
+                  'Round ends in '
+                ) : (
+                  ''
+                )}
+              </div>
               <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3  justify-center'>
                 <div className='flex items-center gap-1'>
                   <span className='font-tusker-grotesk '>
@@ -141,23 +138,23 @@ export const NewBanner: FC<NewBannerProps> = () => {
                   </span>
                 </div>
               </div>
-            ) : (
-              <div className='text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]'>
-                Round has Ended
+            </div>
+            <div className='flex flex-col justify-center py-2'>
+              <div className='text-center text-[#FBBA80] text-sm font-bold font-redHatText '>
+                {' '}
+                Matching Pool
               </div>
-            )}
+
+              <div className=' flex text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]  justify-center'>
+                500,000 POL
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className='text-[#91A0A1] font-tusker-grotesk text-[43px] leading-10 tracking-[-0.21px]  capitalize py-3'>
+            SEASON 2 HAS ENDED
           </div>
         )}
-        <div className='flex flex-col justify-center py-2'>
-          <div className='text-center text-[#FBBA80] text-sm font-bold font-redHatText '>
-            {' '}
-            Matching Pool
-          </div>
-
-          <div className=' flex text-[#fff] text-[42px] font-tusker-grotesk font-semibold   leading-[46px] tracking-[-0.21px]  justify-center'>
-            500,000 POL
-          </div>
-        </div>
       </div>
     </div>
   );
