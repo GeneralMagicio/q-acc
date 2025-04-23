@@ -53,7 +53,7 @@ We may from time to time in the future offer additional services, and such addit
     <li>You acknowledge and accept that the cost and speed of transacting with cryptographic and blockchain-based systems such as Polygon are variable and may increase dramatically at any time.</li>
     <li>You acknowledge that we are not responsible for any of these variables or risks, do not own or control the protocol, and cannot be held liable for any resulting losses that you experience while accessing or using the Technology.</li>
     <li>You understand and agree to assume full responsibility for all of the risks of accessing and using the Technology.</li>
-    <li>You understand that we do not own or control any of the underlying software through which blockchain networks are formed. In general, the software underlying blockchain networks, including the Polygon zkEVM blockchain, is open source, such that anyone can use, copy, modify, and distribute it.</li>
+    <li>You understand that we do not own or control any of the underlying software through which blockchain networks are formed. In general, the software underlying blockchain networks, including the Polygon POS blockchain, is open source, such that anyone can use, copy, modify, and distribute it.</li>
     <li>
       By using the Technology, you acknowledge and agree, that:
       <ul style="list-style-type: circle; padding-left: 20px;">
@@ -137,7 +137,7 @@ We may from time to time in the future offer additional services, and such addit
 You will defend, indemnify, and hold harmless the Accelerator and Giveth, our affiliates, respective shareholders, members, directors, officers, employees, attorneys, agents, representatives, suppliers and contractors (collectively, "Indemnified Parties") from any claim, demand, lawsuit, action, proceeding, investigation, liability, damage, loss, cost or expense, including without limitation reasonable attorneys' fees, arising out of or relating to:   </p>
   <ul style="list-style-type: disc; padding-left: 20px; margin-bottom: 1rem;">
     <li>Your use of, or conduct in connection with, the Technology;</li>
-    <li>Polygon zkEVM blockchain assets associated with your Wallet address;</li>
+    <li>Polygon POS blockchain assets associated with your Wallet address;</li>
     <li>Any feedback or user content you provide to the Technology if any;</li>
     <li>Your violation of these Terms; or</li>
     <li>Your infringement or misappropriation of the rights of any other person or entity.</li>
