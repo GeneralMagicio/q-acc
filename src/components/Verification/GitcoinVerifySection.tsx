@@ -56,10 +56,7 @@ export const GitcoinVerifySection = () => {
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <div>
         <h1 className='text-lg font-bold'>Human Passport</h1>
-        <p>
-          You are eligible to support each project with up to&nbsp;
-          {formatAmount(low_cap)} POL.
-        </p>
+        <p>Your verification allows you to spend up to approximately $1,000.</p>
       </div>
       <div>
         {!isVerified && (
@@ -71,9 +68,7 @@ export const GitcoinVerifySection = () => {
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Human Passport</h1>
       <p>
-        Verify your uniqueness with Human Passport to support each project with
-        up to&nbsp;
-        {formatAmount(low_cap)} POL.
+        This verification would allow you to spend up to approximately $1,000.
       </p>
       <Button
         styleType={ButtonStyle.Solid}
@@ -89,7 +84,7 @@ export const GitcoinVerifySection = () => {
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Human Passport</h1>
       <p>
-        To support each project with up to {formatAmount(low_cap)} POL, you must
+        To support each project with up to $,1000, you must
         <b className='font-bold'>
           &nbsp;increase your Human Passport score to&nbsp;
           {config.GP_SCORER_SCORE_THRESHOLD}

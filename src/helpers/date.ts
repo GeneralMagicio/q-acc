@@ -1,5 +1,3 @@
-import { fetchAllRoundDetails } from '@/services/round.services';
-
 /**
  * Formats an ISO date string (e.g., "2024-09-10T15:44:56.794Z") into a readable date
  * in the format "Month Day, Year" (e.g., "Sep 10, 2024").
@@ -199,13 +197,13 @@ export function remainingTimeValues(endDate: Date): any {
   };
 }
 
-export async function getUpcomingRound(): Promise<any | null> {
-  const allRounds = await fetchAllRoundDetails();
+export async function getUpcomingRound(allRounds: any): Promise<any | null> {
+  // const allRounds = await fetchAllRoundDetails();
   const now = new Date();
 
   if (!allRounds) return null;
 
-  const upcomingRounds = allRounds.filter(round => {
+  const upcomingRounds = allRounds.filter((round: any) => {
     const start = new Date(round.startDate);
     return start > now;
   });
@@ -214,6 +212,7 @@ export async function getUpcomingRound(): Promise<any | null> {
 
   // Return the one with the closest start date
   return upcomingRounds.sort(
-    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    (a: any, b: any) =>
+      new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
   )[0];
 }

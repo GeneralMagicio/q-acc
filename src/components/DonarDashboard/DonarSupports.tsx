@@ -59,6 +59,11 @@ const DonarSupports = () => {
               donationCount: 0,
               userProjectContributionSum: 0,
             };
+            const totalRewardTokens = projectDonations.reduce(
+              (sum: any, donation: { rewardTokenAmount: number }) =>
+                sum + (donation.rewardTokenAmount || 0),
+              0,
+            );
 
             return (
               <div key={projectId}>
@@ -70,7 +75,7 @@ const DonarSupports = () => {
                   totalContributions={donationData.totalContributions}
                   projectDonations={donationData.donationCount}
                   totalContribution={donationData.userProjectContributionSum}
-                  totalRewardTokens={0}
+                  totalRewardTokens={totalRewardTokens}
                   onClickBreakdown={() => {
                     setShowBreakDown(true);
                   }}

@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import floor from 'lodash/floor';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { formatAmount } from '@/helpers/donation';
 
 export const EligibilityCheckToast = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
@@ -31,14 +29,11 @@ export const EligibilityCheckToast = () => {
         <ul className='list-disc px-4'>
           <li>
             {' '}
-            With <span className='font-bold'>Human Passport</span>, you are
-            eligible to support each project with up to{' '}
-            {formatAmount(floor(Number(low_cap)))} POL .
+            You can spend approximately $1,000 when verified with Human
+            Passport.
           </li>
           <li>
-            With <span className='font-bold'>Privado zkID credentials</span>,
-            you are eligible to support each project with up to{' '}
-            {formatAmount(floor(Number(high_cap)))} POL .
+            You can spend approximately $25,000 when verified with Privado zkID.
           </li>
         </ul>
       </p>
