@@ -9,7 +9,15 @@ import {
 } from 'wagmi';
 import { getConnectorClient } from '@wagmi/core';
 import { useRouter } from 'next/navigation';
-import { Account, Chain, Client, parseEther, Transport } from 'viem';
+import {
+  Account,
+  Chain,
+  Client,
+  createPublicClient,
+  http,
+  parseEther,
+  Transport,
+} from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
@@ -204,7 +212,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
 
-  // let provider = new ethers.BrowserProvider(window.ethereum);
+  const publicClient = createPublicClient({
+    chain: chain,
+    transport: http(),
+  });
 
   useEffect(() => {
     const fetchConversion = async () => {
@@ -349,6 +360,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setDonateDisabled(false);
       return;
     }
+    const gasPrice = await publicClient.getGasPrice();
+    const gasFeeInWei = gasPrice * BigInt(squidTransactionRequest.gasLimit);
+    const gasFeeInEth = Number(gasFeeInWei) / 1e18;
+    console.log(gasFeeInEth, 'gasgdgshadghsagdh');
 
     handleDonate();
   };
