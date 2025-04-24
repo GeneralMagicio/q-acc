@@ -570,15 +570,15 @@ const MyProjects = () => {
                   </div>
                 </div>
               </div>
-              <div className='flex gap-1'>
+              <div className='flex gap-2'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimedTributes)} POL
-                </span>
-                <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
                     Math.round(claimedTributes * Number(POLPrice) * 100) / 100,
                   )}
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  {formatAmount(claimedTributes)} POL
                 </span>
               </div>
             </div>
@@ -597,16 +597,16 @@ const MyProjects = () => {
                   </div>
                 </div>
               </div>
-              <div className='flex gap-1'>
+              <div className='flex gap-2'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimableFeesFormated)} POL
-                </span>
-                <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
                     Math.round(claimableFeesFormated * Number(POLPrice) * 100) /
                       100,
                   )}
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  {formatAmount(claimableFeesFormated)} POL
                 </span>
               </div>
             </div>
@@ -693,13 +693,13 @@ const MyProjects = () => {
 
           <div className='flex items-center gap-4'>
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
-              {formatAmount(totalAmountDonated)} POL
-            </span>
-            <span className='text-[#1D1E1F]  font-medium'>
               ~ ${' '}
               {formatAmount(
                 Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
               )}
+            </span>
+            <span className='text-[#1D1E1F]  font-medium'>
+              {formatAmount(totalAmountDonated)} POL
             </span>
           </div>
         </div>

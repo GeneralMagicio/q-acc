@@ -203,12 +203,12 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
             All your contributions
           </h1>
         </div>
-        <div className='flex gap-2 text-[#1D1E1F] '>
-          <h1 className='md:text-[25px] font-bold '>
-            {formatAmount(totalContributions)} POL
+        <div className='flex gap-2 text-[#1D1E1F] justify-center items-center '>
+          <h1 className='md:text-[24px] font-bold '>
+            ~ $ {formatAmount(totalContributions * Number(POLPrice))}
           </h1>
           <span className='font-medium'>
-            ~ ${formatAmount(totalContributions * Number(POLPrice))}
+            {formatAmount(totalContributions)} POL
           </span>
         </div>
       </div>
