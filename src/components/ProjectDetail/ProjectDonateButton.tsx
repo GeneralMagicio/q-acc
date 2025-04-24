@@ -313,7 +313,7 @@ const ProjectDonateButton = () => {
 
         <div className='flex flex-col gap-2 group relative'>
           <span className='text-[#4F576A] font-semibold text-sm'>
-            24h Change
+            Change this round
           </span>
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
