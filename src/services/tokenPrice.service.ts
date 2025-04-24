@@ -249,6 +249,7 @@ export async function getTokenSupplyDetails(address: string) {
 export async function calculateMarketCapChange(
   donations: any[],
   contract_address: string,
+  startDate = '2025-04-15T00:00:00Z', //start date  to see the change in makret cap
 ) {
   const { reserve_ration, collateral_supply, issuance_supply } =
     await getTokenSupplyDetails(contract_address);
@@ -262,7 +263,7 @@ export async function calculateMarketCapChange(
   const initialPrice = (reserve / (supply * reserveRatio)) * 1.1;
 
   const initialMarketCap = supply * initialPrice;
-  const initialTimestamp = '2025-04-01T00:00:00Z'; // virtual Day 0 timestamp (can be set based on your round start)
+  const initialTimestamp = startDate; // virtual Day 0 timestamp (can be set based on your round start)
 
   history.push({
     createdAt: initialTimestamp,
@@ -272,9 +273,9 @@ export async function calculateMarketCapChange(
 
   const now = new Date();
   const cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const recentDonationExists = donations.some(
-    d => new Date(d.createdAt) > cutoff,
-  );
+  // const recentDonationExists = donations.some(
+  //   d => new Date(d.createdAt) > cutoff,
+  // );
 
   const filteredDonations = donations.filter(
     d => new Date(d.createdAt) > new Date(initialTimestamp),
@@ -294,14 +295,16 @@ export async function calculateMarketCapChange(
     .reverse()
     .find(h => new Date(h.createdAt) <= cutoff);
 
-  const marketCapPast = past ? past.marketCap : initialMarketCap;
+  // const marketCapPast = past ? past.marketCap : initialMarketCap;
+  const marketCapPast = initialMarketCap;
 
   const latestMarketCap = history[history.length - 1].marketCap;
 
-  // const change24h = ((marketCapNow - marketCapPast) / marketCapPast) * 100;
-  const change24h = recentDonationExists
-    ? ((latestMarketCap - marketCapPast) / marketCapPast) * 100
-    : 0;
+  // const change24h = recentDonationExists
+  // ? ((latestMarketCap - marketCapPast) / marketCapPast) * 100
+  // : 0;
+  const change24h = ((latestMarketCap - marketCapPast) / marketCapPast) * 100;
+
   return {
     marketCap: Math.round(latestMarketCap),
     change24h: change24h,

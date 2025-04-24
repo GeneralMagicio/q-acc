@@ -64,6 +64,7 @@ const ProjectDonateButton = () => {
             await calculateMarketCapChange(
               donations,
               projectData.abc.fundingManagerAddress,
+              activeRoundDetails?.startDate,
             );
 
           setMarketCap(newCap * Number(POLPrice));
