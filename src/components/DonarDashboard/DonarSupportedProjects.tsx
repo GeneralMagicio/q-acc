@@ -26,6 +26,7 @@ import { EProjectSocialMediaType, IProject } from '@/types/project.type';
 import { IconShare } from '../Icons/IconShare';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
+import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -48,7 +49,7 @@ const DonarSupportedProjects = ({
   totalRewardTokens: number;
   onClickBreakdown: () => void;
 }) => {
-  const { data: POLPrice } = useFetchTokenPrice();
+  const { data: POLPrice } = useFetchPOLPriceSquid();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -233,12 +234,12 @@ const DonarSupportedProjects = ({
               <IconTotalDonations size={24} />
               <span className='font-medium text-[#1D1E1F]'>Total received</span>
             </div>
-            <div className='flex gap-1'>
+            <div className='flex gap-2'>
               <span className='font-medium text-[#1D1E1F]'>
-                {formatAmount(totalContributions) || 0} POL{' '}
+                ~ $ {formatAmount(totalContributions * POLPrice) || 0}
               </span>
               <span className='font-medium text-[#82899A]'>
-                ~ $ {formatAmount(project.totalDonations) || 0}
+                {formatAmount(totalContributions) || 0} POL{' '}
               </span>
             </div>
           </div>

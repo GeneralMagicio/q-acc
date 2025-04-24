@@ -126,12 +126,12 @@ const RewardsBreakDown: React.FC = () => {
                   Total received
                 </span>
               </div>
-              <div className='flex gap-1'>
+              <div className='flex gap-2'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(totalContributions)} POL
+                  ~ ${formatAmount(totalContributions * Number(POLPrice)) || 0}
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ ${formatAmount(totalContributions * Number(POLPrice)) || 0}
+                  {formatAmount(totalContributions)} POL
                 </span>
               </div>
             </div>

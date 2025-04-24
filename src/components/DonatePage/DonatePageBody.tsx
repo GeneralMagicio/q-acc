@@ -1179,13 +1179,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
               </h2>
               <div className='flex gap-2 items-center'>
                 <h1 className='text-4xl font-extrabold p-2'>
-                  {formatAmount(totalPOLDonated)} POL
-                </h1>
-                <h2 className='text-[#1D1E1F] font-medium'>
                   ~ ${' '}
                   {formatAmount(
                     Math.round(totalPOLDonated * Number(POLPrice) * 100) / 100,
                   )}
+                </h1>
+                <h2 className='text-[#1D1E1F] font-medium'>
+                  {formatAmount(totalPOLDonated)} POL
                 </h2>
               </div>
 
