@@ -1,13 +1,48 @@
-import { polygon, polygonZkEvm } from '@reown/appkit/networks';
-import { polygonZkEvm as viemPolygonZkEvm } from 'wagmi/chains';
-
+import {
+  arbitrum,
+  avalanche,
+  base,
+  blast,
+  celo,
+  fantom,
+  filecoin,
+  fraxtal,
+  immutableZkEvm,
+  kava,
+  linea,
+  mainnet,
+  mantle,
+  moonbeam,
+  optimism,
+  polygon,
+  scroll,
+} from '@reown/appkit/networks';
+import { polygon as viemPolygon } from 'wagmi/chains';
 import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
 // Added pre prod configs
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygon, polygonZkEvm] as const,
-  SCAN_URL: 'https://zkevm.polygonscan.com/',
+  SUPPORTED_CHAINS: [
+    polygon,
+    mainnet,
+    arbitrum,
+    avalanche,
+    optimism,
+    base,
+    linea,
+    celo,
+    mantle,
+    moonbeam,
+    fantom,
+    scroll,
+    kava,
+    filecoin,
+    blast,
+    fraxtal,
+    immutableZkEvm,
+  ] as const,
+  SCAN_URL: 'https://polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
   WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   ERC_TOKEN_SYMBOL: 'POL',
@@ -19,8 +54,8 @@ const config: EnvConfig = {
   GIVETH_GQL_ENDPOINT: 'https://mainnet.serve.giveth.io/graphql',
   INDEXER_GRAPHQL_URL: 'https://indexer.hyperindex.xyz/a414bf3/v1/graphql',
   privadoConfig: {
-    chain: viemPolygonZkEvm,
-    chainName: 'zkevm',
+    chain: viemPolygon,
+    chainName: 'Polygon',
     contractAddress: '0xfcc86A79fCb057A8e55C6B853dff9479C3cf607c',
     allowedIssuers: [
       'did:iden3:privado:main:2ScrbEuw9jLXMapW3DELXBbDco5EURzJZRN1tYj7L7',

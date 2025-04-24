@@ -1,4 +1,22 @@
-import { polygon, polygonZkEvm } from '@reown/appkit/networks';
+import {
+  arbitrum,
+  avalanche,
+  base,
+  blast,
+  celo,
+  fantom,
+  filecoin,
+  fraxtal,
+  immutableZkEvm,
+  kava,
+  linea,
+  mainnet,
+  mantle,
+  moonbeam,
+  optimism,
+  polygon,
+  scroll,
+} from '@reown/appkit/networks';
 import { polygon as viemPolygon } from 'wagmi/chains';
 // import { polygon, polygonZkEvm } from 'wagmi/chains';
 
@@ -6,7 +24,25 @@ import { EnvConfig } from '@/types/config.type';
 import { PrivadoContractMethodV2 } from '@/lib/constants/privado';
 
 const config: EnvConfig = {
-  SUPPORTED_CHAINS: [polygon, polygonZkEvm] as const,
+  SUPPORTED_CHAINS: [
+    polygon,
+    mainnet,
+    arbitrum,
+    avalanche,
+    optimism,
+    base,
+    linea,
+    celo,
+    mantle,
+    moonbeam,
+    fantom,
+    scroll,
+    kava,
+    filecoin,
+    blast,
+    fraxtal,
+    immutableZkEvm,
+  ] as const,
   SCAN_URL: 'https://zkevm.polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
   WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
@@ -35,7 +71,7 @@ const config: EnvConfig = {
   GP_SCORER_SCORE_THRESHOLD: 15,
   MINIMUM_DONATION_AMOUNT: 20,
   MATCHING_FUND_ADDRESS: [],
-  SQUID_INTEGRATOR_ID: '',
+  SQUID_INTEGRATOR_ID: 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
 };
 
 export default config;
