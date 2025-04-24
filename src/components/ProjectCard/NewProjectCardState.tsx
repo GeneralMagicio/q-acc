@@ -67,6 +67,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
             await calculateMarketCapChange(
               donations,
               project?.abc?.fundingManagerAddress,
+              activeRoundDetails?.startDate,
             );
 
           // console.log(project.title, change24h);
