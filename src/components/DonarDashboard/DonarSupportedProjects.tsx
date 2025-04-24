@@ -13,7 +13,6 @@ import { IconMinted } from '../Icons/IconMinted';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { Button, ButtonColor } from '../Button';
 import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
