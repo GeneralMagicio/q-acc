@@ -37,7 +37,7 @@ export const UserController = () => {
     if (!newUser?.isSignedIn) return;
 
     // Check if user has accepted ToS after signing in
-    if (newUser?.isSignedIn && !user?.acceptedToS) {
+    if (!user?.acceptedToS) {
       setShowTermsModal(true);
       return;
     }
