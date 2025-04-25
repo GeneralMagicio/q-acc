@@ -23,12 +23,7 @@ import {
   calculateTotalDonations,
   calculateUniqueDonors,
   formatAmount,
-  formatNumber,
 } from '@/helpers/donation';
-import { getIpfsAddress } from '@/helpers/image';
-import { RoundCollectedInfo } from './RoundCollectedInfo';
-import { IconChevronDown } from '../Icons/IconChevronDown';
-import { IconChevronUp } from '../Icons/IconChevronUp';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IEarlyAccessRound, IQfRound } from '@/types/round.type';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
@@ -36,7 +31,6 @@ import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
 } from '@/services/tokenPrice.service';
-import { RoundCollectHeader } from './RoundCollectHeader';
 import {
   useClaimCollectedFee,
   useClaimedTributesAndMintedTokenAmounts,
@@ -49,6 +43,8 @@ import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { calculateCapAmount } from '@/helpers/round';
 import { Button, ButtonColor } from '../Button';
+import { EProjectSocialMediaType } from '@/types/project.type';
+import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 
 const MyProjects = () => {
   const { data: userData } = useFetchUser(true);
@@ -96,6 +92,9 @@ const MyProjects = () => {
     round => round.__typename === 'EarlyAccessRound' && round.roundNumber === 1,
   );
 
+  const { data: tokenDetails } = useTokenSupplyDetails(
+    projectData?.abc?.fundingManagerAddress!,
+  );
   // Check if Round 1 has started
   const round1Started = round1
     ? new Date().toISOString().split('T')[0] >=
@@ -241,7 +240,8 @@ const MyProjects = () => {
   const claimableFeesFormated = Number(formatUnits(claimableFees, 18));
   const enableClaimButton = claimableFeesFormated > 0;
   const tributeModuleAvailable: boolean =
-    !!projectData?.tributeClaimModuleAddress;
+    !!projectData?.tributeClaimModuleAddress &&
+    !!projectData?.tributeRecipientAddress;
 
   const claimedTributesAndMintedTokenAmounts =
     useClaimedTributesAndMintedTokenAmounts(
@@ -258,6 +258,7 @@ const MyProjects = () => {
   const { claim } = useClaimCollectedFee({
     fundingManagerAddress: projectData?.abc?.fundingManagerAddress!,
     tributeModule: projectData?.tributeClaimModuleAddress!,
+    feeRecipient: projectData?.tributeRecipientAddress!,
     amount: claimableFees,
     onSuccess: () => {
       // do after 5 seconds
@@ -280,6 +281,10 @@ const MyProjects = () => {
   const backgroundImage = projectData?.image
     ? `url(${projectData?.image})`
     : '';
+
+  const website = projectData.socialMedia?.find(
+    social => social.type === EProjectSocialMediaType.WEBSITE,
+  )?.link;
 
   return (
     <div className='container'>
@@ -355,41 +360,79 @@ const MyProjects = () => {
               </div>
             </div>
 
-            <p className='text-[#4F576A] font-redHatText leading-6'>
-              {projectData?.teaser}
+            <p className='text-gray-500 font-redHatText leading-6'>
+              {projectData?.descriptionSummary}
             </p>
 
-            <Link
-              target='_blank'
-              href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
-            >
-              <div className='w-full p-[10px_16px] shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                <span className='flex gap-4 text-[#5326EC] font-bold'>
-                  Project Contract Address
-                  <IconViewTransaction color='#5326EC' />
-                </span>
-              </div>{' '}
-            </Link>
-            <div className='flex justify-center gap-4'>
+            <div className='flex flex-wrap gap-2'>
+              {projectData?.socialMedia
+                ?.filter(sm => sm.type !== EProjectSocialMediaType.WEBSITE)
+                .map(social => {
+                  return (
+                    <Link
+                      key={social.link}
+                      href={social.link}
+                      target='_blank'
+                      className='p-2 rounded-lg border-gray-200 border'
+                    >
+                      <Image
+                        src={`/images/icons/social/${social.type.toLowerCase()}.svg`}
+                        alt={`${social.type} icon`}
+                        width={24}
+                        height={24}
+                      />
+                    </Link>
+                  );
+                })}
+            </div>
+
+            <div className='flex gap-4 flex-wrap'>
+              {website && (
+                <Link
+                  target='_blank'
+                  href={website}
+                  className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+                >
+                  <div>
+                    <span className='flex gap-4 text-giv-500 font-bold'>
+                      Website
+                      <IconViewTransaction color='#5326EC' />
+                    </span>
+                  </div>{' '}
+                </Link>
+              )}
               <Link
                 target='_blank'
-                href={`/project/${projectData?.slug}`}
-                className='w-full'
+                href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
+                className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
-                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
-                    View Project
+                <div>
+                  <span className='flex gap-4 text-giv-500 font-bold text-nowrap'>
+                    Contract Address
                     <IconViewTransaction color='#5326EC' />
                   </span>
                 </div>{' '}
               </Link>
-              <div onClick={handleShare} className='cursor-pointer w-full'>
-                <div className='w-full p-[10px_16px]  shadow-tabShadow rounded-3xl flex justify-center font-redHatText'>
-                  <span className='flex gap-4 text-[#5326EC] font-bold items-center'>
-                    Share your project
-                    <IconShare color='#5326EC' size={24} />
-                  </span>
-                </div>
+            </div>
+            <div className='flex justify-center gap-4 flex-wrap'>
+              <Link
+                target='_blank'
+                href={`/project/${projectData?.slug}`}
+                className=' py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                  View Project
+                  <IconViewTransaction color='#5326EC' />
+                </span>
+              </Link>
+              <div
+                onClick={handleShare}
+                className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
+              >
+                <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                  Share your project
+                  <IconShare color='#5326EC' size={24} />
+                </span>
               </div>{' '}
               <ShareProjectModal
                 isOpen={isShareModalOpen}
@@ -397,6 +440,7 @@ const MyProjects = () => {
                 showCloseButton={true}
                 projectSlug={projectData?.slug || ''}
                 projectTitle={projectData?.title}
+                tokenTicker={projectData?.abc?.tokenTicker}
               />
             </div>
           </div>
@@ -416,7 +460,7 @@ const MyProjects = () => {
                 </span>
               </div>
             </div>
-            {activeRoundDetails && (
+            {/* {activeRoundDetails && (
               <>
                 <div className='flex gap-1 items-center'>
                   <img
@@ -439,7 +483,9 @@ const MyProjects = () => {
                     </div>
                   </div>
                 </div>
-                {/* Conditional Rendering for Token Price Range */}
+
+
+
                 <div className='flex justify-between gap-8 font-redHatText items-center py-2'>
                   {tokenPriceRangeStatus.isSuccess &&
                   tokenPriceRangeStatus.data?.isPriceUpToDate ? (
@@ -473,15 +519,15 @@ const MyProjects = () => {
                   )}
                 </div>
               </>
-            )}
+            )} */}
             <div className='flex  flex-col gap-2 md:flex-row justify-between pb-4 pt-2 border-b'>
               <div className='flex gap-2'>
                 <IconTotalSupply />
                 <span className='text-[#4F576A] font-medium'>Total supply</span>
               </div>
               <span className='text-[#1D1E1F] font-medium'>
-                {projectData?.abc?.totalSupply
-                  ? formatAmount(projectData?.abc?.totalSupply)
+                {Number(tokenDetails?.issuance_supply)
+                  ? formatAmount(Number(tokenDetails?.issuance_supply))
                   : '---'}{' '}
                 {projectData?.abc?.tokenTicker}
               </span>
@@ -524,15 +570,15 @@ const MyProjects = () => {
                   </div>
                 </div>
               </div>
-              <div className='flex gap-1'>
+              <div className='flex gap-2'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimedTributes)} POL
-                </span>
-                <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
                     Math.round(claimedTributes * Number(POLPrice) * 100) / 100,
                   )}
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  {formatAmount(claimedTributes)} POL
                 </span>
               </div>
             </div>
@@ -551,16 +597,16 @@ const MyProjects = () => {
                   </div>
                 </div>
               </div>
-              <div className='flex gap-1'>
+              <div className='flex gap-2'>
                 <span className='font-medium text-[#1D1E1F]'>
-                  {formatAmount(claimableFeesFormated)} POL
-                </span>
-                <span className='font-medium text-[#82899A]'>
                   ~ ${' '}
                   {formatAmount(
                     Math.round(claimableFeesFormated * Number(POLPrice) * 100) /
                       100,
                   )}
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  {formatAmount(claimableFeesFormated)} POL
                 </span>
               </div>
             </div>
@@ -589,7 +635,7 @@ const MyProjects = () => {
           </h1>
         </div>
 
-        <div className='flex flex-col gap-4'>
+        {/* <div className='flex flex-col gap-4'>
           {(filteredRoundData.roundType === 'QfRound' ||
             filteredRoundData.qfRoundEnded) && (
             <RoundCollectHeader
@@ -599,7 +645,7 @@ const MyProjects = () => {
             ></RoundCollectHeader>
           )}
 
-          {round1Started ? (
+          {projectData.hasEARound && round1Started ? (
             <div className='flex flex-col'>
               <RoundCollectHeader
                 type={'ea'}
@@ -635,25 +681,25 @@ const MyProjects = () => {
           ) : (
             ''
           )}
-        </div>
+        </div> */}
 
         <div className='flex  flex-col md:flex-row justify-between p-4 bg-[#EBECF2] md:items-center rounded-xl'>
           <div className='flex gap-4 items-center'>
             <IconTotalDonations size={32} />
             <span className='text-[#4F1D1E1F576A] font-bold text-[25px]'>
-              Total contributions
+              Total received
             </span>
           </div>
 
           <div className='flex items-center gap-4'>
             <span className='text-[#1D1E1F] font-bold text-[25px]'>
-              {formatAmount(totalAmountDonated)} POL
-            </span>
-            <span className='text-[#1D1E1F]  font-medium'>
               ~ ${' '}
               {formatAmount(
                 Math.round(totalAmountDonated * Number(POLPrice) * 100) / 100,
               )}
+            </span>
+            <span className='text-[#1D1E1F]  font-medium'>
+              {formatAmount(totalAmountDonated)} POL
             </span>
           </div>
         </div>

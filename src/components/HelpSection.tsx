@@ -6,13 +6,13 @@ export const HelpSection = () => {
   return (
     <div className='container relative'>
       <div className='py-10 px-9 flex flex-col gap-6 text-center text-2xl font-light'>
-        <h1 className='text-4xl text-giv-500 font-bold '>Need help?</h1>
-        <p>
+        <h1 className='text-2xl text-giv-500 font-bold '>Need help?</h1>
+        <p className='text-lg'>
           Stuck or have questions? Our team is on standby to assist you.
           <br />
           Send us an email at{' '}
-          <a className='text-pink-500' href='mailto:qacc@giveth.io'>
-            qacc@giveth.io
+          <a className='text-pink-500' href='mailto:info@qacc.xyz '>
+            info@qacc.xyz
           </a>
           , or drop us a message at{' '}
           <a
@@ -25,7 +25,7 @@ export const HelpSection = () => {
           </a>
           .
         </p>
-        <p className='text-gray-400'>
+        <p className='text-gray-400 text-lg'>
           The q/acc program is proudly incubated under Giveth,
           <br />
           one of the pioneers in blockchain-based philanthropy and fundraising. 

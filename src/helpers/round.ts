@@ -16,13 +16,14 @@ export const calculateCapAmount = async (
   }
 
   let maxPOLAmount =
-    (activeRoundDetails?.roundUSDCloseCapPerProject ??
-      activeRoundDetails?.cumulativeUSDCapPerProject) /
-    activeRoundDetails?.tokenPrice;
+    activeRoundDetails?.roundPOLCloseCapPerProject ??
+    activeRoundDetails?.cumulativePOLCapPerProject;
 
   const roundRecords = await fetchProjectRoundRecords(
     projectId,
-    activeRoundDetails?.__typename === 'QfRound' ? 1 : undefined,
+    activeRoundDetails?.__typename === 'QfRound'
+      ? activeRoundDetails.roundNumber
+      : undefined,
     activeRoundDetails?.__typename === 'EarlyAccessRound'
       ? activeRoundDetails.roundNumber
       : undefined,

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { Button, ButtonColor } from '../Button';
-import { EDonationCardStates } from './DonateSection';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { getIpfsAddress } from '@/helpers/image';
@@ -13,11 +12,16 @@ import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
+  calculateMarketCapChange,
 } from '@/services/tokenPrice.service';
-import { formatNumber } from '@/helpers/donation';
+import { formatAmount, formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getAdjustedEndDate } from '@/helpers/date';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
+import config from '@/config/configuration';
+import { EOrderBy, EDirection } from '../DonarDashboard/DonarSupportTable';
+import { fetchProjectDonationsById } from '@/services/donation.services';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -36,7 +40,73 @@ const ProjectDonateButton = () => {
     activeRoundDetails?.startDate,
     adjustedEndDate,
   );
+  const [isTokenListed, setIsTokenListed] = useState(false);
+  const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
+  const [marketCap, setMarketCap] = useState(0);
+  const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
+
+  useEffect(() => {
+    if (projectData?.id) {
+      const fetchProjectDonations = async () => {
+        const data = await fetchProjectDonationsById(
+          parseInt(projectData?.id),
+          1000,
+          0,
+          { field: EOrderBy.CreationDate, direction: EDirection.ASC },
+        );
+
+        if (data) {
+          const { donations, totalCount } = data;
+          // setPageDonations(donations);
+
+          const { marketCap: newCap, change24h } =
+            await calculateMarketCapChange(
+              donations,
+              projectData.abc.fundingManagerAddress,
+              activeRoundDetails?.startDate,
+            );
+
+          setMarketCap(newCap * Number(POLPrice));
+          setMarketCapChangePercentage(change24h);
+
+          console.log(
+            projectData.title,
+            newCap,
+            change24h,
+            'Change in percentafe',
+          );
+          const now = new Date();
+          const cutoff = new Date(now.getTime() - 100 * 60 * 60 * 1000);
+
+          // 🔍 Filter donations by createdAt
+          const recentDonations = donations.filter((donation: any) => {
+            return new Date(donation.createdAt) >= cutoff;
+          });
+        }
+      };
+      fetchProjectDonations();
+    }
+  }, [projectData, marketCap]);
+
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (projectData?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          projectData.abc.issuanceTokenAddress,
+          config.WPOL_TOKEN_ADDRESS,
+        );
+        setIsTokenListed(isListed);
+        setCurrentTokenPrice(Number(price));
+      }
+    };
+
+    fetchPoolAddress();
+  }, [
+    projectData?.abc?.issuanceTokenAddress,
+    currentTokenPrice,
+    isTokenListed,
+  ]);
   useEffect(() => {
     const updatePOLCap = async () => {
       if (activeRoundDetails) {
@@ -154,40 +224,276 @@ const ProjectDonateButton = () => {
       </div>
     </div>
   );
-  let currentState = 'early';
+
+  const TokenInfo = () => (
+    <div className='flex flex-col gap-4 font-redHatText'>
+      {/* <div className='flex flex-col gap-2'>
+        <div className='flex gap-2'>
+          <img
+            className='w-6 h-6 rounded-full'
+            src={getIpfsAddress(
+              projectData.abc?.icon! ||
+                'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+            )}
+          />
+          <span className='text-[#4F576A] font-semibold text-sm '>
+            {projectData.abc.tokenTicker} price on Quickswap
+          </span>
+        </div>
+
+        <div className='flex justify-between items-center'>
+          {isTokenListed ? (
+            <>
+              <span className='text-[#1D1E1F] font-bold text-lg'>
+                {' '}
+                ~ ${' '}
+                {POLPrice
+                  ? `${' ' + formatNumber(POLPrice * currentTokenPrice)}`
+                  : ''}
+              </span>
+              <span className='text-[#4F576A] font-semibold'>
+                {' '}
+                {currentTokenPrice.toFixed(2)} POL
+              </span>
+            </>
+          ) : (
+            <>
+              <span className='text-[#1D1E1F] font-bold text-lg'>---</span>
+              <span className='text-[#4F576A] font-semibold'>---</span>
+            </>
+          )}
+        </div>
+      </div>
+      <hr /> */}
+
+      {isTokenListed && (
+        <div className='flex flex-col gap-2'>
+          <div className='flex gap-2'>
+            <img
+              className='w-6 h-6 rounded-full'
+              src={getIpfsAddress(
+                projectData.abc?.icon! ||
+                  'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+              )}
+            />
+            <span className='text-[#4F576A] font-semibold text-sm '>
+              {projectData.abc.tokenTicker} price on Quickswap
+            </span>
+          </div>
+
+          <div className='flex justify-between items-center'>
+            <span className='text-[#1D1E1F] font-bold text-lg'>
+              {' '}
+              ~ ${' '}
+              {POLPrice
+                ? `${' ' + formatNumber(POLPrice * currentTokenPrice)}`
+                : ''}
+            </span>
+            <span className='text-[#4F576A] font-semibold'>
+              {' '}
+              {currentTokenPrice.toFixed(2)} POL
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className='flex justify-between items-center'>
+        {/* Market Cap */}
+        <div className='flex flex-col gap-2'>
+          <span className='text-[#4F576A] font-semibold text-sm'>
+            {projectData.abc.tokenTicker} Market Cap
+          </span>
+          <span className='text-[#1D1E1F] font-bold text-lg'>
+            {' '}
+            $ {formatAmount(marketCap)}
+          </span>
+        </div>
+
+        {/* 24 h Change */}
+
+        <div className='flex flex-col gap-2 group relative'>
+          {activeRoundDetails ? (
+            <span className='text-[#4F576A] font-semibold text-sm'>
+              Change this round
+            </span>
+          ) : (
+            <span className='text-[#4F576A] font-semibold text-sm'>
+              24h Change
+            </span>
+          )}
+
+          <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
+            {' '}
+            {formatNumber(marketCapChangePercentage)}%{' '}
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='16'
+              height='16'
+              viewBox='0 0 16 16'
+              fill='none'
+            >
+              <path
+                d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
+                stroke='#4F576A'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              />
+            </svg>
+          </span>
+          <div
+            className='
+                absolute top-full left-1/2 transform -translate-x-1/2 mt-1
+                bg-gray-900 text-white text-sm font-medium px-2 py-1 rounded shadow-lg
+                opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out
+                pointer-events-none z-50 whitespace-nowrap
+              '
+          >
+            {marketCapChangePercentage}%
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const listedPriceInfo = () => (
+    <div className='flex flex-col gap-2 font-redHatText'>
+      <div className='flex justify-start items-center gap-2 '>
+        <img
+          className='w-6 h-6 rounded-full'
+          src={getIpfsAddress(
+            projectData.abc?.icon! ||
+              'Qmeb6CzCBkyEkAhjrw5G9GShpKiVjUDaU8F3Xnf5bPHtm4',
+          )}
+        />
+        <div className='flex gap-2 items-center'>
+          <span className='text-[#4F576A] font-medium'>
+            {projectData?.abc?.tokenTicker} Price
+          </span>
+        </div>
+
+        {/* <IconInfo /> */}
+      </div>
+      <div className='flex items-center text-sm gap-2 text-[#82899A] flex-wrap justify-between'>
+        {isTokenListed &&
+        tokenPriceRangeStatus.isSuccess &&
+        tokenPriceRangeStatus.data?.isPriceUpToDate ? (
+          <>
+            <h1 className=' flex-1 p-2 bg-[#F7F7F9] rounded-lg pr-10 '>
+              <span className='text-[#1D1E1F] font-medium'>
+                {currentTokenPrice.toFixed(2)}
+              </span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>
+              ${' '}
+              {Number(POLPrice) &&
+                formatNumber(Number(POLPrice) * currentTokenPrice)}
+            </span>
+          </>
+        ) : (
+          <>
+            <h1 className='p-2 bg-[#F7F7F9] rounded-lg pr-10'>
+              <span className='text-[#1D1E1F] font-medium'>---</span>
+              <span className='text-[#4F576A] text-xs'> POL</span>
+            </h1>
+            <span className='text-[#4F576A] font-medium'>~$ ---</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className='flex flex-col gap-4'>
-      {activeRoundDetails && PriceInfo()}
-      {currentState === EDonationCardStates.beforeFirstRound ? (
-        <Button
-          color={ButtonColor.Pink}
-          className='w-full justify-center opacity-50 cursor-not-allowed'
-        >
-          Starting Soon
-        </Button>
-      ) : (
-        <>
-          <Button
-            color={ButtonColor.Pink}
-            className='w-full justify-center'
-            onClick={handleSupport}
-            disabled={
-              (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
-                !ownsNFT) ||
-              progress >= 100 ||
-              remainingTime === 'Time is up!' ||
-              remainingTime === '--:--:--'
-            }
-            loading={loadingNFTCheck}
-          >
-            {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
-              ? 'Support This Project'
-              : progress >= 100
-                ? 'Project Maxed Out'
-                : 'Support This Project'}
-          </Button>
+      {TokenInfo()}
 
-          {activeRoundDetails ? (
+      {/* If round is Active show Buy token */}
+      {activeRoundDetails && (
+        <Button
+          color={ButtonColor.Giv}
+          className='w-full justify-center rounded-xl'
+          onClick={handleSupport}
+          disabled={
+            (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
+              !ownsNFT) ||
+            progress >= 100 ||
+            remainingTime === 'Time is up!' ||
+            remainingTime === '--:--:--'
+          }
+          loading={loadingNFTCheck}
+        >
+          {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+            ? 'Buy Token'
+            : progress >= 100
+              ? 'Project Maxed Out'
+              : 'Buy Token'}
+        </Button>
+      )}
+
+      {/* If round is not active */}
+      {!activeRoundDetails ? (
+        isTokenListed ? (
+          <Button
+            color={ButtonColor.Giv}
+            className='w-full justify-center'
+            onClick={() => {
+              const url = `https://dapp.quickswap.exchange/swap/best/ETH/${projectData?.abc?.issuanceTokenAddress}`;
+              window.open(url, '_blank', 'noopener,noreferrer');
+            }}
+          >
+            Get {projectData?.abc?.tokenTicker} on QuickSwap
+          </Button>
+        ) : projectData.batchNumbersWithSafeTransactions?.length != 0 ? (
+          <Button
+            color={ButtonColor.Giv}
+            className='w-full justify-center rounded-xl'
+            disabled={true}
+          >
+            DEX listing soon
+          </Button>
+        ) : (
+          ''
+        )
+      ) : (
+        ''
+      )}
+
+      <>
+        {/* {isTokenListed ? (
+            <Button
+              color={ButtonColor.Giv}
+              className='w-full justify-center'
+              onClick={() => {
+                const url = `https://quickswap.exchange/#/swap?currency0=${config.ERC_TOKEN_ADDRESS}&currency1=${projectData?.abc?.issuanceTokenAddress}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              Get ${projectData?.abc?.tokenTicker} on QuickSwap
+            </Button>
+          ) : (
+            <Button
+              color={ButtonColor.Giv}
+              className='w-full justify-center rounded-xl'
+              onClick={handleSupport}
+              disabled={
+                (activeRoundDetails?.__typename === 'EarlyAccessRound' &&
+                  !ownsNFT) ||
+                progress >= 100 ||
+                remainingTime === 'Time is up!' ||
+                remainingTime === '--:--:--'
+              }
+              loading={loadingNFTCheck}
+            >
+              {remainingTime === 'Time is up!' || remainingTime === '--:--:--'
+                ? 'Buy Token'
+                : progress >= 100
+                  ? 'Project Maxed Out'
+                  : 'Buy Token'}
+            </Button>
+          )} */}
+
+        {/* {activeRoundDetails ? (
             activeRoundDetails.__typename === 'EarlyAccessRound' ? (
               !ownsNFT ? (
                 <span className='text-[#EA960D] p-1 rounded-full bg-[#FFFBEF] text-xs px-2 text-center font-medium'>
@@ -199,9 +505,8 @@ const ProjectDonateButton = () => {
                 </span>
               )
             ) : null
-          ) : null}
-        </>
-      )}
+          ) : null} */}
+      </>
     </div>
   );
 };

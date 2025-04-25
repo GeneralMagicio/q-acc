@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { redirect, useRouter } from 'next/navigation';
 import { fetchGivethUserInfo } from '@/services/user.service';
-import { CompleteProfileModal } from '../Modals/CompleteProfileModal';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
@@ -16,16 +15,18 @@ import { isProductReleased } from '@/config/configuration';
 import { useAddressWhitelist } from '@/hooks/useAddressWhitelist';
 import { useFetchSanctionStatus } from '@/hooks/useFetchSanctionStatus';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
+import { TermsConditionModal } from '../Modals/TermsConditionModal';
 
 export const UserController = () => {
   const [showCompleteProfileModal, setShowCompleteProfileModal] =
     useState(false);
   const [showSignModal, setShowSignModal] = useState(false);
   const [showSanctionModal, setShowSanctionModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const { address } = useAccount();
   const router = useRouter();
   const { mutateAsync: updateUser } = useUpdateUser();
-  const { refetch } = useFetchUser();
+  const { data: user, refetch } = useFetchUser();
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
   const { data: isSafeAccount } = useCheckSafeAccount();
@@ -34,6 +35,12 @@ export const UserController = () => {
     console.log('Signed', newUser);
     setShowSignModal(false);
     if (!newUser?.isSignedIn) return;
+
+    // Check if user has accepted ToS after signing in
+    if (!user?.acceptedToS) {
+      setShowTermsModal(true);
+      return;
+    }
 
     // Save user info to QAcc if user is Giveth user
     if (address && !newUser?.fullName && !newUser?.email) {
@@ -50,7 +57,13 @@ export const UserController = () => {
         };
 
         await updateUser(_user);
-        router.push(Routes.VerifyPrivado);
+
+        // Show terms modal if user hasn't accepted ToS
+        if (!user?.acceptedToS) {
+          setShowTermsModal(true);
+        } else {
+          router.push(Routes.VerifyPrivado);
+        }
         console.log('saved');
       } else {
         console.log('No user in giveth data');
@@ -78,7 +91,12 @@ export const UserController = () => {
 
       // If token exists in local storage, refetch and skip modal
       if (localStorageToken) {
-        refetch();
+        await refetch();
+
+        // Check if user has accepted ToS after refetching user data
+        if (user && !user.acceptedToS) {
+          setShowTermsModal(true);
+        }
         return;
       }
 
@@ -89,7 +107,7 @@ export const UserController = () => {
     };
 
     handleAddressCheck();
-  }, [address, refetch, isSafeAccount]);
+  }, [address, refetch, isSafeAccount, user]);
 
   useEffect(() => {
     const handleShowSignInModal = () => {
@@ -109,21 +127,49 @@ export const UserController = () => {
     }
   }, [isSanctioned]);
 
-  return showSanctionModal ? (
-    <SanctionModal
-      isOpen={showSanctionModal}
-      onClose={() => setShowSanctionModal(false)}
-    />
-  ) : showSignModal ? (
-    <SignModal
-      isOpen={showSignModal}
-      onClose={() => setShowSignModal(false)}
-      onSign={onSign}
-    />
-  ) : showCompleteProfileModal ? (
-    <CompleteProfileModal
-      isOpen={showCompleteProfileModal}
-      onClose={() => setShowCompleteProfileModal(false)}
-    />
-  ) : null;
+  const handleTermsClose = () => {
+    setShowTermsModal(false);
+    if (user?.fullName) {
+      router.push(Routes.VerifyPrivado);
+    } else {
+      setShowCompleteProfileModal(true);
+    }
+  };
+
+  // Determine which modal to show based on priority
+  if (showSanctionModal) {
+    return (
+      <SanctionModal
+        isOpen={showSanctionModal}
+        onClose={() => setShowSanctionModal(false)}
+      />
+    );
+  }
+
+  if (showSignModal) {
+    return (
+      <SignModal
+        isOpen={showSignModal}
+        onClose={() => setShowSignModal(false)}
+        onSign={onSign}
+      />
+    );
+  }
+
+  if (showTermsModal) {
+    return (
+      <TermsConditionModal isOpen={showTermsModal} onClose={handleTermsClose} />
+    );
+  }
+
+  if (showCompleteProfileModal) {
+    return (
+      <TermsConditionModal
+        isOpen={showCompleteProfileModal}
+        onClose={() => setShowCompleteProfileModal(false)}
+      />
+    );
+  }
+
+  return null;
 };

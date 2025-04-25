@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
     },
     {
       label: 'Terms and Conditions',
-      href: 'https://giveth.notion.site/Terms-and-Conditions-10a3ab28d48c8058af3cd37455b591c5',
+      href: Routes.Terms,
       shouldDisplay: true,
     },
   ];

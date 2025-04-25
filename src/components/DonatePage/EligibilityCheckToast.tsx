@@ -1,7 +1,6 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import floor from 'lodash/floor';
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
-import { formatAmount } from '@/helpers/donation';
 
 export const EligibilityCheckToast = () => {
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
@@ -9,16 +8,14 @@ export const EligibilityCheckToast = () => {
 
   if (activeRoundDetails) {
     if (
-      'roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
+      'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
     ) {
       low_cap =
-        (activeRoundDetails?.roundUSDCapPerUserPerProjectWithGitcoinScoreOnly ||
-          1000) / activeRoundDetails?.tokenPrice;
+        activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly ||
+        1000;
     }
 
-    high_cap =
-      (activeRoundDetails?.roundUSDCapPerUserPerProject || 15000) /
-      activeRoundDetails?.tokenPrice;
+    high_cap = activeRoundDetails?.roundPOLCapPerUserPerProject || 15000;
   }
 
   return (
@@ -26,20 +23,17 @@ export const EligibilityCheckToast = () => {
       <h1 className='font-medium'>Caps enable a fair launch!</h1>
       <p className='pb-2 '>
         Individual caps allow more people to participate in the important early
-        stage of a project’s token economy. 
+        stage of a project's token economy.
       </p>
       <p className='pb-2 '>
         <ul className='list-disc px-4'>
           <li>
             {' '}
-            With <span className='font-bold'>Gitcoin Passport</span>, you are
-            eligible to support each project with up to{' '}
-            {formatAmount(floor(Number(low_cap)))} POL .
+            You can spend approximately $1,000 when verified with Human
+            Passport.
           </li>
           <li>
-            With <span className='font-bold'>Privado zkID credentials</span>,
-            you are eligible to support each project with up to{' '}
-            {formatAmount(floor(Number(high_cap)))} POL .
+            You can spend approximately $25,000 when verified with Privado zkID.
           </li>
         </ul>
       </p>

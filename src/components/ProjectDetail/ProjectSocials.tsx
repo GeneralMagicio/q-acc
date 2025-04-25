@@ -12,8 +12,10 @@ import { IconWebsite } from '../Icons/IconWebsite';
 import { IconTelegram } from '../Icons/IconTelegram';
 import { IconGithub } from '../Icons/IconGithub';
 import { useProjectContext } from '@/context/project.context';
+import { IconFarcaster } from '../Icons/IconFarcaster';
+import { IconLens } from '../Icons/IconLens';
 
-const iconMap: { [key: string]: React.ReactNode } = {
+export const socialMediaIconMap: { [key: string]: React.ReactNode } = {
   facebook: <IconFacebook color='#4267B2' size={16} />,
   x: <IconXSocial color={'#26A7DE'} size={16} />,
   instagram: <IconInstagram color={'#8668FC'} size={16} />,
@@ -24,8 +26,10 @@ const iconMap: { [key: string]: React.ReactNode } = {
   website: <IconWebsite color={'#2EA096'} size={16} />,
   telegram: <IconTelegram color={'#229ED9'} size={16} />,
   github: <IconGithub color={'#1D1E1F'} size={16} />,
+  farcaster: <IconFarcaster color={'#1B1657'} size={16} />,
+  lens: <IconLens color={'#FF2D55'} size={16} />,
 };
-const socialMediaColor: { [key: string]: string } = {
+export const socialMediaColor: { [key: string]: string } = {
   facebook: '#4267B2',
   x: '#26A7DE',
   instagram: '#8668FC',
@@ -36,13 +40,16 @@ const socialMediaColor: { [key: string]: string } = {
   website: '#2EA096',
   telegram: '#229ED9',
   github: '#1D1E1F',
+  farcaster: '#1B1657',
+  lens: '#FF2D55',
 };
+
+export const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
+  return socialMediaUrl.replace('https://', '').replace('www.', '');
+};
+
 const ProjectSocials = () => {
   const { projectData } = useProjectContext();
-
-  const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
-    return socialMediaUrl.replace('https://', '').replace('www.', '');
-  };
 
   return (
     <div className='container  max-w-[800px] '>
@@ -50,11 +57,10 @@ const ProjectSocials = () => {
         Find us on our social media
       </h1>
       <br />
-      <div className='flex flex-wrap gap-6'>
-        {/* {projectData?.socialMedia?.map((social: IProjectSocialMedia) => ( */}
+      <div className='flex flex-wrap gap-2'>
         {projectData?.socialMedia?.map((social: any) => {
           const color = socialMediaColor[social.type.toLowerCase()];
-          const icon = iconMap[social.type.toLowerCase()];
+          const icon = socialMediaIconMap[social.type.toLowerCase()];
           return (
             <div
               key={social.link}

@@ -9,13 +9,10 @@ import {
 } from '@/components/EligibilityBadge';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
-import { formatAmount } from '@/helpers/donation';
-import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 
 export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, error, isLoading } = usePrivado();
-  const { data: POLPrice } = useFetchTokenPrice();
 
   const { data: allRounds } = useFetchAllRound();
 
@@ -26,10 +23,8 @@ export const ZkidVerifySection = () => {
   let high_cap;
 
   if (qaccRound) {
-    if ('roundUSDCapPerUserPerProjectWithGitcoinScoreOnly' in qaccRound) {
-      high_cap =
-        (qaccRound?.roundUSDCapPerUserPerProject || 15000) /
-        (qaccRound?.tokenPrice || Number(POLPrice));
+    if ('roundPOLCapPerUserPerProject' in qaccRound) {
+      high_cap = qaccRound?.roundPOLCapPerUserPerProject || 15000;
     }
   }
 
@@ -38,8 +33,7 @@ export const ZkidVerifySection = () => {
       <div>
         <h1 className='text-lg font-bold'>Privado zkID</h1>
         <p>
-          You are eligible to support each project with up to{' '}
-          {formatAmount(high_cap)} POL.
+          Your verification allows you to spend up to approximately $25,000.
         </p>
       </div>
       <div>
@@ -50,8 +44,7 @@ export const ZkidVerifySection = () => {
     <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Privado zkID</h1>
       <p>
-        Get your credentials with Privado zkID to support each project with up
-        to {formatAmount(high_cap)} POL.
+        This verification would allow you to spend up to approximately $25,000.
       </p>
       <Button
         styleType={ButtonStyle.Solid}
