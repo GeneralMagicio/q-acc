@@ -360,10 +360,31 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       setDonateDisabled(false);
       return;
     }
-    const gasPrice = await publicClient.getGasPrice();
-    const gasFeeInWei = gasPrice * BigInt(squidTransactionRequest.gasLimit);
-    const gasFeeInEth = Number(gasFeeInWei) / 1e18;
-    console.log(gasFeeInEth, 'gasgdgshadghsagdh');
+
+    if (squidTransactionRequest) {
+      const gasPrice = await publicClient.getGasPrice();
+      const userGasBalance = await publicClient.getBalance({
+        address: address as `0x${string}`,
+      });
+
+      let estimatedGasFeeInWei =
+        gasPrice * BigInt(squidTransactionRequest.gasLimit);
+
+      const axelarFee = BigInt(squidTransactionRequest.value || '0'); // from Squid SDK/api
+      let estimatedTotalFee = estimatedGasFeeInWei + axelarFee;
+
+      const hasEnough = userGasBalance >= estimatedTotalFee;
+
+      if (!hasEnough) {
+        setDonateDisabled(false);
+        setFlashMessage(
+          'You may not have enough gas to complete the transaction',
+        );
+        setInputAmount('');
+        console.log('Insufficient balance for gas fee.');
+        return;
+      }
+    }
 
     handleDonate();
   };
@@ -1001,7 +1022,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     className='font-medium cursor-pointer  flex gap-2 hover:underline'
                   >
                     {userDonationCap !== null && userDonationCap !== undefined
-                      ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                      ? truncateToSignificantDigits(userDonationCap, 2)
                       : '---'}{' '}
                     {selectedToken?.symbol}
                     <div className='relative group'>
