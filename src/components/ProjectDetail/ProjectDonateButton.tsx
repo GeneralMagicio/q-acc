@@ -312,9 +312,16 @@ const ProjectDonateButton = () => {
         {/* 24 h Change */}
 
         <div className='flex flex-col gap-2 group relative'>
-          <span className='text-[#4F576A] font-semibold text-sm'>
-            Change this round
-          </span>
+          {activeRoundDetails ? (
+            <span className='text-[#4F576A] font-semibold text-sm'>
+              Change this round
+            </span>
+          ) : (
+            <span className='text-[#4F576A] font-semibold text-sm'>
+              24h Change
+            </span>
+          )}
+
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
             {formatNumber(marketCapChangePercentage)}%{' '}

@@ -385,7 +385,11 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     $ {formatAmount(marketCap)}
                   </span>
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
-                    <span className='text-xs'>Change this round</span>
+                    {activeRoundDetails ? (
+                      <span className='text-xs'>Change this round</span>
+                    ) : (
+                      <span className='text-xs'>24h Change</span>
+                    )}
                     <span>{formatNumber(marketCapChangePercentage)}%</span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
