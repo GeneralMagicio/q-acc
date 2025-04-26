@@ -33,14 +33,7 @@ const Rules = () => {
               There is a matching pool for this round. Your token purchases
               boost a project’s matching pool allocation, which will be used for
               their token’s liquidity on the{' '}
-              <a
-                href={'https://quickswap.exchange/#/'}
-                target='_blank'
-                className='font-bold text-pink-500'
-                referrerPolicy='no-referrer'
-              >
-                QuickSwap DEX.
-              </a>
+              <span className='font-bold text-pink-500'>QuickSwap DEX.</span>
             </li>
             <li>
               You receive tokens from the projects you supported about 2 weeks
