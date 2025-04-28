@@ -9,6 +9,7 @@ import { SortDirection, SortField } from '@/services/points.service';
 import { Pagination } from './Pagination';
 import { Spinner } from '../Loading/Spinner';
 import { roundPoints } from '@/helpers/points';
+import { shortenAddress } from '@/helpers/address';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -50,14 +51,14 @@ export const LeaderBoardView = () => {
   return (
     <div className='container'>
       <Banner />
-      <div className='bg-white rounded-xl p-6 flex flex-col gap-8'>
+      <div className='bg-white rounded-xl p-6 flex flex-col '>
         {isConnected && <UserInfo />}
-        <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor'>
+        <div className='border-b-2 border-gray-200 pb-2 text-2xl font-bold font-adventor mt-8'>
           All supporters
         </div>
 
         <div className='relative'>
-          <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
+          <div className='hidden sm:grid grid-cols-[30px_120px_80px_80px] mt-8 md:grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
             {tableHeaders.map((header, index) => (
               <div
                 key={index}
@@ -91,10 +92,10 @@ export const LeaderBoardView = () => {
             return (
               <div
                 key={user.id}
-                className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
+                className={`grid grid-cols-4 sm:grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
-                <div className='text-right'>#{user.rank}</div>
-                <div className='flex gap-2'>
+                <div className=' text-center sm:text-right'>#{user.rank}</div>
+                <div className='col-span-2 sm:col-span-1 flex gap-2  justify-center sm:justify-start  '>
                   {isTop && (
                     <Image
                       src={`/images/icons/rank.svg`}
@@ -104,12 +105,25 @@ export const LeaderBoardView = () => {
                       className='w-6 h-6'
                     />
                   )}
-                  {user.name ? user.name : 'qacc user'}
+                  <div className=' flex flex-col justify-center items-start'>
+                    <span>
+                      {' '}
+                      {user.walletAddress
+                        ? shortenAddress(user.walletAddress)
+                        : 'qacc user'}
+                    </span>
+                    <span className='sm:hidden text-xs font-redHatText text-[#999] font-medium '>
+                      {' '}
+                      Projects funded : {user.projectsFundedCount}
+                    </span>
+                  </div>
                 </div>
-                <div>
+                <div className='sm:text-left text-center'>
                   {roundPoints(user.qaccPoints).toLocaleString('en-US')}
                 </div>
-                <div>{user.projectsFundedCount}</div>
+                <div className='hidden sm:block'>
+                  {user.projectsFundedCount}
+                </div>
               </div>
             );
           })}
