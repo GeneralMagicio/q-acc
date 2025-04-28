@@ -9,7 +9,15 @@ import {
 } from 'wagmi';
 import { getConnectorClient } from '@wagmi/core';
 import { useRouter } from 'next/navigation';
-import { Account, Chain, Client, parseEther, Transport } from 'viem';
+import {
+  Account,
+  Chain,
+  Client,
+  createPublicClient,
+  http,
+  parseEther,
+  Transport,
+} from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
@@ -204,7 +212,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
 
-  // let provider = new ethers.BrowserProvider(window.ethereum);
+  const publicClient = createPublicClient({
+    chain: chain,
+    transport: http(),
+  });
 
   useEffect(() => {
     const fetchConversion = async () => {
@@ -348,6 +359,31 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log('Input amount is more than available balance');
       setDonateDisabled(false);
       return;
+    }
+
+    if (squidTransactionRequest) {
+      const gasPrice = await publicClient.getGasPrice();
+      const userGasBalance = await publicClient.getBalance({
+        address: address as `0x${string}`,
+      });
+
+      let estimatedGasFeeInWei =
+        gasPrice * BigInt(squidTransactionRequest.gasLimit);
+
+      const axelarFee = BigInt(squidTransactionRequest.value || '0'); // from Squid SDK/api
+      let estimatedTotalFee = estimatedGasFeeInWei + axelarFee;
+
+      const hasEnough = userGasBalance >= estimatedTotalFee;
+
+      if (!hasEnough) {
+        setDonateDisabled(false);
+        setFlashMessage(
+          'You may not have enough gas to complete the transaction',
+        );
+        setInputAmount('');
+        console.log('Insufficient balance for gas fee.');
+        return;
+      }
     }
 
     handleDonate();
@@ -986,7 +1022,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     className='font-medium cursor-pointer  flex gap-2 hover:underline'
                   >
                     {userDonationCap !== null && userDonationCap !== undefined
-                      ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                      ? truncateToSignificantDigits(userDonationCap, 2)
                       : '---'}{' '}
                     {selectedToken?.symbol}
                     <div className='relative group'>

@@ -104,7 +104,7 @@ export const LeaderBoardView = () => {
                       className='w-6 h-6'
                     />
                   )}
-                  {user.name}
+                  {user.name ? user.name : 'qacc user'}
                 </div>
                 <div>
                   {roundPoints(user.qaccPoints).toLocaleString('en-US')}
