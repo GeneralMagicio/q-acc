@@ -23,6 +23,7 @@ export interface ILeaderBoardInfo {
       qaccPoints: number;
       qaccPointsMultiplier: number;
       projectsFundedCount: number;
+      walletAddress: string;
     }[];
   };
 }
