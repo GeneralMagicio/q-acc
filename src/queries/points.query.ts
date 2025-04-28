@@ -8,6 +8,7 @@ export const FETCH_LEADERBOARD = /* GraphQL */ `
         qaccPoints
         qaccPointsMultiplier
         projectsFundedCount
+        walletAddress
         rank
       }
       totalCount

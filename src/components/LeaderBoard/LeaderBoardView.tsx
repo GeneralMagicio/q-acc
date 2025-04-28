@@ -9,6 +9,7 @@ import { SortDirection, SortField } from '@/services/points.service';
 import { Pagination } from './Pagination';
 import { Spinner } from '../Loading/Spinner';
 import { roundPoints } from '@/helpers/points';
+import { shortenAddress } from '@/helpers/address';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -57,7 +58,7 @@ export const LeaderBoardView = () => {
         </div>
 
         <div className='relative'>
-          <div className='grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
+          <div className='grid grid-cols-[30px_120px_80px_80px] md:grid-cols-[50px_1fr_150px_150px] gap-4 text-base text-gray-700 font-redHatText py-2'>
             {tableHeaders.map((header, index) => (
               <div
                 key={index}
@@ -91,7 +92,7 @@ export const LeaderBoardView = () => {
             return (
               <div
                 key={user.id}
-                className={`grid grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
+                className={`grid grid-cols-[30px_150px_80px_80px] md:grid-cols-[50px_1fr_150px_150px] gap-4 text-base py-4 text-gray-700 font-redHatText border-t-[1px] border-gray-200 ${isTop ? 'bg-giv-50' : ''} hover:bg-gray-50 transition duration-200 ease-in-out`}
               >
                 <div className='text-right'>#{user.rank}</div>
                 <div className='flex gap-2'>
@@ -104,7 +105,9 @@ export const LeaderBoardView = () => {
                       className='w-6 h-6'
                     />
                   )}
-                  {user.name ? user.name : 'qacc user'}
+                  {user.walletAddress
+                    ? shortenAddress(user.walletAddress)
+                    : 'qacc user'}
                 </div>
                 <div>
                   {roundPoints(user.qaccPoints).toLocaleString('en-US')}
