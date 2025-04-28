@@ -1,8 +1,8 @@
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { roundPoints } from '@/helpers/points';
 import { useFetchLeaderBoard } from '@/hooks/useFetchLeaderBoard';
-import { useAccount } from 'wagmi';
 import { shortenAddress } from '@/helpers/address';
 
 export const UserInfo = () => {
