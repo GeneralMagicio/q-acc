@@ -526,15 +526,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             toChainId: Number(137),
             fromTokenAddress: selectedToken.address,
             toTokenAddress: tokenAddress,
-            fromAmount: parseFloat(inputAmount),
-            toAmount: parseFloat(inputAmount),
+            fromAmount: Number(inputAmount),
+            toAmount: Number(inputAmount),
             fromTokenSymbol: selectedToken.symbol,
             toTokenSymbol: config.ERC_TOKEN_SYMBOL,
           };
 
           const amountInPOL = await convertToPOLAmount(
             selectedToken,
-            parseFloat(inputAmount),
+            Number(inputAmount),
           );
 
           handleSaveDonation({
