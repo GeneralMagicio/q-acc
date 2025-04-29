@@ -16,6 +16,10 @@ import {
   optimism,
   polygon,
   scroll,
+  polygonZkEvm,
+  gnosis,
+  zksync,
+  bsc,
 } from '@reown/appkit/networks';
 import { polygon as viemPolygon } from 'wagmi/chains';
 // import { polygon, polygonZkEvm } from 'wagmi/chains';
@@ -42,6 +46,10 @@ const config: EnvConfig = {
     blast,
     fraxtal,
     immutableZkEvm,
+    polygonZkEvm,
+    gnosis,
+    zksync,
+    bsc,
   ] as const,
   SCAN_URL: 'https://polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
