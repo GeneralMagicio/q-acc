@@ -346,6 +346,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       }
 
       if (
+        !user?.skipVerification &&
         !user?.hasEnoughGitcoinPassportScore &&
         !user?.hasEnoughGitcoinAnalysisScore
       ) {
