@@ -287,15 +287,54 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
   const handleDonateClick = async () => {
     setDonateDisabled(true);
+
+    // if (!isVerified) {
+    //   if (
+    //     activeRoundDetails &&
+    //     'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
+    //       activeRoundDetails &&
+    //     parseFloat(inputAmount) >
+    //       activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
+    //   ) {
+    //     {
+    //       console.log(
+    //         'User is not verified with Privado ID',
+    //         activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+    //       );
+    //       setShowZkidModal(true);
+    //       setDonateDisabled(false);
+    //       return;
+    //     }
+    //   }
+
+    //   if (
+    //     !user?.hasEnoughGitcoinPassportScore &&
+    //     !user?.hasEnoughGitcoinAnalysisScore
+    //   ) {
+    //     setDonateDisabled(false);
+    //     setShowGitcoinModal(true);
+    //     console.log('User is not verified with Human Passport');
+    //     return;
+    //   } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+    //     console.log('User is not verified with Privado ID');
+    //     setDonateDisabled(false);
+    //     setShowZkidModal(true);
+    //     return;
+    //   }
+    // }
+
     if (!isVerified) {
       if (
         activeRoundDetails &&
-        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
-          activeRoundDetails &&
-        parseFloat(inputAmount) >
-          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
       ) {
-        {
+        const convertedCap =
+          (await convertToPOLAmount(
+            selectedToken,
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+          )) ?? 0;
+
+        if (parseFloat(inputAmount) > convertedCap) {
           console.log(
             'User is not verified with Privado ID',
             activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
@@ -321,12 +360,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return;
       }
     }
-    // if (!terms) {
-    //   console.log('no terms');
-    //   setDonateDisabled(false);
-    //   setShowTermsConditionModal(true);
-    //   return;
-    // }
+
     if (
       parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
@@ -584,16 +618,20 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     const value = e.target.value;
 
     const regex = /^\d*\.?\d{0,5}$/;
+    // const regex = /^\d{0,18}(\.\d{0,5})?$/;
 
     if (regex.test(value)) {
       const inputAmount = parseFloat(value);
-      if (activeRoundDetails) {
-        if (
-          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
-        ) {
-          return; // Exit without updating the input
-        }
-      }
+      // if (activeRoundDetails) {
+      //   const convertedAmout =
+      //     (await convertToPOLAmount(
+      //       selectedToken,
+      //       activeRoundDetails?.cumulativePOLCapPerUserPerProject,
+      //     )) ?? 0;
+      //   if (inputAmount > convertedAmout) {
+      //     return; // Exit without updating the input
+      //   }
+      // }
 
       setInputAmount(value);
 
