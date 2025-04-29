@@ -64,18 +64,31 @@ const GetVerified = () => {
         </div>
         <GitcoinVerifySection />
         <ZkidVerifySection />
-        <Button
-          styleType={ButtonStyle.Solid}
-          color={ButtonColor.Base}
-          className='mr-auto px-16 shadow-baseShadow mx-3'
-          loading={isPending}
-          disabled={user?.skipVerification}
-          onClick={() => updateSkipVerification(true)}
-        >
-          {user?.skipVerification
-            ? 'Verification Skipped '
-            : 'Skip Verification'}
-        </Button>
+
+        {/* skip verification */}
+
+        <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
+          <h1 className='text-lg font-bold'>Skip Verification</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation
+          </p>
+
+          <Button
+            styleType={ButtonStyle.Solid}
+            color={ButtonColor.Base}
+            className='mr-auto px-16 shadow-baseShadow'
+            loading={isPending}
+            disabled={user?.skipVerification}
+            onClick={() => updateSkipVerification(true)}
+          >
+            {user?.skipVerification
+              ? 'Verification Skipped '
+              : 'Skip Verification'}
+          </Button>
+        </section>
+
         <div className='text-lg border-gray-100 border-t-2 pt-4'>
           Need help? Hop onto the{' '}
           <a
