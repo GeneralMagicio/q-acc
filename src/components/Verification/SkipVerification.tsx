@@ -1,6 +1,6 @@
+import React from 'react';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useUpdateSkipVerification } from '@/hooks/useUpdateSkipVerification';
-import React from 'react';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
 
