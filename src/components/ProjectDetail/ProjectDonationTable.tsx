@@ -299,7 +299,28 @@ const ProjectDonationTable = () => {
                                 {donation.swapTransaction?.fromTokenSymbol ||
                                   'POL'}
                               </span>
-                              <Link
+                              {donation.transactionNetworkId === 1101 ? (
+                                <Link
+                                  target='_blank'
+                                  href={`https://zkevm.polygonscan.com/tx/${donation.isSwap ? donation.swapTransaction?.secondTxHash : donation.transactionId}`}
+                                >
+                                  <IconViewTransaction
+                                    size={16}
+                                    color='#4F576A'
+                                  />
+                                </Link>
+                              ) : (
+                                <Link
+                                  target='_blank'
+                                  href={`${config.SCAN_URL}/tx/${donation.isSwap ? donation.swapTransaction?.secondTxHash : donation.transactionId}`}
+                                >
+                                  <IconViewTransaction
+                                    size={16}
+                                    color='#4F576A'
+                                  />
+                                </Link>
+                              )}
+                              {/* <Link
                                 target='_blank'
                                 href={`${config.SCAN_URL}/tx/${donation.isSwap ? donation.swapTransaction?.secondTxHash : donation.transactionId}`}
                               >
@@ -307,7 +328,7 @@ const ProjectDonationTable = () => {
                                   size={16}
                                   color='#4F576A'
                                 />
-                              </Link>
+                              </Link> */}
                             </div>
 
                             <span className='text-xs font-medium  text-[#A5ADBF]'>
