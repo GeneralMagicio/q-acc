@@ -43,7 +43,7 @@ const config: EnvConfig = {
     fraxtal,
     immutableZkEvm,
   ] as const,
-  SCAN_URL: 'https://zkevm.polygonscan.com/',
+  SCAN_URL: 'https://polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
   WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   ERC_TOKEN_SYMBOL: 'POL',
