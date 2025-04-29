@@ -305,6 +305,14 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
       </div>
 
       <div className=' flex flex-col gap-8 bg-[#fff] p-6 rounded-2xl shadow-tabShadow font-redHatText'>
+        <div className='flex justify-center'>
+          <Link href={'/projects'}>
+            <Button className='bg-white text-[#E1458D] w-[220px] flex justify-center items-center shadow-tabShadow font-redHatText '>
+              Explore more projects
+            </Button>
+          </Link>
+        </div>
+
         <div className='flex gap-2 items-center'>
           <IconShare size={24} color='#1D1E1F' />
           <span className='text-[#1D1E1F] text-2xl font-bold'>
@@ -372,12 +380,6 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
             buy!
           </span>
         </div> */}
-
-        <Link href={'/projects'}>
-          <Button className='bg-white text-[#E1458D] w-[220px] flex justify-center items-center shadow-tabShadow font-redHatText'>
-            Explore more projects
-          </Button>
-        </Link>
       </div>
     </div>
   );

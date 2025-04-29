@@ -15,7 +15,7 @@ const DonateNavbar: React.FC<DonateNavbarProps> = ({ isConfirming }) => {
     <div className='bg-white flex items-center justify-between px-10 py-4 gap-4   w-full top-0  shadow-tabShadow'>
       <div className='flex gap-4 items-center'>
         <Link
-          href={`/project/${projectData?.slug}`}
+          href={`/projects`}
           onClick={(e: any) => isConfirming && e.preventDefault()}
         >
           <div
