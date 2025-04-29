@@ -34,11 +34,11 @@ const GetVerified = () => {
       <div className='w-full bg-white flex flex-col p-8 gap-10 rounded-2xl  text-lg font-redHatText leading-9 mb-14 md:mb-48 mt-14'>
         {/* <CountryRegulatory /> */}
         {/* <QaccCappDesc /> */}
-        <p>
+        {/* <p>
           The q/acc protocol prohibits citizens of the{' '}
           <b className='font-bold'>United States and United Kingdom</b> from
           participating due to regulatory reasons.
-        </p>
+        </p> */}
         <div>
           <p>
             You must verify in order to use the q/acc protocol. You may verify

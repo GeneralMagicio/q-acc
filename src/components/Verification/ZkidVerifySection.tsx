@@ -9,12 +9,14 @@ import {
 } from '@/components/EligibilityBadge';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { IQfRound } from '@/types/round.type';
+import { usePrivadoUrl } from '@/hooks/usePrivadoUrl';
 
 export const ZkidVerifySection = () => {
   const [showPrivadoModal, setShowPrivadoModal] = useState(false);
   const { isVerified, error, isLoading } = usePrivado();
 
   const { data: allRounds } = useFetchAllRound();
+  const { url, isLoading: isPrivadoLoading } = usePrivadoUrl();
 
   const qaccRound: IQfRound | undefined = allRounds?.filter(
     round => round.__typename === 'QfRound',
@@ -46,7 +48,7 @@ export const ZkidVerifySection = () => {
       <p>
         This verification would allow you to spend up to approximately $25,000.
       </p>
-      <Button
+      {/* <Button
         styleType={ButtonStyle.Solid}
         color={ButtonColor.Base}
         className='mr-auto px-16'
@@ -56,6 +58,21 @@ export const ZkidVerifySection = () => {
         }}
       >
         {!!error ? 'retry' : 'Go to Privado'}
+        <IconArrowRight size={16} />
+      </Button> */}
+
+      <Button
+        styleType={ButtonStyle.Solid}
+        color={ButtonColor.Base}
+        loading={isPrivadoLoading}
+        className='mr-auto px-16 shadow-baseShadow'
+        disabled={isPrivadoLoading || !url}
+        onClick={() => {
+          // Open the Wallet URL to start the verification process
+          url && window.open(url, '_blank');
+        }}
+      >
+        Go to Privado ID
         <IconArrowRight size={16} />
       </Button>
       {showPrivadoModal && (
