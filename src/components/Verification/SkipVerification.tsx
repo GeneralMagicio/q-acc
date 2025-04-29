@@ -1,15 +1,18 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useUpdateSkipVerification } from '@/hooks/useUpdateSkipVerification';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
+import Routes from '@/lib/constants/Routes';
 
 const SkipVerification = () => {
   const { data: user } = useFetchUser();
-
+  const router = useRouter();
   const { mutate: updateSkipVerification, isPending } =
     useUpdateSkipVerification(() => {
       console.log('Skip verification updated successfully!');
+      router.push(Routes.Projects);
     });
   return user?.skipVerification ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
