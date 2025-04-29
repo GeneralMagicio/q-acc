@@ -28,6 +28,7 @@ export interface IUser {
   qaccPointsMultiplier: number;
   projectsFundedCount: number;
   rank: number;
+  skipVerification?: boolean;
 }
 
 export interface IGivethUser {
