@@ -84,7 +84,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   useEffect(() => {
     const updatePOLCap = async () => {
       const { capAmount, totalDonationAmountInRound }: any =
-        await calculateCapAmount(activeRoundDetails, Number(project.id));
+        await calculateCapAmount(activeRoundDetails, Number(project.id), true);
 
       setMaxPOLCap(capAmount);
       setAmountDonatedInRound(totalDonationAmountInRound);
