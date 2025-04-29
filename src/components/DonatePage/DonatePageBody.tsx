@@ -524,7 +524,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         // &&
         // parseFloat(inputAmount) <= userDonationCap
       ) ||
-      parseFloat(inputAmount) > remainingDonationAmount ||
+      // parseFloat(inputAmount) > remainingDonationAmount ||
       parseFloat(inputAmount) > tokenDetails?.formattedBalance
     ) {
       setDonateDisabled(true);
