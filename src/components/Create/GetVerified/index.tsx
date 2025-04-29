@@ -6,21 +6,13 @@ import Routes from '@/lib/constants/Routes';
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import links from '@/lib/constants/links';
-import { useUpdateSkipVerification } from '@/hooks/useUpdateSkipVerification';
-import { Button, ButtonColor, ButtonStyle } from '@/components/Button';
-import { useFetchUser } from '@/hooks/useFetchUser';
+import SkipVerification from '@/components/Verification/SkipVerification';
 
 const GetVerified = () => {
   const router = useRouter();
-  const { data: user } = useFetchUser();
   const searchParams = useSearchParams();
 
   const showBackButton = searchParams.get('b');
-
-  const { mutate: updateSkipVerification, isPending } =
-    useUpdateSkipVerification(() => {
-      console.log('Skip verification updated successfully!');
-    });
 
   return (
     <>
@@ -67,27 +59,7 @@ const GetVerified = () => {
 
         {/* skip verification */}
 
-        <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
-          <h1 className='text-lg font-bold'>Skip Verification</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation
-          </p>
-
-          <Button
-            styleType={ButtonStyle.Solid}
-            color={ButtonColor.Base}
-            className='mr-auto px-16 shadow-baseShadow'
-            loading={isPending}
-            disabled={user?.skipVerification}
-            onClick={() => updateSkipVerification(true)}
-          >
-            {user?.skipVerification
-              ? 'Verification Skipped '
-              : 'Skip Verification'}
-          </Button>
-        </section>
+        <SkipVerification />
 
         <div className='text-lg border-gray-100 border-t-2 pt-4'>
           Need help? Hop onto the{' '}
