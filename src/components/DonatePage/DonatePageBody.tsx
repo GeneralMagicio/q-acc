@@ -895,7 +895,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleRemainingCapClick = () => {
     setSquidRouteLoading(true);
     const remainingBalance = truncateToSignificantDigits(
-      tokenDetails?.formattedBalance,
+      Number(tokenDetails?.formattedBalance),
       2,
     );
     const userCap = truncateToSignificantDigits(userDonationCap, 2);
