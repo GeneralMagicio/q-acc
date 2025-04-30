@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import links from '@/lib/constants/links';
 import SkipVerification from '@/components/Verification/SkipVerification';
 import { Button, ButtonColor } from '@/components/Button';
-import Link from 'next/link';
 
 const GetVerified = () => {
   const router = useRouter();
