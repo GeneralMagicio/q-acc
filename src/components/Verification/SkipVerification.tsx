@@ -26,7 +26,7 @@ const SkipVerification = () => {
     status === GitcoinVerificationStatus.SCORER_PASS ? (
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6'>
       <div>
-        <h1 className='text-lg font-bold'>Skip Verificattion</h1>
+        <h1 className='text-lg font-bold'>Skip Verification</h1>
         <p>
           {user?.skipVerification
             ? '  You have skipped the verification, verify above to influence the matching distribution'
