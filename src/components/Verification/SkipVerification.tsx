@@ -26,10 +26,11 @@ const SkipVerification = () => {
     status === GitcoinVerificationStatus.SCORER_PASS ? (
     <section className='relative overflow-hidden bg-gray-50 rounded-2xl p-6'>
       <div>
-        <h1 className='text-lg font-bold'>Skipped Verificattion</h1>
+        <h1 className='text-lg font-bold'>Skip Verificattion</h1>
         <p>
-          You have skipped the verification, verify above to influence the
-          matching distribution
+          {user?.skipVerification
+            ? '  You have skipped the verification, verify above to influence the matching distribution'
+            : "Skipping Verification will allow you to spend up to approximately $1,000, but your token purchases won't influence the distribution of the matching pool."}
         </p>
       </div>
       <div className='absolute top-0 left-0 right-0 bottom-0 z-10 bg-gray-50 opacity-60'></div>
@@ -37,7 +38,7 @@ const SkipVerification = () => {
   ) : user?.skipVerification ? (
     <section className='bg-gray-50 rounded-2xl p-6 flex gap-4 justify-between'>
       <div>
-        <h1 className='text-lg font-bold'>Skipped Verification</h1>
+        <h1 className='text-lg font-bold'>Skip Verification</h1>
         <p>
           You have skipped the verification, verify above to influence the
           matching distribution.
