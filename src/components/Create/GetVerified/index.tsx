@@ -8,12 +8,21 @@ import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import links from '@/lib/constants/links';
 import SkipVerification from '@/components/Verification/SkipVerification';
 import { Button, ButtonColor } from '@/components/Button';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import {
+  GitcoinVerificationStatus,
+  useGitcoinScore,
+} from '@/hooks/useGitcoinScore';
+import { usePrivado } from '@/hooks/usePrivado';
 
 const GetVerified = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const showBackButton = searchParams.get('b');
+  const { data: user } = useFetchUser();
+  const { status } = useGitcoinScore();
+  const { isVerified } = usePrivado();
 
   return (
     <>
@@ -60,15 +69,21 @@ const GetVerified = () => {
         {/* skip verification */}
 
         <SkipVerification />
-        <Link href={'/projects'}>
-          <Button
-            className='p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center'
-            color={ButtonColor.Pink}
-            type='submit'
-          >
-            See Projects
-          </Button>
-        </Link>
+
+        {(isVerified ||
+          user?.skipVerification ||
+          status === GitcoinVerificationStatus.ANALYSIS_PASS ||
+          status === GitcoinVerificationStatus.SCORER_PASS) && (
+          <Link href={'/projects'}>
+            <Button
+              className='p-4 shadow-2xl rounded-full text-xs md:text-md min-w-[150px] justify-center'
+              color={ButtonColor.Pink}
+              type='submit'
+            >
+              See Projects
+            </Button>
+          </Link>
+        )}
 
         <div className='text-lg border-gray-100 border-t-2 pt-4'>
           Need help? Hop onto the{' '}
