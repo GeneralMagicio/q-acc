@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import CreateNavbar from '../CreateNavbar';
-import Routes from '@/lib/constants/Routes';
+
 import { GitcoinVerifySection } from '@/components/Verification/GitcoinVerifySection';
 import { ZkidVerifySection } from '@/components/Verification/ZkidVerifySection';
 import links from '@/lib/constants/links';
