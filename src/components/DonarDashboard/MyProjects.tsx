@@ -403,7 +403,7 @@ const MyProjects = () => {
               )}
               <Link
                 target='_blank'
-                href={`https://polygonscan.com/address/${projectData?.abc?.issuanceTokenAddress}`}
+                href={`https://polygonscan.com/token/${projectData?.abc?.issuanceTokenAddress}`}
                 className='w-full py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
               >
                 <div>

@@ -12,7 +12,9 @@ export const VerificationBanner = () => {
     !isLoading &&
     isUserProfileCreated &&
     !(
-      user?.hasEnoughGitcoinPassportScore || user?.hasEnoughGitcoinAnalysisScore
+      user?.hasEnoughGitcoinPassportScore ||
+      user?.hasEnoughGitcoinAnalysisScore ||
+      user?.skipVerification
     );
 
   console.log(

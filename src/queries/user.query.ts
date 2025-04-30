@@ -17,6 +17,7 @@ export const GET_USER_BY_ADDRESS = /* GraphQL */ `
       qaccPointsMultiplier
       projectsFundedCount
       rank
+      skipVerification
     }
   }
 `;
@@ -177,5 +178,11 @@ export const REFRESH_USER_GITCOIN_PASSPORT_SCORE = /* GraphQL */ `
       privadoVerified
       acceptedToS
     }
+  }
+`;
+
+export const USER_SET_SKIP_VERIFICATION_MUTATION = `
+  mutation ($skipVerification: Boolean!) {
+    setSkipVerification(skipVerification: $skipVerification)
   }
 `;
