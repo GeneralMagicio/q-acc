@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-
 import { useAccount } from 'wagmi';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect, useRouter, usePathname } from 'next/navigation';
 import { fetchGivethUserInfo } from '@/services/user.service';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
