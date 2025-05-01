@@ -3,7 +3,7 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import { IconX } from '../Icons/IconX';
 import { IconArrowRight } from '../Icons/IconArrowRight';
 import { IconSearch } from '../Icons/IconSearch';
-import { fetchEVMTokenBalances, formatBalance } from '@/helpers/token';
+import { fetchEVMTokenBalances } from '@/helpers/token';
 import { Spinner } from '../Loading/Spinner';
 import { IconArrowLeft } from '../Icons/IconArrowLeft';
 import config from '@/config/configuration';
@@ -264,7 +264,7 @@ const SelectChainModal = ({
               <div className='absolute top-3 right-3 border-l border-neutral-300 pl-2 pt-0.5'>
                 <IconSearch color='#A5ADBF' />
               </div>
-              <div className='flex items-center gap-2 my-3'>
+              {/* <div className='flex items-center gap-2 my-3'>
                 <input
                   type='checkbox'
                   onChange={() => setHideZeroBalance(prev => !prev)}
@@ -273,7 +273,7 @@ const SelectChainModal = ({
                 <span className='text-xs text-[#82899A] font-medium'>
                   Hide 0 balance tokens
                 </span>
-              </div>
+              </div> */}
               <div className='flex flex-col gap-3 max-h-[300px] overflow-y-auto'>
                 {selectedChain && tokenLoading ? (
                   <h1 className=' flex justify-center'>
@@ -308,12 +308,12 @@ const SelectChainModal = ({
                             {token.name}
                           </div>
                         </div>
-                        <div className='flex px-2 py-[2px] gap-2 bg-[#EBECF2] rounded-lg'>
+                        {/* <div className='flex px-2 py-[2px] gap-2 bg-[#EBECF2] rounded-lg'>
                           <span className='text-[#4F576A] font-medium leading-5 text-sm'>
-                            {/* {token.balance?.toFixed(6) || '0.00'} */}
+                         
                             {formatBalance(token.balance)}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))
