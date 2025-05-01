@@ -30,15 +30,15 @@ export const VerificationBanner = () => {
         hidden={!showVerificationBanner}
       >
         <div className='flex justify-end gap-2'>
-          <Image
+          {/* <Image
             src='/images/icons/info.svg'
             alt='info'
             height={24}
             width={24}
-          />
-          <p className='text-gray-900 font-normal font-redHatText'>
+          /> */}
+          {/* <p className='text-gray-900 font-normal font-redHatText'>
             You’re not eligible to support a project
-          </p>
+          </p> */}
         </div>
         <div
           className='flex flex-row gap-2  justify-start cursor-pointer center items-center'
