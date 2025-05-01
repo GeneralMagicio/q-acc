@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { usePrivado } from '@/hooks/usePrivado';
 import { IconExternalLink } from '../Icons/IconExternalLink';
 import { useFetchUser } from '@/hooks/useFetchUser';
