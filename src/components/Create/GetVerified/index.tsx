@@ -49,7 +49,7 @@ const GetVerified = () => {
           <b className='font-bold'>United States and United Kingdom</b> from
           participating due to regulatory reasons.
         </p> */}
-        <div>
+        {/* <div>
           <p>
             You must verify using Human Passport or Privado zkID to allocate the
             Matching Pool in the q/acc protocol.
@@ -62,7 +62,7 @@ const GetVerified = () => {
             The spending caps are set in $POL and may be updated based on the
             fluctuation in the POL-USD rate.
           </p>
-        </div>
+        </div> */}
         <GitcoinVerifySection />
         <ZkidVerifySection />
 

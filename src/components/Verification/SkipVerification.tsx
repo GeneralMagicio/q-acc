@@ -52,9 +52,8 @@ const SkipVerification = () => {
     <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Skip Verification</h1>
       <p>
-        Skipping Verification will allow you to spend up to approximately
-        $1,000, but your token purchases won't influence the distribution of the
-        matching pool.
+        Allows you to spend up to approximately $1,000 but <b>not influence</b>{' '}
+        the matching pool allocation.
       </p>
 
       <Button

@@ -46,8 +46,8 @@ export const ZkidVerifySection = () => {
     <section className='bg-gray-50 rounded-2xl p-6 flex flex-col gap-4'>
       <h1 className='text-lg font-bold'>Privado zkID</h1>
       <p>
-        This verification would allow you to spend up to approximately $25,000
-        and you will influence the matching distribution.
+        Allows you to spend up to approximately $25,000 and influence the
+        matching pool allocation.
       </p>
       {/* <Button
         styleType={ButtonStyle.Solid}
