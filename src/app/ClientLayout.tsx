@@ -1,11 +1,12 @@
 'use client'; // Ensure this component is a Client Component
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import Web3ModalProvider from '@/context/wagmi';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UserController } from '@/components/Controllers/UserController';
 import { GeoController } from '@/components/Controllers/GeoController';
-import dynamic from 'next/dynamic';
+
 // Import usePathname
 
 export default function ClientLayout({
