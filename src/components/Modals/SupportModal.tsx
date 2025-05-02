@@ -4,7 +4,6 @@ import Modal, { BaseModalProps } from '../Modal';
 
 import { IconTelegram } from '../Icons/IconTelegram';
 import { removeHttpsAndWwwFromUrl } from '../ProjectDetail/ProjectSocials';
-import { IconDiscord } from '../Icons/IconDiscord';
 import { IconEmail } from '../Icons/IconEmail';
 
 interface SupportModal extends BaseModalProps {}
