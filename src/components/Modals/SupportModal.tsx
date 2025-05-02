@@ -1,7 +1,7 @@
 import { type FC } from 'react';
-import Modal, { BaseModalProps } from '../Modal';
-import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Link from 'next/link';
+import Modal, { BaseModalProps } from '../Modal';
+
 import { IconTelegram } from '../Icons/IconTelegram';
 import { removeHttpsAndWwwFromUrl } from '../ProjectDetail/ProjectSocials';
 import { IconDiscord } from '../Icons/IconDiscord';
