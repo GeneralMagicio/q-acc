@@ -18,6 +18,7 @@ interface ShareProjectModalProps extends BaseModalProps {
   projectTitle?: string;
   shareMessage?: string;
   tokenTicker?: string;
+  projectData?: any;
 }
 
 export const ShareProjectModal: FC<ShareProjectModalProps> = ({
@@ -25,6 +26,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   projectSlug,
   onClose,
   tokenTicker,
+  projectData,
   shareMessage = `Just backed a real Web3 startup on @theqacc.Bought $${tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. You’re not exit liquidity — you’re early.Round ends soon. Don’t sleep. 😤
   👉`,
   ...props
@@ -34,7 +36,14 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
   const copyLink = `${url.protocol}//${url.host}/project/${projectSlug}`;
-
+  const link = projectData?.socialMedia.find(
+    (item: any) => item.type === 'X',
+  )?.link;
+  const twitterUsername = link
+    ?.replace('https://', '')
+    .replace('www.', '')
+    .replace('x.com/', '');
+  const newShareMessage = `Just backed a real Web3 startup on @theqacc. Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. \nYou’re not exit liquidity — you’re early. Round ends soon. Don’t sleep. ${twitterUsername ? '\n@${twitterUsername}' : ''}😤 \n👉`;
   const handleCopy = () => {
     navigator.clipboard
       .writeText(copyLink)
@@ -64,14 +73,17 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
         </h1>
         <div className='flex justify-center gap-3'>
           <div className='border rounded-lg p-2 flex items-center'>
-            <TwitterShareButton title={shareMessage || ''} url={copyLink || ''}>
+            <TwitterShareButton
+              title={newShareMessage || ''}
+              url={copyLink || ''}
+            >
               <IconXSocial size={24} />
             </TwitterShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <LinkedinShareButton
-              summary={shareMessage}
-              title={shareMessage}
+              summary={newShareMessage}
+              title={newShareMessage}
               url={copyLink || ''}
             >
               <IconLinkedin size={24} />
@@ -79,16 +91,16 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <FacebookShareButton
-              title={shareMessage || ''}
+              title={newShareMessage || ''}
               url={copyLink || ''}
-              hashtag={shareMessage}
+              hashtag={newShareMessage}
             >
               <IconFacebook size={24} />
             </FacebookShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <Link
-              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${shareMessage}`}
+              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${newShareMessage}`}
               target='_blank'
             >
               <IconFarcaster size={24} />

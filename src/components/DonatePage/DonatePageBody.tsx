@@ -1376,6 +1376,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             projectSlug={projectData?.slug || ''}
             projectTitle={projectData?.title}
             tokenTicker={projectData?.abc?.tokenTicker}
+            projectData={projectData}
           />
         </div>
       )}

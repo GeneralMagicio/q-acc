@@ -202,6 +202,7 @@ const DonarSupportedProjects = ({
               projectSlug={project?.slug || ''}
               projectTitle={project?.title}
               tokenTicker={project?.abc?.tokenTicker}
+              projectData={project}
             />
           </div>
 
