@@ -153,45 +153,51 @@ const RewardsBreakDown: React.FC = () => {
         </div>
 
         {/* Claim Rewards */}
-        <div className='flex flex-col gap-4 font-redHatText w-full p-8 border rounded-xl'>
-          <div className='flex justify-between p-2'>
-            <div className='flex gap-2'>
-              <IconMinted size={24} />
-              <span className='text-[#4F576A] font-medium'>
-                Total tokens received
+        {totalTokensReceived > 0 ? (
+          <div className='flex flex-col gap-4 font-redHatText w-full p-8 border rounded-xl'>
+            <div className='flex justify-between p-2'>
+              <div className='flex gap-2'>
+                <IconMinted size={24} />
+                <span className='text-[#4F576A] font-medium'>
+                  Total tokens received
+                </span>
+              </div>
+              <span className='font-medium text-[#1D1E1F]'>
+                {formatAmount(totalTokensReceived)} {project?.abc?.tokenTicker}
               </span>
             </div>
-            <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(totalTokensReceived)} {project?.abc?.tokenTicker}
-            </span>
-          </div>
 
-          <div className='flex justify-between p-2'>
-            <div className='flex gap-2'>
-              <IconLockedTokens size={24} />
-              <span className='text-[#4F576A] font-medium'>Locked tokens</span>
-            </div>
-            <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(lockedTokens)} {project?.abc?.tokenTicker}
-            </span>
-          </div>
-
-          <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
-            <div className='flex gap-2 items-center'>
-              <IconAvailableTokens size={32} />
-              <span className='font-medium text-[#1D1E1F] text-2xl'>
-                Available to claim
+            <div className='flex justify-between p-2'>
+              <div className='flex gap-2'>
+                <IconLockedTokens size={24} />
+                <span className='text-[#4F576A] font-medium'>
+                  Locked tokens
+                </span>
+              </div>
+              <span className='font-medium text-[#1D1E1F]'>
+                {formatAmount(lockedTokens)} {project?.abc?.tokenTicker}
               </span>
             </div>
-            <span className='text-2xl'>
-              {formatAmount(availableToClaim)} {project?.abc?.tokenTicker}
-            </span>
-          </div>
 
-          <Button color={ButtonColor.Gray} disabled={availableToClaim <= 0}>
-            Claim Tokens
-          </Button>
-        </div>
+            <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#F7F7F9] rounded-md'>
+              <div className='flex gap-2 items-center'>
+                <IconAvailableTokens size={32} />
+                <span className='font-medium text-[#1D1E1F] text-2xl'>
+                  Available to claim
+                </span>
+              </div>
+              <span className='text-2xl'>
+                {formatAmount(availableToClaim)} {project?.abc?.tokenTicker}
+              </span>
+            </div>
+
+            <Button color={ButtonColor.Gray} disabled={availableToClaim <= 0}>
+              Claim Tokens
+            </Button>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

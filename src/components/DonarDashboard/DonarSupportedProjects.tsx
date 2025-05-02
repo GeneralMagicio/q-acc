@@ -337,58 +337,66 @@ const DonarSupportedProjects = ({
           </>
         )}
 
-        <div className='flex justify-between p-2'>
-          <div className='flex gap-2'>
-            <IconMinted size={24} />
-            <span className='text-[#4F576A] font-medium '>
-              Your project tokens{' '}
-            </span>
-          </div>
-          <div className='flex gap-1'>
-            <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(totalRewardTokens) || '---'}{' '}
-              {project.abc?.tokenTicker}
-            </span>
-            <span className='font-medium text-[#82899A]'>
-              ~ ${' '}
-              {formatAmount(
-                totalRewardTokens *
-                  ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
-              ) || '---'}
-            </span>
-          </div>
-        </div>
-
-        <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#EBECF2] rounded-md'>
-          <div className='flex gap-2'>
-            <IconAvailableTokens size={24} />
-            <span className='font-medium text-[#1D1E1F]'>
-              Available to claim
-            </span>
-            <div className='relative group'>
-              <IconTokenSchedule />
-              <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
-                The tokens have been unlocked and are now available for you to
-                claim. Once claimed, they will be transferred to your wallet.
+        {totalRewardTokens > 0 ? (
+          <>
+            <div className='flex justify-between p-2'>
+              <div className='flex gap-2'>
+                <IconMinted size={24} />
+                <span className='text-[#4F576A] font-medium '>
+                  Your project tokens{' '}
+                </span>
+              </div>
+              <div className='flex gap-1'>
+                <span className='font-medium text-[#1D1E1F]'>
+                  {formatAmount(totalRewardTokens) || '---'}{' '}
+                  {project.abc?.tokenTicker}
+                </span>
+                <span className='font-medium text-[#82899A]'>
+                  ~ ${' '}
+                  {formatAmount(
+                    totalRewardTokens *
+                      ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
+                  ) || '---'}
+                </span>
               </div>
             </div>
-          </div>
-          <div className='flex gap-1 font-medium text-[#1D1E1F]'>
-            <span>
-              {totalClaimableRewardTokens !== null
-                ? `${formatAmount(totalClaimableRewardTokens)} ${project.abc?.tokenTicker || ''}`
-                : '---'}
-            </span>
-            <span>
-              ~ $
-              {totalClaimableRewardTokens !== null
-                ? formatAmount(
-                    totalClaimableRewardTokens * (project.abc?.tokenPrice || 0),
-                  )
-                : '---'}
-            </span>
-          </div>
-        </div>
+
+            <div className='flex flex-col md:flex-row gap-3 justify-between p-[16px_8px] bg-[#EBECF2] rounded-md'>
+              <div className='flex gap-2'>
+                <IconAvailableTokens size={24} />
+                <span className='font-medium text-[#1D1E1F]'>
+                  Available to claim
+                </span>
+                <div className='relative group'>
+                  <IconTokenSchedule />
+                  <div className='absolute w-[200px] z-50 mb-2 left-[-60px] hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'>
+                    The tokens have been unlocked and are now available for you
+                    to claim. Once claimed, they will be transferred to your
+                    wallet.
+                  </div>
+                </div>
+              </div>
+              <div className='flex gap-1 font-medium text-[#1D1E1F]'>
+                <span>
+                  {totalClaimableRewardTokens !== null
+                    ? `${formatAmount(totalClaimableRewardTokens)} ${project.abc?.tokenTicker || ''}`
+                    : '---'}
+                </span>
+                <span>
+                  ~ $
+                  {totalClaimableRewardTokens !== null
+                    ? formatAmount(
+                        totalClaimableRewardTokens *
+                          (project.abc?.tokenPrice || 0),
+                      )
+                    : '---'}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          ''
+        )}
 
         {/* Claim Rewards */}
         <Button
