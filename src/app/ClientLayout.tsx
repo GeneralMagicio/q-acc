@@ -5,6 +5,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UserController } from '@/components/Controllers/UserController';
 import { GeoController } from '@/components/Controllers/GeoController';
+import dynamic from 'next/dynamic';
 // Import usePathname
 
 export default function ClientLayout({
@@ -18,14 +19,22 @@ export default function ClientLayout({
 
   // Conditionally render the Header based on the route
   const showHeader = !pathname.startsWith('/support');
+  const ErudaProvider = dynamic(
+    () => import('../components/Eruda').then(c => c.ErudaProvider),
+    {
+      ssr: false,
+    },
+  );
 
   return (
-    <Web3ModalProvider initialState={initialState}>
-      {showHeader && <Header />}
-      <UserController />
-      <GeoController />
-      <div className='flex-1'>{children}</div>
-      <Footer />
-    </Web3ModalProvider>
+    <ErudaProvider>
+      <Web3ModalProvider initialState={initialState}>
+        {showHeader && <Header />}
+        <UserController />
+        <GeoController />
+        <div className='flex-1'>{children}</div>
+        <Footer />
+      </Web3ModalProvider>
+    </ErudaProvider>
   );
 }
