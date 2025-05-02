@@ -36,16 +36,6 @@ export const SupportModal: FC<SupportModal> = props => {
               {removeHttpsAndWwwFromUrl('https://t.me/qaccsupport')}
             </Link>
           </div>
-
-          <div
-            className={`flex px-6 py-4 items-center gap-2 rounded-full  bg-white shadow-tabShadow  font-redHatText font-medium `}
-            style={{ color: '#7289DA' }}
-          >
-            <IconDiscord color={'#7289DA'} size={16} />
-            <Link href={'https://t.me/qaccsupport'} target='_blank'>
-              {removeHttpsAndWwwFromUrl('https://t.me/qaccsupport')}
-            </Link>
-          </div>
         </div>
       </div>
     </Modal>
