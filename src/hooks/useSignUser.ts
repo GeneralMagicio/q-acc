@@ -27,6 +27,7 @@ export const useSignUser = (onSigned?: (user: IUser) => void) => {
       // Token generation logic
       if (!chain?.id || !connector) return;
       try {
+        console.log(address, chain.id, connector);
         const newToken = await signWithEVM(address, chain?.id, connector);
         if (newToken) {
           localStorage.setItem('token', JSON.stringify(newToken));
