@@ -37,6 +37,19 @@ export const GitcoinLow: FC<IGitcoinLowProps> = ({
         </div>
       </div>
       <div className='flex gap-2 items-center justify-end mt-4'>
+        <Button
+          styleType={ButtonStyle.Solid}
+          color={ButtonColor.Base}
+          className='mr-auto px-16 shadow-baseShadow'
+          loading={isPending}
+          disabled={user?.skipVerification}
+          onClick={() => updateSkipVerification(true)}
+        >
+          {user?.skipVerification
+            ? 'Verification Skipped '
+            : 'Skip Verification'}
+        </Button>
+
         <a href={links.PASSPORT} target='_blank' referrerPolicy='no-referrer'>
           <Button
             styleType={ButtonStyle.Solid}
@@ -60,18 +73,6 @@ export const GitcoinLow: FC<IGitcoinLowProps> = ({
             <IconGitcoin size={16} />
             Refresh Score
           </div>
-        </Button>
-        <Button
-          styleType={ButtonStyle.Solid}
-          color={ButtonColor.Base}
-          className='mr-auto px-16 shadow-baseShadow'
-          loading={isPending}
-          disabled={user?.skipVerification}
-          onClick={() => updateSkipVerification(true)}
-        >
-          {user?.skipVerification
-            ? 'Verification Skipped '
-            : 'Skip Verification'}
         </Button>
       </div>
     </div>

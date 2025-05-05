@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import Modal, { BaseModalProps } from '../Modal';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import { EligibilityBadge, EligibilityBadgeStatus } from '../EligibilityBadge';
@@ -8,33 +8,74 @@ import {
   useGitcoinScore,
 } from '@/hooks/useGitcoinScore';
 import { GitcoinLow } from '../GitcoinVerifcationElements/GitcoinLow';
+import { useUpdateSkipVerification } from '@/hooks/useUpdateSkipVerification';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface GitcoinEligibilityModalProps extends BaseModalProps {}
 
 export const GitcoinEligibilityModal: FC<
   GitcoinEligibilityModalProps
 > = props => {
-  const { status, userGitcoinScore, onCheckScore, isScoreFetching } =
-    useGitcoinScore();
+  const {
+    status,
+    userGitcoinScore,
+    onCheckScore,
+    isScoreFetching: isScoreFetchingPending,
+  } = useGitcoinScore();
+
+  const {
+    mutate: updateSkipVerification,
+    isPending: isSkipVerificationPending,
+  } = useUpdateSkipVerification(() => {
+    console.log('Skip verification updated successfully!');
+    props.onClose();
+  });
+  const { data: user } = useFetchUser();
+
+  const [isCheckingScore, setIsCheckingScore] = useState(false);
+
+  const handleCheckScore = async () => {
+    setIsCheckingScore(true);
+    await onCheckScore();
+    setIsCheckingScore(false);
+  };
 
   return (
-    <Modal {...props} title='Human Passport' showCloseButton>
+    <Modal {...props} title='Verification' showCloseButton>
       <div className=''>
         <p className='mt-4 mb-10 text-xl'>
-          The amount you want to submit requires Human Passport verification.
+          {status === GitcoinVerificationStatus.LOW_SCORE
+            ? 'Your Human Passport score is below the 15 threshold.'
+            : "Skip verification means your buy won't infulence the matching pool allocation. Verify with Human Passport score > 15 for infulence."}
         </p>
         {status === GitcoinVerificationStatus.NOT_CHECKED && (
-          <Button
-            className='mx-auto'
-            styleType={ButtonStyle.Solid}
-            color={ButtonColor.Pink}
-            loading={isScoreFetching}
-            onClick={async () => {
-              await onCheckScore();
-            }}
-          >
-            Check Eligibility
-          </Button>
+          <div className='flex gap-4 justify-center'>
+            <div>
+              <Button
+                styleType={ButtonStyle.Solid}
+                color={ButtonColor.Base}
+                className='px-16 shadow-baseShadow'
+                loading={isSkipVerificationPending}
+                disabled={user?.skipVerification}
+                onClick={() => updateSkipVerification(true)}
+              >
+                {user?.skipVerification
+                  ? 'Verification Skipped '
+                  : 'Skip Verification'}
+              </Button>
+            </div>
+            <div>
+              <Button
+                className=''
+                styleType={ButtonStyle.Solid}
+                color={ButtonColor.Pink}
+                loading={isCheckingScore}
+                onClick={handleCheckScore}
+              >
+                Check Score
+              </Button>
+            </div>
+          </div>
         )}
         {(status === GitcoinVerificationStatus.ANALYSIS_PASS ||
           status === GitcoinVerificationStatus.SCORER_PASS) && (
@@ -47,7 +88,7 @@ export const GitcoinEligibilityModal: FC<
           <GitcoinLow
             onCheckScore={onCheckScore}
             userGitcoinScore={userGitcoinScore}
-            isScoreFetching={isScoreFetching}
+            isScoreFetching={isScoreFetchingPending}
             onClose={props.onClose}
           />
         )}
