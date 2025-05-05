@@ -43,7 +43,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
     ?.replace('https://', '')
     .replace('www.', '')
     .replace('x.com/', '');
-  const newShareMessage = `Just backed a real Web3 startup on @theqacc. Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. \nYou’re not exit liquidity — you’re early. Round ends soon. Don’t sleep. ${twitterUsername ? '\n@${twitterUsername}' : ''}😤 \n👉`;
+  const newShareMessage = `Just backed a real Web3 startup on @theqacc. Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. \nYou’re not exit liquidity — you’re early. Round ends soon. Don’t sleep. ${twitterUsername ? '\n @' + twitterUsername : ''}😤 \n👉`;
   const handleCopy = () => {
     navigator.clipboard
       .writeText(copyLink)
