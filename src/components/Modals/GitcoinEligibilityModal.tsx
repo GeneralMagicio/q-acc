@@ -48,6 +48,7 @@ export const GitcoinEligibilityModal: FC<
             onCheckScore={onCheckScore}
             userGitcoinScore={userGitcoinScore}
             isScoreFetching={isScoreFetching}
+            onClose={props.onClose}
           />
         )}
       </div>
