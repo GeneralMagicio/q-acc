@@ -10,7 +10,7 @@ interface IGitcoinLowProps {
   userGitcoinScore: number;
   isScoreFetching: boolean;
   onCheckScore: () => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const GitcoinLow: FC<IGitcoinLowProps> = ({
@@ -22,7 +22,9 @@ export const GitcoinLow: FC<IGitcoinLowProps> = ({
   const { mutate: updateSkipVerification, isPending } =
     useUpdateSkipVerification(() => {
       console.log('Skip verification updated successfully!');
-      onClose();
+      if (onClose) {
+        onClose();
+      }
     });
   const { data: user } = useFetchUser();
 
