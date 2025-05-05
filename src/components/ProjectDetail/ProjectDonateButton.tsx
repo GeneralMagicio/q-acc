@@ -22,6 +22,7 @@ import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import config from '@/config/configuration';
 import { EOrderBy, EDirection } from '../DonarDashboard/DonarSupportTable';
 import { fetchProjectDonationsById } from '@/services/donation.services';
+import { Spinner } from '../Loading/Spinner';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -45,6 +46,7 @@ const ProjectDonateButton = () => {
 
   const [marketCap, setMarketCap] = useState(0);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
+  const [marketCapLoading, setMarketCapLoading] = useState(false);
 
   useEffect(() => {
     if (projectData?.id) {
@@ -59,7 +61,7 @@ const ProjectDonateButton = () => {
         if (data) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
-
+          setMarketCapLoading(true);
           const { marketCap: newCap, change24h } =
             await calculateMarketCapChange(
               donations,
@@ -69,6 +71,7 @@ const ProjectDonateButton = () => {
 
           setMarketCap(newCap * Number(POLPrice));
           setMarketCapChangePercentage(change24h);
+          setMarketCapLoading(false);
 
           console.log(
             projectData.title,
@@ -303,10 +306,14 @@ const ProjectDonateButton = () => {
           <span className='text-[#4F576A] font-semibold text-sm'>
             {projectData.abc.tokenTicker} Market Cap
           </span>
-          <span className='text-[#1D1E1F] font-bold text-lg'>
-            {' '}
-            $ {formatAmount(marketCap)}
-          </span>
+          {!marketCap || marketCap === 0 || marketCapLoading ? (
+            <Spinner size={16} />
+          ) : (
+            <span className='text-[#1D1E1F] font-bold text-lg'>
+              {' '}
+              $ {formatAmount(marketCap)}
+            </span>
+          )}
         </div>
 
         {/* 24 h Change */}
@@ -324,7 +331,9 @@ const ProjectDonateButton = () => {
 
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
-            {formatNumber(marketCapChangePercentage)}%{' '}
+            {!marketCap || marketCap === 0 || marketCapLoading
+              ? ''
+              : formatNumber(marketCapChangePercentage) + '%'}
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='16'
