@@ -824,6 +824,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const fetchRoute = (inputAmount: number) => {
     // Skip if the token is already on Polygon and is native MATIC
+    if (inputAmount <= 0) {
+      setSquidRouteLoading(false);
+      return;
+    }
     if (
       selectedToken.address === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
       selectedChain.id === '137'
@@ -867,13 +871,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handlePercentageClick = (percentage: number) => {
-    setSquidRouteLoading(true);
     setSelectedPercentage((prevSelected): any => {
       if (prevSelected === percentage) {
         setInputAmount('');
         setInputBalanceError(false);
         return null;
       } else {
+        setSquidRouteLoading(true);
         const remainingBalance = tokenDetails?.formattedBalance;
 
         const amount =
