@@ -618,7 +618,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    const regex = /^\d{0,10}\.?\d{0,4}$/;
+    const regex = /^\d{0,10}\.?\d{0,10}$/;
     // const regex = /^\d{0,18}(\.\d{0,5})?$/;
 
     if (regex.test(value)) {
