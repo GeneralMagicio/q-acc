@@ -29,8 +29,8 @@ export const EligibilityCheckToast = () => {
         <ul className='list-disc px-4'>
           <li>
             {' '}
-            You can spend approximately $1,000 when verified with Human
-            Passport.
+            You can spend approximately $1,000 when unverified or verified with
+            Human Passport.
           </li>
           <li>
             You can spend approximately $25,000 when verified with Privado zkID.
