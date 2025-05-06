@@ -23,6 +23,8 @@ import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
 import { EDirection, EOrderBy } from '../ProjectDetail/ProjectDonationTable';
+import { getUpcomingRound } from '@/helpers/date';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -38,6 +40,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
+  const { data: allRounds, isLoading: allRoundsLoading } = useFetchAllRound();
 
   const router = useRouter();
   const { data: POLPrice } = useFetchPOLPriceSquid();
@@ -48,6 +51,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
 
   const [marketCap, setMarketCap] = useState(0);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
+  const [roundStatus, setRoundStatus] = useState('ended');
 
   useEffect(() => {
     if (project?.id) {
@@ -140,6 +144,19 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
     fetchPoolAddress(); // Call the async function inside useEffect
   }, [project?.abc?.issuanceTokenAddress]);
 
+  useEffect(() => {
+    const calcRemTime = async () => {
+      const upcomingRound = await getUpcomingRound(allRounds);
+      if (upcomingRound?.startDate) {
+        setRoundStatus('starts');
+      } else {
+        setRoundStatus('ended');
+        console.log('No upcoming round.');
+      }
+    };
+    calcRemTime();
+  }, [activeRoundDetails?.startDate, activeRoundDetails?.endDate, allRounds]);
+
   return (
     <div
       className={`${className} relative cursor-pointer rounded-xl ${progress === 100 ? 'shadow-cardShadow' : ''}`}
@@ -177,7 +194,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     />
                   </svg>
                   <span className='text-[#1D1E1F] font-redHatText font-semibold'>
-                    {project.batchNumbersWithSafeTransactions?.length != 0
+                    {project.batchNumbersWithSafeTransactions?.length !== 0 ||
+                    roundStatus === 'ended'
                       ? ' DEX listing soon'
                       : 'New!'}
                   </span>
