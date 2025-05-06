@@ -3,18 +3,31 @@ import { Button, ButtonStyle, ButtonColor } from '../Button';
 import links from '@/lib/constants/links';
 import { IconExternalLink } from '../Icons/IconExternalLink';
 import { IconGitcoin } from '../Icons/IconGitcoin';
+import { useUpdateSkipVerification } from '@/hooks/useUpdateSkipVerification';
+import { useFetchUser } from '@/hooks/useFetchUser';
 
 interface IGitcoinLowProps {
   userGitcoinScore: number;
   isScoreFetching: boolean;
   onCheckScore: () => void;
+  onClose?: () => void;
 }
 
 export const GitcoinLow: FC<IGitcoinLowProps> = ({
   userGitcoinScore,
   isScoreFetching,
   onCheckScore,
+  onClose,
 }) => {
+  const { mutate: updateSkipVerification, isPending } =
+    useUpdateSkipVerification(() => {
+      console.log('Skip verification updated successfully!');
+      if (onClose) {
+        onClose();
+      }
+    });
+  const { data: user } = useFetchUser();
+
   return (
     <div className='bg-white my-2 rounded-xl p-4 text-base border-[1px] border-gray-200'>
       <div className='bg-gray-50 mt-2 rounded-xl p-4 text-base text-black flex items-center justify-between'>
@@ -24,6 +37,19 @@ export const GitcoinLow: FC<IGitcoinLowProps> = ({
         </div>
       </div>
       <div className='flex gap-2 items-center justify-end mt-4'>
+        <Button
+          styleType={ButtonStyle.Solid}
+          color={ButtonColor.Base}
+          className='mr-auto px-16 shadow-baseShadow'
+          loading={isPending}
+          disabled={user?.skipVerification}
+          onClick={() => updateSkipVerification(true)}
+        >
+          {user?.skipVerification
+            ? 'Verification Skipped '
+            : 'Skip Verification'}
+        </Button>
+
         <a href={links.PASSPORT} target='_blank' referrerPolicy='no-referrer'>
           <Button
             styleType={ButtonStyle.Solid}

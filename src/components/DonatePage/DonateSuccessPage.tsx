@@ -51,9 +51,14 @@ const DonateSuccessPage: FC<IDonateSuccessPage> = ({
   const { refetch: refetchUser } = useFetchUser();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = (state: boolean) => setIsShareModalOpen(state);
-
-  const shareMessage = `Just backed a real Web3 startup on @theqacc.Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. You’re not exit liquidity — you’re early.Round ends soon. Don’t sleep. 😤
-  👉`;
+  const link = projectData?.socialMedia.find(
+    (item: any) => item.type === 'X',
+  )?.link;
+  const twitterUsername = link
+    ?.replace('https://', '')
+    .replace('www.', '')
+    .replace('x.com/', '');
+  const shareMessage = `Just backed a real Web3 startup on @theqacc. Bought $${projectData?.abc?.tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. \nYou’re not exit liquidity — you’re early. Round ends soon. Don’t sleep. \n@${twitterUsername}😤 \n👉`;
 
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);

@@ -23,8 +23,9 @@ import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
 import { EDirection, EOrderBy } from '../ProjectDetail/ProjectDonationTable';
-import { getUpcomingRound } from '@/helpers/date';
+import { Spinner } from '../Loading/Spinner';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getUpcomingRound } from '@/helpers/date';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -50,6 +51,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
   const [marketCap, setMarketCap] = useState(0);
+  const [marketCapLoading, setMarketCapLoading] = useState(false);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
   const [roundStatus, setRoundStatus] = useState('ended');
 
@@ -66,7 +68,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
         if (data && project?.abc?.fundingManagerAddress) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
-
+          setMarketCapLoading(true);
           const { marketCap: newCap, change24h } =
             await calculateMarketCapChange(
               donations,
@@ -77,6 +79,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           // console.log(project.title, change24h);
           setMarketCap(newCap * polPriceNumber);
           setMarketCapChangePercentage(change24h);
+          setMarketCapLoading(false);
 
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
@@ -406,17 +409,29 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   {project?.abc?.tokenTicker} Market Cap
                 </span>
                 <div className='flex flex-col'>
-                  <span className='text-[#1D1E1F] font-bold text-lg text-right'>
-                    {' '}
-                    $ {formatAmount(marketCap)}
-                  </span>
+                  {!marketCap || marketCap === 0 || marketCapLoading ? (
+                    <span className='flex justify-end'>
+                      <Spinner size={16} />
+                    </span>
+                  ) : (
+                    <span className='text-[#1D1E1F] font-bold text-lg text-right'>
+                      {' '}
+                      $ {formatAmount(marketCap)}
+                    </span>
+                  )}
+
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
                     {activeRoundDetails ? (
                       <span className='text-xs'>Change this round</span>
                     ) : (
                       <span className='text-xs'>24h Change</span>
                     )}
-                    <span>{formatNumber(marketCapChangePercentage)}%</span>
+                    {!marketCap || marketCap === 0 || marketCapLoading ? (
+                      ''
+                    ) : (
+                      <span>{formatNumber(marketCapChangePercentage)}%</span>
+                    )}
+
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='16'

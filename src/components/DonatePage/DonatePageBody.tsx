@@ -618,7 +618,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    const regex = /^\d{0,10}\.?\d{0,4}$/;
+    const regex = /^\d{0,10}\.?\d{0,10}$/;
     // const regex = /^\d{0,18}(\.\d{0,5})?$/;
 
     if (regex.test(value)) {
@@ -824,6 +824,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const fetchRoute = (inputAmount: number) => {
     // Skip if the token is already on Polygon and is native MATIC
+    if (inputAmount <= 0) {
+      setSquidRouteLoading(false);
+      return;
+    }
     if (
       selectedToken.address === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
       selectedChain.id === '137'
@@ -867,13 +871,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handlePercentageClick = (percentage: number) => {
-    setSquidRouteLoading(true);
     setSelectedPercentage((prevSelected): any => {
       if (prevSelected === percentage) {
         setInputAmount('');
         setInputBalanceError(false);
         return null;
       } else {
+        setSquidRouteLoading(true);
         const remainingBalance = tokenDetails?.formattedBalance;
 
         const amount =
@@ -1376,6 +1380,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             projectSlug={projectData?.slug || ''}
             projectTitle={projectData?.title}
             tokenTicker={projectData?.abc?.tokenTicker}
+            projectData={projectData}
           />
         </div>
       )}
