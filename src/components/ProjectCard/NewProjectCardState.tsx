@@ -14,6 +14,7 @@ import {
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import {
   calculateMarketCapChange,
+  getMarketCap,
   useTokenPriceRange,
 } from '@/services/tokenPrice.service';
 import { calculateCapAmount } from '@/helpers/round';
@@ -65,7 +66,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           { field: EOrderBy.CreationDate, direction: EDirection.ASC },
         );
 
-        if (data && project?.abc?.fundingManagerAddress) {
+        if (activeRoundDetails && data && project?.abc?.fundingManagerAddress) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
           setMarketCapLoading(true);
@@ -82,11 +83,33 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           setMarketCapLoading(false);
 
           setTotalPOLDonated(calculateTotalDonations(donations));
+        } else if (
+          project.abc?.issuanceTokenAddress &&
+          project.abc?.fundingManagerAddress
+        ) {
+          if (isTokenListed) {
+            const marketCapData = await getMarketCap(
+              isTokenListed,
+              project?.abc.issuanceTokenAddress,
+              project.abc.fundingManagerAddress,
+            );
+            setMarketCap(marketCapData);
+          } else {
+            const { donations, totalCount } = data;
+            const { marketCap: newCap, change24h } =
+              await calculateMarketCapChange(
+                donations,
+                project?.abc?.fundingManagerAddress,
+              );
+            setMarketCap(newCap * polPriceNumber);
+          }
+
+          setMarketCapChangePercentage(0); // No change to show
         }
       };
       fetchProjectDonations();
     }
-  }, [project, marketCap]);
+  }, [project, marketCap, activeRoundDetails, isTokenListed]);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -421,32 +444,42 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   )}
 
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
-                    {activeRoundDetails ? (
-                      <span className='text-xs'>Change this round</span>
-                    ) : (
-                      <span className='text-xs'>24h Change</span>
-                    )}
-                    {!marketCap || marketCap === 0 || marketCapLoading ? (
-                      ''
-                    ) : (
-                      <span>{formatNumber(marketCapChangePercentage)}%</span>
-                    )}
+                    {activeRoundDetails &&
+                      !marketCapLoading &&
+                      marketCap > 0 && (
+                        <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
+                          <span className='text-xs'>Change this round</span>
+                          <span>
+                            {formatNumber(marketCapChangePercentage)}%
+                          </span>
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='16'
+                            height='16'
+                            viewBox='0 0 16 16'
+                            fill='none'
+                          >
+                            <path
+                              d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
+                              stroke='#4F576A'
+                              strokeWidth='2'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                            />
+                          </svg>
+                          <div
+                            className='
+        absolute top-full right-0 transform mt-1
+        bg-gray-900 text-white text-sm font-medium px-2 py-1 rounded shadow-lg
+        opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out
+        pointer-events-none z-50 whitespace-nowrap
+      '
+                          >
+                            {marketCapChangePercentage}%
+                          </div>
+                        </div>
+                      )}
 
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='16'
-                      height='16'
-                      viewBox='0 0 16 16'
-                      fill='none'
-                    >
-                      <path
-                        d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
-                        stroke='#4F576A'
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                    </svg>
                     <div
                       className='
                       absolute top-full right-0 transform mt-1
