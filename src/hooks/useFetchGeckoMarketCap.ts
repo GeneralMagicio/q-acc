@@ -1,5 +1,5 @@
-import { fetchGeckoMarketCap } from '@/services/tokenPrice.service';
 import { useQuery } from '@tanstack/react-query';
+import { fetchGeckoMarketCap } from '@/services/tokenPrice.service';
 
 export const useFetchGeckoMarketCap = (tokenAddress: string) => {
   return useQuery({
