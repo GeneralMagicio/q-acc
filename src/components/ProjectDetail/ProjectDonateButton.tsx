@@ -104,7 +104,7 @@ const ProjectDonateButton = () => {
       };
       fetchProjectDonations();
     }
-  }, [projectData, marketCap]);
+  }, [projectData, marketCap, isTokenListed, activeRoundDetails]);
 
   useEffect(() => {
     const fetchPoolAddress = async () => {
