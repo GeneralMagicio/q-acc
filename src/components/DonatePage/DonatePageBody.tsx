@@ -530,9 +530,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     ) {
       setDonateDisabled(true);
     } else {
+      setInputBalanceError(false);
       setDonateDisabled(false);
     }
-  }, [isConnected, inputAmount, userDonationCap]);
+  }, [isConnected, inputAmount, userDonationCap, tokenDetails]);
 
   useEffect(() => {
     if (projectData?.seasonNumber === 1) {
