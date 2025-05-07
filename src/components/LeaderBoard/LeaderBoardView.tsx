@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 import { Banner } from './Banner';
 import { UserInfo } from './UserInfo';
@@ -9,7 +10,7 @@ import { SortDirection, SortField } from '@/services/points.service';
 import { Pagination } from './Pagination';
 import { Spinner } from '../Loading/Spinner';
 import { roundPoints } from '@/helpers/points';
-import { shortenAddress } from '@/helpers/address';
+import { ENSName } from './ENSName';
 
 const tableHeaders = [
   { name: 'Rank', sortField: null },
@@ -108,10 +109,13 @@ export const LeaderBoardView = () => {
                   <div className=' flex flex-col justify-center items-start'>
                     <span>
                       {' '}
-                      {user.walletAddress
-                        ? shortenAddress(user.walletAddress)
-                        : 'qacc user'}
+                      {user.name ? (
+                        user.name
+                      ) : (
+                        <ENSName address={user.walletAddress as Address} />
+                      )}
                     </span>
+
                     <span className='sm:hidden text-xs font-redHatText text-[#999] font-medium '>
                       {' '}
                       Projects funded : {user.projectsFundedCount}
