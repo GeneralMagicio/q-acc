@@ -135,6 +135,9 @@ interface TokenPriceRangeStatusResult {
   isPriceUpToDate: boolean;
 }
 
+const GECKO_TERMINAL_BASE_URL =
+  'https://api.geckoterminal.com/api/v2/networks/polygon_pos/tokens';
+
 const getBondingCurveSwapsQuery = `
     query getBondingCurveSwapsQuery($orchestratorAddress: String!) {
       BondingCurve(where: {workflow_id: {_ilike: $orchestratorAddress}}){
@@ -309,4 +312,65 @@ export async function calculateMarketCapChange(
     marketCap: Math.round(latestMarketCap),
     change24h: change24h,
   };
+}
+
+export async function fetchGeckoMarketCap(tokenAddress: string) {
+  try {
+    const response = await axios.get(
+      `${GECKO_TERMINAL_BASE_URL}/${tokenAddress.toLowerCase()}/`,
+    );
+
+    const priceUSD = parseFloat(response.data.data.attributes.price_usd);
+    if (isNaN(priceUSD) || priceUSD === 0) {
+      return null;
+    }
+
+    // Calculate token price in POL by dividing USD price by POL price
+    const polResponse = await axios.get(
+      `${GECKO_TERMINAL_BASE_URL}/${tokenAddress}/`,
+    );
+    const polPriceUSD = parseFloat(polResponse.data.data.attributes.price_usd);
+
+    if (isNaN(polPriceUSD) || polPriceUSD === 0) {
+      return null;
+    }
+
+    const marketCap = response.data.data.attributes.fdv_usd
+      ? parseFloat(response.data.data.attributes.fdv_usd)
+      : null;
+
+    return {
+      price: priceUSD / polPriceUSD, // Price in terms of POL tokens
+      priceUSD,
+      marketCap,
+    };
+  } catch (error: any) {
+    console.error('Error fetching token price from GeckoTerminal', {
+      tokenAddress,
+      error: error.message,
+    });
+    return null;
+  }
+}
+
+export async function getMarketCap(
+  isTokenListed: boolean,
+  tokenAddress: string,
+  contract_address: string,
+): Promise<number> {
+  if (isTokenListed) {
+    const result = await fetchGeckoMarketCap(tokenAddress);
+    return result?.marketCap ?? 0;
+  } else {
+    const { reserve_ration, collateral_supply, issuance_supply } =
+      await getTokenSupplyDetails(contract_address);
+
+    const reserveRatio = Number(reserve_ration);
+    let reserve = Number(collateral_supply);
+    let supply = Number(issuance_supply);
+
+    const initialPrice = (reserve / (supply * reserveRatio)) * 1.1;
+    const marketCap = supply * initialPrice;
+    return marketCap;
+  }
 }
