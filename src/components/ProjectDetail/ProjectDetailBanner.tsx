@@ -21,7 +21,7 @@ const ProjectDetailBanner: FC<IProjectDetailBannerProps> = ({
         backgroundImage: `url(${bgSrc})`,
       }}
     >
-      <div className='absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-transparent pointer-events-none' />
+      <div className='absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-transparent pointer-events-none rounded-3xl' />
       <div className=' flex flex-col absolute  bottom-[40px] left-[40px] md:bottom-[40px] md:left-[40px] gap-2'>
         <div className='border rounded-md bg-white p-1 block w-fit'>
           {/* <Image
