@@ -13,6 +13,7 @@ import { isProductReleased } from '@/config/configuration';
 import { shortenAddress } from '@/helpers/address';
 import { useFetchChainsFromSquid } from '@/hooks/useFetchChainsFromSquid';
 import { useWalletInfo } from '@/hooks/useWalletInfo';
+import { SupportModal } from '../Modals/SupportModal';
 
 interface ConnectButtonProps extends HTMLProps<HTMLDivElement> {}
 
@@ -42,6 +43,7 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
   };
 
   const shortAddress = shortenAddress(address);
+  const [showSupportModal, setShowSupportModal] = useState(false);
 
   return (
     <div className={`relative ${className}`} {...props}>
@@ -147,12 +149,12 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
                 My Account
               </Link>
             )}
-            <Link
-              href={'mailto:info@qacc.xyz'}
+            <div
+              onClick={() => setShowSupportModal(true)}
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
             >
-              Do You Need Help?
-            </Link>
+              Support
+            </div>
             <div
               className='p-2 hover:bg-[#F7F7F9] rounded-lg'
               onClick={() => {
@@ -166,6 +168,10 @@ export const ConnectButton: FC<ConnectButtonProps> = ({
             </div>
           </div>
         </div>
+        <SupportModal
+          isOpen={showSupportModal}
+          onClose={() => setShowSupportModal(false)}
+        />
       </div>
     </div>
   );

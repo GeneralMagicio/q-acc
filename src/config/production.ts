@@ -16,6 +16,10 @@ import {
   optimism,
   polygon,
   scroll,
+  polygonZkEvm,
+  gnosis,
+  zksync,
+  bsc,
 } from '@reown/appkit/networks';
 import { polygon as viemPolygon } from 'wagmi/chains';
 // import { polygon, polygonZkEvm } from 'wagmi/chains';
@@ -42,8 +46,12 @@ const config: EnvConfig = {
     blast,
     fraxtal,
     immutableZkEvm,
+    polygonZkEvm,
+    gnosis,
+    zksync,
+    bsc,
   ] as const,
-  SCAN_URL: 'https://zkevm.polygonscan.com/',
+  SCAN_URL: 'https://polygonscan.com/',
   ERC_TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
   WPOL_TOKEN_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
   ERC_TOKEN_SYMBOL: 'POL',
@@ -69,7 +77,7 @@ const config: EnvConfig = {
   },
   GP_ANALYSIS_SCORE_THRESHOLD: 50,
   GP_SCORER_SCORE_THRESHOLD: 15,
-  MINIMUM_DONATION_AMOUNT: 20,
+  MINIMUM_DONATION_AMOUNT: 10,
   MATCHING_FUND_ADDRESS: [],
   SQUID_INTEGRATOR_ID: 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
 };

@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
+import { ethers } from 'ethers';
+
 import { getLocalStorageToken, signWithEVM } from '@/helpers/generateJWT';
 import { IUser } from '@/types/user.type';
 import { useFetchUser } from './useFetchUser';
@@ -27,7 +29,12 @@ export const useSignUser = (onSigned?: (user: IUser) => void) => {
       // Token generation logic
       if (!chain?.id || !connector) return;
       try {
-        const newToken = await signWithEVM(address, chain?.id, connector);
+        const checkSumAddress = ethers.getAddress(address);
+        const newToken = await signWithEVM(
+          checkSumAddress,
+          chain?.id,
+          connector,
+        );
         if (newToken) {
           localStorage.setItem('token', JSON.stringify(newToken));
           const { data: newUser } = await refetch();

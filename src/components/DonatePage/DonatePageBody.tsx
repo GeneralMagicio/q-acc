@@ -9,7 +9,15 @@ import {
 } from 'wagmi';
 import { getConnectorClient } from '@wagmi/core';
 import { useRouter } from 'next/navigation';
-import { Account, Chain, Client, parseEther, Transport } from 'viem';
+import {
+  Account,
+  Chain,
+  Client,
+  createPublicClient,
+  http,
+  parseEther,
+  Transport,
+} from 'viem';
 import round from 'lodash/round';
 import floor from 'lodash/floor';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
@@ -204,7 +212,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const [minimumContributionAmount, setMinimumContributionAmount] =
     useState<number>(config.MINIMUM_DONATION_AMOUNT);
 
-  // let provider = new ethers.BrowserProvider(window.ethereum);
+  const publicClient = createPublicClient({
+    chain: chain,
+    transport: http(),
+  });
 
   useEffect(() => {
     const fetchConversion = async () => {
@@ -276,15 +287,54 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
   const handleDonateClick = async () => {
     setDonateDisabled(true);
+
+    // if (!isVerified) {
+    //   if (
+    //     activeRoundDetails &&
+    //     'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
+    //       activeRoundDetails &&
+    //     parseFloat(inputAmount) >
+    //       activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
+    //   ) {
+    //     {
+    //       console.log(
+    //         'User is not verified with Privado ID',
+    //         activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+    //       );
+    //       setShowZkidModal(true);
+    //       setDonateDisabled(false);
+    //       return;
+    //     }
+    //   }
+
+    //   if (
+    //     !user?.hasEnoughGitcoinPassportScore &&
+    //     !user?.hasEnoughGitcoinAnalysisScore
+    //   ) {
+    //     setDonateDisabled(false);
+    //     setShowGitcoinModal(true);
+    //     console.log('User is not verified with Human Passport');
+    //     return;
+    //   } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+    //     console.log('User is not verified with Privado ID');
+    //     setDonateDisabled(false);
+    //     setShowZkidModal(true);
+    //     return;
+    //   }
+    // }
+
     if (!isVerified) {
       if (
         activeRoundDetails &&
-        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in
-          activeRoundDetails &&
-        parseFloat(inputAmount) >
-          activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly
+        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
       ) {
-        {
+        const convertedCap =
+          (await convertToPOLAmount(
+            selectedToken,
+            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+          )) ?? 0;
+
+        if (parseFloat(inputAmount) > convertedCap) {
           console.log(
             'User is not verified with Privado ID',
             activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
@@ -296,6 +346,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       }
 
       if (
+        !user?.skipVerification &&
         !user?.hasEnoughGitcoinPassportScore &&
         !user?.hasEnoughGitcoinAnalysisScore
       ) {
@@ -310,12 +361,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         return;
       }
     }
-    // if (!terms) {
-    //   console.log('no terms');
-    //   setDonateDisabled(false);
-    //   setShowTermsConditionModal(true);
-    //   return;
-    // }
+
     if (
       parseFloat(inputAmount) < minimumContributionAmount ||
       isNaN(parseFloat(inputAmount))
@@ -348,6 +394,31 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
       console.log('Input amount is more than available balance');
       setDonateDisabled(false);
       return;
+    }
+
+    if (squidTransactionRequest) {
+      const gasPrice = await publicClient.getGasPrice();
+      const userGasBalance = await publicClient.getBalance({
+        address: address as `0x${string}`,
+      });
+
+      let estimatedGasFeeInWei =
+        gasPrice * BigInt(squidTransactionRequest.gasLimit);
+
+      const axelarFee = BigInt(squidTransactionRequest.value || '0'); // from Squid SDK/api
+      let estimatedTotalFee = estimatedGasFeeInWei + axelarFee;
+
+      const hasEnough = userGasBalance >= estimatedTotalFee;
+
+      if (!hasEnough) {
+        setDonateDisabled(false);
+        setFlashMessage(
+          'You may not have enough gas to complete the transaction',
+        );
+        setInputAmount('');
+        console.log('Insufficient balance for gas fee.');
+        return;
+      }
     }
 
     handleDonate();
@@ -435,7 +506,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   useEffect(() => {
     getTokenDetails();
-  }, [address, tokenAddress, selectedToken]);
+  }, [address, tokenAddress, selectedToken, selectedChain, chain]);
 
   // if user allready accepted terms and conditions set it to true
   // useEffect(() => {
@@ -454,14 +525,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
         // &&
         // parseFloat(inputAmount) <= userDonationCap
       ) ||
-      parseFloat(inputAmount) > remainingDonationAmount ||
+      // parseFloat(inputAmount) > remainingDonationAmount ||
       parseFloat(inputAmount) > tokenDetails?.formattedBalance
     ) {
       setDonateDisabled(true);
     } else {
+      setInputBalanceError(false);
       setDonateDisabled(false);
     }
-  }, [isConnected, inputAmount, userDonationCap]);
+  }, [isConnected, inputAmount, userDonationCap, tokenDetails]);
 
   useEffect(() => {
     if (projectData?.seasonNumber === 1) {
@@ -490,15 +562,15 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             toChainId: Number(137),
             fromTokenAddress: selectedToken.address,
             toTokenAddress: tokenAddress,
-            fromAmount: parseFloat(inputAmount),
-            toAmount: parseFloat(inputAmount),
+            fromAmount: Number(inputAmount),
+            toAmount: Number(inputAmount),
             fromTokenSymbol: selectedToken.symbol,
             toTokenSymbol: config.ERC_TOKEN_SYMBOL,
           };
 
           const amountInPOL = await convertToPOLAmount(
             selectedToken,
-            parseFloat(inputAmount),
+            Number(inputAmount),
           );
 
           handleSaveDonation({
@@ -547,17 +619,21 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    const regex = /^\d*\.?\d{0,5}$/;
+    const regex = /^\d{0,10}\.?\d{0,10}$/;
+    // const regex = /^\d{0,18}(\.\d{0,5})?$/;
 
     if (regex.test(value)) {
       const inputAmount = parseFloat(value);
-      if (activeRoundDetails) {
-        if (
-          inputAmount > activeRoundDetails?.cumulativePOLCapPerUserPerProject
-        ) {
-          return; // Exit without updating the input
-        }
-      }
+      // if (activeRoundDetails) {
+      //   const convertedAmout =
+      //     (await convertToPOLAmount(
+      //       selectedToken,
+      //       activeRoundDetails?.cumulativePOLCapPerUserPerProject,
+      //     )) ?? 0;
+      //   if (inputAmount > convertedAmout) {
+      //     return; // Exit without updating the input
+      //   }
+      // }
 
       setInputAmount(value);
 
@@ -749,6 +825,10 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
 
   const fetchRoute = (inputAmount: number) => {
     // Skip if the token is already on Polygon and is native MATIC
+    if (inputAmount <= 0) {
+      setSquidRouteLoading(false);
+      return;
+    }
     if (
       selectedToken.address === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
       selectedChain.id === '137'
@@ -792,13 +872,13 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   };
 
   const handlePercentageClick = (percentage: number) => {
-    setSquidRouteLoading(true);
     setSelectedPercentage((prevSelected): any => {
       if (prevSelected === percentage) {
         setInputAmount('');
         setInputBalanceError(false);
         return null;
       } else {
+        setSquidRouteLoading(true);
         const remainingBalance = tokenDetails?.formattedBalance;
 
         const amount =
@@ -821,7 +901,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
   const handleRemainingCapClick = () => {
     setSquidRouteLoading(true);
     const remainingBalance = truncateToSignificantDigits(
-      tokenDetails?.formattedBalance,
+      Number(tokenDetails?.formattedBalance),
       2,
     );
     const userCap = truncateToSignificantDigits(userDonationCap, 2);
@@ -986,7 +1066,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
                     className='font-medium cursor-pointer  flex gap-2 hover:underline'
                   >
                     {userDonationCap !== null && userDonationCap !== undefined
-                      ? formatAmount(Math.floor(userDonationCap * 100) / 100)
+                      ? truncateToSignificantDigits(userDonationCap, 2)
                       : '---'}{' '}
                     {selectedToken?.symbol}
                     <div className='relative group'>
@@ -1301,6 +1381,7 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
             projectSlug={projectData?.slug || ''}
             projectTitle={projectData?.title}
             tokenTicker={projectData?.abc?.tokenTicker}
+            projectData={projectData}
           />
         </div>
       )}

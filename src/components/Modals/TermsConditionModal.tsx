@@ -78,19 +78,19 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
       closeable={false}
     >
       <div className='flex flex-col gap-5 text-lg  font-redHatText'>
-        <p className=''>
+        {/* <p className=''>
           Access to the protocol is prohibited for citizens and residents of the
           United States and individuals from other jurisdictions outlined in the
           Terms of Service, as well as companies, entities, and other
           organizations based in the United States or those operating from
           jurisdictions specified in the Terms of Service.
-        </p>
+        </p> */}
 
         {/* Terms of Service */}
         <div className='flex flex-col gap-4'>
           <p>By proceeding, you confirm:</p>
 
-          <label className='flex gap-2 items-center   rounded-2xl w-full cursor-pointer'>
+          {/* <label className='flex gap-2 items-center   rounded-2xl w-full cursor-pointer'>
             <div>
               <input
                 type='checkbox'
@@ -106,9 +106,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
                 </span>
               </h2>
             </div>
-          </label>
+          </label> */}
 
-          <label className='flex gap-2 items-top   rounded-2xl w-full cursor-pointer'>
+          {/* <label className='flex gap-2 items-top   rounded-2xl w-full cursor-pointer'>
             <div>
               <input
                 type='checkbox'
@@ -130,7 +130,7 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
                 </span>
               </h2>
             </div>
-          </label>
+          </label> */}
 
           <label className='flex gap-2 items-center   rounded-2xl w-full cursor-pointer'>
             <div>
@@ -157,7 +157,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
         <div className='flex justify-center items-center'>
           <Button
             disabled={
-              !isUsUkChecked || !isProhibitedCountriesChecked || !istermsChecked
+              // !isUsUkChecked ||
+              //  !isProhibitedCountriesChecked ||
+              !istermsChecked
             }
             color={ButtonColor.Pink}
             className='w-[200px] flex justify-center '

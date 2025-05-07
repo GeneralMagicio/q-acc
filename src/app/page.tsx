@@ -55,7 +55,7 @@ export default function Home() {
             </div>
             <div className='p-10 flex justify-center items-center'>
               <iframe
-                className='w-full rounded-lg h-auto my-6 aspect-video'
+                className='w-full rounded-lg h-auto my-6 aspect-video z-50'
                 src='https://www.youtube.com/embed/m30ElzaR--4'
                 title='Quadratic Acceleration (q/acc): The Future of Tokenization'
                 allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'

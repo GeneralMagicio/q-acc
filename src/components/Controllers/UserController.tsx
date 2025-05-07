@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect, useRouter, usePathname } from 'next/navigation';
 import { fetchGivethUserInfo } from '@/services/user.service';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
@@ -30,6 +30,7 @@ export const UserController = () => {
   const useWhitelist = useAddressWhitelist();
   const { data: isSanctioned } = useFetchSanctionStatus(address as string);
   const { data: isSafeAccount } = useCheckSafeAccount();
+  const pathname = usePathname();
 
   const onSign = async (newUser: IUser) => {
     console.log('Signed', newUser);
@@ -37,7 +38,7 @@ export const UserController = () => {
     if (!newUser?.isSignedIn) return;
 
     // Check if user has accepted ToS after signing in
-    if (!user?.acceptedToS) {
+    if (!user?.acceptedToS && pathname !== '/tos') {
       setShowTermsModal(true);
       return;
     }
@@ -94,7 +95,7 @@ export const UserController = () => {
         await refetch();
 
         // Check if user has accepted ToS after refetching user data
-        if (user && !user.acceptedToS) {
+        if (user && !user.acceptedToS && pathname !== '/tos') {
           setShowTermsModal(true);
         }
         return;
@@ -107,7 +108,7 @@ export const UserController = () => {
     };
 
     handleAddressCheck();
-  }, [address, refetch, isSafeAccount, user]);
+  }, [address, refetch, isSafeAccount, user, pathname]);
 
   useEffect(() => {
     const handleShowSignInModal = () => {

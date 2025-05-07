@@ -28,6 +28,9 @@ export const useGitcoinScore = () => {
     } else if (_passportScore >= config.GP_SCORER_SCORE_THRESHOLD) {
       setStatus(GitcoinVerificationStatus.SCORER_PASS);
       return;
+    } else {
+      setStatus(GitcoinVerificationStatus.NOT_CHECKED);
+      return;
     }
   }, [isSuccess, user?.analysisScore, user?.passportScore]);
 

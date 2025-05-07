@@ -23,6 +23,9 @@ import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
 import { EDirection, EOrderBy } from '../ProjectDetail/ProjectDonationTable';
+import { Spinner } from '../Loading/Spinner';
+import { useFetchAllRound } from '@/hooks/useFetchAllRound';
+import { getUpcomingRound } from '@/helpers/date';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -38,6 +41,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [totalPOLDonated, setTotalPOLDonated] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const [amountDonatedInRound, setAmountDonatedInRound] = useState(0);
+  const { data: allRounds, isLoading: allRoundsLoading } = useFetchAllRound();
 
   const router = useRouter();
   const { data: POLPrice } = useFetchPOLPriceSquid();
@@ -47,7 +51,9 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [currentTokenPrice, setCurrentTokenPrice] = useState(0);
 
   const [marketCap, setMarketCap] = useState(0);
+  const [marketCapLoading, setMarketCapLoading] = useState(false);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
+  const [roundStatus, setRoundStatus] = useState('ended');
 
   useEffect(() => {
     if (project?.id) {
@@ -62,7 +68,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
         if (data && project?.abc?.fundingManagerAddress) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
-
+          setMarketCapLoading(true);
           const { marketCap: newCap, change24h } =
             await calculateMarketCapChange(
               donations,
@@ -73,6 +79,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           // console.log(project.title, change24h);
           setMarketCap(newCap * polPriceNumber);
           setMarketCapChangePercentage(change24h);
+          setMarketCapLoading(false);
 
           setTotalPOLDonated(calculateTotalDonations(donations));
         }
@@ -84,7 +91,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   useEffect(() => {
     const updatePOLCap = async () => {
       const { capAmount, totalDonationAmountInRound }: any =
-        await calculateCapAmount(activeRoundDetails, Number(project.id));
+        await calculateCapAmount(activeRoundDetails, Number(project.id), true);
 
       setMaxPOLCap(capAmount);
       setAmountDonatedInRound(totalDonationAmountInRound);
@@ -119,8 +126,16 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           project.abc.issuanceTokenAddress,
           config.WPOL_TOKEN_ADDRESS,
         );
+
         setIsTokenListed(isListed);
-        setCurrentTokenPrice(1 / Number(price));
+        if (
+          project?.abc?.issuanceTokenAddress ===
+          '0x0b7a46e1af45e1eaadeed34b55b6fc00a85c7c68' //check for prismo token address only
+        ) {
+          setCurrentTokenPrice(Number(price));
+        } else {
+          setCurrentTokenPrice(1 / Number(price));
+        }
         console.log(
           'Current Price  Address:',
           isTokenListed,
@@ -131,6 +146,19 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
 
     fetchPoolAddress(); // Call the async function inside useEffect
   }, [project?.abc?.issuanceTokenAddress]);
+
+  useEffect(() => {
+    const calcRemTime = async () => {
+      const upcomingRound = await getUpcomingRound(allRounds);
+      if (upcomingRound?.startDate) {
+        setRoundStatus('starts');
+      } else {
+        setRoundStatus('ended');
+        console.log('No upcoming round.');
+      }
+    };
+    calcRemTime();
+  }, [activeRoundDetails?.startDate, activeRoundDetails?.endDate, allRounds]);
 
   return (
     <div
@@ -169,7 +197,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     />
                   </svg>
                   <span className='text-[#1D1E1F] font-redHatText font-semibold'>
-                    {project.batchNumbersWithSafeTransactions?.length != 0
+                    {project.batchNumbersWithSafeTransactions?.length !== 0 ||
+                    roundStatus === 'ended'
                       ? ' DEX listing soon'
                       : 'New!'}
                   </span>
@@ -380,17 +409,29 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   {project?.abc?.tokenTicker} Market Cap
                 </span>
                 <div className='flex flex-col'>
-                  <span className='text-[#1D1E1F] font-bold text-lg text-right'>
-                    {' '}
-                    $ {formatAmount(marketCap)}
-                  </span>
+                  {!marketCap || marketCap === 0 || marketCapLoading ? (
+                    <span className='flex justify-end'>
+                      <Spinner size={16} />
+                    </span>
+                  ) : (
+                    <span className='text-[#1D1E1F] font-bold text-lg text-right'>
+                      {' '}
+                      $ {formatAmount(marketCap)}
+                    </span>
+                  )}
+
                   <div className='flex gap-1 text-[#4F576A] font-medium items-center group relative'>
                     {activeRoundDetails ? (
                       <span className='text-xs'>Change this round</span>
                     ) : (
                       <span className='text-xs'>24h Change</span>
                     )}
-                    <span>{formatNumber(marketCapChangePercentage)}%</span>
+                    {!marketCap || marketCap === 0 || marketCapLoading ? (
+                      ''
+                    ) : (
+                      <span>{formatNumber(marketCapChangePercentage)}%</span>
+                    )}
+
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='16'

@@ -117,26 +117,41 @@ export const NewBanner: FC<NewBannerProps> = () => {
                 )}
               </div>
               <div className='text-[#fff] text-center text-[42px] font-tusker-grotesk  font-semibold  leading-[46px] tracking-[-0.21px] flex gap-3  justify-center'>
-                <div className='flex items-center gap-1'>
-                  <span className='font-tusker-grotesk '>
-                    {remainingTime?.days}
-                  </span>
-                  <span className='text-lg font-redHatText font-semibold mt-4'>
-                    Days
-                  </span>
-                </div>
-                <div className='flex items-center justify-center gap-1'>
-                  <span>{remainingTime?.hours}</span>
-                  <span className='text-lg font-redHatText font-semibold mt-4'>
-                    Hours
-                  </span>
-                </div>
+                {remainingTime && remainingTime.days > 0 && (
+                  <div className='flex items-center gap-1'>
+                    <span className='font-tusker-grotesk '>
+                      {remainingTime.days}
+                    </span>
+                    <span className='text-lg font-redHatText font-semibold mt-4'>
+                      {remainingTime.days > 1 ? 'Days' : 'Day'}
+                    </span>
+                  </div>
+                )}
+
+                {remainingTime && remainingTime.hours > 0 && (
+                  <div className='flex items-center justify-center gap-1'>
+                    <span>{remainingTime?.hours}</span>
+                    <span className='text-lg font-redHatText font-semibold mt-4'>
+                      {remainingTime.hours > 1 ? 'Hours' : 'Hour'}
+                    </span>
+                  </div>
+                )}
+
                 <div className='flex items-center gap-1'>
                   <span>{remainingTime?.minutes}</span>
                   <span className='text-lg font-redHatText font-semibold mt-4'>
                     Minutes
                   </span>
                 </div>
+
+                {remainingTime && remainingTime?.days <= 0 && (
+                  <div className='flex items-center gap-1'>
+                    <span>{remainingTime?.seconds}</span>
+                    <span className='text-lg font-redHatText font-semibold mt-4'>
+                      Seconds
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             <div className='flex flex-col justify-center py-2'>
