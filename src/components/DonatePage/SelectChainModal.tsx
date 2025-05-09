@@ -18,6 +18,7 @@ const headers = {
   'x-integrator-id': config.SQUID_INTEGRATOR_ID,
 };
 
+const tokenCache: any = {};
 const SelectChainModal = ({
   isOpen,
   onClose,
@@ -83,6 +84,24 @@ const SelectChainModal = ({
       return;
     }
 
+    const cacheKey = `${selectedChain.id}_${address}`;
+
+    if (tokenCache[cacheKey]) {
+      console.log('Using cached data');
+      const tokenData = tokenCache[cacheKey];
+
+      // Recalculate balances and sort
+      fetchEVMTokenBalances(tokenData.tokens, address)
+        .then(tokenWithBalances => {
+          const sortedTokens = tokenWithBalances.sort(
+            (a, b) => b.balance - a.balance,
+          );
+          setTokenData(sortedTokens);
+        })
+        .catch(error => console.error('Error recalculating balances:', error));
+      return;
+    }
+
     setTokenLoading(true);
     const fetchToken = async () => {
       try {
@@ -97,6 +116,8 @@ const SelectChainModal = ({
         );
 
         const tokenData = await tokenResponse.json();
+
+        tokenCache[cacheKey] = tokenData;
         const tokenWithBalances = await fetchEVMTokenBalances(
           tokenData.tokens,
           address,
