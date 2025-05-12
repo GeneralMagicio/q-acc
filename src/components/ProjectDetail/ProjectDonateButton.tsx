@@ -13,6 +13,7 @@ import {
   useTokenPriceRange,
   useTokenPriceRangeStatus,
   calculateMarketCapChange,
+  getMarketCap,
 } from '@/services/tokenPrice.service';
 import { formatAmount, formatNumber } from '@/helpers/donation';
 import { calculateCapAmount } from '@/helpers/round';
@@ -58,39 +59,52 @@ const ProjectDonateButton = () => {
           { field: EOrderBy.CreationDate, direction: EDirection.ASC },
         );
 
-        if (data) {
+        if (
+          activeRoundDetails &&
+          data &&
+          projectData?.abc?.fundingManagerAddress
+        ) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
           setMarketCapLoading(true);
           const { marketCap: newCap, change24h } =
             await calculateMarketCapChange(
               donations,
-              projectData.abc.fundingManagerAddress,
+              projectData?.abc?.fundingManagerAddress,
               activeRoundDetails?.startDate,
             );
 
+          // console.log(project.title, change24h);
           setMarketCap(newCap * Number(POLPrice));
           setMarketCapChangePercentage(change24h);
           setMarketCapLoading(false);
+        } else if (
+          projectData.abc?.issuanceTokenAddress &&
+          projectData.abc?.fundingManagerAddress
+        ) {
+          if (isTokenListed) {
+            const marketCapData = await getMarketCap(
+              isTokenListed,
+              projectData?.abc.issuanceTokenAddress,
+              projectData.abc.fundingManagerAddress,
+            );
+            setMarketCap(marketCapData);
+          } else {
+            const { donations, totalCount } = data;
+            const { marketCap: newCap, change24h } =
+              await calculateMarketCapChange(
+                donations,
+                projectData?.abc?.fundingManagerAddress,
+              );
+            setMarketCap(newCap * Number(POLPrice));
+          }
 
-          console.log(
-            projectData.title,
-            newCap,
-            change24h,
-            'Change in percentafe',
-          );
-          const now = new Date();
-          const cutoff = new Date(now.getTime() - 100 * 60 * 60 * 1000);
-
-          // 🔍 Filter donations by createdAt
-          const recentDonations = donations.filter((donation: any) => {
-            return new Date(donation.createdAt) >= cutoff;
-          });
+          setMarketCapChangePercentage(0); // No change to show
         }
       };
       fetchProjectDonations();
     }
-  }, [projectData, marketCap]);
+  }, [projectData, marketCap, isTokenListed, activeRoundDetails]);
 
   useEffect(() => {
     const fetchPoolAddress = async () => {
@@ -331,31 +345,34 @@ const ProjectDonateButton = () => {
               Change this round
             </span>
           ) : (
-            <span className='text-[#4F576A] font-semibold text-sm'>
-              24h Change
-            </span>
+            ''
           )}
 
           <span className='flex  items-center gap-1  justify-end text-[#4F576A] font-semibold '>
             {' '}
-            {!marketCap || marketCap === 0 || marketCapLoading
-              ? ''
-              : formatNumber(marketCapChangePercentage) + '%'}
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='16'
-              height='16'
-              viewBox='0 0 16 16'
-              fill='none'
-            >
-              <path
-                d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
-                stroke='#4F576A'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
+            {activeRoundDetails && !marketCapLoading && marketCap > 0 ? (
+              <>
+                {' '}
+                {formatNumber(marketCapChangePercentage) + '%'}
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='16'
+                  height='16'
+                  viewBox='0 0 16 16'
+                  fill='none'
+                >
+                  <path
+                    d='M3.33398 8.00065L8.00065 3.33398M8.00065 3.33398L12.6673 8.00065M8.00065 3.33398V12.6673'
+                    stroke='#4F576A'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </>
+            ) : (
+              ''
+            )}
           </span>
           <div
             className='
