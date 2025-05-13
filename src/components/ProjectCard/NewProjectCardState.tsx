@@ -66,7 +66,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
           { field: EOrderBy.CreationDate, direction: EDirection.ASC },
         );
 
-        if (activeRoundDetails && data && project?.abc?.fundingManagerAddress) {
+        if (data && project?.abc?.fundingManagerAddress) {
           const { donations, totalCount } = data;
           // setPageDonations(donations);
           setMarketCapLoading(true);
