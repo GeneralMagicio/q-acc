@@ -5,6 +5,7 @@ import { IconSort } from '../Icons/IconSort';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { fetchProjectDonors } from '@/services/donation.services';
 import {
+  addCliff,
   formatDateMonthDayYear,
   getDifferenceFromPeriod,
   OneYearInMilliSecs,
@@ -397,7 +398,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                         </span>
                         <span className='text-xs font-medium text-[#A5ADBF]'>
                           Starts on{' '}
-                          {formatDateMonthDayYear(donation.rewardStreamStart)}
+                          {addCliff(donation.rewardStreamStart, donation.cliff)}
                         </span>
                       </div>
                     ) : (
