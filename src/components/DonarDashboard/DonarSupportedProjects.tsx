@@ -26,6 +26,7 @@ import { IconShare } from '../Icons/IconShare';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
+import { useClaimRewards } from '@/hooks/useClaimRewards';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -94,6 +95,20 @@ const DonarSupportedProjects = ({
 
   const isTokenClaimable =
     totalClaimableRewardTokens !== null && totalClaimableRewardTokens > 0;
+
+  const { claim } = useClaimRewards({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    paymentRouterAddress: project?.abc?.paymentRouterAddress!,
+    onSuccess: () => {
+      // do after 5 seconds
+      // setTimeout(() => {
+      //   claimedTributesAndMintedTokenAmounts.refetch();
+      // }, 5000);
+      // projectCollateralFeeCollected.refetch();
+
+      console.log('Successly Clamied Tokens');
+    },
+  });
   return (
     <div className='p-6 flex lg:flex-row flex-col gap-14 bg-white rounded-xl'>
       {/* Project Details */}
@@ -404,6 +419,7 @@ const DonarSupportedProjects = ({
           color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
           className='flex justify-center rounded-xl'
           disabled={!isTokenClaimable}
+          onClick={() => claim.mutateAsync()}
         >
           Claim Tokens
         </Button>

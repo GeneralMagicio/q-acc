@@ -40,3 +40,19 @@ export const roleModuleAbi = [
     type: 'function',
   },
 ];
+
+export const claimAllAbi = [
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+    ],
+    name: 'claimAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+];
