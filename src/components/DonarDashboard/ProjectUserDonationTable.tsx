@@ -277,7 +277,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
         : 'q/acc round'}
   </div> */}
                   <div className='p-[18px_4px] flex gap-2 text-start  border-b w-full min-w-[250px]'>
-                    <div className='flex gap-1'>
+                    <div className='flex gap-1 items-center'>
                       <div>
                         <div className='flex relative px-2'>
                           <div className='flex items-center'>
@@ -338,20 +338,9 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                               <Spinner size={10} />
                             ) : (
                               <>
-                                ${' '}
-                                {donation.fromTokenAmount
-                                  ? formatAmount(
-                                      Math.round(
-                                        donation.fromTokenAmount *
-                                          tokenUsdPrice *
-                                          100,
-                                      ) / 100,
-                                    )
-                                  : formatAmount(
-                                      Math.round(
-                                        donation.amount * tokenUsdPrice * 100,
-                                      ) / 100,
-                                    )}
+                                {donation.isSwap
+                                  ? formatAmount(donation.amount) + ' POL'
+                                  : ''}
                               </>
                             )}
                           </span>
