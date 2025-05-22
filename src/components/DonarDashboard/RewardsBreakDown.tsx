@@ -19,6 +19,7 @@ import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { useDonorContext } from '@/context/dashboard.context';
+import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 
 const RewardsBreakDown: React.FC = () => {
   const { donationsGroupedByProject, projectDonorData } = useDonorContext();
@@ -29,12 +30,12 @@ const RewardsBreakDown: React.FC = () => {
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: isSafeAccount } = useCheckSafeAccount();
 
-  if (
-    !donationsGroupedByProject ||
-    Object.keys(donationsGroupedByProject).length === 0
-  ) {
-    return <p>No data available</p>;
-  }
+  // if (
+  //   !donationsGroupedByProject ||
+  //   Object.keys(donationsGroupedByProject).length === 0
+  // ) {
+  //   return <p>No data available</p>;
+  // }
 
   const projectDonations = donationsGroupedByProject[Number(projectId)] || [];
   const project = projectDonations[0]?.project;
@@ -42,11 +43,15 @@ const RewardsBreakDown: React.FC = () => {
     uniqueDonors: 0,
     donarContributions: 0,
     userProjectContributionSum: 0,
+    totalContributions: 0,
   };
+  const { data: tokenDetails } = useTokenSupplyDetails(
+    project?.abc?.fundingManagerAddress,
+  );
 
-  const totalSupply = project?.abc?.totalSupply || '---';
   const totalSupporters = projectData.uniqueDonors;
-  const totalContributions = projectData.userProjectContributionSum;
+  const totalContributions = projectData.totalContributions;
+  const totalUserContributions = projectData.userProjectContributionSum;
   const totalTokensReceived = projectDonations.reduce(
     (sum: any, donation: any) => sum + (donation.rewardTokenAmount || 0),
     0,
@@ -102,7 +107,8 @@ const RewardsBreakDown: React.FC = () => {
               <span className='text-[#4F576A] font-medium'>Total supply</span>
             </div>
             <span className='font-medium text-[#1D1E1F]'>
-              {formatAmount(totalSupply)} {project?.abc?.tokenTicker}
+              {formatAmount(Number(tokenDetails?.issuance_supply)) || '---'}{' '}
+              {project?.abc?.tokenTicker}
             </span>
           </div>
 
@@ -148,7 +154,7 @@ const RewardsBreakDown: React.FC = () => {
           <ProjectUserDonationTable
             userId={parseInt(userId as string)}
             project={project}
-            totalContributions={totalContributions}
+            totalContributions={totalUserContributions}
           />
         </div>
 
