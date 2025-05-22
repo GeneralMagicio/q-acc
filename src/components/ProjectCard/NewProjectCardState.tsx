@@ -220,8 +220,9 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                     />
                   </svg>
                   <span className='text-[#1D1E1F] font-redHatText font-semibold'>
-                    {project.batchNumbersWithSafeTransactions?.length !== 0 ||
-                    roundStatus === 'ended'
+                    {(project.batchNumbersWithSafeTransactions?.length !== 0 ||
+                      roundStatus === 'ended') &&
+                    !isTokenListed
                       ? ' DEX listing soon'
                       : 'New!'}
                   </span>
