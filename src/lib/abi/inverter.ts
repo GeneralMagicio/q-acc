@@ -40,3 +40,93 @@ export const roleModuleAbi = [
     type: 'function',
   },
 ];
+
+export const claimAllAbi = [
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+    ],
+    name: 'claimAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+];
+
+export const claimTokensABI = [
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+    ],
+    name: 'claimAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'streamId',
+        type: 'uint256',
+      },
+    ],
+    name: 'releasableForSpecificStream',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'streamId',
+        type: 'uint256',
+      },
+    ],
+    name: 'releasedForSpecificStream',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];

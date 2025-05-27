@@ -103,6 +103,8 @@ export const GET_USER_DONATIONS = /* GraphQL */ `
             tokenPrice
             mintedAmount
             fundingManagerAddress
+            paymentRouterAddress
+            paymentProcessorAddress
           }
           totalDonations
         }

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProjectUserDonationTable from './ProjectUserDonationTable';
 import { IconABC } from '../Icons/IconABC';
@@ -10,17 +10,21 @@ import { Button, ButtonColor } from '../Button';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconMinted } from '../Icons/IconMinted';
-import {
-  formatAmount,
-  calculateLockedRewardTokenAmount,
-  calculateClaimableRewardTokenAmount,
-} from '@/helpers/donation';
+import { formatAmount } from '@/helpers/donation';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { useFetchTokenPrice } from '@/hooks/useFetchTokenPrice';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { useDonorContext } from '@/context/dashboard.context';
+import {
+  useClaimRewards,
+  useReleasableForStream,
+  useReleasedForStream,
+} from '@/hooks/useClaimRewards';
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 
 const RewardsBreakDown: React.FC = () => {
+  const { address } = useAccount();
   const { donationsGroupedByProject, projectDonorData } = useDonorContext();
   const { data: user } = useFetchUser();
   const userId = user?.id;
@@ -52,24 +56,52 @@ const RewardsBreakDown: React.FC = () => {
     0,
   );
 
-  let lockedTokens = 0;
-  let availableToClaim = 0;
+  const [lockedTokens, setLockedTokens] = useState(0);
 
-  projectDonations.forEach((donation: any) => {
-    const lockedRewardTokenAmount = calculateLockedRewardTokenAmount(
-      donation.rewardTokenAmount,
-      donation.rewardStreamStart,
-      donation.rewardStreamEnd,
-      donation.cliff,
-    );
-    const claimableRewardTokenAmount = calculateClaimableRewardTokenAmount(
-      donation.rewardTokenAmount,
-      lockedRewardTokenAmount,
-    );
-
-    lockedTokens += lockedRewardTokenAmount || 0;
-    availableToClaim += claimableRewardTokenAmount || 0;
+  const releasable = useReleasableForStream({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    client: project?.abc?.paymentRouterAddress!,
+    receiver: address,
+    streamId: BigInt(1),
   });
+
+  const released = useReleasedForStream({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    client: project?.abc?.paymentRouterAddress!,
+    receiver: address,
+    streamId: BigInt(1),
+  });
+
+  const availableToClaim = releasable.data
+    ? Number(ethers.formatUnits(releasable.data, 18)) // Format BigInt data to decimal
+    : 0;
+
+  const tokensAlreadyClaimed = released.data
+    ? Number(ethers.formatUnits(released.data, 18)) // Format BigInt data to decimal
+    : 0;
+
+  const isTokenClaimable =
+    releasable.data !== undefined && availableToClaim > 0;
+
+  const { claim } = useClaimRewards({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    paymentRouterAddress: project?.abc?.paymentRouterAddress!,
+    onSuccess: () => {
+      // do after 5 seconds
+      // setTimeout(() => {
+      //   claimedTributesAndMintedTokenAmounts.refetch();
+      // }, 5000);
+      // projectCollateralFeeCollected.refetch();
+
+      releasable.refetch();
+
+      console.log('Successly Clamied Tokens');
+    },
+  });
+
+  useEffect(() => {
+    setLockedTokens(totalTokensReceived - tokensAlreadyClaimed);
+  }, [releasable, released, totalTokensReceived]);
 
   return (
     <div className='container flex flex-col gap-8 my-8'>
@@ -153,7 +185,7 @@ const RewardsBreakDown: React.FC = () => {
         </div>
 
         {/* Claim Rewards */}
-        {totalTokensReceived > 0 ? (
+        {tokensAlreadyClaimed > 0 ? (
           <div className='flex flex-col gap-4 font-redHatText w-full p-8 border rounded-xl'>
             <div className='flex justify-between p-2'>
               <div className='flex gap-2'>
@@ -163,7 +195,7 @@ const RewardsBreakDown: React.FC = () => {
                 </span>
               </div>
               <span className='font-medium text-[#1D1E1F]'>
-                {formatAmount(totalTokensReceived)} {project?.abc?.tokenTicker}
+                {formatAmount(tokensAlreadyClaimed)} {project?.abc?.tokenTicker}
               </span>
             </div>
 
@@ -191,7 +223,13 @@ const RewardsBreakDown: React.FC = () => {
               </span>
             </div>
 
-            <Button color={ButtonColor.Gray} disabled={availableToClaim <= 0}>
+            <Button
+              color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
+              onClick={() => claim.mutateAsync()}
+              disabled={availableToClaim <= 0}
+              loading={claim.isPending}
+              className='flex  justify-center'
+            >
               Claim Tokens
             </Button>
           </div>
