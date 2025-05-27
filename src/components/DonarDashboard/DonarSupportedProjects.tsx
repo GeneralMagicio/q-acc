@@ -13,20 +13,21 @@ import { IconMinted } from '../Icons/IconMinted';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { Button, ButtonColor } from '../Button';
 import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
-import {
-  useTokenPriceRange,
-  useTokenPriceRangeStatus,
-} from '@/services/tokenPrice.service';
+
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
-import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { useCheckSafeAccount } from '@/hooks/useCheckSafeAccount';
 import { EProjectSocialMediaType, IProject } from '@/types/project.type';
 import { IconShare } from '../Icons/IconShare';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
-import { useClaimRewards } from '@/hooks/useClaimRewards';
+import {
+  useClaimRewards,
+  useReleasableForStream,
+} from '@/hooks/useClaimRewards';
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -49,6 +50,7 @@ const DonarSupportedProjects = ({
   totalRewardTokens: number;
   onClickBreakdown: () => void;
 }) => {
+  const { address } = useAccount();
   const { data: POLPrice } = useFetchPOLPriceSquid();
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
@@ -69,21 +71,20 @@ const DonarSupportedProjects = ({
     updatePOLCap();
   }, [activeRoundDetails, projectId, maxPOLCap]);
 
-  const { data: allRounds } = useFetchAllRound();
   const { data: isSafeAccount } = useCheckSafeAccount();
 
   const { data: tokenDetails } = useTokenSupplyDetails(
     project?.abc?.fundingManagerAddress!,
   );
 
-  const tokenPriceRangeStatus = useTokenPriceRangeStatus({
-    project,
-    allRounds,
-  });
-  const tokenPriceRange = useTokenPriceRange({
-    contributionLimit: maxPOLCap,
-    contractAddress: project.abc?.fundingManagerAddress || '',
-  });
+  // const tokenPriceRangeStatus = useTokenPriceRangeStatus({
+  //   project,
+  //   allRounds,
+  // });
+  // const tokenPriceRange = useTokenPriceRange({
+  //   contributionLimit: maxPOLCap,
+  //   contractAddress: project.abc?.fundingManagerAddress || '',
+  // });
 
   const handleShare = () => {
     openShareModal();
@@ -93,9 +94,17 @@ const DonarSupportedProjects = ({
     social => social.type === EProjectSocialMediaType.WEBSITE,
   )?.link;
 
-  const isTokenClaimable =
-    totalClaimableRewardTokens !== null && totalClaimableRewardTokens > 0;
+  const releasable = useReleasableForStream({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    client: project?.abc?.paymentRouterAddress!,
+    receiver: address,
+    streamId: BigInt(1),
+  });
 
+  const claimableReward = releasable.data
+    ? Number(ethers.formatUnits(releasable.data, 18)) // Format BigInt data to decimal
+    : 0;
+  const isTokenClaimable = releasable.data !== undefined && claimableReward > 0;
   const { claim } = useClaimRewards({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     paymentRouterAddress: project?.abc?.paymentRouterAddress!,
@@ -105,6 +114,8 @@ const DonarSupportedProjects = ({
       //   claimedTributesAndMintedTokenAmounts.refetch();
       // }, 5000);
       // projectCollateralFeeCollected.refetch();
+
+      releasable.refetch();
 
       console.log('Successly Clamied Tokens');
     },
@@ -395,7 +406,7 @@ const DonarSupportedProjects = ({
               <div className='flex gap-1 font-medium text-[#1D1E1F]'>
                 <span>
                   {totalClaimableRewardTokens !== null
-                    ? `${formatAmount(totalClaimableRewardTokens)} ${project.abc?.tokenTicker || ''}`
+                    ? `${formatAmount(Number(claimableReward))} ${project.abc?.tokenTicker || ''}`
                     : '---'}
                 </span>
                 <span>
@@ -419,6 +430,7 @@ const DonarSupportedProjects = ({
           color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
           className='flex justify-center rounded-xl'
           disabled={!isTokenClaimable}
+          loading={claim.isPending}
           onClick={() => claim.mutateAsync()}
         >
           Claim Tokens
