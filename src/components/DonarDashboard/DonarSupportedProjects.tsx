@@ -191,7 +191,7 @@ const DonarSupportedProjects = ({
               className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
             >
               <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
-                Share your project
+                Share Project
                 <IconShare color='#5326EC' size={24} />
               </span>
             </div>{' '}

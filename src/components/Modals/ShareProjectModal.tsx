@@ -27,8 +27,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   onClose,
   tokenTicker,
   projectData,
-  shareMessage = `Just backed a real Web3 startup on @theqacc.Bought $${tokenTicker} in a true fair launch — no insiders, no VCs. Just builders and the community. You’re not exit liquidity — you’re early.Round ends soon. Don’t sleep. 😤
-  👉`,
+  shareMessage = `Check out ${projectTitle} from @theqacc and ${tokenTicker}. Fair launches, legit builders and real utility.👉 `,
   ...props
 }) => {
   const [copied, setCopied] = useState(false);
@@ -73,17 +72,14 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
         </h1>
         <div className='flex justify-center gap-3'>
           <div className='border rounded-lg p-2 flex items-center'>
-            <TwitterShareButton
-              title={newShareMessage || ''}
-              url={copyLink || ''}
-            >
+            <TwitterShareButton title={shareMessage || ''} url={copyLink || ''}>
               <IconXSocial size={24} />
             </TwitterShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <LinkedinShareButton
-              summary={newShareMessage}
-              title={newShareMessage}
+              summary={shareMessage}
+              title={shareMessage}
               url={copyLink || ''}
             >
               <IconLinkedin size={24} />
@@ -91,16 +87,16 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <FacebookShareButton
-              title={newShareMessage || ''}
+              title={shareMessage || ''}
               url={copyLink || ''}
-              hashtag={newShareMessage}
+              hashtag={shareMessage}
             >
               <IconFacebook size={24} />
             </FacebookShareButton>
           </div>
           <div className='border rounded-lg p-2 flex items-center'>
             <Link
-              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${newShareMessage}`}
+              href={`https://warpcast.com/~/compose?embeds[]=${copyLink}&text=${shareMessage}`}
               target='_blank'
             >
               <IconFarcaster size={24} />
