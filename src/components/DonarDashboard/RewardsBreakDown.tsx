@@ -1,5 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 import { useSearchParams } from 'next/navigation';
 import ProjectUserDonationTable from './ProjectUserDonationTable';
 import { IconABC } from '../Icons/IconABC';
@@ -20,8 +22,6 @@ import {
   useReleasableForStream,
   useReleasedForStream,
 } from '@/hooks/useClaimRewards';
-import { ethers } from 'ethers';
-import { useAccount } from 'wagmi';
 
 const RewardsBreakDown: React.FC = () => {
   const { address } = useAccount();
@@ -33,12 +33,12 @@ const RewardsBreakDown: React.FC = () => {
   const { data: POLPrice } = useFetchTokenPrice();
   const { data: isSafeAccount } = useCheckSafeAccount();
 
-  if (
-    !donationsGroupedByProject ||
-    Object.keys(donationsGroupedByProject).length === 0
-  ) {
-    return <p>No data available</p>;
-  }
+  // if (
+  //   !donationsGroupedByProject ||
+  //   Object.keys(donationsGroupedByProject).length === 0
+  // ) {
+  //   return <p>No data available</p>;
+  // }
 
   const projectDonations = donationsGroupedByProject[Number(projectId)] || [];
   const project = projectDonations[0]?.project;

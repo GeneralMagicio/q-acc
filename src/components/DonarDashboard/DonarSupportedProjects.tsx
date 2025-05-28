@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 import { getIpfsAddress } from '@/helpers/image';
-
 import { IconViewTransaction } from '../Icons/IconViewTransaction';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
@@ -26,8 +27,6 @@ import {
   useClaimRewards,
   useReleasableForStream,
 } from '@/hooks/useClaimRewards';
-import { ethers } from 'ethers';
-import { useAccount } from 'wagmi';
 
 const DonarSupportedProjects = ({
   projectId,
