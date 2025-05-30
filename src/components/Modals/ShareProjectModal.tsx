@@ -27,7 +27,7 @@ export const ShareProjectModal: FC<ShareProjectModalProps> = ({
   onClose,
   tokenTicker,
   projectData,
-  shareMessage = `Check out ${projectTitle} from @theqacc and ${tokenTicker}. Fair launches, legit builders and real utility.👉 `,
+  shareMessage = `Check out ${projectTitle} from @theqacc and $${tokenTicker}. Fair launches, legit builders and real utility.👉 `,
   ...props
 }) => {
   const [copied, setCopied] = useState(false);
