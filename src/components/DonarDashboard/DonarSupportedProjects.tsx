@@ -26,6 +26,7 @@ import { IconShare } from '../Icons/IconShare';
 import { ShareProjectModal } from '../Modals/ShareProjectModal';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
+import { useGetCurrentTokenPrice } from '@/hooks/useGetCurrentTokenPrice';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -54,6 +55,8 @@ const DonarSupportedProjects = ({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
+  const { issuanceTokenAddress } = project?.abc || {};
+  const { currentTokenPrice } = useGetCurrentTokenPrice(issuanceTokenAddress);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -353,11 +356,10 @@ const DonarSupportedProjects = ({
                   {project.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ ${' '}
-                  {formatAmount(
-                    totalRewardTokens *
-                      ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
-                  ) || '---'}
+                  ~{' '}
+                  {formatAmount(totalRewardTokens * (currentTokenPrice || 0)) ||
+                    '---'}{' '}
+                  POL
                 </span>
               </div>
             </div>
@@ -383,14 +385,14 @@ const DonarSupportedProjects = ({
                     ? `${formatAmount(totalClaimableRewardTokens)} ${project.abc?.tokenTicker || ''}`
                     : '---'}
                 </span>
-                <span>
-                  ~ $
+                <span className='text-[#82899A]'>
+                  ~{' '}
                   {totalClaimableRewardTokens !== null
                     ? formatAmount(
-                        totalClaimableRewardTokens *
-                          (project.abc?.tokenPrice || 0),
+                        totalClaimableRewardTokens * (currentTokenPrice || 0),
                       )
-                    : '---'}
+                    : '---'}{' '}
+                  POL
                 </span>
               </div>
             </div>
