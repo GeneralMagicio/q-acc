@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
-import { useEffect, useState } from 'react';
 
 const PRISMO_TOKEN_ADDRESS = '0x0b7a46e1af45e1eaadeed34b55b6fc00a85c7c68';
 
