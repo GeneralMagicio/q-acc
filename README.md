@@ -178,7 +178,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 # Developer Sequence Diagrams
 
-Below are key sequence diagrams for the main flows in this project. You can render these using [PlantUML](https://plantuml.com/sequence-diagram) or compatible tools.
 
 ## 1. User Onboarding & zkID Verification Flow
 
