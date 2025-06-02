@@ -171,8 +171,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Contact
 
 - **Email:** info@qacc.xyz
-- **Telegram Support:** [q/acc Support Telegram](https://t.me/your-support-link)
-- **Website:** [https://qacc.xyz](https://qacc.xyz)
+- **Telegram Support:** [q/acc Support Telegram](https://t.me/qaccsupport)
+- **Website:** [https://qacc.giveth.io/](https://qacc.giveth.io/)
 
 ---
 
@@ -196,4 +196,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## 4. Dashboard & Leaderboard Data Flow
 
 ![image](https://github.com/user-attachments/assets/f08eccc9-3045-47ed-ac0f-0f2f226e829f)
+
+## 5. Claiming Reward Tokens
+
+![image](https://github.com/user-attachments/assets/ffdb25d9-247c-4321-99f1-814869834e31)
+
 
