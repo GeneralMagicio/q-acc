@@ -182,120 +182,19 @@ Below are key sequence diagrams for the main flows in this project. You can rend
 
 ## 1. User Onboarding & zkID Verification Flow
 
-```plantuml
-@startuml
-actor User
-participant "Frontend (Next.js)" as FE
-participant "Wallet" as Wallet
-participant "Privado zkID Service" as Privado
-participant "Backend/API" as API
+![image](https://github.com/user-attachments/assets/a26b4020-a8e2-4add-a5e0-114a3a4e75d7)
 
-User -> FE : Visit Home or Onboard
-FE -> Wallet : Prompt Connect Wallet
-Wallet -> FE : Wallet Address
-FE -> API : Fetch user profile (by address)
-API --> FE : User profile (may be empty)
-alt No profile
-    FE -> User : Show Create Profile Form
-    User -> FE : Submit profile info
-    FE -> API : Save profile
-    API --> FE : Profile created
-end
-FE -> User : Show Terms & Conditions
-User -> FE : Accept Terms
-FE -> API : Update ToS acceptance
-API --> FE : ToS updated
-
-FE -> User : Show "Get Verified" (zkID) button
-User -> FE : Click "Get Verified"
-FE -> Privado : Open Privado zkID verification URL
-User -> Privado : Complete liveness & document check
-Privado -> Wallet : Issue zkID credential
-User -> FE : Return to site
-FE -> API : Check zkID status
-API --> FE : Verified
-FE -> User : Show onboarding complete
-@enduml
-```
 
 ## 2. Project Creation Flow
 
-```plantuml
-@startuml
-actor User
-participant "Frontend (Next.js)" as FE
-participant "Wallet" as Wallet
-participant "Backend/API" as API
-database "Database" as DB
+![image](https://github.com/user-attachments/assets/48b5064b-77b4-41f2-8372-5e696d6a2d6d)
 
-User -> FE : Navigate to "Create Project"
-FE -> Wallet : Check wallet connection
-Wallet -> FE : Wallet Address
-FE -> API : Fetch user profile & whitelist status
-API --> FE : User info, whitelist status
-alt Not whitelisted
-    FE -> User : Show "Get Verified" (zkID) flow
-    User -> FE : Complete verification
-    FE -> API : Update whitelist
-    API --> FE : Whitelisted
-end
-FE -> User : Show Project Creation Form
-User -> FE : Fill project details, team, media
-FE -> API : Submit project data
-API -> DB : Store project
-DB --> API : Project created
-API --> FE : Project slug/id
-FE -> User : Show success modal (view project or dashboard)
-@enduml
-```
 
 ## 3. Supporting a Project (Donation/Buy Token)
 
-```plantuml
-@startuml
-actor User
-participant "Frontend (Next.js)" as FE
-participant "Wallet" as Wallet
-participant "Backend/API" as API
-participant "Smart Contract" as SC
-
-User -> FE : Click "Support/Buy Token" on project
-FE -> Wallet : Check wallet connection
-Wallet -> FE : Wallet Address
-FE -> API : Fetch user caps, verification status
-API --> FE : Cap info, zkID status
-alt Not verified or over cap
-    FE -> User : Show zkID or Gitcoin Passport modal
-    User -> FE : Complete verification
-    FE -> API : Update verification
-    API --> FE : Updated
-end
-FE -> Wallet : Initiate token purchase/transaction
-Wallet -> SC : Send transaction (buy token)
-SC --> Wallet : Transaction receipt
-Wallet -> FE : Success
-FE -> API : Record donation/support
-API -> DB : Store donation
-DB --> API : Donation recorded
-API --> FE : Confirmation
-FE -> User : Show confirmation, update dashboard
-@enduml
-```
+![image](https://github.com/user-attachments/assets/b3104de9-7859-46c6-b9a7-8482e5979738)
 
 ## 4. Dashboard & Leaderboard Data Flow
 
-```plantuml
-@startuml
-actor User
-participant "Frontend (Next.js)" as FE
-participant "Backend/API" as API
-database "Database" as DB
+![image](https://github.com/user-attachments/assets/f08eccc9-3045-47ed-ac0f-0f2f226e829f)
 
-User -> FE : Open Dashboard/Leaderboard
-FE -> API : Fetch user/project/leaderboard data
-API -> DB : Query donations, projects, verifications, points
-DB --> API : Data
-API --> FE : Data (projects, supports, points, verifications)
-FE -> User : Render dashboard, leaderboard, verifications
-@enduml
-```
