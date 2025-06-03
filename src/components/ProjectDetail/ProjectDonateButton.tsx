@@ -114,7 +114,14 @@ const ProjectDonateButton = () => {
           config.WPOL_TOKEN_ADDRESS,
         );
         setIsTokenListed(isListed);
-        setCurrentTokenPrice(Number(price));
+        if (
+          projectData?.abc?.issuanceTokenAddress ===
+          '0x0b7a46e1af45e1eaadeed34b55b6fc00a85c7c68' //check for prismo token address only
+        ) {
+          setCurrentTokenPrice(Number(price));
+        } else {
+          setCurrentTokenPrice(1 / Number(price));
+        }
       }
     };
 

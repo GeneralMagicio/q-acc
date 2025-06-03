@@ -216,3 +216,9 @@ export async function getUpcomingRound(allRounds: any): Promise<any | null> {
       new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
   )[0];
 }
+
+export function addCliff(startDateStr: string, cliffMs: number): string {
+  const startDate = new Date(startDateStr);
+  const cliffDate = new Date(startDate.getTime() + cliffMs);
+  return cliffDate.toDateString();
+}

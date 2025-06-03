@@ -336,8 +336,10 @@ const ProjectDonationTable = () => {
                                 <Spinner size={10} />
                               ) : (
                                 <>
-                                  ${' '}
-                                  {donation.fromTokenAmount
+                                  {donation.isSwap
+                                    ? formatAmount(donation.amount) + ' POL'
+                                    : ''}
+                                  {/* {donation.fromTokenAmount
                                     ? formatAmount(
                                         Math.round(
                                           donation.fromTokenAmount *
@@ -349,7 +351,7 @@ const ProjectDonationTable = () => {
                                         Math.round(
                                           donation.amount * tokenUsdPrice * 100,
                                         ) / 100,
-                                      )}
+                                      )} */}
                                 </>
                               )}
                             </span>

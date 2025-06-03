@@ -27,6 +27,7 @@ import {
   useClaimRewards,
   useReleasableForStream,
 } from '@/hooks/useClaimRewards';
+import { useGetCurrentTokenPrice } from '@/hooks/useGetCurrentTokenPrice';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -56,6 +57,8 @@ const DonarSupportedProjects = ({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
+  const { issuanceTokenAddress } = project?.abc || {};
+  const { currentTokenPrice } = useGetCurrentTokenPrice(issuanceTokenAddress);
 
   useEffect(() => {
     const updatePOLCap = async () => {
@@ -216,7 +219,7 @@ const DonarSupportedProjects = ({
               className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
             >
               <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
-                Share your project
+                Share Project
                 <IconShare color='#5326EC' size={24} />
               </span>
             </div>{' '}
@@ -378,11 +381,10 @@ const DonarSupportedProjects = ({
                   {project.abc?.tokenTicker}
                 </span>
                 <span className='font-medium text-[#82899A]'>
-                  ~ ${' '}
-                  {formatAmount(
-                    totalRewardTokens *
-                      ((project.abc?.tokenPrice || 0) * Number(POLPrice)),
-                  ) || '---'}
+                  ~{' '}
+                  {formatAmount(totalRewardTokens * (currentTokenPrice || 0)) ||
+                    '---'}{' '}
+                  POL
                 </span>
               </div>
             </div>
@@ -408,14 +410,14 @@ const DonarSupportedProjects = ({
                     ? `${formatAmount(Number(claimableReward))} ${project.abc?.tokenTicker || ''}`
                     : '---'}
                 </span>
-                <span>
-                  ~ $
+                <span className='text-[#82899A]'>
+                  ~{' '}
                   {totalClaimableRewardTokens !== null
                     ? formatAmount(
-                        totalClaimableRewardTokens *
-                          (project.abc?.tokenPrice || 0),
+                        totalClaimableRewardTokens * (currentTokenPrice || 0),
                       )
-                    : '---'}
+                    : '---'}{' '}
+                  POL
                 </span>
               </div>
             </div>
