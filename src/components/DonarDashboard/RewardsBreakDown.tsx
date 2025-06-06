@@ -133,9 +133,9 @@ const RewardsBreakDown: React.FC = () => {
                 </span>
               </div>
               <div className='flex gap-2'>
-                <span className='font-medium text-[#1D1E1F]'>
+                {/* <span className='font-medium text-[#1D1E1F]'>
                   ~ ${formatAmount(totalContributions * Number(POLPrice)) || 0}
-                </span>
+                </span> */}
                 <span className='font-medium text-[#82899A]'>
                   {formatAmount(totalContributions)} POL
                 </span>

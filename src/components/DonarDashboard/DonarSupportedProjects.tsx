@@ -238,9 +238,9 @@ const DonarSupportedProjects = ({
               <span className='font-medium text-[#1D1E1F]'>Total received</span>
             </div>
             <div className='flex gap-2'>
-              <span className='font-medium text-[#1D1E1F]'>
+              {/* <span className='font-medium text-[#1D1E1F]'>
                 ~ $ {formatAmount(totalContributions * POLPrice) || 0}
-              </span>
+              </span> */}
               <span className='font-medium text-[#82899A]'>
                 {formatAmount(totalContributions) || 0} POL{' '}
               </span>
