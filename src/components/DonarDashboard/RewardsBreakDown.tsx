@@ -85,8 +85,9 @@ const RewardsBreakDown: React.FC = () => {
     ? Number(ethers.formatUnits(released.data, 18)) // Format BigInt data to decimal
     : 0;
 
-  const isTokenClaimable =
-    releasable.data !== undefined && availableToClaim > 0;
+  // const isTokenClaimable =
+  //   releasable.data !== undefined && availableToClaim > 0;
+  const isTokenClaimable = false;
 
   const { claim } = useClaimRewards({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
