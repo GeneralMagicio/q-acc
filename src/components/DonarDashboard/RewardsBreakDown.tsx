@@ -8,7 +8,7 @@ import { IconABC } from '../Icons/IconABC';
 import { IconTotalDonations } from '../Icons/IconTotalDonations';
 import { IconTotalSupply } from '../Icons/IconTotalSupply';
 import { IconTotalDonars } from '../Icons/IconTotalDonars';
-import { Button, ButtonColor } from '../Button';
+// import { Button, ButtonColor } from '../Button';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
 import { IconLockedTokens } from '../Icons/IconLockedTokens';
 import { IconMinted } from '../Icons/IconMinted';
@@ -229,7 +229,7 @@ const RewardsBreakDown: React.FC = () => {
               </span>
             </div>
 
-            <Button
+            {/* <Button
               color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
               onClick={() => claim.mutateAsync()}
               disabled={availableToClaim <= 0}
@@ -237,7 +237,7 @@ const RewardsBreakDown: React.FC = () => {
               className='flex  justify-center'
             >
               Claim Tokens
-            </Button>
+            </Button> */}
           </div>
         ) : (
           ''

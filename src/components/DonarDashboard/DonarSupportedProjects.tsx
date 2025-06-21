@@ -12,8 +12,8 @@ import { formatAmount } from '@/helpers/donation';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
 import { IconMinted } from '../Icons/IconMinted';
 import { IconAvailableTokens } from '../Icons/IconAvailableTokens';
-import { Button, ButtonColor } from '../Button';
-import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
+// import { Button, ButtonColor } from '../Button';
+// import { IconBreakdownArrow } from '../Icons/IconBreakdownArrow';
 
 import { useFetchActiveRoundDetails } from '@/hooks/useFetchActiveRoundDetails';
 import { calculateCapAmount } from '@/helpers/round';
@@ -427,7 +427,7 @@ const DonarSupportedProjects = ({
         )}
 
         {/* Claim Rewards */}
-        <Button
+        {/* <Button
           color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
           className='flex justify-center rounded-xl'
           disabled={!isTokenClaimable}
@@ -444,7 +444,7 @@ const DonarSupportedProjects = ({
           >
             Tokens & Contributions Breakdown <IconBreakdownArrow />
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
