@@ -100,7 +100,7 @@ const DonarSupportedProjects = ({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamId: BigInt(1),
+    streamIds: [BigInt(1), BigInt(2), BigInt(3)],
   });
 
   const claimableReward = releasable.data

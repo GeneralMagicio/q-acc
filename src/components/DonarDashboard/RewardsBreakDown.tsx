@@ -67,14 +67,14 @@ const RewardsBreakDown: React.FC = () => {
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamId: BigInt(1),
+    streamIds: [BigInt(1), BigInt(2), BigInt(3)],
   });
 
   const released = useReleasedForStream({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamId: BigInt(1),
+    streamIds: [BigInt(1), BigInt(2), BigInt(3)],
   });
 
   const availableToClaim = releasable.data

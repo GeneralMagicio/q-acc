@@ -40,17 +40,22 @@ export const useReleasableForStream = ({
   paymentProcessorAddress,
   client,
   receiver,
-  streamId,
+  streamIds,
 }: {
   paymentProcessorAddress: string;
   client: string;
   receiver: `0x${string}` | undefined;
-  streamId: bigint;
+  streamIds: bigint[];
 }) => {
   const publicClient = usePublicClient();
 
   return useQuery<bigint>({
-    queryKey: ['releasableForStream', client, receiver, streamId.toString()],
+    queryKey: [
+      'releasableForStream',
+      client,
+      receiver,
+      streamIds.map(id => id.toString()),
+    ],
     queryFn: async (): Promise<bigint> => {
       const contract = getContract({
         address: paymentProcessorAddress as Address,
@@ -58,17 +63,29 @@ export const useReleasableForStream = ({
         client: publicClient!,
       });
 
-      const res = await contract.read.releasableForSpecificStream([
-        client,
-        receiver,
-        streamId,
-      ]);
+      // Get releasable amounts for all stream IDs
+      const releasablePromises = streamIds.map(async streamId => {
+        const res = await contract.read.releasableForSpecificStream([
+          client,
+          receiver,
+          streamId,
+        ]);
+        return res as bigint;
+      });
 
-      return res as bigint;
+      const releasableAmounts = await Promise.all(releasablePromises);
+
+      // Sum all releasable amounts
+      const totalReleasable = releasableAmounts.reduce(
+        (sum, amount) => sum + amount,
+        BigInt(0),
+      );
+
+      return totalReleasable;
     },
     staleTime: Infinity,
     gcTime: 1000 * 60,
-    enabled: !!receiver && !!client,
+    enabled: !!receiver && !!client && streamIds.length > 0,
   });
 };
 
@@ -76,17 +93,22 @@ export const useReleasedForStream = ({
   paymentProcessorAddress,
   client,
   receiver,
-  streamId,
+  streamIds,
 }: {
   paymentProcessorAddress: string;
   client: string;
   receiver: `0x${string}` | undefined;
-  streamId: bigint;
+  streamIds: bigint[];
 }) => {
   const publicClient = usePublicClient();
 
   return useQuery<bigint>({
-    queryKey: ['releasedForStream', client, receiver, streamId.toString()],
+    queryKey: [
+      'releasedForStream',
+      client,
+      receiver,
+      streamIds.map(id => id.toString()),
+    ],
     queryFn: async (): Promise<bigint> => {
       const contract = getContract({
         address: paymentProcessorAddress as Address,
@@ -94,15 +116,28 @@ export const useReleasedForStream = ({
         client: publicClient!,
       });
 
-      const res = await contract.read.releasedForSpecificStream([
-        client,
-        receiver,
-        streamId,
-      ]);
-      return res as bigint;
+      // Get released amounts for all stream IDs
+      const releasedPromises = streamIds.map(async streamId => {
+        const res = await contract.read.releasedForSpecificStream([
+          client,
+          receiver,
+          streamId,
+        ]);
+        return res as bigint;
+      });
+
+      const releasedAmounts = await Promise.all(releasedPromises);
+
+      // Sum all released amounts
+      const totalReleased = releasedAmounts.reduce(
+        (sum, amount) => sum + amount,
+        BigInt(0),
+      );
+
+      return totalReleased;
     },
     staleTime: Infinity,
     gcTime: 1000 * 60,
-    enabled: !!receiver && !!client,
+    enabled: !!receiver && !!client && streamIds.length > 0,
   });
 };
