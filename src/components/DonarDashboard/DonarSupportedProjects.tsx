@@ -106,8 +106,7 @@ const DonarSupportedProjects = ({
   const claimableReward = releasable.data
     ? Number(ethers.formatUnits(releasable.data, 18)) // Format BigInt data to decimal
     : 0;
-  // const isTokenClaimable = releasable.data !== undefined && claimableReward > 0;
-  const isTokenClaimable = false;
+  const isTokenClaimable = releasable.data !== undefined && claimableReward > 0;
   const { claim } = useClaimRewards({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     paymentRouterAddress: project?.abc?.paymentRouterAddress!,
