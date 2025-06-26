@@ -36,7 +36,7 @@ export const TradingButton: React.FC<TradingButtonProps> = ({
     <>
       <Button
         onClick={handleOpenModal}
-        color={ButtonColor.Green}
+        color={ButtonColor.Giv}
         styleType={ButtonStyle.Solid}
         className={className}
         disabled={!isConnected}

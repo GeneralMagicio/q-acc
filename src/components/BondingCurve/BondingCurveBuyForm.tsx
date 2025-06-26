@@ -133,7 +133,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <Input
             name='depositAmount'
-            label='Amount to Deposit (ETH)'
+            label='Amount to Deposit (POL)'
             type='number'
             step='0.000001'
             min='0'

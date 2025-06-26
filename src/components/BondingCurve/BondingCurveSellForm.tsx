@@ -26,7 +26,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   onError,
 }) => {
   const { isConnected } = useAccount();
-  const [calculatedEth, setCalculatedEth] = useState<string>('');
+  const [calculatedWpol, setCalculatedWpol] = useState<string>('');
   const [slippage, setSlippage] = useState<number>(0.5); // 0.5% default slippage
 
   const { bondingCurveData, calculateSaleReturn, sellTokens, sellTokensTo } =
@@ -43,28 +43,28 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   const { watch, setValue, handleSubmit } = methods;
   const depositAmount = watch('depositAmount');
 
-  // Calculate ETH when deposit amount changes
+  // Calculate WPOL when deposit amount changes
   useEffect(() => {
-    const calculateEth = async () => {
+    const calculateWpol = async () => {
       if (!depositAmount || parseFloat(depositAmount) <= 0) {
-        setCalculatedEth('');
+        setCalculatedWpol('');
         return;
       }
 
       try {
         const result = await calculateSaleReturn.mutateAsync(depositAmount);
-        setCalculatedEth(result);
+        setCalculatedWpol(result);
 
         // Calculate minimum amount out based on slippage
         const minAmountOut = parseFloat(result) * (1 - slippage / 100);
         setValue('minAmountOut', minAmountOut.toFixed(6));
       } catch (error) {
         console.error('Error calculating sale return:', error);
-        setCalculatedEth('');
+        setCalculatedWpol('');
       }
     };
 
-    calculateEth();
+    calculateWpol();
   }, [depositAmount, slippage, calculateSaleReturn, setValue]);
 
   const onSubmit = async (data: SellFormData) => {
@@ -96,7 +96,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
 
       onSuccess?.(hash);
       methods.reset();
-      setCalculatedEth('');
+      setCalculatedWpol('');
     } catch (error) {
       console.error('Error selling tokens:', error);
       onError?.(error as Error);
@@ -144,12 +144,12 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
             placeholder='0.0'
           />
 
-          {calculatedEth && (
+          {calculatedWpol && (
             <div className='bg-gray-50 rounded-lg p-4'>
               <div className='flex justify-between items-center'>
                 <span className='text-sm text-gray-600'>You will receive:</span>
                 <span className='text-lg font-semibold text-green-600'>
-                  {parseFloat(calculatedEth).toFixed(6)} ETH
+                  {parseFloat(calculatedWpol).toFixed(6)} WPOL
                 </span>
               </div>
 
@@ -192,7 +192,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
 
           <Input
             name='minAmountOut'
-            label='Minimum ETH to Receive'
+            label='Minimum WPOL to Receive'
             type='number'
             step='0.000001'
             min='0'
@@ -207,7 +207,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
             name='receiver'
             label='Receiver Address (Optional)'
             placeholder='0x...'
-            description='Leave empty to receive ETH in your connected wallet'
+            description='Leave empty to receive WPOL in your connected wallet'
           />
 
           <Button
