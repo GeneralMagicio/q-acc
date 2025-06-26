@@ -24,6 +24,7 @@ import config from '@/config/configuration';
 import { EOrderBy, EDirection } from '../DonarDashboard/DonarSupportTable';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { Spinner } from '../Loading/Spinner';
+import { TradingButton } from '../BondingCurve/TradingButton';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -490,6 +491,15 @@ const ProjectDonateButton = () => {
         )
       ) : (
         ''
+      )}
+
+      {/* Bonding Curve Trading Button */}
+      {projectData?.abc?.bondingCurveAddress && (
+        <TradingButton
+          contractAddress={projectData.abc.bondingCurveAddress}
+          projectName={projectData.title || 'Project'}
+          className='w-[300px] justify-center'
+        />
       )}
 
       <>

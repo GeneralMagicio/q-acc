@@ -21,7 +21,6 @@ import { Button, ButtonColor } from '../Button';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import config from '@/config/configuration';
 import { Spinner } from '../Loading/Spinner';
-import { TradingButton } from '../BondingCurve/TradingButton';
 
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
@@ -149,15 +148,6 @@ const ProjectDetail = () => {
                   <IconViewTransaction color='#5326EC' />
                 </span>
               </Link>
-
-              {/* Bonding Curve Trading Button */}
-              {projectData?.abc?.bondingCurveAddress && (
-                <TradingButton
-                  contractAddress={projectData.abc.bondingCurveAddress}
-                  projectName={projectData.title || 'Project'}
-                  className='w-[300px] justify-center'
-                />
-              )}
 
               {isTokenListed ? (
                 <Button
