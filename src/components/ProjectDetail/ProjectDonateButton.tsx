@@ -442,6 +442,19 @@ const ProjectDonateButton = () => {
     <div className='flex flex-col gap-4'>
       {TokenInfo()}
 
+      {/* Bonding Curve Trading Button */}
+      {console.log(
+        'bounding curve address:',
+        projectData?.abc?.bondingCurveAddress,
+      )}
+      {projectData?.abc?.bondingCurveAddress && (
+        <TradingButton
+          contractAddress={projectData.abc.bondingCurveAddress}
+          projectName={projectData.title || 'Project'}
+          className='w-[300px] justify-center'
+        />
+      )}
+
       {/* If round is Active show Buy token */}
       {activeRoundDetails && (
         <Button
@@ -491,15 +504,6 @@ const ProjectDonateButton = () => {
         )
       ) : (
         ''
-      )}
-
-      {/* Bonding Curve Trading Button */}
-      {projectData?.abc?.bondingCurveAddress && (
-        <TradingButton
-          contractAddress={projectData.abc.bondingCurveAddress}
-          projectName={projectData.title || 'Project'}
-          className='w-[300px] justify-center'
-        />
       )}
 
       <>
