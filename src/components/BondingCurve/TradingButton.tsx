@@ -1,0 +1,55 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useAccount } from 'wagmi';
+import { Button, ButtonColor, ButtonStyle } from '../Button';
+import { BondingCurveModal } from './BondingCurveModal';
+
+interface TradingButtonProps {
+  contractAddress: string;
+  projectName?: string;
+  className?: string;
+}
+
+export const TradingButton: React.FC<TradingButtonProps> = ({
+  contractAddress,
+  projectName = 'Project',
+  className = '',
+}) => {
+  const { isConnected } = useAccount();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    if (!isConnected) {
+      // You can add a toast notification here
+      console.log('Please connect your wallet first');
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={handleOpenModal}
+        color={ButtonColor.Green}
+        styleType={ButtonStyle.Solid}
+        className={className}
+        disabled={!isConnected}
+      >
+        {isConnected ? 'Trade Tokens' : 'Connect Wallet to Trade'}
+      </Button>
+
+      <BondingCurveModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        contractAddress={contractAddress}
+        projectName={projectName}
+      />
+    </>
+  );
+};
