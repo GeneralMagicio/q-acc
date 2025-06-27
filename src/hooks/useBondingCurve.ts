@@ -4,12 +4,10 @@ import { Address, getContract, parseUnits, formatUnits } from 'viem';
 import bondingCurveABI from '@/lib/abi/bondingCurve';
 
 export interface BondingCurveData {
-  buyFee: bigint;
-  sellFee: bigint;
+  BuyPrice: number;
+  SellPrice: number;
   buyIsOpen: boolean;
   sellIsOpen: boolean;
-  buyReserveRatio: bigint;
-  sellReserveRatio: bigint;
   virtualCollateralSupply: bigint;
   virtualIssuanceSupply: bigint;
   token: Address;
@@ -30,12 +28,10 @@ export const useBondingCurve = (contractAddress: string) => {
           throw new Error('Client or contract address not available');
 
         const [
-          buyFee,
-          sellFee,
+          StaticPriceForBuying,
+          StaticPriceForSelling,
           buyIsOpen,
           sellIsOpen,
-          buyReserveRatio,
-          sellReserveRatio,
           virtualCollateralSupply,
           virtualIssuanceSupply,
           token,
@@ -45,12 +41,12 @@ export const useBondingCurve = (contractAddress: string) => {
             {
               address: contractAddress as Address,
               abi: bondingCurveABI,
-              functionName: 'buyFee',
+              functionName: 'StaticPriceForBuying',
             },
             {
               address: contractAddress as Address,
               abi: bondingCurveABI,
-              functionName: 'sellFee',
+              functionName: 'StaticPriceForSelling',
             },
             {
               address: contractAddress as Address,
@@ -61,16 +57,6 @@ export const useBondingCurve = (contractAddress: string) => {
               address: contractAddress as Address,
               abi: bondingCurveABI,
               functionName: 'sellIsOpen',
-            },
-            {
-              address: contractAddress as Address,
-              abi: bondingCurveABI,
-              functionName: 'getReserveRatioForBuying',
-            },
-            {
-              address: contractAddress as Address,
-              abi: bondingCurveABI,
-              functionName: 'getReserveRatioForSelling',
             },
             {
               address: contractAddress as Address,
@@ -96,12 +82,22 @@ export const useBondingCurve = (contractAddress: string) => {
         });
 
         return {
-          buyFee: buyFee.result as bigint,
-          sellFee: sellFee.result as bigint,
+          BuyPrice: Number(
+            formatUnits(
+              ((StaticPriceForBuying.result as bigint) * BigInt(11)) /
+                BigInt(10),
+              6,
+            ),
+          ), // add 10% fee
+          SellPrice: Number(
+            formatUnits(
+              ((StaticPriceForSelling.result as bigint) * BigInt(9)) /
+                BigInt(10),
+              6,
+            ),
+          ), // deduct 10% fee
           buyIsOpen: buyIsOpen.result as boolean,
           sellIsOpen: sellIsOpen.result as boolean,
-          buyReserveRatio: buyReserveRatio.result as bigint,
-          sellReserveRatio: sellReserveRatio.result as bigint,
           virtualCollateralSupply: virtualCollateralSupply.result as bigint,
           virtualIssuanceSupply: virtualIssuanceSupply.result as bigint,
           token: token.result as Address,

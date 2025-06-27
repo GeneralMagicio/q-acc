@@ -58,41 +58,20 @@ export const BondingCurveInfo: React.FC<BondingCurveInfoProps> = ({
           </span>
         </div>
 
-        {/* Fees */}
-        <div className='pt-4 border-t border-gray-200'>
-          <h4 className='text-sm font-medium text-gray-700 mb-3'>Fees</h4>
-          <div className='space-y-2'>
-            <div className='flex justify-between'>
-              <span className='text-sm text-gray-600'>Buy Fee:</span>
-              <span className='text-sm font-medium'>
-                {formatUnits(bondingCurveData.buyFee, 18)}%
-              </span>
-            </div>
-            <div className='flex justify-between'>
-              <span className='text-sm text-gray-600'>Sell Fee:</span>
-              <span className='text-sm font-medium'>
-                {formatUnits(bondingCurveData.sellFee, 18)}%
-              </span>
-            </div>
-          </div>
-        </div>
-
         {/* Reserve Ratios */}
         <div className='pt-4 border-t border-gray-200'>
-          <h4 className='text-sm font-medium text-gray-700 mb-3'>
-            Reserve Ratios
-          </h4>
+          <h4 className='text-sm font-medium text-gray-700 mb-3'>Prices</h4>
           <div className='space-y-2'>
             <div className='flex justify-between'>
-              <span className='text-sm text-gray-600'>Buy Reserve Ratio:</span>
+              <span className='text-sm text-gray-600'>Buy Price:</span>
               <span className='text-sm font-medium'>
-                {bondingCurveData.buyReserveRatio.toString()}%
+                {bondingCurveData.BuyPrice} WPOL
               </span>
             </div>
             <div className='flex justify-between'>
-              <span className='text-sm text-gray-600'>Sell Reserve Ratio:</span>
+              <span className='text-sm text-gray-600'>Sell Price:</span>
               <span className='text-sm font-medium'>
-                {bondingCurveData.sellReserveRatio.toString()}%
+                {bondingCurveData.SellPrice} WPOL
               </span>
             </div>
           </div>

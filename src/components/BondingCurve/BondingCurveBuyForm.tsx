@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAccount } from 'wagmi';
-import { formatUnits } from 'viem';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
 import { useBondingCurve } from '@/hooks/useBondingCurve';
@@ -133,7 +132,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <Input
             name='depositAmount'
-            label='Amount to Deposit (POL)'
+            label='Amount to Deposit (WPOL)'
             type='number'
             step='0.000001'
             min='0'
@@ -156,12 +155,8 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
               {bondingCurveData && (
                 <div className='mt-2 text-xs text-gray-500'>
                   <div className='flex justify-between'>
-                    <span>Buy Fee:</span>
-                    <span>{formatUnits(bondingCurveData.buyFee, 18)}%</span>
-                  </div>
-                  <div className='flex justify-between'>
-                    <span>Reserve Ratio:</span>
-                    <span>{bondingCurveData.buyReserveRatio.toString()}%</span>
+                    <span>Buy Price:</span>
+                    <span>{bondingCurveData.BuyPrice} WPOL</span>
                   </div>
                 </div>
               )}
