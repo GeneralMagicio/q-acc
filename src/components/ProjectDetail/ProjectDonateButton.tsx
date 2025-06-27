@@ -502,7 +502,7 @@ const ProjectDonateButton = () => {
         <TradingButton
           contractAddress={projectData.abc.fundingManagerAddress}
           projectName={projectData.title || 'Project'}
-          className='w-[300px] justify-center'
+          className='w-full justify-center'
         />
       )}
 
