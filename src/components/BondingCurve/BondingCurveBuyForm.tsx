@@ -16,7 +16,6 @@ interface BondingCurveBuyFormProps {
 interface BuyFormData {
   depositAmount: string;
   minAmountOut: string;
-  receiver?: string;
 }
 
 export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
@@ -35,7 +34,6 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
     defaultValues: {
       depositAmount: '',
       minAmountOut: '',
-      receiver: '',
     },
   });
 
@@ -78,20 +76,10 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
     }
 
     try {
-      let hash: string;
-
-      if (data.receiver && data.receiver.trim()) {
-        hash = await buyTokensFor.mutateAsync({
-          receiver: data.receiver,
-          depositAmount: data.depositAmount,
-          minAmountOut: data.minAmountOut,
-        });
-      } else {
-        hash = await buyTokens.mutateAsync({
-          depositAmount: data.depositAmount,
-          minAmountOut: data.minAmountOut,
-        });
-      }
+      const hash = await buyTokens.mutateAsync({
+        depositAmount: data.depositAmount,
+        minAmountOut: data.minAmountOut,
+      });
 
       onSuccess?.(hash);
       methods.reset();
@@ -134,7 +122,6 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
             name='depositAmount'
             label='Amount to Deposit (WPOL)'
             type='number'
-            step='0.000001'
             min='0'
             rules={{
               required: 'Deposit amount is required',
@@ -189,20 +176,12 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
             name='minAmountOut'
             label='Minimum Tokens to Receive'
             type='number'
-            step='0.000001'
             min='0'
             rules={{
               required: 'Minimum amount out is required',
               min: { value: 0, message: 'Amount must be greater than 0' },
             }}
             placeholder='0.0'
-          />
-
-          <Input
-            name='receiver'
-            label='Receiver Address (Optional)'
-            placeholder='0x...'
-            description='Leave empty to receive tokens in your connected wallet'
           />
 
           <Button

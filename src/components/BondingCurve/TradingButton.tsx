@@ -7,12 +7,14 @@ import { BondingCurveModal } from './BondingCurveModal';
 
 interface TradingButtonProps {
   contractAddress: string;
+  tokenTicker: string;
   projectName?: string;
   className?: string;
 }
 
 export const TradingButton: React.FC<TradingButtonProps> = ({
   contractAddress,
+  tokenTicker,
   projectName = 'Project',
   className = '',
 }) => {
@@ -41,7 +43,7 @@ export const TradingButton: React.FC<TradingButtonProps> = ({
         className={className}
         disabled={!isConnected}
       >
-        {isConnected ? 'Trade Tokens' : 'Connect Wallet to Trade'}
+        {isConnected ? `Trade ${tokenTicker}` : 'Connect Wallet to Trade'}
       </Button>
 
       <BondingCurveModal

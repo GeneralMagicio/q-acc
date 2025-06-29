@@ -16,7 +16,6 @@ interface BondingCurveSellFormProps {
 interface SellFormData {
   depositAmount: string;
   minAmountOut: string;
-  receiver?: string;
 }
 
 export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
@@ -35,7 +34,6 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     defaultValues: {
       depositAmount: '',
       minAmountOut: '',
-      receiver: '',
     },
   });
 
@@ -78,20 +76,10 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     }
 
     try {
-      let hash: string;
-
-      if (data.receiver && data.receiver.trim()) {
-        hash = await sellTokensTo.mutateAsync({
-          receiver: data.receiver,
-          depositAmount: data.depositAmount,
-          minAmountOut: data.minAmountOut,
-        });
-      } else {
-        hash = await sellTokens.mutateAsync({
-          depositAmount: data.depositAmount,
-          minAmountOut: data.minAmountOut,
-        });
-      }
+      const hash = await sellTokens.mutateAsync({
+        depositAmount: data.depositAmount,
+        minAmountOut: data.minAmountOut,
+      });
 
       onSuccess?.(hash);
       methods.reset();
@@ -134,7 +122,6 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
             name='depositAmount'
             label='Amount of Tokens to Sell'
             type='number'
-            step='0.000001'
             min='0'
             rules={{
               required: 'Token amount is required',
@@ -189,20 +176,12 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
             name='minAmountOut'
             label='Minimum WPOL to Receive'
             type='number'
-            step='0.000001'
             min='0'
             rules={{
               required: 'Minimum amount out is required',
               min: { value: 0, message: 'Amount must be greater than 0' },
             }}
             placeholder='0.0'
-          />
-
-          <Input
-            name='receiver'
-            label='Receiver Address (Optional)'
-            placeholder='0x...'
-            description='Leave empty to receive WPOL in your connected wallet'
           />
 
           <Button

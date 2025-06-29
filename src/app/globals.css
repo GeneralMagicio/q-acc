@@ -158,6 +158,10 @@ input[type='number'] {
 
 /* Hide header when modal is open */
 
+body.modal-open {
+    overflow: hidden;
+}
+
 body.modal-open nav {
     z-index: 10 !important;
 }

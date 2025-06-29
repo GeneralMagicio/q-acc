@@ -501,6 +501,7 @@ const ProjectDonateButton = () => {
       {projectData?.abc?.fundingManagerAddress && (
         <TradingButton
           contractAddress={projectData.abc.fundingManagerAddress}
+          tokenTicker={projectData.abc.tokenTicker}
           projectName={projectData.title || 'Project'}
           className='w-full justify-center'
         />

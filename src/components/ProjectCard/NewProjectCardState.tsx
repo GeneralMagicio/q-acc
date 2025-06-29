@@ -27,6 +27,8 @@ import { EDirection, EOrderBy } from '../ProjectDetail/ProjectDonationTable';
 import { Spinner } from '../Loading/Spinner';
 import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getUpcomingRound } from '@/helpers/date';
+import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
+import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -55,6 +57,8 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
   const [marketCapLoading, setMarketCapLoading] = useState(false);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
   const [roundStatus, setRoundStatus] = useState('ended');
+  const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+  const [isBondingCurveModalOpen, setIsBondingCurveModalOpen] = useState(false);
 
   useEffect(() => {
     if (project?.id) {
@@ -505,17 +509,19 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   disabled={maxPOLCap === amountDonatedInRound}
                 />
               ) : (
-                isTokenListed && (
+                isTokenListed &&
+                project.abc?.tokenTicker &&
+                project.abc?.issuanceTokenAddress &&
+                project.abc?.fundingManagerAddress && (
                   <Button
-                    className='w-full  flex justify-center items-center'
+                    className='w-full flex justify-center items-center'
                     color={ButtonColor.Giv}
                     onClick={e => {
                       e.stopPropagation();
-                      const url = `https://dapp.quickswap.exchange/swap/best/ETH/${project?.abc?.issuanceTokenAddress}`;
-                      window.open(url, '_blank', 'noopener,noreferrer');
+                      setIsTradeModalOpen(true);
                     }}
                   >
-                    Buy {project.abc?.tokenTicker} on Quickswap
+                    Trade {project.abc.tokenTicker}
                   </Button>
                 )
               )}
@@ -526,6 +532,26 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
               >
                 Review Project
               </Button>
+
+              {/* Trade Options Modal */}
+              <TradeOptionsModal
+                isOpen={isTradeModalOpen}
+                onClose={() => setIsTradeModalOpen(false)}
+                tokenTicker={project.abc?.tokenTicker || ''}
+                quickswapUrl={`https://dapp.quickswap.exchange/swap/best/ETH/${project.abc?.issuanceTokenAddress}`}
+                onBondingCurve={() => {
+                  setIsTradeModalOpen(false);
+                  setIsBondingCurveModalOpen(true);
+                }}
+              />
+
+              {/* Bonding Curve Modal */}
+              <BondingCurveModal
+                isOpen={isBondingCurveModalOpen}
+                onClose={() => setIsBondingCurveModalOpen(false)}
+                contractAddress={project.abc?.fundingManagerAddress || ''}
+                projectName={project.title || 'Project'}
+              />
             </div>
           </div>
         </div>

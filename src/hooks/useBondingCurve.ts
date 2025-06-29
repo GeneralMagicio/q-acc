@@ -41,12 +41,12 @@ export const useBondingCurve = (contractAddress: string) => {
             {
               address: contractAddress as Address,
               abi: bondingCurveABI,
-              functionName: 'StaticPriceForBuying',
+              functionName: 'getStaticPriceForBuying',
             },
             {
               address: contractAddress as Address,
               abi: bondingCurveABI,
-              functionName: 'StaticPriceForSelling',
+              functionName: 'getStaticPriceForSelling',
             },
             {
               address: contractAddress as Address,
