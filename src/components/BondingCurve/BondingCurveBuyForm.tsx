@@ -5,10 +5,14 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useAccount } from 'wagmi';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
-import { useBondingCurve } from '@/hooks/useBondingCurve';
+import {
+  useBondingCurve,
+  useCalculatePurchaseReturn,
+} from '@/hooks/useBondingCurve';
 
 interface BondingCurveBuyFormProps {
   contractAddress: string;
+  tokenTicker: string;
   onSuccess?: (hash: string) => void;
   onError?: (error: Error) => void;
 }
@@ -20,14 +24,14 @@ interface BuyFormData {
 
 export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
   contractAddress,
+  tokenTicker,
   onSuccess,
   onError,
 }) => {
   const { isConnected } = useAccount();
-  const [calculatedTokens, setCalculatedTokens] = useState<string>('');
   const [slippage, setSlippage] = useState<number>(0.5); // 0.5% default slippage
 
-  const { bondingCurveData, calculatePurchaseReturn, buyTokens, buyTokensFor } =
+  const { bondingCurveData, buyTokens, buyTokensFor } =
     useBondingCurve(contractAddress);
 
   const methods = useForm<BuyFormData>({
@@ -40,29 +44,17 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
   const { watch, setValue, handleSubmit } = methods;
   const depositAmount = watch('depositAmount');
 
-  // Calculate tokens when deposit amount changes
+  // Use the cached calculation hook with built-in debouncing
+  const { data: calculatedTokens, isLoading: isCalculating } =
+    useCalculatePurchaseReturn(contractAddress, depositAmount);
+
+  // Update minimum amount out when calculation changes
   useEffect(() => {
-    const calculateTokens = async () => {
-      if (!depositAmount || parseFloat(depositAmount) <= 0) {
-        setCalculatedTokens('');
-        return;
-      }
-
-      try {
-        const result = await calculatePurchaseReturn.mutateAsync(depositAmount);
-        setCalculatedTokens(result);
-
-        // Calculate minimum amount out based on slippage
-        const minAmountOut = parseFloat(result) * (1 - slippage / 100);
-        setValue('minAmountOut', minAmountOut.toFixed(6));
-      } catch (error) {
-        console.error('Error calculating purchase return:', error);
-        setCalculatedTokens('');
-      }
-    };
-
-    calculateTokens();
-  }, [depositAmount, slippage, calculatePurchaseReturn, setValue]);
+    if (calculatedTokens && !isCalculating) {
+      const minAmountOut = parseFloat(calculatedTokens) * (1 - slippage / 100);
+      setValue('minAmountOut', minAmountOut.toFixed(6));
+    }
+  }, [calculatedTokens, slippage, setValue, isCalculating]);
 
   const onSubmit = async (data: BuyFormData) => {
     if (!isConnected) {
@@ -83,7 +75,6 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
 
       onSuccess?.(hash);
       methods.reset();
-      setCalculatedTokens('');
     } catch (error) {
       console.error('Error buying tokens:', error);
       onError?.(error as Error);
@@ -120,22 +111,22 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <Input
             name='depositAmount'
-            label='Amount to Deposit (WPOL)'
+            label='Amount (WPOL)'
             type='number'
             min='0'
             rules={{
-              required: 'Deposit amount is required',
+              required: 'Amount is required',
               min: { value: 0, message: 'Amount must be greater than 0' },
             }}
             placeholder='0.0'
           />
 
-          {calculatedTokens && (
+          {calculatedTokens && !isCalculating && (
             <div className='bg-gray-50 rounded-lg p-4'>
               <div className='flex justify-between items-center'>
                 <span className='text-sm text-gray-600'>You will receive:</span>
                 <span className='text-lg font-semibold text-green-600'>
-                  {parseFloat(calculatedTokens).toFixed(6)} tokens
+                  {parseFloat(calculatedTokens).toFixed(6)} {tokenTicker}
                 </span>
               </div>
 
@@ -147,6 +138,15 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {isCalculating && depositAmount && parseFloat(depositAmount) > 0 && (
+            <div className='bg-gray-50 rounded-lg p-4'>
+              <div className='flex justify-between items-center'>
+                <span className='text-sm text-gray-600'>Calculating...</span>
+                <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500'></div>
+              </div>
             </div>
           )}
 
@@ -174,7 +174,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
 
           <Input
             name='minAmountOut'
-            label='Minimum Tokens to Receive'
+            label={`Minimum Tokens to Receive (${tokenTicker})`}
             type='number'
             min='0'
             rules={{
@@ -187,14 +187,15 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
           <Button
             type='submit'
             loading={buyTokens.isPending || buyTokensFor.isPending}
-            color={ButtonColor.Green}
+            color={ButtonColor.Giv}
             styleType={ButtonStyle.Solid}
-            className='w-full'
-            disabled={!depositAmount || parseFloat(depositAmount) <= 0}
+            disabled={
+              !depositAmount || parseFloat(depositAmount) <= 0 || isCalculating
+            }
           >
             {buyTokens.isPending || buyTokensFor.isPending
               ? 'Buying Tokens...'
-              : 'Buy Tokens'}
+              : 'Swap'}
           </Button>
         </form>
       </FormProvider>

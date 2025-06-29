@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Address, getContract, parseUnits, formatUnits } from 'viem';
@@ -13,6 +14,109 @@ export interface BondingCurveData {
   token: Address;
   issuanceToken: Address;
 }
+
+// Custom debounce hook
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+// Custom hook for purchase return calculation with caching and debouncing
+export const useCalculatePurchaseReturn = (
+  contractAddress: string,
+  depositAmount: string,
+  debounceMs: number = 500,
+) => {
+  const publicClient = usePublicClient();
+  const debouncedAmount = useDebounce(depositAmount, debounceMs);
+
+  return useQuery({
+    queryKey: ['calculatePurchaseReturn', contractAddress, debouncedAmount],
+    queryFn: async () => {
+      if (
+        !publicClient ||
+        !contractAddress ||
+        !debouncedAmount ||
+        parseFloat(debouncedAmount) <= 0
+      ) {
+        throw new Error('Invalid parameters for calculation');
+      }
+
+      const depositAmountWei = parseUnits(debouncedAmount, 18);
+      const result = await publicClient.readContract({
+        address: contractAddress as Address,
+        abi: bondingCurveABI,
+        functionName: 'calculatePurchaseReturn',
+        args: [depositAmountWei],
+      });
+
+      return formatUnits(result as bigint, 18);
+    },
+    enabled:
+      !!publicClient &&
+      !!contractAddress &&
+      !!debouncedAmount &&
+      parseFloat(debouncedAmount) > 0,
+    staleTime: 10000, // 10 seconds
+    gcTime: 60000, // 1 minute
+    retry: 2,
+    retryDelay: 1000,
+  });
+};
+
+// Custom hook for sale return calculation with caching and debouncing
+export const useCalculateSaleReturn = (
+  contractAddress: string,
+  depositAmount: string,
+  debounceMs: number = 500,
+) => {
+  const publicClient = usePublicClient();
+  const debouncedAmount = useDebounce(depositAmount, debounceMs);
+
+  return useQuery({
+    queryKey: ['calculateSaleReturn', contractAddress, debouncedAmount],
+    queryFn: async () => {
+      if (
+        !publicClient ||
+        !contractAddress ||
+        !debouncedAmount ||
+        parseFloat(debouncedAmount) <= 0
+      ) {
+        throw new Error('Invalid parameters for calculation');
+      }
+
+      const depositAmountWei = parseUnits(debouncedAmount, 18);
+      const result = await publicClient.readContract({
+        address: contractAddress as Address,
+        abi: bondingCurveABI,
+        functionName: 'calculateSaleReturn',
+        args: [depositAmountWei],
+      });
+
+      return formatUnits(result as bigint, 18);
+    },
+    enabled:
+      !!publicClient &&
+      !!contractAddress &&
+      !!debouncedAmount &&
+      parseFloat(debouncedAmount) > 0,
+    staleTime: 10000, // 10 seconds
+    gcTime: 60000, // 1 minute
+    retry: 2,
+    retryDelay: 1000,
+  });
+};
 
 export const useBondingCurve = (contractAddress: string) => {
   const { address } = useAccount();
@@ -105,44 +209,10 @@ export const useBondingCurve = (contractAddress: string) => {
         };
       },
       enabled: !!contractAddress && !!publicClient,
+      staleTime: 30000, // 30 seconds
+      gcTime: 300000, // 5 minutes
     },
   );
-
-  // Calculate purchase return
-  const calculatePurchaseReturn = useMutation({
-    mutationFn: async (depositAmount: string) => {
-      if (!publicClient || !contractAddress)
-        throw new Error('Client or contract address not available');
-
-      const depositAmountWei = parseUnits(depositAmount, 18);
-      const result = await publicClient.readContract({
-        address: contractAddress as Address,
-        abi: bondingCurveABI,
-        functionName: 'calculatePurchaseReturn',
-        args: [depositAmountWei],
-      });
-
-      return formatUnits(result as bigint, 18);
-    },
-  });
-
-  // Calculate sale return
-  const calculateSaleReturn = useMutation({
-    mutationFn: async (depositAmount: string) => {
-      if (!publicClient || !contractAddress)
-        throw new Error('Client or contract address not available');
-
-      const depositAmountWei = parseUnits(depositAmount, 18);
-      const result = await publicClient.readContract({
-        address: contractAddress as Address,
-        abi: bondingCurveABI,
-        functionName: 'calculateSaleReturn',
-        args: [depositAmountWei],
-      });
-
-      return formatUnits(result as bigint, 18);
-    },
-  });
 
   // Buy tokens
   const buyTokens = useMutation({
@@ -300,8 +370,6 @@ export const useBondingCurve = (contractAddress: string) => {
 
   return {
     bondingCurveData,
-    calculatePurchaseReturn,
-    calculateSaleReturn,
     buyTokens,
     buyTokensFor,
     sellTokens,

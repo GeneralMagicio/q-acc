@@ -6,10 +6,12 @@ import { useBondingCurve } from '@/hooks/useBondingCurve';
 
 interface BondingCurveInfoProps {
   contractAddress: string;
+  tokenTicker: string;
 }
 
 export const BondingCurveInfo: React.FC<BondingCurveInfoProps> = ({
   contractAddress,
+  tokenTicker,
 }) => {
   const { bondingCurveData } = useBondingCurve(contractAddress);
 
@@ -88,7 +90,10 @@ export const BondingCurveInfo: React.FC<BondingCurveInfoProps> = ({
                 Virtual Collateral Supply:
               </span>
               <span className='text-sm font-medium'>
-                {formatUnits(bondingCurveData.virtualCollateralSupply, 18)}
+                {Number(
+                  formatUnits(bondingCurveData.virtualCollateralSupply, 18),
+                ).toFixed(3)}{' '}
+                WPOL
               </span>
             </div>
             <div className='flex justify-between'>
@@ -96,7 +101,10 @@ export const BondingCurveInfo: React.FC<BondingCurveInfoProps> = ({
                 Virtual Issuance Supply:
               </span>
               <span className='text-sm font-medium'>
-                {formatUnits(bondingCurveData.virtualIssuanceSupply, 18)}
+                {Number(
+                  formatUnits(bondingCurveData.virtualIssuanceSupply, 18),
+                ).toFixed(3)}{' '}
+                {tokenTicker}
               </span>
             </div>
           </div>

@@ -10,14 +10,14 @@ interface BondingCurveModalProps {
   isOpen: boolean;
   onClose: () => void;
   contractAddress: string;
-  projectName?: string;
+  tokenTicker: string;
 }
 
 export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
   isOpen,
   onClose,
   contractAddress,
-  projectName = 'Project',
+  tokenTicker,
 }) => {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell' | 'info'>('buy');
   const [transactionHash, setTransactionHash] = useState<string>('');
@@ -53,7 +53,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
         {/* Background overlay */}
         <div
           className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onClose();
           }}
@@ -65,10 +65,10 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
           <div className='bg-white px-6 py-4 border-b border-gray-200'>
             <div className='flex items-center justify-between'>
               <h3 className='text-lg font-semibold text-gray-900'>
-                {projectName} Token Trading
+                Trade With The Bonding Curve
               </h3>
               <button
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   onClose();
                 }}
@@ -130,6 +130,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
             {activeTab === 'buy' && (
               <BondingCurveBuyForm
                 contractAddress={contractAddress}
+                tokenTicker={tokenTicker}
                 onSuccess={handleTransactionSuccess}
                 onError={handleTransactionError}
               />
@@ -138,13 +139,17 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
             {activeTab === 'sell' && (
               <BondingCurveSellForm
                 contractAddress={contractAddress}
+                tokenTicker={tokenTicker}
                 onSuccess={handleTransactionSuccess}
                 onError={handleTransactionError}
               />
             )}
 
             {activeTab === 'info' && (
-              <BondingCurveInfo contractAddress={contractAddress} />
+              <BondingCurveInfo
+                contractAddress={contractAddress}
+                tokenTicker={tokenTicker}
+              />
             )}
           </div>
 
