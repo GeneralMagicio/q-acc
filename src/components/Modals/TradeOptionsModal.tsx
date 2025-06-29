@@ -37,24 +37,24 @@ export const TradeOptionsModal: React.FC<TradeOptionsModalProps> = ({
       {/* Background overlay */}
       <div
         className='absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           onClose();
         }}
       ></div>
 
       {/* Modal container */}
-      <div 
+      <div
         className='flex items-center justify-center min-h-screen pt-20 px-4 pb-20 text-center sm:block sm:p-0'
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           onClose();
         }}
       >
         {/* Modal panel */}
-        <div 
+        <div
           className='inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full mt-24'
-          onClick={(e) => e.stopPropagation()}
+          onClick={e => e.stopPropagation()}
         >
           {/* Header */}
           <div className='bg-white px-6 py-4 border-b border-gray-200'>
@@ -63,7 +63,7 @@ export const TradeOptionsModal: React.FC<TradeOptionsModalProps> = ({
                 Buy or Sell ${tokenTicker}
               </h3>
               <button
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   onClose();
                 }}
@@ -89,9 +89,9 @@ export const TradeOptionsModal: React.FC<TradeOptionsModalProps> = ({
           {/* Content */}
           <div className='bg-gray-50 px-6 py-6'>
             <p className='text-gray-700 mb-8'>
-              You can trade tokens directly with the bonding curve or on Quickswap.
-              For larger trades, the bonding curve may have less slippage. Check
-              both to ensure you get the best price.
+              You can trade tokens directly with the bonding curve or on
+              Quickswap. For larger trades, the bonding curve may have less
+              slippage. Check both to ensure you get the best price.
             </p>
             <div className='flex flex-col sm:flex-row gap-4 justify-center'>
               <Button
