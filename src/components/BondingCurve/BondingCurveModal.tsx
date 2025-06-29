@@ -53,7 +53,10 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
         {/* Background overlay */}
         <div
           className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
         ></div>
 
         {/* Modal panel */}
@@ -65,7 +68,10 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                 {projectName} Token Trading
               </h3>
               <button
-                onClick={onClose}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
                 className='text-gray-400 hover:text-gray-600 transition-colors'
               >
                 <svg
