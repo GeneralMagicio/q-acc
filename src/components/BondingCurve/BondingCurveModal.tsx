@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BondingCurveBuyForm } from './BondingCurveBuyForm';
 import { BondingCurveSellForm } from './BondingCurveSellForm';
 import { BondingCurveInfo } from './BondingCurveInfo';
@@ -21,6 +21,20 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell' | 'info'>('buy');
   const [transactionHash, setTransactionHash] = useState<string>('');
+
+  // Add/remove class to body to hide header when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isOpen]);
 
   const handleTransactionSuccess = (hash: string) => {
     setTransactionHash(hash);
