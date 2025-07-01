@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { BondingCurveBuyForm } from './BondingCurveBuyForm';
 import { BondingCurveSellForm } from './BondingCurveSellForm';
-import { BondingCurveInfo } from './BondingCurveInfo';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 
 interface BondingCurveModalProps {
@@ -112,7 +111,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
               >
                 Sell
               </button>
-              <button
+              {/* <button
                 onClick={() => setActiveTab('info')}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                   activeTab === 'info'
@@ -121,7 +120,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                 }`}
               >
                 Info
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -145,12 +144,12 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
               />
             )}
 
-            {activeTab === 'info' && (
+            {/* {activeTab === 'info' && (
               <BondingCurveInfo
                 contractAddress={contractAddress}
                 tokenTicker={tokenTicker}
               />
-            )}
+            )} */}
           </div>
 
           {/* Transaction Success Message */}
