@@ -550,6 +550,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                 isOpen={isBondingCurveModalOpen}
                 onClose={() => setIsBondingCurveModalOpen(false)}
                 contractAddress={project.abc?.fundingManagerAddress || ''}
+                tokenAddress={project.abc?.issuanceTokenAddress || ''}
                 tokenTicker={project.abc?.tokenTicker || ''}
               />
             </div>

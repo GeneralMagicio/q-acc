@@ -11,17 +11,20 @@ interface BondingCurveModalProps {
   onClose: () => void;
   contractAddress: string;
   tokenTicker: string;
+  tokenAddress: string;
 }
 
 interface TransactionResult {
   approvalHash?: string;
-  buyHash: string;
+  buyHash?: string;
+  sellHash?: string;
 }
 
 export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
   isOpen,
   onClose,
   contractAddress,
+  tokenAddress,
   tokenTicker,
 }) => {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell' | 'info'>('buy');
@@ -45,7 +48,12 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
   const handleTransactionSuccess = (result: TransactionResult | string) => {
     // Handle both old format (string hash) and new format (TransactionResult)
     if (typeof result === 'string') {
-      setTransactionResult({ buyHash: result });
+      // Determine if it's a buy or sell based on active tab
+      if (activeTab === 'buy') {
+        setTransactionResult({ buyHash: result });
+      } else {
+        setTransactionResult({ sellHash: result });
+      }
     } else {
       setTransactionResult(result);
     }
@@ -150,6 +158,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
             {activeTab === 'sell' && (
               <BondingCurveSellForm
                 contractAddress={contractAddress}
+                tokenAddress={tokenAddress}
                 tokenTicker={tokenTicker}
                 onSuccess={handleTransactionSuccess}
                 onError={handleTransactionError}
@@ -187,19 +196,37 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                   </Button>
                 </div>
 
-                {/* Show buy transaction */}
-                <div className='mt-2'>
-                  <p className='text-xs text-green-600 font-medium'>
-                    Buy Transaction:
-                  </p>
-                  <div className='mt-1'>
-                    <TransactionHash
-                      value={transactionResult.buyHash}
-                      truncate={false}
-                      className='text-xs text-green-700'
-                    />
+                {/* Show buy transaction if it exists */}
+                {transactionResult.buyHash && (
+                  <div className='mt-2'>
+                    <p className='text-xs text-green-600 font-medium'>
+                      Buy Transaction:
+                    </p>
+                    <div className='mt-1'>
+                      <TransactionHash
+                        value={transactionResult.buyHash}
+                        truncate={false}
+                        className='text-xs text-green-700'
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* Show sell transaction if it exists */}
+                {transactionResult.sellHash && (
+                  <div className='mt-2'>
+                    <p className='text-xs text-green-600 font-medium'>
+                      Sell Transaction:
+                    </p>
+                    <div className='mt-1'>
+                      <TransactionHash
+                        value={transactionResult.sellHash}
+                        truncate={false}
+                        className='text-xs text-green-700'
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

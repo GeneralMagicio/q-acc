@@ -8,12 +8,14 @@ import { BondingCurveModal } from './BondingCurveModal';
 interface TradingButtonProps {
   contractAddress: string;
   tokenTicker: string;
+  tokenAddress: string;
   className?: string;
 }
 
 export const TradingButton: React.FC<TradingButtonProps> = ({
   contractAddress,
   tokenTicker,
+  tokenAddress,
   className = '',
 }) => {
   const { isConnected } = useAccount();
@@ -48,6 +50,7 @@ export const TradingButton: React.FC<TradingButtonProps> = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         contractAddress={contractAddress}
+        tokenAddress={tokenAddress}
         tokenTicker={tokenTicker}
       />
     </>

@@ -569,6 +569,7 @@ const ProjectDonateButton = () => {
         isOpen={isBondingCurveModalOpen}
         onClose={() => setIsBondingCurveModalOpen(false)}
         contractAddress={projectData.abc?.fundingManagerAddress || ''}
+        tokenAddress={projectData.abc?.issuanceTokenAddress || ''}
         tokenTicker={projectData.abc?.tokenTicker || ''}
       />
     </div>

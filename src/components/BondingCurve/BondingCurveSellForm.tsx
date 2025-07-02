@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useAccount } from 'wagmi';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
 import {
@@ -11,10 +11,14 @@ import {
 } from '@/hooks/useBondingCurve';
 import { useRoleCheck } from '@/hooks/useRoleCheck';
 import config from '@/config/configuration';
+import { executeSellFlow } from '@/services/bondingCurveProxy.service';
+import { TransactionStatusModal } from './TransactionStatusModal';
+import { TransactionHash } from './TransactionHash';
 
 interface BondingCurveSellFormProps {
   contractAddress: string;
   tokenTicker: string;
+  tokenAddress: string;
   onSuccess?: (hash: string) => void;
   onError?: (error: Error) => void;
 }
@@ -26,16 +30,24 @@ interface SellFormData {
 
 export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   contractAddress,
+  tokenAddress,
   tokenTicker,
   onSuccess,
   onError,
 }) => {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
   const [slippage, setSlippage] = useState<number>(0.5); // 0.5% default slippage
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [transactionStatus, setTransactionStatus] = useState<string>('');
+  const [transactionResult, setTransactionResult] = useState<null | {
+    approvalHash?: string;
+    sellHash: string;
+  }>(null);
 
-  const { bondingCurveData, sellTokens, sellTokensTo } =
-    useBondingCurve(contractAddress);
-
+  const { bondingCurveData } = useBondingCurve(contractAddress);
   const { data: roleCheckData } = useRoleCheck(
     contractAddress,
     config.PROXY_CONTRACT_ADDRESS,
@@ -63,29 +75,53 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     }
   }, [calculatedWpol, slippage, setValue, isCalculating]);
 
+  const handleStatusUpdate = (status: string) => {
+    setTransactionStatus(status);
+  };
+
   const onSubmit = async (data: SellFormData) => {
-    if (!isConnected) {
-      onError?.(new Error('Wallet not connected'));
+    if (!isConnected || !address || !publicClient || !walletClient) {
+      onError?.(new Error('Wallet not connected or clients not available'));
       return;
     }
-
-    if (!bondingCurveData?.sellIsOpen) {
-      onError?.(new Error('Selling is currently disabled'));
+    if (!bondingCurveData?.sellIsOpen || !roleCheckData?.hasRole) {
+      onError?.(
+        new Error('Selling is currently disabled or you lack permission'),
+      );
       return;
     }
-
+    setIsProcessing(true);
+    setShowStatusModal(true);
+    setTransactionStatus('Starting transaction...');
     try {
-      const hash = await sellTokens.mutateAsync({
-        depositAmount: data.depositAmount,
-        minAmountOut: data.minAmountOut,
-      });
-
-      onSuccess?.(hash);
+      const result = await executeSellFlow(
+        publicClient,
+        walletClient,
+        address,
+        contractAddress,
+        tokenAddress,
+        data.depositAmount,
+        data.minAmountOut,
+        handleStatusUpdate,
+      );
+      setTransactionResult(result);
+      onSuccess?.(result.sellHash);
       methods.reset();
     } catch (error) {
-      console.error('Error selling tokens:', error);
+      console.error('Error in sell flow:', error);
       onError?.(error as Error);
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => {
+        setShowStatusModal(false);
+        setTransactionStatus('');
+      }, 60000);
     }
+  };
+
+  const handleCloseStatusModal = () => {
+    setShowStatusModal(false);
+    setTransactionStatus('');
   };
 
   if (!isConnected) {
@@ -99,23 +135,19 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     );
   }
 
-  if (!bondingCurveData?.sellIsOpen || !roleCheckData?.hasRole) {
-    console.log('has correct role:', roleCheckData?.hasRole);
-    console.log('bonding curve sell is open:', bondingCurveData?.sellIsOpen);
-
-    // Show loading state when role check data is not ready
-    if (bondingCurveData === undefined || roleCheckData === undefined) {
-      return (
-        <div className='bg-white rounded-lg p-6 shadow-sm border'>
-          <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
-          <div className='flex items-center justify-center py-8'>
-            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
-            <span className='ml-3 text-gray-600'>Checking permissions...</span>
-          </div>
+  if (bondingCurveData === undefined || roleCheckData === undefined) {
+    return (
+      <div className='bg-white rounded-lg p-6 shadow-sm border'>
+        <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
+        <div className='flex items-center justify-center py-8'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
+          <span className='ml-3 text-gray-600'>Checking permissions...</span>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
+  if (!bondingCurveData?.sellIsOpen || !roleCheckData?.hasRole) {
     return (
       <div className='bg-white rounded-lg p-6 shadow-sm border'>
         <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
@@ -127,109 +159,110 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   }
 
   return (
-    <div className='bg-white rounded-lg p-6 shadow-sm border'>
-      <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
-
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-          <Input
-            name='depositAmount'
-            label={`Amount (${tokenTicker})`}
-            type='number'
-            min='0'
-            rules={{
-              required: 'Amount is required',
-              min: { value: 0, message: 'Amount must be greater than 0' },
-            }}
-            placeholder='0.0'
-          />
-
-          {calculatedWpol && !isCalculating && (
-            <div className='bg-gray-50 rounded-lg p-4'>
-              <div className='flex justify-between items-center'>
-                <span className='text-sm text-gray-600'>You will receive:</span>
-                <span className='text-lg font-semibold text-green-600'>
-                  {parseFloat(calculatedWpol).toFixed(6)} WPOL
-                </span>
+    <>
+      <div className='bg-white rounded-lg p-6 shadow-sm border'>
+        <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+            <Input
+              name='depositAmount'
+              label={`Amount (${tokenTicker})`}
+              type='number'
+              min='0'
+              rules={{
+                required: 'Amount is required',
+                min: { value: 0, message: 'Amount must be greater than 0' },
+              }}
+              placeholder='0.0'
+              disabled={isProcessing}
+            />
+            {calculatedWpol && !isCalculating && (
+              <div className='bg-gray-50 rounded-lg p-4'>
+                <div className='flex justify-between items-center'>
+                  <span className='text-sm text-gray-600'>
+                    You will receive:
+                  </span>
+                  <span className='text-lg font-semibold text-green-600'>
+                    {parseFloat(calculatedWpol).toFixed(6)} WPOL
+                  </span>
+                </div>
+                {bondingCurveData && (
+                  <div className='mt-2 text-xs text-gray-500'>
+                    <div className='flex justify-between'>
+                      <span>Sell Price:</span>
+                      <span>{bondingCurveData.SellPrice} WPOL</span>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {bondingCurveData && (
-                <div className='mt-2 text-xs text-gray-500'>
-                  <div className='flex justify-between'>
-                    <span>Sell Price:</span>
-                    <span>{bondingCurveData.SellPrice} WPOL</span>
+            )}
+            {isCalculating &&
+              depositAmount &&
+              parseFloat(depositAmount) > 0 && (
+                <div className='bg-gray-50 rounded-lg p-4'>
+                  <div className='flex justify-between items-center'>
+                    <span className='text-sm text-gray-600'>
+                      Calculating...
+                    </span>
+                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500'></div>
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {isCalculating && depositAmount && parseFloat(depositAmount) > 0 && (
-            <div className='bg-gray-50 rounded-lg p-4'>
-              <div className='flex justify-between items-center'>
-                <span className='text-sm text-gray-600'>Calculating...</span>
-                <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500'></div>
+            {/* Slippage Settings */}
+            <div className='pt-4 border-t border-gray-200'>
+              <div className='flex items-center justify-between mb-2'>
+                <span className='text-sm text-gray-600'>
+                  Slippage Tolerance:
+                </span>
+                <span className='text-sm font-medium'>{slippage}%</span>
+              </div>
+              <div className='flex space-x-2'>
+                {[0.1, 0.5, 1.0].map(value => (
+                  <button
+                    key={value}
+                    type='button'
+                    onClick={() => setSlippage(value)}
+                    className={`px-3 py-1 text-xs rounded-md border transition-colors ${
+                      slippage === value
+                        ? 'bg-blue-100 border-blue-300 text-blue-800'
+                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    {value}%
+                  </button>
+                ))}
               </div>
             </div>
-          )}
 
-          <div className='space-y-2'>
-            <label className='block text-sm font-medium text-gray-700'>
-              Slippage Tolerance
-            </label>
-            <div className='flex gap-2'>
-              {[0.1, 0.5, 1.0].map(value => (
-                <button
-                  key={value}
-                  type='button'
-                  onClick={() => setSlippage(value)}
-                  className={`px-3 py-1 rounded text-sm ${
-                    slippage === value
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {value}%
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <Input
-            name='minAmountOut'
-            label='Minimum WPOL to Receive'
-            type='number'
-            min='0'
-            rules={{
-              required: 'Minimum amount out is required',
-              min: { value: 0, message: 'Amount must be greater than 0' },
-            }}
-            placeholder='0.0'
-          />
-
-          <Button
-            type='submit'
-            loading={sellTokens.isPending || sellTokensTo.isPending}
-            color={ButtonColor.Giv}
-            styleType={ButtonStyle.Solid}
-            disabled={
-              !depositAmount || parseFloat(depositAmount) <= 0 || isCalculating
-            }
-          >
-            {sellTokens.isPending || sellTokensTo.isPending
-              ? 'Selling Tokens...'
-              : 'Swap'}
-          </Button>
-        </form>
-      </FormProvider>
-
-      {(sellTokens.error || sellTokensTo.error) && (
-        <div className='mt-4 p-3 bg-red-50 border border-red-200 rounded-lg'>
-          <p className='text-red-600 text-sm'>
-            Error: {(sellTokens.error || sellTokensTo.error)?.message}
-          </p>
-        </div>
-      )}
-    </div>
+            <Input
+              name='minAmountOut'
+              label='Minimum WPOL to Receive'
+              type='float'
+              min='0'
+              rules={{
+                required: 'Minimum amount out is required',
+                min: { value: 0, message: 'Amount must be greater than 0' },
+              }}
+              placeholder='0.0'
+              disabled={isProcessing}
+            />
+            <Button
+              type='submit'
+              color={ButtonColor.Giv}
+              styleType={ButtonStyle.Solid}
+              disabled={isProcessing || isCalculating}
+            >
+              {isProcessing ? 'Processing...' : 'Swap'}
+            </Button>
+          </form>
+        </FormProvider>
+      </div>
+      {/* Transaction Status Modal */}
+      <TransactionStatusModal
+        isOpen={showStatusModal}
+        status={transactionStatus}
+        onClose={handleCloseStatusModal}
+      />
+    </>
   );
 };

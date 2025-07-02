@@ -77,6 +77,9 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
     if (status.includes('Buy transaction failed')) {
       return 'Your buy transaction failed. This could be due to insufficient funds, slippage protection, or contract issues. Please check your inputs and try again.';
     }
+    if (status.includes('Sell transaction failed')) {
+      return 'Your sell transaction failed. This could be due to insufficient tokens, slippage protection, or contract issues. Please check your inputs and try again.';
+    }
     if (status.includes('Transaction failed')) {
       return 'The transaction failed. Please check your wallet and try again.';
     }
@@ -107,9 +110,7 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
                 {status}
               </p>
 
-              {status.includes(
-                'Waiting for approval transaction to be confirmed',
-              ) && (
+              {status.includes('Waiting for approval transaction to be confirmed') && (
                 <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
                   <p className='text-xs text-blue-700'>
                     Please wait while your approval transaction is being
@@ -121,8 +122,17 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
               {status.includes('Waiting for buy transaction confirmation') && (
                 <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
                   <p className='text-xs text-blue-700'>
-                    Please wait while your buy transaction is being confirmed on
-                    the blockchain. This may take a few minutes.
+                    Please wait while your buy transaction is being
+                    confirmed on the blockchain. This may take a few minutes.
+                  </p>
+                </div>
+              )}
+
+              {status.includes('Waiting for sell transaction confirmation') && (
+                <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
+                  <p className='text-xs text-blue-700'>
+                    Please wait while your sell transaction is being
+                    confirmed on the blockchain. This may take a few minutes.
                   </p>
                 </div>
               )}
