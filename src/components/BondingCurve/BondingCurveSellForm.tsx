@@ -13,7 +13,6 @@ import { useRoleCheck } from '@/hooks/useRoleCheck';
 import config from '@/config/configuration';
 import { executeSellFlow } from '@/services/bondingCurveProxy.service';
 import { TransactionStatusModal } from './TransactionStatusModal';
-import { TransactionHash } from './TransactionHash';
 
 interface BondingCurveSellFormProps {
   contractAddress: string;
