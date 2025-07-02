@@ -9,6 +9,8 @@ import {
   useBondingCurve,
   useCalculatePurchaseReturn,
 } from '@/hooks/useBondingCurve';
+import { useRoleCheck } from '@/hooks/useRoleCheck';
+import config from '@/config/configuration';
 
 interface BondingCurveBuyFormProps {
   contractAddress: string;
@@ -33,6 +35,11 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
 
   const { bondingCurveData, buyTokens, buyTokensFor } =
     useBondingCurve(contractAddress);
+
+  const { data: roleCheckData } = useRoleCheck(
+    contractAddress,
+    config.PROXY_CONTRACT_ADDRESS,
+  );
 
   const methods = useForm<BuyFormData>({
     defaultValues: {
@@ -92,7 +99,23 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
     );
   }
 
-  if (!bondingCurveData?.buyIsOpen) {
+  if (!bondingCurveData?.buyIsOpen || !roleCheckData?.hasRole) {
+    console.log('has correct role:', roleCheckData?.hasRole);
+    console.log('bonding curve buy is open:', bondingCurveData?.buyIsOpen);
+
+    // Show loading state when role check data is not ready
+    if (bondingCurveData === undefined || roleCheckData === undefined) {
+      return (
+        <div className='bg-white rounded-lg p-6 shadow-sm border'>
+          <h3 className='text-lg font-semibold mb-4'>Buy Tokens</h3>
+          <div className='flex items-center justify-center py-8'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
+            <span className='ml-3 text-gray-600'>Checking permissions...</span>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className='bg-white rounded-lg p-6 shadow-sm border'>
         <h3 className='text-lg font-semibold mb-4'>Buy Tokens</h3>

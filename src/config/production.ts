@@ -80,6 +80,9 @@ const config: EnvConfig = {
   MINIMUM_DONATION_AMOUNT: 10,
   MATCHING_FUND_ADDRESS: [],
   SQUID_INTEGRATOR_ID: 'test-project-4ba94915-f432-4d42-89df-53c6de4dd93e',
+  PROXY_CONTRACT_ADDRESS:
+    process.env.PROXY_CONTRACT_ADDRESS ||
+    '0xf8EFA36A3C6F1233a4144F5fcA614a28b1fBADEC',
 };
 
 export default config;
