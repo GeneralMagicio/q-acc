@@ -31,4 +31,5 @@ export type EnvConfig = {
   MATCHING_FUND_ADDRESS: string[];
   SQUID_INTEGRATOR_ID: string;
   PROXY_CONTRACT_ADDRESS: string;
+  BONDING_CURVE_COLLATERAL_TOKEN: string;
 };

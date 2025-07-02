@@ -4,12 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { BondingCurveBuyForm } from './BondingCurveBuyForm';
 import { BondingCurveSellForm } from './BondingCurveSellForm';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
+import { TransactionHash } from './TransactionHash';
 
 interface BondingCurveModalProps {
   isOpen: boolean;
   onClose: () => void;
   contractAddress: string;
   tokenTicker: string;
+}
+
+interface TransactionResult {
+  approvalHash?: string;
+  buyHash: string;
 }
 
 export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
@@ -19,7 +25,8 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
   tokenTicker,
 }) => {
   const [activeTab, setActiveTab] = useState<'buy' | 'sell' | 'info'>('buy');
-  const [transactionHash, setTransactionHash] = useState<string>('');
+  const [transactionResult, setTransactionResult] =
+    useState<TransactionResult | null>(null);
 
   // Add/remove class to body to hide header when modal is open
   useEffect(() => {
@@ -35,9 +42,14 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
     };
   }, [isOpen]);
 
-  const handleTransactionSuccess = (hash: string) => {
-    setTransactionHash(hash);
-    console.log('Transaction successful:', hash);
+  const handleTransactionSuccess = (result: TransactionResult | string) => {
+    // Handle both old format (string hash) and new format (TransactionResult)
+    if (typeof result === 'string') {
+      setTransactionResult({ buyHash: result });
+    } else {
+      setTransactionResult(result);
+    }
+    console.log('Transaction successful:', result);
   };
 
   const handleTransactionError = (error: Error) => {
@@ -153,7 +165,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
           </div>
 
           {/* Transaction Success Message */}
-          {transactionHash && (
+          {transactionResult && (
             <div className='bg-white px-6 py-4 border-t border-gray-200'>
               <div className='p-4 bg-green-50 border border-green-200 rounded-lg'>
                 <div className='flex items-center justify-between'>
@@ -166,7 +178,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                     </p>
                   </div>
                   <Button
-                    onClick={() => setTransactionHash('')}
+                    onClick={() => setTransactionResult(null)}
                     color={ButtonColor.Green}
                     styleType={ButtonStyle.Text}
                     className='text-sm'
@@ -174,11 +186,19 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                     Dismiss
                   </Button>
                 </div>
+
+                {/* Show buy transaction */}
                 <div className='mt-2'>
-                  <p className='text-xs text-green-600'>Transaction Hash:</p>
-                  <p className='text-xs font-mono text-green-700 break-all'>
-                    {transactionHash}
+                  <p className='text-xs text-green-600 font-medium'>
+                    Buy Transaction:
                   </p>
+                  <div className='mt-1'>
+                    <TransactionHash
+                      value={transactionResult.buyHash}
+                      truncate={false}
+                      className='text-xs text-green-700'
+                    />
+                  </div>
                 </div>
               </div>
             </div>

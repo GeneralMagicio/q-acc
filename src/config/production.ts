@@ -83,6 +83,9 @@ const config: EnvConfig = {
   PROXY_CONTRACT_ADDRESS:
     process.env.PROXY_CONTRACT_ADDRESS ||
     '0xf8EFA36A3C6F1233a4144F5fcA614a28b1fBADEC',
+  BONDING_CURVE_COLLATERAL_TOKEN:
+    process.env.BONDING_CURVE_COLLATERAL_TOKEN ||
+    '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270', // WPOL
 };
 
 export default config;
