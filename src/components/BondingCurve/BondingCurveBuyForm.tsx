@@ -204,7 +204,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
             )}
 
             {/* Slippage Settings */}
-            <div className='pt-4 border-t border-gray-200'>
+            {/* <div className='pt-4 border-t border-gray-200'>
               <div className='flex items-center justify-between mb-2'>
                 <span className='text-sm text-gray-600'>
                   Slippage Tolerance:
@@ -227,7 +227,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             <Input
               name='minAmountOut'
