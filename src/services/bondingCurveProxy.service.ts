@@ -201,7 +201,7 @@ export async function executeBuyFlow(
       }
 
       console.log('Wrap transaction confirmed');
-      onStatusUpdate?.('Wrap transaction completed!');
+      onStatusUpdate?.('Wrap transaction complete!');
     } else {
       throw new Error('Wrap transaction failed');
     }
@@ -397,7 +397,7 @@ export async function executeSellFlow(
     }
 
     console.log('Sell transaction confirmed');
-    onStatusUpdate?.('Sell transaction completed!');
+    onStatusUpdate?.('Sell transaction complete!');
 
     // Step 3: Unwrap WPOL to POL for user convenience
     onStatusUpdate?.('Unwrapping WPOL to POL...');
