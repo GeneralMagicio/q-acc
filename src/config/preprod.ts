@@ -76,7 +76,7 @@ const config: EnvConfig = {
     '0x84Ed70229D6Fc49d3624a81C8334cC0748ff0f5B',
   BONDING_CURVE_COLLATERAL_TOKEN:
     process.env.BONDING_CURVE_COLLATERAL_TOKEN ||
-    '0x806B448d6C5b507727AD715425B744f038E475bc', // test WMATIC
+    '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270', // WPOL
 };
 
 export default config;
