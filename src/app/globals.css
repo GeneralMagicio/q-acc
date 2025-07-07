@@ -2,7 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -36,28 +35,32 @@ body {
 
 @media (min-width: 640px) {
   .one-side-container {
-    width: calc(50% + 320px); /* 640px / 2 */
+    width: calc(50% + 320px);
+    /* 640px / 2 */
     margin-left: calc(50% - 320px);
   }
 }
 
 @media (min-width: 768px) {
   .one-side-container {
-    width: calc(50% + 384px); /* 768px / 2 */
+    width: calc(50% + 384px);
+    /* 768px / 2 */
     margin-left: calc(50% - 384px);
   }
 }
 
 @media (min-width: 1024px) {
   .one-side-container {
-    width: calc(50% + 512px); /* 1024px / 2 */
+    width: calc(50% + 512px);
+    /* 1024px / 2 */
     margin-left: calc(50% - 512px);
   }
 }
 
 @media (min-width: 1280px) {
   .one-side-container {
-    width: calc(50% + 640px); /* 1280px / 2 */
+    width: calc(50% + 640px);
+    /* 1280px / 2 */
     margin-left: calc(50% - 640px);
   }
 }
@@ -70,12 +73,14 @@ body {
 
 @media (min-width: 1536px) {
   .one-side-container {
-    width: calc(50% + 768px); /* 1536px / 2 */
+    width: calc(50% + 768px);
+    /* 1536px / 2 */
     margin-left: calc(50% - 768px);
   }
 }
 
 /* Swiper */
+
 .swiper-button-disabled {
   opacity: 0.4;
   cursor: default;
@@ -116,6 +121,7 @@ body {
 }
 
 /* Remove arrows from input tags */
+
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -127,6 +133,7 @@ input[type='number'] {
 }
 
 /* Fonts */
+
 @layer base {
   @font-face {
     font-family: 'TuskerGrotesk';
@@ -147,4 +154,14 @@ input[type='number'] {
     font-weight: bold;
     font-style: normal;
   }
+}
+
+/* Hide header when modal is open */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+body.modal-open nav {
+  z-index: 10 !important;
 }

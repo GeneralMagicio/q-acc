@@ -30,4 +30,6 @@ export type EnvConfig = {
   MINIMUM_DONATION_AMOUNT: number;
   MATCHING_FUND_ADDRESS: string[];
   SQUID_INTEGRATOR_ID: string;
+  PROXY_CONTRACT_ADDRESS: string;
+  BONDING_CURVE_COLLATERAL_TOKEN: string;
 };
