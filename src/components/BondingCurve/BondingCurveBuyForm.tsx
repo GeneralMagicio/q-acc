@@ -15,11 +15,14 @@ import config from '@/config/configuration';
 import { executeBuyFlow } from '@/services/bondingCurveProxy.service';
 import { TransactionStatusModal } from './TransactionStatusModal';
 
-
 interface BondingCurveBuyFormProps {
   contractAddress: string;
   tokenTicker: string;
-  onSuccess?: (result: { wrapHash?: string; approvalHash?: string; buyHash: string }) => void;
+  onSuccess?: (result: {
+    wrapHash?: string;
+    approvalHash?: string;
+    buyHash: string;
+  }) => void;
   onError?: (error: Error) => void;
 }
 
@@ -77,18 +80,30 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
   useEffect(() => {
     const checkBalance = async () => {
       setBalanceError(null);
-      if (!publicClient || !address || !depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) return;
+      if (
+        !publicClient ||
+        !address ||
+        !depositAmount ||
+        isNaN(Number(depositAmount)) ||
+        Number(depositAmount) <= 0
+      )
+        return;
       setCheckingBalance(true);
       try {
         // Check if POL is native token (zero address) or ERC20
-        if (config.ERC_TOKEN_ADDRESS === '0x0000000000000000000000000000000000000000') {
+        if (
+          config.ERC_TOKEN_ADDRESS ===
+          '0x0000000000000000000000000000000000000000'
+        ) {
           // Native token - use getBalance
           const balance = await publicClient.getBalance({
             address: address as Address,
           });
           const userBalance = Number(balance) / 1e18;
           if (userBalance < Number(depositAmount)) {
-            setBalanceError(`Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`);
+            setBalanceError(
+              `Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`,
+            );
           }
         } else {
           // ERC20 token - use balanceOf
@@ -96,9 +111,13 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
             address: config.ERC_TOKEN_ADDRESS as Address,
             abi: [
               {
-                inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+                inputs: [
+                  { internalType: 'address', name: 'account', type: 'address' },
+                ],
                 name: 'balanceOf',
-                outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+                outputs: [
+                  { internalType: 'uint256', name: '', type: 'uint256' },
+                ],
                 stateMutability: 'view',
                 type: 'function',
               },
@@ -108,7 +127,9 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
           });
           const userBalance = Number(balance) / 1e18;
           if (userBalance < Number(depositAmount)) {
-            setBalanceError(`Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`);
+            setBalanceError(
+              `Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`,
+            );
           }
         }
       } catch (e: any) {
@@ -300,7 +321,12 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
                 type='submit'
                 color={ButtonColor.Giv}
                 styleType={ButtonStyle.Solid}
-                disabled={isProcessing || isCalculating || !!balanceError || checkingBalance}
+                disabled={
+                  isProcessing ||
+                  isCalculating ||
+                  !!balanceError ||
+                  checkingBalance
+                }
               >
                 {isProcessing ? 'Processing...' : 'Swap'}
               </Button>

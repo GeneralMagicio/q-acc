@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { Address } from 'viem';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
 import {
@@ -13,13 +14,16 @@ import { useRoleCheck } from '@/hooks/useRoleCheck';
 import config from '@/config/configuration';
 import { executeSellFlow } from '@/services/bondingCurveProxy.service';
 import { TransactionStatusModal } from './TransactionStatusModal';
-import { Address } from 'viem';
 
 interface BondingCurveSellFormProps {
   contractAddress: string;
   tokenTicker: string;
   tokenAddress: string;
-  onSuccess?: (result: { approvalHash?: string; sellHash: string; unwrapHash?: string }) => void;
+  onSuccess?: (result: {
+    approvalHash?: string;
+    sellHash: string;
+    unwrapHash?: string;
+  }) => void;
   onError?: (error: Error) => void;
 }
 
@@ -91,7 +95,14 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   useEffect(() => {
     const checkBalance = async () => {
       setBalanceError(null);
-      if (!publicClient || !address || !depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) return;
+      if (
+        !publicClient ||
+        !address ||
+        !depositAmount ||
+        isNaN(Number(depositAmount)) ||
+        Number(depositAmount) <= 0
+      )
+        return;
       setCheckingBalance(true);
       try {
         const balance = await publicClient.readContract({
@@ -102,7 +113,9 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
         });
         const userBalance = Number(balance) / 1e18;
         if (userBalance < Number(depositAmount)) {
-          setBalanceError(`Insufficient balance. You need ${depositAmount} ${tokenTicker} but have ${userBalance}.`);
+          setBalanceError(
+            `Insufficient balance. You need ${depositAmount} ${tokenTicker} but have ${userBalance}.`,
+          );
         }
       } catch (e: any) {
         setBalanceError('Failed to check balance.');
@@ -291,7 +304,12 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
               type='submit'
               color={ButtonColor.Giv}
               styleType={ButtonStyle.Solid}
-              disabled={isProcessing || isCalculating || !!balanceError || checkingBalance}
+              disabled={
+                isProcessing ||
+                isCalculating ||
+                !!balanceError ||
+                checkingBalance
+              }
             >
               {isProcessing ? 'Processing...' : 'Swap'}
             </Button>

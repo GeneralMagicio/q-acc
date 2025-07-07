@@ -78,7 +78,7 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
         }}
       >
         {/* Modal panel */}
-        <div 
+        <div
           className='inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full mt-16'
           onClick={e => e.stopPropagation()}
         >

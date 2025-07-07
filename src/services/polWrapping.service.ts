@@ -1,5 +1,4 @@
-import { Address, parseEther, formatUnits, getContract } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { Address, parseEther, formatUnits } from 'viem';
 import config from '@/config/configuration';
 import WRAPPED_POL_ABI from '@/lib/abi/wrappedPol';
 
@@ -23,7 +22,9 @@ export async function checkPOLBalance(
 ): Promise<string> {
   try {
     // Check if POL is native token (zero address) or ERC20
-    if (config.ERC_TOKEN_ADDRESS === '0x0000000000000000000000000000000000000000') {
+    if (
+      config.ERC_TOKEN_ADDRESS === '0x0000000000000000000000000000000000000000'
+    ) {
       // Native token - use getBalance
       const balance = await publicClient.getBalance({
         address: userAddress as Address,
@@ -191,4 +192,4 @@ export async function executePOLWrappingFlow(
     console.error('Error in POL wrapping flow:', error);
     throw error;
   }
-} 
+}

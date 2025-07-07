@@ -190,7 +190,7 @@ export async function executeBuyFlow(
     if (wrapResult.wrapHash) {
       console.log('Waiting for wrap transaction to be confirmed...');
       onStatusUpdate?.('Waiting for wrap transaction confirmation...');
-      
+
       const wrapReceipt = await waitForTransactionReceipt(publicClient, {
         hash: wrapResult.wrapHash as Address,
       });
@@ -402,35 +402,40 @@ export async function executeSellFlow(
     // Step 3: Unwrap WPOL to POL for user convenience
     onStatusUpdate?.('Unwrapping WPOL to POL...');
     let unwrapHash: string | undefined;
-    
+
     try {
       // Get the amount of WPOL received from the sell transaction receipt
       const sellReceipt = await publicClient.getTransactionReceipt({
         hash: sellHash as Address,
       });
       console.log('Sell transaction receipt retrieved successfully');
-      
+
       // Check if the sell transaction was successful
       if (sellReceipt.status === 'reverted') {
         throw new Error('Sell transaction failed');
       }
-      
-      onStatusUpdate?.('Sell transaction successful, checking for WPOL transfer...');
-      
+
+      onStatusUpdate?.(
+        'Sell transaction successful, checking for WPOL transfer...',
+      );
+
       // Parse the logs to find the Transfer event for WPOL received
       console.log('Sell transaction logs:', sellReceipt.logs);
-      const wpolTransferLogs = sellReceipt.logs.filter((log: any) => 
-        log.address.toLowerCase() === config.BONDING_CURVE_COLLATERAL_TOKEN.toLowerCase() &&
-        log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef' // Transfer event signature
+      const wpolTransferLogs = sellReceipt.logs.filter(
+        (log: any) =>
+          log.address.toLowerCase() ===
+            config.BONDING_CURVE_COLLATERAL_TOKEN.toLowerCase() &&
+          log.topics[0] ===
+            '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', // Transfer event signature
       );
-      
+
       // Find the transfer to the user address
       const userTransferLog = wpolTransferLogs.find((log: any) => {
         // The 'to' address is in the third topic (index 2)
         const toAddress = '0x' + log.topics[2].slice(26); // Remove padding
         return toAddress.toLowerCase() === userAddress.toLowerCase();
       });
-      
+
       let wpolAmount = 0;
       if (userTransferLog) {
         // The amount is in the data field
@@ -439,7 +444,7 @@ export async function executeSellFlow(
       } else {
         console.log('No WPOL transfer found in transaction logs');
       }
-      
+
       if (wpolAmount > 0) {
         unwrapHash = await unwrapWPOL(
           walletClient,
@@ -447,7 +452,7 @@ export async function executeSellFlow(
           wpolAmount.toString(),
           onStatusUpdate,
         );
-        
+
         console.log('Unwrap transaction hash:', unwrapHash);
         onStatusUpdate?.('Waiting for unwrap transaction confirmation...');
 

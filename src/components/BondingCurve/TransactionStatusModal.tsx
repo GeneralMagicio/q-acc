@@ -160,7 +160,9 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
                 </div>
               )}
 
-              {status.includes('Waiting for unwrap transaction confirmation') && (
+              {status.includes(
+                'Waiting for unwrap transaction confirmation',
+              ) && (
                 <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
                   <p className='text-xs text-blue-700'>
                     Please wait while your unwrap transaction is being confirmed
