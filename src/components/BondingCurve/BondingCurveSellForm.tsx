@@ -13,12 +13,13 @@ import { useRoleCheck } from '@/hooks/useRoleCheck';
 import config from '@/config/configuration';
 import { executeSellFlow } from '@/services/bondingCurveProxy.service';
 import { TransactionStatusModal } from './TransactionStatusModal';
+import { Address } from 'viem';
 
 interface BondingCurveSellFormProps {
   contractAddress: string;
   tokenTicker: string;
   tokenAddress: string;
-  onSuccess?: (hash: string) => void;
+  onSuccess?: (result: { approvalHash?: string; sellHash: string; unwrapHash?: string }) => void;
   onError?: (error: Error) => void;
 }
 
@@ -26,6 +27,16 @@ interface SellFormData {
   depositAmount: string;
   minAmountOut: string;
 }
+
+const ERC20_ABI = [
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];
 
 export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   contractAddress,
@@ -45,6 +56,8 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     approvalHash?: string;
     sellHash: string;
   }>(null);
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+  const [checkingBalance, setCheckingBalance] = useState(false);
 
   const { bondingCurveData } = useBondingCurve(contractAddress);
   const { data: roleCheckData } = useRoleCheck(
@@ -73,6 +86,32 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
       setValue('minAmountOut', minAmountOut.toFixed(6));
     }
   }, [calculatedWpol, slippage, setValue, isCalculating]);
+
+  // Check user ABC token balance on depositAmount change
+  useEffect(() => {
+    const checkBalance = async () => {
+      setBalanceError(null);
+      if (!publicClient || !address || !depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) return;
+      setCheckingBalance(true);
+      try {
+        const balance = await publicClient.readContract({
+          address: tokenAddress as Address,
+          abi: ERC20_ABI,
+          functionName: 'balanceOf',
+          args: [address as Address],
+        });
+        const userBalance = Number(balance) / 1e18;
+        if (userBalance < Number(depositAmount)) {
+          setBalanceError(`Insufficient balance. You need ${depositAmount} ${tokenTicker} but have ${userBalance}.`);
+        }
+      } catch (e: any) {
+        setBalanceError('Failed to check balance.');
+      } finally {
+        setCheckingBalance(false);
+      }
+    };
+    checkBalance();
+  }, [publicClient, address, depositAmount, tokenAddress, tokenTicker]);
 
   const handleStatusUpdate = (status: string) => {
     setTransactionStatus(status);
@@ -104,7 +143,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
         handleStatusUpdate,
       );
       setTransactionResult(result);
-      onSuccess?.(result.sellHash);
+      onSuccess?.(result);
       methods.reset();
     } catch (error) {
       console.error('Error in sell flow:', error);
@@ -161,12 +200,15 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     <>
       <div className='bg-white rounded-lg p-6 shadow-sm border'>
         <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
+        {balanceError && (
+          <div className='mb-2 text-red-600 text-sm'>{balanceError}</div>
+        )}
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <Input
               name='depositAmount'
               label={`Amount (${tokenTicker})`}
-              type='number'
+              type='float'
               min='0'
               rules={{
                 required: 'Amount is required',
@@ -249,7 +291,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
               type='submit'
               color={ButtonColor.Giv}
               styleType={ButtonStyle.Solid}
-              disabled={isProcessing || isCalculating}
+              disabled={isProcessing || isCalculating || !!balanceError || checkingBalance}
             >
               {isProcessing ? 'Processing...' : 'Swap'}
             </Button>

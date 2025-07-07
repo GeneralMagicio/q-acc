@@ -71,6 +71,12 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
   };
 
   const getErrorMessage = (status: string) => {
+    if (status.includes('Wrap transaction failed')) {
+      return 'Your POL wrapping transaction failed. This could be due to insufficient POL balance, insufficient gas, or user rejection. Please check your POL balance and try again.';
+    }
+    if (status.includes('Insufficient POL balance')) {
+      return status; // Return the specific error message from the service
+    }
     if (status.includes('Approval transaction failed')) {
       return 'Your approval transaction failed. This could be due to insufficient gas, user rejection, or contract issues. Please try again.';
     }
@@ -80,8 +86,14 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
     if (status.includes('Sell transaction failed')) {
       return 'Your sell transaction failed. This could be due to insufficient tokens, slippage protection, or contract issues. Please check your inputs and try again.';
     }
+    if (status.includes('Unwrap transaction failed')) {
+      return 'Your unwrap transaction failed. This could be due to insufficient gas, user rejection, or contract issues. The sell was successful, but WPOL was not unwrapped to POL.';
+    }
     if (status.includes('Transaction failed')) {
       return 'The transaction failed. Please check your wallet and try again.';
+    }
+    if (status.includes('Insufficient balance')) {
+      return status; // Return the specific error message from the service
     }
     return '';
   };
@@ -110,6 +122,15 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
                 {status}
               </p>
 
+              {status.includes('Waiting for wrap transaction confirmation') && (
+                <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
+                  <p className='text-xs text-blue-700'>
+                    Please wait while your POL wrapping transaction is being
+                    confirmed on the blockchain. This may take a few minutes.
+                  </p>
+                </div>
+              )}
+
               {status.includes(
                 'Waiting for approval transaction to be confirmed',
               ) && (
@@ -134,6 +155,15 @@ export const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
                 <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
                   <p className='text-xs text-blue-700'>
                     Please wait while your sell transaction is being confirmed
+                    on the blockchain. This may take a few minutes.
+                  </p>
+                </div>
+              )}
+
+              {status.includes('Waiting for unwrap transaction confirmation') && (
+                <div className='bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4'>
+                  <p className='text-xs text-blue-700'>
+                    Please wait while your unwrap transaction is being confirmed
                     on the blockchain. This may take a few minutes.
                   </p>
                 </div>
