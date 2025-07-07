@@ -15,9 +15,11 @@ interface BondingCurveModalProps {
 }
 
 interface TransactionResult {
+  wrapHash?: string;
   approvalHash?: string;
   buyHash?: string;
   sellHash?: string;
+  unwrapHash?: string;
 }
 
 export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
@@ -45,18 +47,8 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
     };
   }, [isOpen]);
 
-  const handleTransactionSuccess = (result: TransactionResult | string) => {
-    // Handle both old format (string hash) and new format (TransactionResult)
-    if (typeof result === 'string') {
-      // Determine if it's a buy or sell based on active tab
-      if (activeTab === 'buy') {
-        setTransactionResult({ buyHash: result });
-      } else {
-        setTransactionResult({ sellHash: result });
-      }
-    } else {
-      setTransactionResult(result);
-    }
+  const handleTransactionSuccess = (result: TransactionResult) => {
+    setTransactionResult(result);
     console.log('Transaction successful:', result);
   };
 
@@ -67,19 +59,29 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 z-50 overflow-y-auto'>
-      <div className='flex items-center justify-center min-h-screen pt-20 px-4 pb-20 text-center sm:block sm:p-0'>
-        {/* Background overlay */}
-        <div
-          className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
-          onClick={e => {
-            e.stopPropagation();
-            onClose();
-          }}
-        ></div>
+    <div className='fixed inset-0 z-50'>
+      {/* Background overlay */}
+      <div
+        className='absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
+        onClick={e => {
+          e.stopPropagation();
+          onClose();
+        }}
+      ></div>
 
+      {/* Modal container */}
+      <div
+        className='flex items-center justify-center min-h-screen pt-20 px-4 pb-20 text-center sm:block sm:p-0'
+        onClick={e => {
+          e.stopPropagation();
+          onClose();
+        }}
+      >
         {/* Modal panel */}
-        <div className='inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full mt-16'>
+        <div
+          className='inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full mt-16'
+          onClick={e => e.stopPropagation()}
+        >
           {/* Header */}
           <div className='bg-white px-6 py-4 border-b border-gray-200'>
             <div className='flex items-center justify-between'>
@@ -221,6 +223,22 @@ export const BondingCurveModal: React.FC<BondingCurveModalProps> = ({
                     <div className='mt-1'>
                       <TransactionHash
                         value={transactionResult.sellHash}
+                        truncate={false}
+                        className='text-xs text-green-700'
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Show unwrap transaction if it exists */}
+                {transactionResult.unwrapHash && (
+                  <div className='mt-2'>
+                    <p className='text-xs text-green-600 font-medium'>
+                      Unwrap Transaction:
+                    </p>
+                    <div className='mt-1'>
+                      <TransactionHash
+                        value={transactionResult.unwrapHash}
                         truncate={false}
                         className='text-xs text-green-700'
                       />

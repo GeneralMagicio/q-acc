@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { Address } from 'viem';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
 import {
@@ -17,7 +18,11 @@ import { TransactionStatusModal } from './TransactionStatusModal';
 interface BondingCurveBuyFormProps {
   contractAddress: string;
   tokenTicker: string;
-  onSuccess?: (hash: string) => void;
+  onSuccess?: (result: {
+    wrapHash?: string;
+    approvalHash?: string;
+    buyHash: string;
+  }) => void;
   onError?: (error: Error) => void;
 }
 
@@ -39,6 +44,8 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [transactionStatus, setTransactionStatus] = useState<string>('');
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+  const [checkingBalance, setCheckingBalance] = useState(false);
 
   const { bondingCurveData } = useBondingCurve(contractAddress);
 
@@ -68,6 +75,71 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
       setValue('minAmountOut', minAmountOut.toFixed(6));
     }
   }, [calculatedTokens, slippage, setValue, isCalculating]);
+
+  // Check user POL balance on depositAmount change
+  useEffect(() => {
+    const checkBalance = async () => {
+      setBalanceError(null);
+      if (
+        !publicClient ||
+        !address ||
+        !depositAmount ||
+        isNaN(Number(depositAmount)) ||
+        Number(depositAmount) <= 0
+      )
+        return;
+      setCheckingBalance(true);
+      try {
+        // Check if POL is native token (zero address) or ERC20
+        if (
+          config.ERC_TOKEN_ADDRESS ===
+          '0x0000000000000000000000000000000000000000'
+        ) {
+          // Native token - use getBalance
+          const balance = await publicClient.getBalance({
+            address: address as Address,
+          });
+          const userBalance = Number(balance) / 1e18;
+          if (userBalance < Number(depositAmount)) {
+            setBalanceError(
+              `Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`,
+            );
+          }
+        } else {
+          // ERC20 token - use balanceOf
+          const balance = await publicClient.readContract({
+            address: config.ERC_TOKEN_ADDRESS as Address,
+            abi: [
+              {
+                inputs: [
+                  { internalType: 'address', name: 'account', type: 'address' },
+                ],
+                name: 'balanceOf',
+                outputs: [
+                  { internalType: 'uint256', name: '', type: 'uint256' },
+                ],
+                stateMutability: 'view',
+                type: 'function',
+              },
+            ],
+            functionName: 'balanceOf',
+            args: [address as Address],
+          });
+          const userBalance = Number(balance) / 1e18;
+          if (userBalance < Number(depositAmount)) {
+            setBalanceError(
+              `Insufficient POL balance. You need ${depositAmount} POL but have ${userBalance.toFixed(6)} POL.`,
+            );
+          }
+        }
+      } catch (e: any) {
+        setBalanceError('Failed to check balance.');
+      } finally {
+        setCheckingBalance(false);
+      }
+    };
+    checkBalance();
+  }, [publicClient, address, depositAmount]);
 
   const handleStatusUpdate = (status: string) => {
     setTransactionStatus(status);
@@ -102,8 +174,8 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
         handleStatusUpdate,
       );
 
-      // Call onSuccess with the buy transaction hash
-      onSuccess?.(result.buyHash);
+      // Call onSuccess with the complete result object
+      onSuccess?.(result);
       methods.reset();
     } catch (error) {
       console.error('Error in buy flow:', error);
@@ -165,13 +237,15 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
     <>
       <div className='bg-white rounded-lg p-6 shadow-sm border'>
         <h3 className='text-lg font-semibold mb-4'>Buy Tokens</h3>
-
+        {balanceError && (
+          <div className='mb-2 text-red-600 text-sm'>{balanceError}</div>
+        )}
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <Input
               name='depositAmount'
-              label='Amount (WPOL)'
-              type='number'
+              label='Amount (POL)'
+              type='float'
               min='0'
               rules={{
                 required: 'Amount is required',
@@ -247,7 +321,12 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
                 type='submit'
                 color={ButtonColor.Giv}
                 styleType={ButtonStyle.Solid}
-                disabled={isProcessing || isCalculating}
+                disabled={
+                  isProcessing ||
+                  isCalculating ||
+                  !!balanceError ||
+                  checkingBalance
+                }
               >
                 {isProcessing ? 'Processing...' : 'Swap'}
               </Button>
