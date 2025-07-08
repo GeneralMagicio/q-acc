@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { Address } from 'viem';
+import { useAppKit } from '@reown/appkit/react';
 import { Button, ButtonColor, ButtonStyle } from '../Button';
 import Input from '../Input';
 import {
@@ -52,6 +53,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
   const { isConnected, address } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+  const { open } = useAppKit();
   const [slippage, setSlippage] = useState<number>(0.5); // 0.5% default slippage
   const [isProcessing, setIsProcessing] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -179,9 +181,16 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
     return (
       <div className='bg-white rounded-lg p-6 shadow-sm border'>
         <h3 className='text-lg font-semibold mb-4'>Sell Tokens</h3>
-        <p className='text-gray-600'>
+        <p className='text-gray-600 mb-4'>
           Please connect your wallet to sell tokens.
         </p>
+        <Button
+          onClick={() => open()}
+          color={ButtonColor.Giv}
+          styleType={ButtonStyle.Solid}
+        >
+          Connect Wallet
+        </Button>
       </div>
     );
   }
