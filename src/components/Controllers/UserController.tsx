@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { redirect, useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { fetchGivethUserInfo } from '@/services/user.service';
 import { SignModal } from '../Modals/SignModal';
 import { SanctionModal } from '../Modals/SanctionModal';
@@ -63,17 +63,23 @@ export const UserController = () => {
         if (!user?.acceptedToS) {
           setShowTermsModal(true);
         } else {
-          router.push(Routes.VerifyPrivado);
+          // router.push(Routes.VerifyPrivado);
+          // Verification no longer required - skip to projects
+          router.push(Routes.Projects);
         }
         console.log('saved');
       } else {
         console.log('No user in giveth data');
-        setShowCompleteProfileModal(true);
+        // setShowCompleteProfileModal(true);
+        // Profile creation no longer required - skip to projects
+        router.push(Routes.Projects);
       }
     }
 
     if (!isProductReleased) {
-      return redirect(Routes.KycLanding);
+      // return redirect(Routes.KycLanding);
+      // Verification no longer required - skip to projects
+      router.push(Routes.Projects);
     }
 
     // Check if user is whitelisted
@@ -130,11 +136,13 @@ export const UserController = () => {
 
   const handleTermsClose = () => {
     setShowTermsModal(false);
-    if (user?.fullName) {
-      router.push(Routes.VerifyPrivado);
-    } else {
-      setShowCompleteProfileModal(true);
-    }
+    // if (user?.fullName) {
+    //   router.push(Routes.VerifyPrivado);
+    // } else {
+    //   setShowCompleteProfileModal(true);
+    // }
+    // Profile creation no longer required - skip to projects
+    router.push(Routes.Projects);
   };
 
   // Determine which modal to show based on priority
@@ -163,14 +171,15 @@ export const UserController = () => {
     );
   }
 
-  if (showCompleteProfileModal) {
-    return (
-      <TermsConditionModal
-        isOpen={showCompleteProfileModal}
-        onClose={() => setShowCompleteProfileModal(false)}
-      />
-    );
-  }
+  // Profile creation modal removed - no longer required
+  // if (showCompleteProfileModal) {
+  //   return (
+  //     <TermsConditionModal
+  //       isOpen={showCompleteProfileModal}
+  //       onClose={() => setShowCompleteProfileModal(false)}
+  //     />
+  //   );
+  // }
 
   return null;
 };
