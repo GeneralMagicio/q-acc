@@ -521,7 +521,7 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                       setIsTradeModalOpen(true);
                     }}
                   >
-                    Trade {project.abc.tokenTicker}
+                    Trade ${project.abc.tokenTicker}
                   </Button>
                 )
               )}
