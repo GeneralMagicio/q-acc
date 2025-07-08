@@ -24,6 +24,8 @@ import config from '@/config/configuration';
 import { EOrderBy, EDirection } from '../DonarDashboard/DonarSupportTable';
 import { fetchProjectDonationsById } from '@/services/donation.services';
 import { Spinner } from '../Loading/Spinner';
+import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
+import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -48,6 +50,8 @@ const ProjectDonateButton = () => {
   const [marketCap, setMarketCap] = useState(0);
   const [marketCapChangePercentage, setMarketCapChangePercentage] = useState(0);
   const [marketCapLoading, setMarketCapLoading] = useState(false);
+  const [isTradeModalOpen, setTradeModalOpen] = useState(false);
+  const [isBondingCurveModalOpen, setIsBondingCurveModalOpen] = useState(false);
 
   useEffect(() => {
     if (projectData?.id) {
@@ -464,7 +468,8 @@ const ProjectDonateButton = () => {
         </Button>
       )}
 
-      {/* If round is not active */}
+      {/* commet out because we add it to the trade token modal */}
+      {/* If round is not active
       {!activeRoundDetails ? (
         isTokenListed ? (
           <Button
@@ -490,7 +495,7 @@ const ProjectDonateButton = () => {
         )
       ) : (
         ''
-      )}
+      )} */}
 
       <>
         {/* {isTokenListed ? (
@@ -540,6 +545,33 @@ const ProjectDonateButton = () => {
             ) : null
           ) : null} */}
       </>
+
+      <Button
+        color={ButtonColor.Giv}
+        className='w-full justify-center rounded-xl'
+        onClick={() => setTradeModalOpen(true)}
+      >
+        Trade ${projectData?.abc?.tokenTicker}
+      </Button>
+
+      <TradeOptionsModal
+        isOpen={isTradeModalOpen}
+        onClose={() => setTradeModalOpen(false)}
+        tokenTicker={projectData.abc.tokenTicker}
+        quickswapUrl={`https://dapp.quickswap.exchange/swap/best/ETH/${projectData?.abc?.issuanceTokenAddress}`}
+        onBondingCurve={() => {
+          setTradeModalOpen(false);
+          setIsBondingCurveModalOpen(true);
+        }}
+      />
+
+      <BondingCurveModal
+        isOpen={isBondingCurveModalOpen}
+        onClose={() => setIsBondingCurveModalOpen(false)}
+        contractAddress={projectData.abc?.fundingManagerAddress || ''}
+        tokenAddress={projectData.abc?.issuanceTokenAddress || ''}
+        tokenTicker={projectData.abc?.tokenTicker || ''}
+      />
     </div>
   );
 };

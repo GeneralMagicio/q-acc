@@ -178,16 +178,13 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 # Developer Sequence Diagrams
 
-
 ## 1. User Onboarding & zkID Verification Flow
 
 ![image](https://github.com/user-attachments/assets/a26b4020-a8e2-4add-a5e0-114a3a4e75d7)
 
-
 ## 2. Project Creation Flow
 
 ![image](https://github.com/user-attachments/assets/48b5064b-77b4-41f2-8372-5e696d6a2d6d)
-
 
 ## 3. Supporting a Project (Donation/Buy Token)
 
@@ -200,5 +197,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## 5. Claiming Reward Tokens
 
 ![image](https://github.com/user-attachments/assets/ffdb25d9-247c-4321-99f1-814869834e31)
-
-

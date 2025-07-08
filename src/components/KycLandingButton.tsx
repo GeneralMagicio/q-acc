@@ -33,11 +33,14 @@ export const KycLandingButton = () => {
         };
 
         await updateUser(_user);
-        route.push(Routes.VerifyPrivado);
+        // route.push(Routes.VerifyPrivado);
+        route.push(Routes.Projects);
         console.log('saved');
       } else {
         console.log('No user in giveth data');
-        route.push(Routes.CreateProfile);
+        // route.push(Routes.CreateProfile);
+        // Profile creation no longer required - skip to projects
+        route.push(Routes.Projects);
       }
     }
   };
@@ -48,11 +51,13 @@ export const KycLandingButton = () => {
       color={ButtonColor.Pink}
       className={'mx-auto'}
       onClick={() => {
-        if (user?.fullName) {
-          route.push(Routes.VerifyPrivado);
-        } else {
-          handleStartKyc();
-        }
+        // if (user?.fullName) {
+        //   route.push(Routes.VerifyPrivado);
+        // } else {
+        //   handleStartKyc();
+        // }
+        // Profile creation no longer required - skip to projects
+        route.push(Routes.Projects);
       }}
     >
       <div className='flex gap-2'>

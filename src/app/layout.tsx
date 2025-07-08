@@ -10,7 +10,11 @@ import ClientLayout from './ClientLayout';
 import { GA_ID, GTM_ID } from '@/config/configuration';
 import type { Metadata } from 'next';
 
-const nunito = Nunito_Sans({ subsets: ['latin'] });
+const nunito = Nunito_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
+});
 
 const title = 'Quadratic Acceleration';
 const description =

@@ -62,7 +62,9 @@ const CreateProjectForm: FC = () => {
       // const dest = isUserWhiteListed
       //   ? '/create/project'
       //   : '/create/verify-privado';
-      router.push(Routes.VerifyPrivado + '?b=cp');
+      // router.push(Routes.VerifyPrivado + '?b=cp');
+      // Profile creation no longer required - skip to projects
+      router.push(Routes.Projects);
     }
     console.log('res', res);
   };
