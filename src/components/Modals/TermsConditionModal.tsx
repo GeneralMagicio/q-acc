@@ -25,7 +25,9 @@ export const TermsConditionModal: FC<ConnectModalProps> = ({
   const { data: user } = useFetchUser();
   const router = useRouter();
   const { mutate: updateAcceptedTerms } = useUpdateAcceptedTerms(() => {
-    if (!user?.fullName) router.push(Routes.CreateProfile);
+    // if (!user?.fullName) router.push(Routes.CreateProfile);
+    // Profile creation no longer required - skip to projects
+    router.push(Routes.Projects);
   });
 
   const [isUsUkChecked, setIsUsUkChecked] = useState<boolean>(false);
