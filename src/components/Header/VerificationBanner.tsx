@@ -1,6 +1,6 @@
-import { usePrivado } from '@/hooks/usePrivado';
-import { IconExternalLink } from '../Icons/IconExternalLink';
-import { useFetchUser } from '@/hooks/useFetchUser';
+// import { usePrivado } from '@/hooks/usePrivado';
+// import { IconExternalLink } from '../Icons/IconExternalLink';
+// import { useFetchUser } from '@/hooks/useFetchUser';
 
 export const VerificationBanner = () => {
   // const { isVerified, isLoading } = usePrivado();
