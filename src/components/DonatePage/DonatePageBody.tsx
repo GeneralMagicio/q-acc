@@ -323,44 +323,45 @@ const DonatePageBody: React.FC<DonatePageBodyProps> = ({ setIsConfirming }) => {
     //   }
     // }
 
-    if (!isVerified) {
-      if (
-        activeRoundDetails &&
-        'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
-      ) {
-        const convertedCap =
-          (await convertToPOLAmount(
-            selectedToken,
-            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
-          )) ?? 0;
+    // Verification checks removed - users can now donate without verification
+    // if (!isVerified) {
+    //   if (
+    //     activeRoundDetails &&
+    //     'roundPOLCapPerUserPerProjectWithGitcoinScoreOnly' in activeRoundDetails
+    //   ) {
+    //     const convertedCap =
+    //       (await convertToPOLAmount(
+    //         selectedToken,
+    //         activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+    //       )) ?? 0;
 
-        if (parseFloat(inputAmount) > convertedCap) {
-          console.log(
-            'User is not verified with Privado ID',
-            activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
-          );
-          setShowZkidModal(true);
-          setDonateDisabled(false);
-          return;
-        }
-      }
+    //     if (parseFloat(inputAmount) > convertedCap) {
+    //       console.log(
+    //         'User is not verified with Privado ID',
+    //         activeRoundDetails?.roundPOLCapPerUserPerProjectWithGitcoinScoreOnly,
+    //       );
+    //       setShowZkidModal(true);
+    //       setDonateDisabled(false);
+    //       return;
+    //     }
+    //   }
 
-      if (
-        !user?.skipVerification &&
-        !user?.hasEnoughGitcoinPassportScore &&
-        !user?.hasEnoughGitcoinAnalysisScore
-      ) {
-        setDonateDisabled(false);
-        setShowGitcoinModal(true);
-        console.log('User is not verified with Human Passport');
-        return;
-      } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
-        console.log('User is not verified with Privado ID');
-        setDonateDisabled(false);
-        setShowZkidModal(true);
-        return;
-      }
-    }
+    //   if (
+    //     !user?.skipVerification &&
+    //     !user?.hasEnoughGitcoinPassportScore &&
+    //     !user?.hasEnoughGitcoinAnalysisScore
+    //   ) {
+    //     setDonateDisabled(false);
+    //     setShowGitcoinModal(true);
+    //     console.log('User is not verified with Human Passport');
+    //     return;
+    //   } else if (parseFloat(inputAmount) > userUnusedCapOnGP) {
+    //     console.log('User is not verified with Privado ID');
+    //     setDonateDisabled(false);
+    //     setShowZkidModal(true);
+    //     return;
+    //   }
+    // }
 
     if (
       parseFloat(inputAmount) < minimumContributionAmount ||

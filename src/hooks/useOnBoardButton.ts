@@ -27,16 +27,22 @@ export const useOnBoardButton = () => {
       };
     }
 
-    if (isVerified) {
-      return {
-        label: 'View Projects',
-        href: Routes.Projects,
-      };
-    }
+    // if (isVerified) {
+    //   return {
+    //     label: 'View Projects',
+    //     href: Routes.Projects,
+    //   };
+    // }
 
+    // return {
+    //   label: 'Get Started',
+    //   href: user?.fullName ? Routes.VerifyPrivado : Routes.CreateProfile,
+    // };
+
+    // Verification no longer required - users can always view projects
     return {
-      label: 'Get Started',
-      href: user?.fullName ? Routes.VerifyPrivado : Routes.CreateProfile,
+      label: 'View Projects',
+      href: Routes.Projects,
     };
   };
 
