@@ -237,14 +237,14 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
                     You will receive:
                   </span>
                   <span className='text-lg font-semibold text-green-600'>
-                    {parseFloat(calculatedWpol).toFixed(6)} WPOL
+                    {parseFloat(calculatedWpol).toFixed(6)} POL
                   </span>
                 </div>
                 {bondingCurveData && (
                   <div className='mt-2 text-xs text-gray-500'>
                     <div className='flex justify-between'>
                       <span>Sell Price:</span>
-                      <span>{bondingCurveData.SellPrice} WPOL</span>
+                      <span>{bondingCurveData.SellPrice} POL</span>
                     </div>
                   </div>
                 )}
@@ -290,7 +290,7 @@ export const BondingCurveSellForm: React.FC<BondingCurveSellFormProps> = ({
 
             <Input
               name='minAmountOut'
-              label='Minimum WPOL to Receive'
+              label='Minimum POL to Receive'
               type='float'
               min='0'
               rules={{

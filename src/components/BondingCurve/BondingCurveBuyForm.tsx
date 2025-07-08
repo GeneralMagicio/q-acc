@@ -270,7 +270,7 @@ export const BondingCurveBuyForm: React.FC<BondingCurveBuyFormProps> = ({
                   <div className='mt-2 text-xs text-gray-500'>
                     <div className='flex justify-between'>
                       <span>Buy Price:</span>
-                      <span>{bondingCurveData.BuyPrice} WPOL</span>
+                      <span>{bondingCurveData.BuyPrice} POL</span>
                     </div>
                   </div>
                 )}
