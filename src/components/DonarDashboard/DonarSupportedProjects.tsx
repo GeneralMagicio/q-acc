@@ -421,7 +421,7 @@ const DonarSupportedProjects = ({
                   ~{' '}
                   {totalClaimableRewardTokens !== null
                     ? formatAmount(
-                      Number(claimableReward) * (currentTokenPrice || 0),
+                        Number(claimableReward) * (currentTokenPrice || 0),
                       )
                     : '---'}{' '}
                   POL
