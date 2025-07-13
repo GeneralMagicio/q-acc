@@ -83,12 +83,10 @@ const DonarSupportedProjects = ({
   useEffect(() => {
     const fetchPoolAddress = async () => {
       if (project?.abc?.issuanceTokenAddress) {
-        // const { price, isListed } = await getPoolAddressByPair(
-        //   project.abc.issuanceTokenAddress,
-        //   config.WPOL_TOKEN_ADDRESS,
-        // );
-
-        const isListed = true;
+        const { price, isListed } = await getPoolAddressByPair(
+          project.abc.issuanceTokenAddress,
+          config.WPOL_TOKEN_ADDRESS,
+        );
 
         setIsTokenListed(isListed);
       }
