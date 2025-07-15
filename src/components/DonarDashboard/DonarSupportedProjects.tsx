@@ -206,7 +206,7 @@ const DonarSupportedProjects = ({
             onClick={handleShare}
             className='cursor-pointer p-2 rounded-lg border-gray-200 border'
           >
-            <IconShare color='#4F576A' size={24} />
+            <IconShare size={24} color='black' />
           </div>
         </div>
         <div className='flex flex-col gap-4 font-redHatText'>
