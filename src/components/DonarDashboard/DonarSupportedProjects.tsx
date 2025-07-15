@@ -28,6 +28,10 @@ import {
   useReleasableForStream,
 } from '@/hooks/useClaimRewards';
 import { useGetCurrentTokenPrice } from '@/hooks/useGetCurrentTokenPrice';
+import config from '@/config/configuration';
+import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
+import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
+import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -55,6 +59,9 @@ const DonarSupportedProjects = ({
   const { data: activeRoundDetails } = useFetchActiveRoundDetails();
   const [maxPOLCap, setMaxPOLCap] = useState(0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isTokenListed, setIsTokenListed] = useState(false);
+  const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
+  const [isBondingCurveModalOpen, setIsBondingCurveModalOpen] = useState(false);
   const openShareModal = () => setIsShareModalOpen(true);
   const closeShareModal = () => setIsShareModalOpen(false);
   const { issuanceTokenAddress } = project?.abc || {};
@@ -72,6 +79,21 @@ const DonarSupportedProjects = ({
 
     updatePOLCap();
   }, [activeRoundDetails, projectId, maxPOLCap]);
+
+  useEffect(() => {
+    const fetchPoolAddress = async () => {
+      if (project?.abc?.issuanceTokenAddress) {
+        const { price, isListed } = await getPoolAddressByPair(
+          project.abc.issuanceTokenAddress,
+          config.WPOL_TOKEN_ADDRESS,
+        );
+
+        setIsTokenListed(isListed);
+      }
+    };
+
+    fetchPoolAddress();
+  }, [project?.abc?.issuanceTokenAddress]);
 
   const { data: isSafeAccount } = useCheckSafeAccount();
 
@@ -180,6 +202,12 @@ const DonarSupportedProjects = ({
                 </Link>
               );
             })}
+          <div
+            onClick={handleShare}
+            className='cursor-pointer p-2 rounded-lg border-gray-200 border'
+          >
+            <IconShare size={24} color='black' />
+          </div>
         </div>
         <div className='flex flex-col gap-4 font-redHatText'>
           <div className='flex gap-4 flex-wrap'>
@@ -221,15 +249,22 @@ const DonarSupportedProjects = ({
                 <IconViewTransaction color='#5326EC' />
               </span>
             </Link>
-            <div
-              onClick={handleShare}
-              className='cursor-pointer py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1'
-            >
-              <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
-                Share Project
-                <IconShare color='#5326EC' size={24} />
-              </span>
-            </div>{' '}
+            {isTokenListed &&
+              project.abc?.tokenTicker &&
+              project.abc?.issuanceTokenAddress &&
+              project.abc?.fundingManagerAddress && (
+                <div
+                  className='py-2 px-4 border border-giv-500 rounded-3xl flex justify-center flex-1 cursor-pointer'
+                  onClick={e => {
+                    e.stopPropagation();
+                    setIsTradeModalOpen(true);
+                  }}
+                >
+                  <span className='flex gap-4 text-[#5326EC] font-bold items-center text-nowrap'>
+                    Trade ${project.abc.tokenTicker}
+                  </span>
+                </div>
+              )}
             <ShareProjectModal
               isOpen={isShareModalOpen}
               onClose={closeShareModal}
@@ -452,6 +487,27 @@ const DonarSupportedProjects = ({
             Tokens & Contributions Breakdown <IconBreakdownArrow />
           </Button>
         </Link>
+
+        {/* Trade Options Modal */}
+        <TradeOptionsModal
+          isOpen={isTradeModalOpen}
+          onClose={() => setIsTradeModalOpen(false)}
+          tokenTicker={project.abc?.tokenTicker || ''}
+          quickswapUrl={`https://dapp.quickswap.exchange/swap/best/ETH/${project.abc?.issuanceTokenAddress}`}
+          onBondingCurve={() => {
+            setIsTradeModalOpen(false);
+            setIsBondingCurveModalOpen(true);
+          }}
+        />
+
+        {/* Bonding Curve Modal */}
+        <BondingCurveModal
+          isOpen={isBondingCurveModalOpen}
+          onClose={() => setIsBondingCurveModalOpen(false)}
+          contractAddress={project.abc?.fundingManagerAddress || ''}
+          tokenAddress={project.abc?.issuanceTokenAddress || ''}
+          tokenTicker={project.abc?.tokenTicker || ''}
+        />
       </div>
     </div>
   );
