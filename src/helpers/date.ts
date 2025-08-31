@@ -24,24 +24,29 @@ export function formatDateMonthDayYear(isoString: string) {
  * and day overflows (e.g., adding months that lead to invalid dates).
  *
  * @param {string} startDateString - The starting date in string format (ISO or other formats parsable by Date).
+ * @param {string} endDateString - The ending date in string format (ISO or other formats parsable by Date).
  * @param {number} yearsToAdd - The number of years to add to the starting date. Can be a fractional number (e.g., 1.5 for 1 year and 6 months).
  *
- * @returns {string} - A formatted string representing the time difference from now to the calculated end date, such as "X Years Y Months Z Days".
- * If the end date is in the past, the function returns a message indicating that the period has ended.
+ * @returns {string} - A formatted string representing the time difference from now to the start date, such as "X Years Y Months Z Days".
+ * If the current time is after the end date, returns "The period has ended.".
+ * If the current time is between start and end dates, returns "Stream has started.".
+ * If the current time is before the start date, returns the countdown to start.
  *
  * Example usage:
- *   getDifferenceFromPeriod("2023-09-11T13:20:36.013Z", 1.5);
+ *   getDifferenceFromPeriod("2023-09-11T13:20:36.013Z", "2024-09-11T13:20:36.013Z", 1.5);
  *   // Returns a string like "1 Year 6 Months 15 Days" depending on the current date.
  */
 export function getDifferenceFromPeriod(
   startDateString: string,
+  endDateString: string,
   yearsToAdd: number,
 ) {
   // Get the current date
   const now = new Date();
 
-  // Parse the provided start date
+  // Parse the provided start and end dates
   const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
 
   // Calculate the number of full years and the remaining months from the fractional years
   const fullYears = Math.floor(yearsToAdd);
@@ -59,12 +64,14 @@ export function getDifferenceFromPeriod(
     finalDate.setDate(0); // Set to last day of previous month if overflow occurs
   }
 
-  // Calculate the difference in milliseconds
-  const diffInMilliseconds = Number(finalDate) - Number(now);
-
-  // If the date is in the past, return a message
-  if (diffInMilliseconds < 0) {
+  // Check if we're after the end date (period has ended)
+  if (now > endDate) {
     return 'The period has ended.';
+  }
+
+  // Check if we're between start and end dates (stream has started)
+  if (now >= startDate && now <= endDate) {
+    return 'Stream has started.';
   }
 
   // Calculate months and years using date math

@@ -193,6 +193,7 @@ const DonarSupportTable = () => {
                   <div className='p-[18px_4px]  text-[#1D1E1F]  flex gap-2 text-start border-b w-full min-w-[150px]'>
                     {getDifferenceFromPeriod(
                       donation.rewardStreamStart,
+                      donation.rewardStreamEnd,
                       donation.cliff / OneYearInMilliSecs,
                     )}
                   </div>

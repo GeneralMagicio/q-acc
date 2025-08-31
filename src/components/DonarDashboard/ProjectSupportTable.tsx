@@ -309,6 +309,7 @@ const ProjectSupportTable = ({
                     {donation.rewardStreamStart
                       ? getDifferenceFromPeriod(
                           donation.rewardStreamStart,
+                          donation.rewardStreamEnd,
                           donation.cliff / OneYearInMilliSecs,
                         )
                       : '-'}
