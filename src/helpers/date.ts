@@ -70,7 +70,7 @@ export function getDifferenceFromPeriod(
   }
 
   // Check if we're between start and end dates (stream has started)
-  if (now >= startDate && now <= endDate) {
+  if (now >= finalDate && now <= endDate) {
     return 'Stream has started.';
   }
 
