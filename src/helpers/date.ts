@@ -66,12 +66,12 @@ export function getDifferenceFromPeriod(
 
   // Check if we're after the end date (period has ended)
   if (now > endDate) {
-    return 'The period has ended.';
+    return 'The period has ended';
   }
 
   // Check if we're between start and end dates (stream has started)
   if (now >= finalDate && now <= endDate) {
-    return 'Stream has started.';
+    return 'Stream has started';
   }
 
   // Calculate months and years using date math
