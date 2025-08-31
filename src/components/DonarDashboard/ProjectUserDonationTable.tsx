@@ -374,6 +374,7 @@ const ProjectUserDonationTable: React.FC<ProjectUserDonationTableProps> = ({
                     {donation.rewardStreamStart
                       ? getDifferenceFromPeriod(
                           donation.rewardStreamStart,
+                          donation.rewardStreamEnd,
                           donation.cliff / OneYearInMilliSecs,
                         )
                       : '-'}
