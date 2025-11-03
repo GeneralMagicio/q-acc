@@ -26,6 +26,10 @@ import { fetchProjectDonationsById } from '@/services/donation.services';
 import { Spinner } from '../Loading/Spinner';
 import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
 import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
+import {
+  hasGracefulExit,
+  getGracefulExitTweetUrl,
+} from '@/config/gracefulExitProjects';
 
 const ProjectDonateButton = () => {
   const { projectData, totalAmount: totalPOLDonated } = useProjectContext();
@@ -546,13 +550,29 @@ const ProjectDonateButton = () => {
           ) : null} */}
       </>
 
-      <Button
-        color={ButtonColor.Giv}
-        className='w-full justify-center rounded-xl'
-        onClick={() => setTradeModalOpen(true)}
-      >
-        Trade ${projectData?.abc?.tokenTicker}
-      </Button>
+      {projectData?.slug && hasGracefulExit(projectData.slug) ? (
+        <Button
+          color={ButtonColor.Giv}
+          className='w-full justify-center rounded-xl gap-2'
+          onClick={e => {
+            e.stopPropagation();
+            const tweetUrl = getGracefulExitTweetUrl(projectData.slug);
+            if (tweetUrl) {
+              window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+            }
+          }}
+        >
+          Graceful Exit Completed!
+        </Button>
+      ) : (
+        <Button
+          color={ButtonColor.Giv}
+          className='w-full justify-center rounded-xl'
+          onClick={() => setTradeModalOpen(true)}
+        >
+          Trade ${projectData?.abc?.tokenTicker}
+        </Button>
+      )}
 
       <TradeOptionsModal
         isOpen={isTradeModalOpen}

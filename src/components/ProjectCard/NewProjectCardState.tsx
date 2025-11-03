@@ -29,6 +29,10 @@ import { useFetchAllRound } from '@/hooks/useFetchAllRound';
 import { getUpcomingRound } from '@/helpers/date';
 import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
 import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
+import {
+  hasGracefulExit,
+  getGracefulExitTweetUrl,
+} from '@/config/gracefulExitProjects';
 
 interface ProjectCardProps extends React.HTMLAttributes<HTMLDivElement> {
   project: IProject;
@@ -508,6 +512,20 @@ export const NewProjectCardState: FC<ProjectCardProps> = ({
                   project={project}
                   disabled={maxPOLCap === amountDonatedInRound}
                 />
+              ) : project.slug && hasGracefulExit(project.slug) ? (
+                <Button
+                  className='w-full flex justify-center items-center gap-2'
+                  color={ButtonColor.Giv}
+                  onClick={e => {
+                    e.stopPropagation();
+                    const tweetUrl = getGracefulExitTweetUrl(project.slug);
+                    if (tweetUrl) {
+                      window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                >
+                  Graceful Exit Completed!
+                </Button>
               ) : (
                 isTokenListed &&
                 project.abc?.tokenTicker &&

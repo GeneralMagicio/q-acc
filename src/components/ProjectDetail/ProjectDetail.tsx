@@ -21,6 +21,10 @@ import { Button, ButtonColor } from '../Button';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import config from '@/config/configuration';
 import { Spinner } from '../Loading/Spinner';
+import {
+  hasGracefulExit,
+  getGracefulExitTweetUrl,
+} from '@/config/gracefulExitProjects';
 
 export enum EProjectPageTabs {
   DONATIONS = 'supporters',
@@ -149,7 +153,21 @@ const ProjectDetail = () => {
                 </span>
               </Link>
 
-              {isTokenListed ? (
+              {projectData?.slug && hasGracefulExit(projectData.slug) ? (
+                <Button
+                  color={ButtonColor.Pink}
+                  className='w-[300px] justify-center gap-2 opacity-80 hover:opacity-100'
+                  onClick={e => {
+                    e.stopPropagation();
+                    const tweetUrl = getGracefulExitTweetUrl(projectData.slug);
+                    if (tweetUrl) {
+                      window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                >
+                  Graceful Exit Completed!
+                </Button>
+              ) : isTokenListed ? (
                 <Button
                   onClick={e => {
                     e.stopPropagation();
