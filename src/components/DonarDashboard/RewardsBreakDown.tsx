@@ -23,6 +23,10 @@ import {
   useReleasedForStream,
 } from '@/hooks/useClaimRewards';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
+import {
+  hasGracefulExit,
+  getGracefulExitTweetUrl,
+} from '@/config/gracefulExitProjects';
 
 const RewardsBreakDown: React.FC = () => {
   const { address } = useAccount();
@@ -236,15 +240,31 @@ const RewardsBreakDown: React.FC = () => {
               </span>
             </div>
 
-            <Button
-              color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
-              onClick={() => claim.mutateAsync()}
-              disabled={availableToClaim <= 0}
-              loading={claim.isPending}
-              className='flex  justify-center'
-            >
-              Claim Tokens
-            </Button>
+            {project?.slug && hasGracefulExit(project.slug) ? (
+              <Button
+                color={ButtonColor.Giv}
+                onClick={e => {
+                  e.stopPropagation();
+                  const tweetUrl = getGracefulExitTweetUrl(project.slug);
+                  if (tweetUrl) {
+                    window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+                  }
+                }}
+                className='flex justify-center gap-2'
+              >
+                Graceful Exit Completed!
+              </Button>
+            ) : (
+              <Button
+                color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
+                onClick={() => claim.mutateAsync()}
+                disabled={availableToClaim <= 0}
+                loading={claim.isPending}
+                className='flex justify-center'
+              >
+                Claim Tokens
+              </Button>
+            )}
           </div>
         ) : (
           ''

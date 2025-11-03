@@ -32,6 +32,10 @@ import config from '@/config/configuration';
 import { getPoolAddressByPair } from '@/helpers/getListedTokenData';
 import { TradeOptionsModal } from '../Modals/TradeOptionsModal';
 import { BondingCurveModal } from '../BondingCurve/BondingCurveModal';
+import {
+  hasGracefulExit,
+  getGracefulExitTweetUrl,
+} from '@/config/gracefulExitProjects';
 
 const DonarSupportedProjects = ({
   projectId,
@@ -469,15 +473,31 @@ const DonarSupportedProjects = ({
         )}
 
         {/* Claim Rewards */}
-        <Button
-          color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
-          className='flex justify-center rounded-xl'
-          disabled={!isTokenClaimable}
-          loading={claim.isPending}
-          onClick={() => claim.mutateAsync()}
-        >
-          Claim Tokens
-        </Button>
+        {project?.slug && hasGracefulExit(project.slug) ? (
+          <Button
+            color={ButtonColor.Giv}
+            className='flex justify-center rounded-xl gap-2'
+            onClick={e => {
+              e.stopPropagation();
+              const tweetUrl = getGracefulExitTweetUrl(project.slug);
+              if (tweetUrl) {
+                window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+              }
+            }}
+          >
+            Graceful Exit Completed!
+          </Button>
+        ) : (
+          <Button
+            color={isTokenClaimable ? ButtonColor.Giv : ButtonColor.Gray}
+            className='flex justify-center rounded-xl'
+            disabled={!isTokenClaimable}
+            loading={claim.isPending}
+            onClick={() => claim.mutateAsync()}
+          >
+            Claim Tokens
+          </Button>
+        )}
         <Link href={`/dashboard?tab=contributions&projectId=${projectId}`}>
           <Button
             color={ButtonColor.Base}
