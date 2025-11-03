@@ -154,32 +154,19 @@ const ProjectDetail = () => {
               </Link>
 
               {projectData?.slug && hasGracefulExit(projectData.slug) ? (
-                <div className='w-[300px] px-6 py-[10px] border border-[#5326EC] rounded-3xl flex justify-center items-center gap-2 bg-white'>
-                  <span className='text-[#5326EC] font-bold font-redHatText'>
-                    Graceful Exit Completed!
-                  </span>
-                  {getGracefulExitTweetUrl(projectData.slug) && (
-                    <Link
-                      target='_blank'
-                      href={getGracefulExitTweetUrl(projectData.slug)!}
-                      className='text-[#5326EC] hover:opacity-80'
-                      title='View tweet'
-                    >
-                      <svg
-                        width='20'
-                        height='20'
-                        viewBox='0 0 24 24'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
-                      >
-                        <path
-                          d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'
-                          fill='currentColor'
-                        />
-                      </svg>
-                    </Link>
-                  )}
-                </div>
+                <Button
+                  color={ButtonColor.Pink}
+                  className='w-[300px] justify-center gap-2 opacity-80 hover:opacity-100'
+                  onClick={e => {
+                    e.stopPropagation();
+                    const tweetUrl = getGracefulExitTweetUrl(projectData.slug);
+                    if (tweetUrl) {
+                      window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                >
+                  Graceful Exit Completed!
+                </Button>
               ) : isTokenListed ? (
                 <Button
                   onClick={e => {

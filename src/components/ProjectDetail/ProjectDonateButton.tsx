@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Button, ButtonColor } from '../Button';
 import { useProjectContext } from '@/context/project.context';
 import { IconTokenSchedule } from '../Icons/IconTokenSchedule';
@@ -552,32 +551,19 @@ const ProjectDonateButton = () => {
       </>
 
       {projectData?.slug && hasGracefulExit(projectData.slug) ? (
-        <div className='w-full flex justify-center items-center gap-2 py-3 px-4 bg-gray-100 rounded-xl'>
-          <span className='text-gray-600 font-medium'>
-            Graceful Exit Completed!
-          </span>
-          {getGracefulExitTweetUrl(projectData.slug) && (
-            <Link
-              target='_blank'
-              href={getGracefulExitTweetUrl(projectData.slug)!}
-              className='text-gray-600 hover:opacity-80 transition-opacity'
-              title='View tweet'
-            >
-              <svg
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'
-                  fill='currentColor'
-                />
-              </svg>
-            </Link>
-          )}
-        </div>
+        <Button
+          color={ButtonColor.Giv}
+          className='w-full justify-center rounded-xl gap-2'
+          onClick={e => {
+            e.stopPropagation();
+            const tweetUrl = getGracefulExitTweetUrl(projectData.slug);
+            if (tweetUrl) {
+              window.open(tweetUrl, '_blank', 'noopener,noreferrer');
+            }
+          }}
+        >
+          Graceful Exit Completed!
+        </Button>
       ) : (
         <Button
           color={ButtonColor.Giv}
