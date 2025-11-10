@@ -79,11 +79,16 @@ export const useStreamIds = ({
           client,
           receiver,
         ])) as Array<{
+          token: `0x${string}`;
           streamId: bigint;
           amount: bigint;
-          startTime: bigint;
-          endTime: bigint;
+          released: bigint;
+          start: bigint;
+          cliff: bigint;
+          end: bigint;
         }>;
+
+        console.log('paymentOrders', paymentOrders);
 
         // Extract stream IDs
         return paymentOrders.map(order => BigInt(order.streamId.toString()));

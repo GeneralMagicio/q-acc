@@ -171,6 +171,11 @@ export const claimTokensABI = [
       {
         components: [
           {
+            internalType: 'address',
+            name: 'token',
+            type: 'address',
+          },
+          {
             internalType: 'uint256',
             name: 'streamId',
             type: 'uint256',
@@ -182,16 +187,26 @@ export const claimTokensABI = [
           },
           {
             internalType: 'uint256',
-            name: 'startTime',
+            name: 'released',
             type: 'uint256',
           },
           {
             internalType: 'uint256',
-            name: 'endTime',
+            name: 'start',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'cliff',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'end',
             type: 'uint256',
           },
         ],
-        internalType: 'struct PaymentOrder[]',
+        internalType: 'tuple[]',
         name: '',
         type: 'tuple[]',
       },
