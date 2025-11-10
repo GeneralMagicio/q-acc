@@ -26,6 +26,7 @@ import { useFetchPOLPriceSquid } from '@/hooks/useFetchPOLPriceSquid';
 import {
   useClaimRewards,
   useReleasableForStream,
+  useStreamIds,
 } from '@/hooks/useClaimRewards';
 import { useGetCurrentTokenPrice } from '@/hooks/useGetCurrentTokenPrice';
 import config from '@/config/configuration';
@@ -122,18 +123,18 @@ const DonarSupportedProjects = ({
     social => social.type === EProjectSocialMediaType.WEBSITE,
   )?.link;
 
+  // Dynamically fetch stream IDs
+  const { data: streamIds = [] } = useStreamIds({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    client: project?.abc?.paymentRouterAddress!,
+    receiver: address,
+  });
+
   const releasable = useReleasableForStream({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamIds: [
-      BigInt(1),
-      BigInt(2),
-      BigInt(3),
-      BigInt(4),
-      BigInt(5),
-      BigInt(6),
-    ],
+    streamIds: streamIds,
   });
 
   const claimableReward = releasable.data

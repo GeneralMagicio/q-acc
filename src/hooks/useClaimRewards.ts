@@ -36,6 +36,76 @@ export const useClaimRewards = ({
   return { claim };
 };
 
+/**
+ * Fetch stream IDs for a user dynamically
+ */
+export const useStreamIds = ({
+  paymentProcessorAddress,
+  client,
+  receiver,
+}: {
+  paymentProcessorAddress: string;
+  client: string;
+  receiver: `0x${string}` | undefined;
+}) => {
+  const publicClient = usePublicClient();
+
+  return useQuery<bigint[]>({
+    queryKey: ['streamIds', paymentProcessorAddress, client, receiver],
+    queryFn: async (): Promise<bigint[]> => {
+      if (!receiver || !client || !paymentProcessorAddress) {
+        return [];
+      }
+
+      try {
+        const contract = getContract({
+          address: paymentProcessorAddress as Address,
+          abi: claimTokensABI,
+          client: publicClient!,
+        });
+
+        // Check if user is active
+        const isActive = await contract.read.isActivePaymentReceiver([
+          client,
+          receiver,
+        ]);
+
+        if (!isActive) {
+          return [];
+        }
+
+        // Get all payment orders
+        const paymentOrders = (await contract.read.viewAllPaymentOrders([
+          client,
+          receiver,
+        ])) as Array<{
+          token: `0x${string}`;
+          streamId: bigint;
+          amount: bigint;
+          released: bigint;
+          start: bigint;
+          cliff: bigint;
+          end: bigint;
+        }>;
+
+        console.log('paymentOrders', paymentOrders);
+
+        // Extract stream IDs
+        return paymentOrders.map(order => BigInt(order.streamId.toString()));
+      } catch (error) {
+        console.error(
+          `Error fetching streams for ${receiver}:`,
+          error instanceof Error ? error.message : error,
+        );
+        return [];
+      }
+    },
+    staleTime: Infinity,
+    gcTime: 1000 * 60,
+    enabled: !!receiver && !!client && !!paymentProcessorAddress,
+  });
+};
+
 export const useReleasableForStream = ({
   paymentProcessorAddress,
   client,

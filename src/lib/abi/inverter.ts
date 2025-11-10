@@ -129,4 +129,89 @@ export const claimTokensABI = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+    ],
+    name: 'isActivePaymentReceiver',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+    ],
+    name: 'viewAllPaymentOrders',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'token',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'streamId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'released',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'start',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'cliff',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'end',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'tuple[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ];
