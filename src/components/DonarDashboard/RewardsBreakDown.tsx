@@ -21,6 +21,7 @@ import {
   useClaimRewards,
   useReleasableForStream,
   useReleasedForStream,
+  useStreamIds,
 } from '@/hooks/useClaimRewards';
 import { useTokenSupplyDetails } from '@/hooks/useTokenSupplyDetails';
 import {
@@ -67,25 +68,25 @@ const RewardsBreakDown: React.FC = () => {
 
   const [lockedTokens, setLockedTokens] = useState(0);
 
+  // Dynamically fetch stream IDs
+  const { data: streamIds = [], refetch: refetchStreamIds } = useStreamIds({
+    paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
+    client: project?.abc?.paymentRouterAddress!,
+    receiver: address,
+  });
+
   const releasable = useReleasableForStream({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamIds: [
-      BigInt(1),
-      BigInt(2),
-      BigInt(3),
-      BigInt(4),
-      BigInt(5),
-      BigInt(6),
-    ],
+    streamIds: streamIds,
   });
 
   const released = useReleasedForStream({
     paymentProcessorAddress: project?.abc?.paymentProcessorAddress!,
     client: project?.abc?.paymentRouterAddress!,
     receiver: address,
-    streamIds: [BigInt(1), BigInt(2), BigInt(3)],
+    streamIds: streamIds,
   });
 
   const availableToClaim = releasable.data
@@ -110,6 +111,8 @@ const RewardsBreakDown: React.FC = () => {
       // projectCollateralFeeCollected.refetch();
 
       releasable.refetch();
+      released.refetch();
+      refetchStreamIds();
 
       console.log('Successly Clamied Tokens');
     },

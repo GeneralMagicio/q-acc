@@ -129,4 +129,74 @@ export const claimTokensABI = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+    ],
+    name: 'isActivePaymentReceiver',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'client',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'paymentReceiver',
+        type: 'address',
+      },
+    ],
+    name: 'viewAllPaymentOrders',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'streamId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'amount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'startTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'endTime',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct PaymentOrder[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ];
