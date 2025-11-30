@@ -4,6 +4,12 @@
  */
 export const gracefulExitProjects: Record<string, string> = {
   x23ai: 'https://x.com/x23_ai/status/1978066885708071162',
+  akarun: 'https://x.com/theqacc/status/1988594492610371936', // AKA
+  'gridlock-social-recovery-wallet':
+    'https://x.com/GridlockCrypto/status/1987228808584503528?s=20', // LOCK
+  'xade-finance': 'https://x.com/xade_xyz/status/1987066666363273636', // ACHAD
+  'citizen-wallet': 'https://x.com/citizenwallet/status/1987801700464226611', // CITIZEN
+
   // Add more projects here in the future:
   // example: 'https://x.com/example-tweet-url',
 };
