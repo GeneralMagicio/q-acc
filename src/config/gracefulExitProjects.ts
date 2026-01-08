@@ -9,6 +9,10 @@ export const gracefulExitProjects: Record<string, string> = {
     'https://x.com/GridlockCrypto/status/1987228808584503528?s=20', // LOCK
   'xade-finance': 'https://x.com/xade_xyz/status/1987066666363273636', // ACHAD
   'citizen-wallet': 'https://x.com/citizenwallet/status/1987801700464226611', // CITIZEN
+  h2dao: 'https://x.com/HowToDAObook/status/1998786165110190375', // H2DAO
+  'the-grand-timeline':
+    'https://x.com/GrandTimeline/status/1998800144813404571', // GRAND
+  todamoon: 'https://x.com/ToDaMoonAI/status/1998801121452642419', // TDM
 
   // Add more projects here in the future:
   // example: 'https://x.com/example-tweet-url',
